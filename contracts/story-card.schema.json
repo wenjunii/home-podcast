@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "story-card.schema.json",
+  "title": "Recovered Homes Story Card",
+  "type": "object",
+  "required": ["story_id", "content_hash", "analysis"],
+  "properties": {
+    "story_id": {"type": "string", "pattern": "^story-[a-f0-9]{24}$"},
+    "content_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "analysis": {
+      "type": "object",
+      "required": [
+        "eligible",
+        "summary",
+        "primary_theme",
+        "secondary_themes",
+        "theme_fit",
+        "anchor_score",
+        "emotional_tone",
+        "digital_archaeology_angles",
+        "memorable_passages",
+        "sensitivity_notes",
+        "translation_needed",
+        "pronunciation_items",
+        "usage_recommendation"
+      ],
+      "properties": {
+        "eligible": {"type": "boolean"},
+        "exclusion_reason": {"type": ["string", "null"]},
+        "summary": {"type": "string"},
+        "primary_theme": {"type": ["string", "null"]},
+        "secondary_themes": {"type": "array", "items": {"type": "string"}},
+        "theme_fit": {"type": "number", "minimum": 0, "maximum": 1},
+        "anchor_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "emotional_tone": {"type": "string"},
+        "digital_archaeology_angles": {"type": "array", "items": {"type": "string"}},
+        "memorable_passages": {"type": "array", "items": {"type": "string"}},
+        "sensitivity_notes": {"type": "array", "items": {"type": "string"}},
+        "translation_needed": {"type": "boolean"},
+        "pronunciation_items": {"type": "array", "items": {"type": "string"}},
+        "usage_recommendation": {
+          "enum": ["anchor", "featured", "supporting", "fragment", "contextual"]
+        }
+      }
+    }
+  }
+}

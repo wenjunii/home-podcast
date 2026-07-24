@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "working_title": "Recovered Homes",
+  "promise": "Knowledge, fun, inspiration, and emotional resonance from human stories recovered in the archived web.",
+  "format": {
+    "hosts": 3,
+    "target_minutes_min": 20,
+    "target_minutes_max": 35,
+    "cold_open": true,
+    "original_language_fragments": true,
+    "synthetic_voice_disclosure": true
+  },
+  "hosts": [
+    {
+      "id": "curious_guide",
+      "display_name": "Maya",
+      "role": "The Curious Guide",
+      "writing_profile": "Warm, energetic, accessible, and willing to ask the question a listener is thinking.",
+      "voice_profile": "Warm and clear; medium pace; expressive without sounding theatrical.",
+      "voice_id": null
+    },
+    {
+      "id": "archive_nerd",
+      "display_name": "Theo",
+      "role": "The Archive Nerd",
+      "writing_profile": "Playful about metadata and odd web artifacts; precise without lecturing; dry rather than cynical.",
+      "voice_profile": "Sonically distinct from Maya; medium-high energy; slightly quicker pace.",
+      "voice_id": null
+    },
+    {
+      "id": "connector",
+      "display_name": "Lina",
+      "role": "The Connector",
+      "writing_profile": "Emotionally perceptive and cross-cultural; notices echoes and contradictions without forcing a moral.",
+      "voice_profile": "Grounded, intimate, and unhurried; capable of restrained emotional turns.",
+      "voice_id": null
+    }
+  ],
+  "editorial_rules": [
+    "Treat the crawl month as capture time, never as the story's publication date.",
+    "Never invent words, motives, identities, or historical context for a story author.",
+    "Exact quotations must be copied from the source evidence and remain traceable to story IDs.",
+    "Make uncertainty audible when the archive cannot support a conclusion.",
+    "Use as many eligible stories as the theme can hold; vary depth instead of silently dropping stories.",
+    "Direct humor at host behavior, surprising metadata, or web artifacts—not at vulnerable people.",
+    "Allow emotional breathing room; do not place a joke immediately after trauma.",
+    "Avoid repetitive synthetic banter such as constant agreement or 'that's fascinating'.",
+    "Give each host a distinct function in the conversation.",
+    "Disclose that the hosts and fragment readers are synthetic."
+  ],
+  "recurring_segments": [
+    "What Did the Crawler Catch?",
+    "Digital Dust",
+    "Home in One Sentence",
+    "Lost in Translation",
+    "What the Archive Forgot",
+    "One More Fragment"
+  ],
+  "story_usage_types": [
+    "anchor",
+    "featured",
+    "supporting",
+    "fragment",
+    "contextual"
+  ]
+}

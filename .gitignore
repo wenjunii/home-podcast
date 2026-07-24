@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# Rebuildable and potentially large local artifacts
+data/catalog.sqlite3
+data/catalog.sqlite3-*
+work/
+audio/cache/
+audio/normalized/
+episodes/**/audio/*.wav
+episodes/**/audio/*.mp3
+
+# Provider credentials belong in the environment, never in this project.
+.env

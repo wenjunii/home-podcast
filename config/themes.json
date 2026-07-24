@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "themes": [
+    {
+      "slug": "physical-home",
+      "name": "Home as a Place",
+      "description": "Rooms, houses, neighborhoods, landscapes, and the sensory details of dwelling.",
+      "archaeology_questions": [
+        "What survives online after a physical place changes or disappears?",
+        "Which details did the crawler preserve that an official history might miss?"
+      ]
+    },
+    {
+      "slug": "migration-displacement",
+      "name": "Migration, Borders, and Displacement",
+      "description": "Leaving, arriving, exile, forced movement, and rebuilding a sense of home.",
+      "archaeology_questions": [
+        "How does a captured web page preserve a moment between departure and arrival?",
+        "What context about movement and borders is absent from the archived fragment?"
+      ]
+    },
+    {
+      "slug": "family-inheritance",
+      "name": "Family, Ancestry, and Inheritance",
+      "description": "Family memory, ancestors, intergenerational stories, heritage, and inherited identity.",
+      "archaeology_questions": [
+        "How do private memories become public digital artifacts?",
+        "Which family histories survive because somebody once put them on a web page?"
+      ]
+    },
+    {
+      "slug": "language-culture",
+      "name": "Language and Cultural Belonging",
+      "description": "Mother tongues, translation, cultural memory, and belonging expressed through language.",
+      "archaeology_questions": [
+        "What changes when an archived story is translated?",
+        "What can wording, dialect, or code-switching tell us that metadata cannot?"
+      ]
+    },
+    {
+      "slug": "housing-precarity",
+      "name": "Housing, Homelessness, and Precarity",
+      "description": "Unstable shelter, eviction, housing insecurity, homelessness, and the politics of dwelling.",
+      "archaeology_questions": [
+        "Whose housing experiences are easiest to lose from the public web?",
+        "Does the archive preserve testimony while erasing the conditions around it?"
+      ]
+    },
+    {
+      "slug": "exile-return-nostalgia",
+      "name": "Exile, Return, and Nostalgia",
+      "description": "Longing for a place, returning home, homesickness, and homes transformed by memory.",
+      "archaeology_questions": [
+        "Can an old capture preserve a version of home that no longer exists?",
+        "How does the date of capture complicate the date remembered by the writer?"
+      ]
+    },
+    {
+      "slug": "objects-food-rituals",
+      "name": "Objects, Food, and Rituals",
+      "description": "Everyday objects, meals, customs, sounds, and rituals that make belonging tangible.",
+      "archaeology_questions": [
+        "Why do small domestic details survive when broader context disappears?",
+        "What can ordinary objects reveal about a vanished online community?"
+      ]
+    },
+    {
+      "slug": "chosen-community",
+      "name": "Chosen Family and Community",
+      "description": "Friendship, solidarity, adopted communities, and belonging created outside inherited ties.",
+      "archaeology_questions": [
+        "How does a surviving fragment reveal the shape of a community around it?",
+        "Which relationships become invisible when links and comment threads vanish?"
+      ]
+    },
+    {
+      "slug": "online-home",
+      "name": "The Internet as Home",
+      "description": "Blogs, forums, social networks, fandoms, games, and other digital places of belonging.",
+      "archaeology_questions": [
+        "Can an abandoned website still be a home?",
+        "What did the crawler capture of the community, and what lived outside the page?"
+      ]
+    },
+    {
+      "slug": "lost-places",
+      "name": "Lost and Inaccessible Places",
+      "description": "Demolished homes, inaccessible homelands, environmental loss, and places reachable only through memory.",
+      "archaeology_questions": [
+        "What does a digital trace preserve after access to a place is lost?",
+        "How should we talk about absence without pretending the archive is complete?"
+      ]
+    },
+    {
+      "slug": "identity-belonging",
+      "name": "Identity and Contested Belonging",
+      "description": "National, local, racial, religious, gendered, and other identities shaped by inclusion or exclusion.",
+      "archaeology_questions": [
+        "Who was able to describe belonging publicly on the web represented by this crawl?",
+        "What identities are flattened by extraction, classification, or translation?"
+      ]
+    },
+    {
+      "slug": "memory-archive",
+      "name": "Memory, Forgetting, and the Archive",
+      "description": "Remembering, forgetting, unreliable memory, missing context, and the accidental survival of digital traces.",
+      "archaeology_questions": [
+        "Why did this fragment survive?",
+        "What cannot be responsibly reconstructed from the captured text?"
+      ]
+    }
+  ]
+}

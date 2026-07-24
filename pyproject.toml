@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "home-podcast"
+version = "0.1.0"
+description = "Incremental, source-grounded production pipeline for a synthetic-host podcast about home, belonging, and the archived web."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Home Podcast"}]
+dependencies = []
+
+[project.scripts]
+home-podcast = "home_podcast.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["home_podcast*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

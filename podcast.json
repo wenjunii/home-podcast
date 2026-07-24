@@ -1,0 +1,17 @@
+{
+  "project_name": "Recovered Homes",
+  "primary_language": "en",
+  "exports_dir": "../cc-home-extractor/data/exports",
+  "catalog_path": "data/catalog.sqlite3",
+  "themes_path": "config/themes.json",
+  "show_bible_path": "config/show_bible.json",
+  "episodes_dir": "episodes",
+  "work_dir": "work",
+  "audio_dir": "audio",
+  "target_stories_per_installment": 30,
+  "target_minutes_min": 20,
+  "target_minutes_max": 35,
+  "analysis_provider": null,
+  "script_provider": null,
+  "speech_provider": null
+}

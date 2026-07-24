@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "script.schema.json",
+  "title": "Recovered Homes Episode Script",
+  "type": "object",
+  "required": ["contract_version", "episode_id", "title", "segments"],
+  "properties": {
+    "contract_version": {"const": 1},
+    "episode_id": {"type": "string"},
+    "title": {"type": "string"},
+    "segments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "segment_id",
+          "speaker",
+          "kind",
+          "text",
+          "source_story_ids",
+          "pause_after_ms"
+        ],
+        "properties": {
+          "segment_id": {"type": "string"},
+          "speaker": {"enum": ["curious_guide", "archive_nerd", "connector"]},
+          "kind": {
+            "enum": ["host_dialogue", "quote", "disclosure", "transition"]
+          },
+          "text": {"type": "string", "minLength": 1},
+          "source_story_ids": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "delivery": {"type": "object"},
+          "pronunciation": {"type": "object"},
+          "pause_after_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          }
+        }
+      }
+    }
+  }
+}
