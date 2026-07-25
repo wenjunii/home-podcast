@@ -65,9 +65,9 @@ Natural and Creative versions use the same 1,760 rendered characters and differ
 only in stability. Natural runs 118.05 seconds and favors consistency. Creative
 runs 115.15 seconds and permits broader emotion with a higher artifact risk.
 A Creative+ follow-up runs 115.41 seconds with stronger direction and moderate
-style exaggeration. The full 128-turn pilot should not be rendered until
-listening review selects Creative or Creative+ and confirms that contextual
-dialogue solves the flatness.
+style exaggeration. Creative+ is selected for the pilot. The full 128-turn
+script should use contextual dialogue chunks that preserve this performance
+profile.
 
 ## Accent-aware rotation
 

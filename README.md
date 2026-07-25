@@ -369,17 +369,18 @@ python -m home_podcast prepare-dialogue-audition `
   --cast .\episodes\2013-12.01\cast.json
 ```
 
-It runs 115.41 seconds and used 1,884 credits. It remains a listening candidate,
-not the automatically selected production setting.
+It runs 115.41 seconds and used 1,884 credits. Creative+ is the selected pilot
+performance style.
 
 The current speech-provider shortlist and pilot audition recommendation are in
 [docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).
 The selected one-theme pilot and its TTS cost model are in
 [docs/PILOT_EPISODE.md](docs/PILOT_EPISODE.md).
 
-Non-voice audio is an independent layer. The pilot contains 11 sparse,
-illustrative cues—not simulated historical recordings. Validate them and
-prepare provider-neutral generation jobs:
+Non-voice audio is an independent layer. The pilot contains one nearly
+subliminal full-episode base bed, seven long thematic beds, and five structural
+or spot cues. They are illustrative sounds, not simulated historical
+recordings. Validate them and prepare provider-neutral generation jobs:
 
 ```powershell
 python -m home_podcast validate-sound-design `
@@ -413,10 +414,17 @@ python -m home_podcast render-audio `
 ```
 
 The renderer uses FFmpeg to normalize clips to 48 kHz stereo, insert scripted
-pauses, place and fade sound cues, duck selected sounds under speech, target
-podcast loudness, and create a WAV master, MP3 distribution copy, and exact
-speech-and-sound timeline. Omitting the two sound-design arguments still
-produces the clean speech-only render.
+pauses, extend each thematic bed to the next eligible handoff, suppress
+too-short handoffs, place and fade structural cues, and create synchronized
+192 kbps deliverables:
+
+- `<episode>-voices-only.mp3`
+- `<episode>-soundscape-only.mp3`
+- `<episode>.mp3` as a combined review mix
+
+The non-human stem is continuous because a quiet base loop covers any interval
+without a retained thematic bed. Omitting the two sound-design arguments still
+produces the voices-only render.
 
 Generate deliverable transcripts:
 

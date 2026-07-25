@@ -53,11 +53,18 @@ def render_transcripts(
     for cue in timeline.get("sound_cues", []):
         label = str(cue.get("transcript_label", "")).strip()
         if label:
+            caption_end_ms = int(cue["end_ms"])
+            caption_duration_ms = cue.get("caption_duration_ms")
+            if isinstance(caption_duration_ms, int):
+                caption_end_ms = min(
+                    caption_end_ms,
+                    int(cue["start_ms"]) + caption_duration_ms,
+                )
             caption_items.append(
                 {
                     "type": "sound",
                     "start_ms": int(cue["start_ms"]),
-                    "end_ms": int(cue["end_ms"]),
+                    "end_ms": caption_end_ms,
                     "text": f"[{label}]",
                 }
             )
