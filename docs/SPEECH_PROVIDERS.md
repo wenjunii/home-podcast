@@ -6,14 +6,15 @@ recheck them immediately before purchasing production capacity.
 
 ## Recommendation
 
-Run one blind casting audition across:
+ElevenLabs Eleven v3 is selected for the pilot implementation. The broader
+shortlist remains useful if the provisional voices fail the listening review:
 
 1. ElevenLabs Eleven v3
 2. Hume Octave 2
 3. Google Gemini 3.1 Flash TTS Preview
 4. Cartesia Sonic 3.5
 
-ElevenLabs is the leading default because Eleven v3 directly supports
+ElevenLabs was selected because Eleven v3 directly supports
 multi-speaker dialogue, expressive delivery, and more than 70 languages. Hume
 is the strongest alternative for acting direction and emotional continuity.
 Cartesia is the safest broad-language fallback for source fragments and an
@@ -24,6 +25,30 @@ two speakers in a single request.
 Do not select voices from a short audition alone. Render the same
 three-to-five-minute scene with every engine, hide provider names from
 reviewers, and score the results before assigning permanent voice IDs.
+
+## Current pilot audition
+
+The first casting pass uses three deliberately distinct default voices:
+
+| Host | Provisional voice | Audition focus |
+| --- | --- | --- |
+| Maya | Bella (`hpp4J3VqNfWAUOO0d1Us`) | Warm disclosure, light humor, curiosity, and a restrained close |
+| Theo | Roger (`CwhRBWXzGAHq8TQ4Fs17`) | Clear archive explanation, dry warmth, and a serious close |
+| Lina | Lily (`pFZP5JQG7iQjIQuC4Bku`) | Cross-cultural observation, intimacy, and emotional restraint |
+
+The source-grounded audition contract is
+`episodes/2013-12.01/voice-audition.json`. One API pass used 1,797 input
+characters across three calls, approximately $0.18 at the published
+$0.10-per-1,000-character rate. The level-matched listening copies total
+118.24 seconds and remain in the ignored local directory
+`work/tts/audition-2013-12.01/`.
+
+The Eleven v3 TTS endpoint rejected `previous_text` and `next_text` during the
+live preflight, so the adapter omits those generic endpoint fields for this
+model. This matters for production: ElevenLabs also warns that very short v3
+prompts are less consistent. The audition therefore uses one long,
+multi-delivery passage per host. The 129-turn pilot should not be rendered
+until the cast is approved and short-turn continuity has been spot-tested.
 
 ## Comparison
 

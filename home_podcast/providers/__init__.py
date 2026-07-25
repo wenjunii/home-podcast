@@ -6,6 +6,8 @@ from .capriole import (
     ProviderTrafficBlockedError,
 )
 from .elevenlabs import (
+    ElevenLabsSpeechClient,
+    ElevenLabsSpeechResponse,
     ElevenLabsSoundEffectResponse,
     ElevenLabsSoundEffectsClient,
 )
@@ -14,6 +16,8 @@ __all__ = [
     "CaprioleChatClient",
     "CaprioleResponse",
     "ProviderTrafficBlockedError",
+    "ElevenLabsSpeechClient",
+    "ElevenLabsSpeechResponse",
     "ElevenLabsSoundEffectResponse",
     "ElevenLabsSoundEffectsClient",
 ]

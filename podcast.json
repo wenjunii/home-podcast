@@ -28,7 +28,24 @@
     "protocol": "anthropic_messages_stream",
     "max_tokens": 4096
   },
-  "speech_provider": null,
+  "speech_provider": {
+    "type": "elevenlabs_tts",
+    "endpoint": "https://api.elevenlabs.io/v1/text-to-speech",
+    "model": "eleven_v3",
+    "api_key_env": "ELEVENLABS_API_KEY",
+    "timeout_seconds": 180,
+    "max_attempts": 4,
+    "output_format": "mp3_44100_128",
+    "language_code": "en",
+    "voice_settings": {
+      "stability": 0.5,
+      "similarity_boost": 0.75,
+      "style": 0,
+      "use_speaker_boost": true
+    },
+    "credits_per_character": 1,
+    "usd_per_thousand_characters": 0.1
+  },
   "sound_effects_provider": {
     "type": "elevenlabs_sound_effects",
     "endpoint": "https://api.elevenlabs.io/v1/sound-generation",

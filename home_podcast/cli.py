@@ -21,6 +21,7 @@ from .script_runner import generate_episode_script
 from .sfx_runner import generate_sound_effect_jobs
 from .sound_design import prepare_sfx_jobs, validate_sound_design
 from .transcripts import render_transcripts
+from .tts_runner import generate_tts_jobs
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -152,6 +153,23 @@ def build_parser() -> argparse.ArgumentParser:
     tts.add_argument("--provider", required=True)
     tts.add_argument("--model", required=True)
 
+    generate_tts = subparsers.add_parser(
+        "generate-tts",
+        help="Dry-run or execute cached ElevenLabs speech jobs",
+    )
+    generate_tts.add_argument("--jobs", required=True)
+    generate_tts.add_argument("--limit", type=int)
+    generate_tts.add_argument(
+        "--execute",
+        action="store_true",
+        help="Make paid provider calls; otherwise report pending cost only",
+    )
+    generate_tts.add_argument(
+        "--max-credits",
+        type=float,
+        help="Required spending ceiling when --execute is used",
+    )
+
     validate_sound = subparsers.add_parser(
         "validate-sound-design",
         help="Validate a sound-design cue sheet against its episode script",
@@ -223,7 +241,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "validate-sound-design" and not result["valid"]:
             return 2
         if (
-            args.command == "generate-sfx"
+            args.command in {"generate-sfx", "generate-tts"}
             and result["execution_requested"]
             and result["failed"]
         ):
@@ -371,11 +389,19 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             Path(args.script).resolve(),
             config.show_bible_path,
             output,
-            config.audio_dir / "cache",
+            config.audio_dir / "cache" / "tts",
             provider=args.provider,
             model=args.model,
         )
         return {"output": str(output), "jobs": count}
+    if args.command == "generate-tts":
+        return generate_tts_jobs(
+            config,
+            Path(args.jobs).resolve(),
+            execute=args.execute,
+            max_credits=args.max_credits,
+            limit=args.limit,
+        )
     if args.command == "validate-sound-design":
         return validate_sound_design(
             Path(args.sound_design).resolve(),
