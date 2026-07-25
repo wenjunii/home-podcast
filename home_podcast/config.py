@@ -25,6 +25,7 @@ class ProjectConfig:
     analysis_provider: dict[str, Any] | None
     script_provider: dict[str, Any] | None
     speech_provider: dict[str, Any] | None
+    sound_effects_provider: dict[str, Any] | None
 
     @classmethod
     def load(cls, path: str | Path = "podcast.json") -> "ProjectConfig":
@@ -56,6 +57,7 @@ class ProjectConfig:
             analysis_provider=data.get("analysis_provider"),
             script_provider=data.get("script_provider"),
             speech_provider=data.get("speech_provider"),
+            sound_effects_provider=data.get("sound_effects_provider"),
         )
 
     def load_themes(self) -> dict[str, Any]:

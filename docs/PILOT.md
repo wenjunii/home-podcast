@@ -67,7 +67,7 @@ Still confirm before final audio generation:
 
 - public series title (the current title is a working title)
 - final approval of the 11-cue illustrative sound-design map
-- sound-effects provider and generated-versus-licensed asset decisions
+- final approval of ElevenLabs-generated effect candidates and any licensed replacements
 - publication/licensing policy for source excerpts
 - sensitivity and translation review standard
 

@@ -5,9 +5,15 @@ from .capriole import (
     CaprioleResponse,
     ProviderTrafficBlockedError,
 )
+from .elevenlabs import (
+    ElevenLabsSoundEffectResponse,
+    ElevenLabsSoundEffectsClient,
+)
 
 __all__ = [
     "CaprioleChatClient",
     "CaprioleResponse",
     "ProviderTrafficBlockedError",
+    "ElevenLabsSoundEffectResponse",
+    "ElevenLabsSoundEffectsClient",
 ]

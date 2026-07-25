@@ -50,7 +50,12 @@ def run_doctor(config: ProjectConfig) -> dict[str, Any]:
         shutil.which("ffprobe") is not None,
         shutil.which("ffprobe") or "Not found on PATH",
     )
-    for provider_name in ("analysis_provider", "script_provider", "speech_provider"):
+    for provider_name in (
+        "analysis_provider",
+        "script_provider",
+        "speech_provider",
+        "sound_effects_provider",
+    ):
         value = getattr(config, provider_name)
         add(
             provider_name,

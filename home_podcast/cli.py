@@ -18,6 +18,7 @@ from .planning import snapshot_crawl_month
 from .provider_runner import analyze_story_jobs
 from .script import prepare_tts_jobs, validate_script
 from .script_runner import generate_episode_script
+from .sfx_runner import generate_sound_effect_jobs
 from .sound_design import prepare_sfx_jobs, validate_sound_design
 from .transcripts import render_transcripts
 
@@ -168,6 +169,23 @@ def build_parser() -> argparse.ArgumentParser:
     sfx.add_argument("--provider", required=True)
     sfx.add_argument("--model", required=True)
 
+    generate_sfx = subparsers.add_parser(
+        "generate-sfx",
+        help="Dry-run or execute cached ElevenLabs sound-effect jobs",
+    )
+    generate_sfx.add_argument("--jobs", required=True)
+    generate_sfx.add_argument("--limit", type=int)
+    generate_sfx.add_argument(
+        "--execute",
+        action="store_true",
+        help="Make paid provider calls; otherwise report pending cost only",
+    )
+    generate_sfx.add_argument(
+        "--max-credits",
+        type=float,
+        help="Required spending ceiling when --execute is used",
+    )
+
     audio = subparsers.add_parser(
         "render-audio",
         help="Normalize and mix completed speech clips with optional sound design",
@@ -203,6 +221,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "trim-script" and not result["valid"]:
             return 2
         if args.command == "validate-sound-design" and not result["valid"]:
+            return 2
+        if (
+            args.command == "generate-sfx"
+            and result["execution_requested"]
+            and result["failed"]
+        ):
             return 2
         return 0
     except (FileNotFoundError, ValueError, RuntimeError) as error:
@@ -373,6 +397,14 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             model=args.model,
         )
         return {"output": str(output), "jobs": count}
+    if args.command == "generate-sfx":
+        return generate_sound_effect_jobs(
+            config,
+            Path(args.jobs).resolve(),
+            execute=args.execute,
+            max_credits=args.max_credits,
+            limit=args.limit,
+        )
     if args.command == "render-audio":
         jobs_path = Path(args.jobs).resolve()
         first_job = next(

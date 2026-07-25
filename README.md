@@ -81,7 +81,15 @@ The configured analysis and script model is Capriole Fable 5. Supply its
 credential only through the process environment:
 
 ```powershell
-$env:CAPRIOLE_API_KEY = Read-Host -MaskInput "Capriole API key"
+$secureKey = Read-Host "Capriole API key" -AsSecureString
+$keyPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
+try {
+  $env:CAPRIOLE_API_KEY = `
+    [Runtime.InteropServices.Marshal]::PtrToStringBSTR($keyPointer)
+} finally {
+  [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($keyPointer)
+}
+Remove-Variable secureKey, keyPointer
 ```
 
 The complete December snapshot, analyzed pool, and one-theme pilot are frozen
@@ -274,10 +282,17 @@ python -m home_podcast prepare-sfx `
   --script .\episodes\2013-12.01\script.json `
   --provider elevenlabs `
   --model eleven_text_to_sound_v2
+
+# Dry run: no credential and no provider call
+python -m home_podcast generate-sfx `
+  --jobs .\work\sfx\2013-12.01-jobs.jsonl
 ```
 
 The cue contract, provider research, provenance policy, and mixing behavior are
 documented in [docs/SOUND_DESIGN.md](docs/SOUND_DESIGN.md).
+Paid generation is opt-in and requires both `--execute` and an explicit
+`--max-credits` ceiling. Provider keys are read only from environment
+variables and must never be committed.
 
 Once every speech and generated-effect clip exists:
 
