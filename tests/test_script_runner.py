@@ -4,6 +4,8 @@ import unittest
 
 from home_podcast.script_runner import (
     _compact_evidence_packet,
+    _keep_first_disclosure,
+    _normalize_movement_segments,
     _parse_script_output,
     _script_metrics,
 )
@@ -62,6 +64,39 @@ class ScriptRunnerTests(unittest.TestCase):
         self.assertNotIn("story_text", compact["evidence"][0])
         self.assertNotIn("source_markdown", compact["evidence"][0])
         self.assertNotIn("accepted_filter_text", compact["evidence"][0])
+
+    def test_canonicalizes_quote_punctuation_from_memorable_passage(self) -> None:
+        segments = [
+            {
+                "speaker": "connector",
+                "kind": "quote",
+                "text": "I'm going home -- now.",
+                "source_story_ids": ["story-a"],
+                "pause_after_ms": 0,
+            }
+        ]
+        evidence = {
+            "story-a": {
+                "story_text": "I’m going home — now.",
+                "story_card": {
+                    "memorable_passages": ["I’m going home — now."],
+                },
+            }
+        }
+        normalized = _normalize_movement_segments(segments, 1, evidence)
+        self.assertEqual(normalized[0]["text"], "I’m going home — now.")
+
+    def test_keeps_only_first_disclosure(self) -> None:
+        segments = [
+            {"kind": "disclosure", "text": "Opening disclosure."},
+            {"kind": "host_dialogue", "text": "Episode."},
+            {"kind": "disclosure", "text": "Closing disclosure."},
+        ]
+        kept = _keep_first_disclosure(segments)
+        self.assertEqual([segment["text"] for segment in kept], [
+            "Opening disclosure.",
+            "Episode.",
+        ])
 
 
 if __name__ == "__main__":

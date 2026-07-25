@@ -109,6 +109,7 @@ def generate_episode_script(
             flush=True,
         )
 
+    all_segments = _keep_first_disclosure(all_segments)
     script = {
         "contract_version": 1,
         "episode_id": episode_id,
@@ -123,6 +124,12 @@ def generate_episode_script(
         config.show_bible_path,
     )
     report.update(_script_metrics(script))
+    if report["estimated_minutes"] > config.target_minutes_max:
+        report["warnings"].append(
+            "Estimated runtime "
+            f"{report['estimated_minutes']:.1f} minutes exceeds the configured "
+            f"{config.target_minutes_max}-minute maximum; trim before TTS."
+        )
     if report["valid"]:
         _write_json_atomic(output_path, script)
     return {
@@ -354,11 +361,25 @@ def _normalize_movement_segments(
             ):
                 source_text = str(evidence_by_id[source_ids[0]]["story_text"])
                 stripped = text.strip().strip("\"'“”‘’")
-                if (
-                    _normalize_quote(text) not in _normalize_quote(source_text)
-                    and _normalize_quote(stripped) in _normalize_quote(source_text)
-                ):
-                    segment["text"] = stripped
+                if _normalize_quote(text) not in _normalize_quote(source_text):
+                    passages = (
+                        evidence_by_id[source_ids[0]]
+                        .get("story_card", {})
+                        .get("memorable_passages", [])
+                    )
+                    canonical = next(
+                        (
+                            passage
+                            for passage in passages
+                            if isinstance(passage, str)
+                            and _relaxed_quote(text) == _relaxed_quote(passage)
+                        ),
+                        None,
+                    )
+                    if canonical is not None:
+                        segment["text"] = canonical
+                    elif _normalize_quote(stripped) in _normalize_quote(source_text):
+                        segment["text"] = stripped
         normalized.append(segment)
     return normalized
 
@@ -402,8 +423,26 @@ def _script_metrics(script: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _keep_first_disclosure(
+    segments: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    kept: list[dict[str, Any]] = []
+    disclosure_seen = False
+    for segment in segments:
+        if segment.get("kind") == "disclosure":
+            if disclosure_seen:
+                continue
+            disclosure_seen = True
+        kept.append(segment)
+    return kept
+
+
 def _normalize_quote(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip().casefold()
+
+
+def _relaxed_quote(value: str) -> str:
+    return re.sub(r"[^\w]+", " ", value, flags=re.UNICODE).strip().casefold()
 
 
 def _load_object(path: Path) -> dict[str, Any]:

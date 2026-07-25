@@ -31,6 +31,7 @@ class CaprioleChatClient:
         timeout_seconds: int = 180,
         max_attempts: int = 4,
         protocol: str = "native_chat",
+        max_tokens: int = 4096,
     ) -> None:
         self.endpoint = endpoint
         self.model = model
@@ -38,6 +39,7 @@ class CaprioleChatClient:
         self.timeout_seconds = timeout_seconds
         self.max_attempts = max_attempts
         self.protocol = protocol
+        self.max_tokens = max_tokens
 
     @classmethod
     def from_config(cls, provider: dict[str, Any]) -> "CaprioleChatClient":
@@ -50,6 +52,7 @@ class CaprioleChatClient:
             timeout_seconds=int(provider.get("timeout_seconds", 180)),
             max_attempts=int(provider.get("max_attempts", 4)),
             protocol=str(provider.get("protocol", "native_chat")),
+            max_tokens=int(provider.get("max_tokens", 4096)),
         )
 
     def complete(self, input_text: str) -> CaprioleResponse:
@@ -66,6 +69,13 @@ class CaprioleChatClient:
                 "messages": [{"role": "user", "content": input_text}],
                 "stream": True,
                 "stream_options": {"include_usage": True},
+            }
+        elif self.protocol == "anthropic_messages_stream":
+            body = {
+                "model": _anthropic_messages_model(self.model),
+                "max_tokens": self.max_tokens,
+                "messages": [{"role": "user", "content": input_text}],
+                "stream": True,
             }
         else:
             raise ValueError(f"Unsupported Capriole protocol: {self.protocol}")
@@ -88,6 +98,8 @@ class CaprioleChatClient:
                 ) as response:
                     if self.protocol == "openai_chat_completions_stream":
                         return _consume_openai_sse(response, self.model)
+                    if self.protocol == "anthropic_messages_stream":
+                        return _consume_anthropic_sse(response, self.model)
                     response_body = json.loads(response.read().decode("utf-8"))
                 result = response_body.get("result", {})
                 text = result.get("text")
@@ -176,6 +188,47 @@ def _consume_openai_sse(
     )
 
 
+def _consume_anthropic_sse(
+    response: BinaryIO,
+    fallback_model: str,
+) -> CaprioleResponse:
+    text_parts: list[str] = []
+    request_id = ""
+    model = fallback_model
+    usage: dict[str, int] = {}
+    for raw_line in response:
+        line = raw_line.decode("utf-8", errors="replace").strip()
+        if not line or line.startswith(":") or not line.startswith("data:"):
+            continue
+        event = json.loads(line[5:].strip())
+        event_type = event.get("type")
+        if event_type == "error":
+            raise RuntimeError(
+                f"Capriole stream error: {str(event.get('error'))[:500]}"
+            )
+        if event_type == "message_start":
+            message = event.get("message", {})
+            request_id = str(message.get("id", request_id))
+            model = str(message.get("model", model))
+            usage.update(_numeric_usage(message.get("usage", {})))
+        elif event_type == "content_block_delta":
+            delta = event.get("delta", {})
+            text = delta.get("text")
+            if isinstance(text, str):
+                text_parts.append(text)
+        elif event_type == "message_delta":
+            usage.update(_numeric_usage(event.get("usage", {})))
+    text = "".join(text_parts)
+    if not text.strip():
+        raise RuntimeError("Capriole stream did not contain response text")
+    return CaprioleResponse(
+        request_id=request_id,
+        model=model,
+        text=text,
+        usage=usage,
+    )
+
+
 def _numeric_usage(value: Any) -> dict[str, int]:
     if not isinstance(value, dict):
         return {}
@@ -184,3 +237,8 @@ def _numeric_usage(value: Any) -> dict[str, int]:
         for key, item in value.items()
         if isinstance(item, (int, float))
     }
+
+
+def _anthropic_messages_model(value: str) -> str:
+    prefix = "anthropic/"
+    return value[len(prefix) :] if value.startswith(prefix) else value

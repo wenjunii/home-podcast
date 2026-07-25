@@ -20,12 +20,13 @@
   },
   "script_provider": {
     "type": "capriole",
-    "endpoint": "https://api.caprioletech.com/v1/chat/completions",
-    "model": "anthropic/claude-fable-5",
+    "endpoint": "https://api.caprioletech.com/v1/messages",
+    "model": "anthropic/claude-opus-4-6",
     "api_key_env": "CAPRIOLE_API_KEY",
     "timeout_seconds": 600,
     "max_attempts": 1,
-    "protocol": "openai_chat_completions_stream"
+    "protocol": "anthropic_messages_stream",
+    "max_tokens": 4096
   },
   "speech_provider": null
 }

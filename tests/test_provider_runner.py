@@ -9,10 +9,18 @@ from home_podcast.provider_runner import (
     _sanitize_memorable_passages,
 )
 from home_podcast.providers.capriole import _safe_error_body
+from home_podcast.providers.capriole import _consume_anthropic_sse
 from home_podcast.providers.capriole import _consume_openai_sse
+from home_podcast.providers.capriole import _anthropic_messages_model
 
 
 class ProviderRunnerTests(unittest.TestCase):
+    def test_normalizes_catalog_model_for_messages_endpoint(self) -> None:
+        self.assertEqual(
+            _anthropic_messages_model("anthropic/claude-opus-4-6"),
+            "claude-opus-4-6",
+        )
+
     def test_parses_fenced_json_and_forces_job_identity(self) -> None:
         job = {"story_id": "story-correct", "content_hash": "hash-correct"}
         card = _parse_card(
@@ -81,6 +89,25 @@ class ProviderRunnerTests(unittest.TestCase):
         self.assertEqual(result.text, "Hello home.")
         self.assertEqual(result.model, "fable")
         self.assertEqual(result.usage["input_tokens"], 10)
+
+    def test_consumes_anthropic_compatible_sse(self) -> None:
+        response = io.BytesIO(
+            b'event: message_start\n'
+            b'data: {"type":"message_start","message":{"id":"msg-1",'
+            b'"model":"claude-opus-4-6","usage":{"input_tokens":10}}}\n\n'
+            b'event: content_block_delta\n'
+            b'data: {"type":"content_block_delta","index":0,'
+            b'"delta":{"type":"text_delta","text":"Hello home."}}\n\n'
+            b'event: message_delta\n'
+            b'data: {"type":"message_delta","usage":{"output_tokens":2}}\n\n'
+            b'event: message_stop\n'
+            b'data: {"type":"message_stop"}\n\n'
+        )
+        result = _consume_anthropic_sse(response, "fallback")
+        self.assertEqual(result.text, "Hello home.")
+        self.assertEqual(result.model, "claude-opus-4-6")
+        self.assertEqual(result.usage["input_tokens"], 10)
+        self.assertEqual(result.usage["output_tokens"], 2)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,2058 @@
+{
+  "contract_version": 1,
+  "episode_id": "2013-12.01",
+  "title": "The Homes We Leave Behind",
+  "segments": [
+    {
+      "segment_id": "m1-s001",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "\"I have merely been transplanted from one scene of student-life to another.\" That's a young man writing from Cambridge in 1859, trying to convince himself that leaving home isn't really leaving home.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "reflective, quiet"
+      },
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m1-s002",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "But he doesn't buy it, does he? A few lines later he admits he's going to be homesick on long evenings, longing for something home-like to talk to and smile at.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "warm, knowing"
+      },
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m1-s003",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And we only have those words because a letter survived long enough to be printed in a book, and that book survived long enough to be scanned, and the scan got crawled onto the internet. One hundred and fifty-four years from pen to pixel.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "marveling, precise"
+      },
+      "pause_after_ms": 800
+    },
+    {
+      "segment_id": "m1-s004",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Welcome to The Homes We Leave Behind. I'm Maya.",
+      "source_story_ids": [],
+      "delivery": {
+        "tone": "bright, welcoming"
+      },
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m1-s005",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "I'm Theo.",
+      "source_story_ids": [],
+      "delivery": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m1-s006",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And I'm Lina.",
+      "source_story_ids": [],
+      "delivery": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s007",
+      "speaker": "curious_guide",
+      "kind": "disclosure",
+      "text": "Quick thing before we dive in: every voice you're hearing on this show is synthetic. We are AI hosts exploring real human stories preserved in web archives.",
+      "source_story_ids": [],
+      "delivery": {
+        "tone": "straightforward"
+      },
+      "pause_after_ms": 500
+    },
+    {
+      "segment_id": "m1-s008",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And all the material today comes from pages crawled in December 2013. That's when a web crawler grabbed them, not necessarily when they were written. Some of these stories are much older. That 1859 letter, for instance, was sitting as a raw text file on the Internet Archive—an OCR dump of a scanned book, complete with broken line breaks and a page number header.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "informative, lightly amused"
+      },
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m1-s009",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Today we're talking about what happens when the place you call home becomes a place you can only visit. And we found that ache everywhere in this archive—in old letters, in blog posts, in a grief journal on a health website.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39",
+        "story-0df1f0c21c6c8791e42dba65"
+      ],
+      "delivery": {
+        "tone": "warm, setting the stage"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s010",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Let's go back to William Wheeler. He's just left New Haven for Cambridge, and what gets him isn't the newness. He says the difference from his earlier trip to Europe was that Europe was unknown and exciting. This move just ends his membership in the family home.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "emphatic"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s011",
+      "speaker": "curious_guide",
+      "kind": "quote",
+      "text": "the idea of going away for good and all, and always hereafter being at home only as a visitor.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "measured, letting the words land"
+      },
+      "pause_after_ms": 700
+    },
+    {
+      "segment_id": "m1-s012",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "That phrase—\"only as a visitor\"—it's doing a lot of work. Everyone who's ever gone back to a childhood bedroom that's been turned into a home office knows exactly what he means.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "dry, relatable"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s013",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And that same feeling shows up a century and a half later on a Blogspot page. The author goes by \"Saudade\"—the Portuguese word for a longing that never quite resolves.",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "tone": "intrigued"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s014",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "They're writing about leaving Cape Verde after volunteering there, and they call it one of the saddest days of their life. Years later they still think about it every single day.",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "tone": "moved"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s015",
+      "speaker": "archive_nerd",
+      "kind": "quote",
+      "text": "There never was a time when I was more myself, more comfortable with the skin I wore, the people I'd seen, the place I'd visited.",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "tone": "sincere, letting the sentiment breathe"
+      },
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m1-s016",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "What strikes me is that Saudade's home isn't the place they grew up. It's a place they chose and then had to leave. And that kind of homesickness can be even harder to explain to people.",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "tone": "perceptive"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s017",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "The blog itself is fascinating. The archive shows exactly one post. The blog's called \"Raskalnikov\"—yes, as in Dostoevsky—but the display name is Saudade. It's like two different literary personas on one page. And there are Cape Verdean Creole phrases woven right into the English with no translation at all.",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "tone": "genuinely curious"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s018",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Maybe they weren't writing for us. Maybe they were writing for the friends they name at the end of the post, people still in Cape Verde who'd understand every word.",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "tone": "gentle"
+      },
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m1-s019",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Now here's where Theo found something that floored me. In the same crawl, from another Internet Archive text file—another OCR scan with page numbers still embedded—there's a letter from Beethoven.",
+      "source_story_ids": [
+        "story-bc88fb883cd14b8f55e78065"
+      ],
+      "delivery": {
+        "tone": "building energy"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s020",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Right, it's addressed to Stephan von Breuning, and Beethoven is writing about his deafness keeping him from traveling. He can't go see the scenery of his fatherland. He can't marry. And there's this astonishing line—",
+      "source_story_ids": [
+        "story-bc88fb883cd14b8f55e78065"
+      ],
+      "delivery": {
+        "tone": "setting up carefully"
+      },
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m1-s021",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "Oh ! I could span the world were I only free from this ! I feel that my youth is only now commencing.",
+      "source_story_ids": [
+        "story-bc88fb883cd14b8f55e78065"
+      ],
+      "delivery": {
+        "tone": "aching, deliberate"
+      },
+      "pause_after_ms": 700
+    },
+    {
+      "segment_id": "m1-s022",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "He's homesick for a life he can't get to. Not a specific house, but a whole future that his deafness has walled off.",
+      "source_story_ids": [
+        "story-bc88fb883cd14b8f55e78065"
+      ],
+      "delivery": {
+        "tone": "quiet, struck"
+      },
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m1-s023",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And the digital version of the letter just cuts off mid-sentence. His closing words, his signature—gone. The scan or the extraction stopped before the end. So even this archived copy of a published copy of a private letter is incomplete.",
+      "source_story_ids": [
+        "story-bc88fb883cd14b8f55e78065"
+      ],
+      "delivery": {
+        "tone": "pointed, wry"
+      },
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m1-s024",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Then there's Brooke Davidoff, and her story brings all of this into the present tense. She wrote a post called \"Homesick\" after her father died.",
+      "source_story_ids": [
+        "story-0df1f0c21c6c8791e42dba65"
+      ],
+      "delivery": {
+        "tone": "careful, shifting down"
+      },
+      "pause_after_ms": 500
+    },
+    {
+      "segment_id": "m1-s025",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "She's living far from southern California, where her mother and her father's house are. The family owns the house in Wildomar together, but nobody can afford the mortgage, and nobody lives nearby.",
+      "source_story_ids": [
+        "story-0df1f0c21c6c8791e42dba65"
+      ],
+      "delivery": {
+        "tone": "empathetic"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s026",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "I want to go home. The California heat and my mommy are calling. I'm not homesick, I'm heart sick.",
+      "source_story_ids": [
+        "story-0df1f0c21c6c8791e42dba65"
+      ],
+      "delivery": {
+        "tone": "raw, vulnerable"
+      },
+      "pause_after_ms": 800
+    },
+    {
+      "segment_id": "m1-s027",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Her post also cuts off mid-sentence—she starts describing a dream at a party and the text just stops. We don't know if that's how she left it or if the crawl missed the rest.",
+      "source_story_ids": [
+        "story-0df1f0c21c6c8791e42dba65"
+      ],
+      "delivery": {
+        "tone": "matter-of-fact, respectful"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s028",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "So we have four voices across two centuries, and every one of them is reaching toward a home that's already changed—or that they've already changed too much to simply walk back into.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39",
+        "story-7ac236ec06ced47546d91a19",
+        "story-bc88fb883cd14b8f55e78065",
+        "story-0df1f0c21c6c8791e42dba65"
+      ],
+      "delivery": {
+        "tone": "gathering threads"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m1-s029",
+      "speaker": "connector",
+      "kind": "transition",
+      "text": "Distance turns a remembered home into a destination. But arriving—actually getting there—that doesn't guarantee you'll recognize what you find. That's where we're headed next.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39",
+        "story-0df1f0c21c6c8791e42dba65"
+      ],
+      "delivery": {
+        "tone": "forward-looking, slightly ominous"
+      },
+      "pause_after_ms": 1000
+    },
+    {
+      "segment_id": "m2-s001",
+      "speaker": "curious_guide",
+      "kind": "transition",
+      "text": "So we've been talking about what it means to leave. But here's the thing about distance — it doesn't just separate you from a place. It turns every ordinary thing you left behind into something radiant.",
+      "source_story_ids": [
+        "story-b97029685f681ec4175a39e4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m2-s002",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And the archive is full of people discovering that in real time. We found a letter — well, an OCR extraction from a scanned book on the Internet Archive — titled in its headers as Letters of William Wheeler. The text is machine-transcribed, so you get these little scars where the scanner split words across lines. But through those cracks, this voice comes through so clearly.",
+      "source_story_ids": [
+        "story-b97029685f681ec4175a39e4"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "William Wheeler": "WIHL-yum HWEE-lur"
+      },
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s003",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And what he's longing for isn't grand. It's voices. Songs. Faces.",
+      "source_story_ids": [
+        "story-b97029685f681ec4175a39e4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m2-s004",
+      "speaker": "curious_guide",
+      "kind": "quote",
+      "text": "I sigh for rest and the sound of home\nvoices, the music of home songs, the light of loved eyes and\nfaces",
+      "source_story_ids": [
+        "story-b97029685f681ec4175a39e4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m2-s005",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "He describes himself as on a little island in the boundless ocean — surrounded by travelers gambling over champagne on a Sunday, which horrifies him. Now, he's also pretty harsh about foreign faces and tongues in ways that are very much of his era, so we should note: that's his period-bound lens, not ours.",
+      "source_story_ids": [
+        "story-b97029685f681ec4175a39e4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s006",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "But underneath the moralizing? He's just lonely. And loneliness makes you catalogue what you had.",
+      "source_story_ids": [
+        "story-b97029685f681ec4175a39e4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m2-s007",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Which is exactly what a blogger named Emily does — but in 2012, from Kenya. She's on a site called One Trailing Spouse, and she writes this list of five things she misses about the U.S. after five months abroad. And the list is so specific it's almost funny.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Kenya": "KEHN-yuh"
+      },
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s008",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Purple corduroy pants. Her muffin tin. Netflix.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s009",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And driving! Just the freedom to get in a car by herself after dark. She's candid that this is a privileged perspective — she says so. But missing the feeling of casual safety? That's real no matter how you frame it.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s010",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "A commenter named Marina chimes in from England and says she hasn't worn completely dry clothes in nearly two years. She misses the sun. And avocados.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m2-s011",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "I love that a comment section becomes this little support group for homesickness. That's the web doing something no letter could — letting strangers compare their longing in real time.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s012",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And then there's Kathleen, on a WordPress blog called My 8×10 Life. She grew up in the rural Midwest and moved reluctantly to Brooklyn. And she writes about driving back through Midwestern landscapes and feeling like she could finally stretch and breathe again after months of swallowing the grit of New York.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Kathleen": "kath-LEEN"
+      },
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s013",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "But she says something that really gets me — she talks about the details of home growing fuzzy, and that really bothers her. Like the feelings of belonging are still sharp, but the specifics are slipping.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m2-s014",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "But, I don’t think I’ll ever allow myself to like it, and will never love it no matter how well I adapt to the urban life. I guess it makes me feel disloyal to my roots.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 500
+    },
+    {
+      "segment_id": "m2-s015",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Disloyal. That's the word. Homesickness isn't just missing a place — it's a kind of moral obligation to keep missing it.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s016",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "We found another exile — a memoir fragment, also from the Internet Archive's OCR pipeline. Someone marking a thirty-seventh birthday in May 1919, living in seclusion on an island. The narrator doesn't fully identify themselves in this fragment, but letters and flowers arrive from Germany, so many that the small rooms of a parsonage can't hold them all.",
+      "source_story_ids": [
+        "story-ea05fee5897c7db8f73cc06a"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m2-s017",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "What struck me is how the narrator measures belonging — not by being present, but by being remembered. Those letters prove people still feel connected across distance and, as the writer says, across a wildly raging campaign of slander.",
+      "source_story_ids": [
+        "story-ea05fee5897c7db8f73cc06a"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m2-s018",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And we should be honest — we don't know from this fragment alone who the narrator is or what the slander was about. The text starts mid-sentence. That's the nature of digitized scraps.",
+      "source_story_ids": [
+        "story-ea05fee5897c7db8f73cc06a"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s019",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Which brings us to a passage that kind of names the whole feeling we're circling. From what appears to be volume twenty-one of the collected works of someone abbreviated 'Stev' in the filename — an essay about roads. The writer introduces this German word: Sehnsucht.",
+      "source_story_ids": [
+        "story-33794ca00b8257365b2cd670"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Sehnsucht": "ZAYN-zookht"
+      },
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s020",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "The passion for what is ever beyond. That ache for the horizon.",
+      "source_story_ids": [
+        "story-33794ca00b8257365b2cd670"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m2-s021",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And the essay quotes Goethe's Werther to make this devastating point — that when you finally reach the distance you've been longing for, when 'there' is changed to 'here,' all is afterwards as it was before. You arrive, and the magic collapses.",
+      "source_story_ids": [
+        "story-33794ca00b8257365b2cd670"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Werther": "VAIR-tur"
+      },
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m2-s022",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "So every person we've just heard — Wheeler sighing for home voices, Kathleen gripping the steering wheel through flat fields, Emily dreaming of her purple pants, the unnamed exile counting birthday flowers — they're all living inside that word. Sehnsucht.",
+      "source_story_ids": [
+        "story-33794ca00b8257365b2cd670",
+        "story-b97029685f681ec4175a39e4",
+        "story-e58ed78f41114cade2acc8c5",
+        "story-2327326c1fcdf3a10f70bdca",
+        "story-ea05fee5897c7db8f73cc06a"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Sehnsucht": "ZAYN-zookht"
+      },
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m2-s023",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And the essay warns us what happens next. Distance turns the remembered home into a destination. You start moving toward it. But arrival — arrival does not guarantee you'll recognize what you find.",
+      "source_story_ids": [
+        "story-33794ca00b8257365b2cd670"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 800
+    },
+    {
+      "segment_id": "m3-s001",
+      "speaker": "curious_guide",
+      "kind": "transition",
+      "text": "So we've been talking about what it means to leave home, and how distance can turn the place you left into something almost mythical. But here's the thing—what happens when you actually go back?",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m3-s002",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "We found a story in the crawl that hits this dead on. It's a first-person essay by Christal Presley, originally published on CNN and then republished on a New Hampshire TV station's website, which is where the crawler caught it. She's driving from Atlanta back to Honaker, Virginia—deep Appalachia—for a book signing.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Honaker": "HAH-nuh-ker",
+        "Christal Presley": "KRIS-tal PREZ-lee",
+        "Appalachia": "ap-uh-LATCH-uh"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m3-s003",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And she hasn't been back—not really—in almost twenty years. She left at eighteen. She says it plainly: the same age her father was when he was drafted and sent to Vietnam.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m3-s004",
+      "speaker": "curious_guide",
+      "kind": "quote",
+      "text": "I'm going home to tell my truth. I was 18 when I fled there -- the same age my father was when he was drafted and sent to Vietnam. We both ended up scarred by his war.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {
+        "tone": "measured, quiet weight"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 800
+    },
+    {
+      "segment_id": "m3-s005",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Both scarred by his war. That line just sits there, doesn't it. Her father came home with PTSD. The family kept it secret—for years. And she describes that secret growing inside her like a cancer. Those are her words.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m3-s006",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "And this is what shaped how she saw the mountains, the whole town. She writes that she'd grown to hate them—she associated the mountains and the entire town with the secrets she was never able to tell.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m3-s007",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Now here's where the archive does something frustrating and weirdly poetic. The captured text cuts off mid-sentence. She's arrived at her parents' house, there's a clash with her father over a song he wrote, and the text just stops. Mid-word. We literally do not get the resolution.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {
+        "tone": "wry, a little pained"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m3-s008",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Which means this crawl preserved the wound but not the healing—if there even was one in that moment.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 500
+    },
+    {
+      "segment_id": "m3-s009",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "But she did write a whole book—Thirty Days with My Father—built from phone calls and journal entries. So there's a fuller story out there. We just don't have it in this snapshot.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m3-s010",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And while Christal's return is about confronting trauma, we found another piece from barely thirty miles away—same region of Virginia—that's about a much quieter kind of loss. A woman named Melva posted a poem on a personal website called Heavens Gates, describing her grandparents' homeplace in Smith Hollow near Abingdon.",
+      "source_story_ids": [
+        "story-ec32dd5b7c69997097358090"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Melva": "MEL-vuh",
+        "Abingdon": "AB-ing-dun"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m3-s011",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "And this house is physically falling apart. Broken windows, rotting walls, vines climbing through the cracks. But Melva layers in these memories—a little girl hunting for hen's nests, riding a bike down the hill, her grandmother calling her in for supper.",
+      "source_story_ids": [
+        "story-ec32dd5b7c69997097358090"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m3-s012",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "With love and laughter inside those rotting walls",
+      "source_story_ids": [
+        "story-ec32dd5b7c69997097358090"
+      ],
+      "delivery": {
+        "tone": "gentle, savoring the line"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 500
+    },
+    {
+      "segment_id": "m3-s013",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Love and laughter inside those rotting walls. The house is gone, basically. But in the poem it's still full.",
+      "source_story_ids": [
+        "story-ec32dd5b7c69997097358090"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m3-s014",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And the page itself is a kind of rotting house! It has a MIDI file set to auto-play—a song called \"Old Home Place\"—and a boilerplate lyrics disclaimer that doesn't even apply to the original poem. It's got that early-web memorial-site feel. The poem is dated 2009, but the site design feels older. The crawl grabbed it in 2013.",
+      "source_story_ids": [
+        "story-ec32dd5b7c69997097358090"
+      ],
+      "delivery": {
+        "tone": "affectionate, amused"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m3-s015",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "A poem about a crumbling house, on a crumbling website. That's almost too perfect, Theo.",
+      "source_story_ids": [
+        "story-ec32dd5b7c69997097358090"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m3-s016",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And this pattern—going back and being stunned by the change—it's not new. We found a speech from a scanned book on Archive.org, someone addressing the town of Holland, Massachusetts. His family farmed there for four generations. He left as a teenager, fought in the Civil War with the First Michigan Sharpshooters, and was, in his words, dreadfully homesick.",
+      "source_story_ids": [
+        "story-4ed05cb194b517ab41b3f7e6"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Holland": "HOL-und"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m3-s017",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "We don't even know his name for certain—the OCR is rough, and the speech is introduced as reported rather than bylined. But he says the old homes could tell stories of scenes that are past, of a life that never comes back. And that speech was already old when it was scanned, and already degraded when the crawler found the scan.",
+      "source_story_ids": [
+        "story-4ed05cb194b517ab41b3f7e6"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m3-s018",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Then there's another scanned speech—someone returning to America after twenty years abroad. He compares himself to Rip Van Winkle, almost appalled at the wonderful changes that meet his eyes. He's been invited to dinners everywhere, but he only says yes to his native town of Danvers, Massachusetts.",
+      "source_story_ids": [
+        "story-25945a71670ab26747eae7ff"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Danvers": "DAN-verz"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m3-s019",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "There's something honest in that Rip Van Winkle comparison. You sleep through the change, and then the change is all you can see. Christal dreaded her mountains. Melva's house is swallowed by vines. The Holland speaker says the life never comes back. The Danvers speaker is amazed the country is barely recognizable.",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1",
+        "story-ec32dd5b7c69997097358090",
+        "story-4ed05cb194b517ab41b3f7e6",
+        "story-25945a71670ab26747eae7ff"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m3-s020",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Four people, across centuries, all saying the same thing: you can go back, but what you left isn't waiting for you. So if the place can't hold the memory anymore—where does it go?",
+      "source_story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1",
+        "story-ec32dd5b7c69997097358090",
+        "story-4ed05cb194b517ab41b3f7e6",
+        "story-25945a71670ab26747eae7ff"
+      ],
+      "delivery": {
+        "tone": "genuine question, slightly quieter"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m4-s001",
+      "speaker": "curious_guide",
+      "kind": "transition",
+      "text": "So we've been talking about leaving and coming back, but here's the thing that nobody warns you about—sometimes the place is still on the map, still has a zip code, and it's just… not yours anymore.",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322",
+        "story-191f2a6d4501d545e19858cd"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m4-s002",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "We've got two writers doing almost the exact same thing in these archives. Both walking through their hometowns, taking inventory. One's in Mt. Union, Iowa—small, rural, Henry County. The other's walking a courthouse square in his own little Texas town. And both pieces were published around May 2013, then crawled that December—months later. One from the Ottumwa Courier, one from a Houston Chronicle blog.",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322",
+        "story-191f2a6d4501d545e19858cd"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Ottumwa": "AH-tum-wah",
+        "Mt. Union": "Mount Union"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s003",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And the Iowa writer brings their daughter and baby grandson Max on the trip. Three generations standing in a cemetery, leaving flowers at family graves. There's this line—",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s004",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "Tears fell in the cemetery where we showed Max the resting places of his great-grandparents.",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322"
+      ],
+      "delivery": {
+        "tone": "gentle, measured"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 800
+    },
+    {
+      "segment_id": "m4-s005",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Showing an infant a headstone. He won't remember any of it.",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m4-s006",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "No. But the writer will. That's the point—the ritual is for the living. And the writer reaches this realization that I think is the heart of the whole piece.",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s007",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "It gave me pause when I finally realized that I love the memory of that part of Henry County. That even though the town is still there, many of the places I knew so well are gone. And most of the people I knew who lived there are gone, too.",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322"
+      ],
+      "delivery": {
+        "tone": "reflective, slow"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m4-s008",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And we should say—that column is truncated. It ends mid-sentence: 'I walked past stones,' and then nothing. The crawler grabbed a printer-friendly page variant—you can see '/print' in the URL—and whether the full text ever made it into the archive, we don't know.",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s009",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "The Texas writer has the same mid-sentence cutoff! He's walking the courthouse square, remembering every storefront.",
+      "source_story_ids": [
+        "story-191f2a6d4501d545e19858cd"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s010",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Right, and his text opens with the string 'Print67' smashed right into the first paragraph—that's a share-counter widget the crawler swallowed as regular text. Classic WET extraction artifact.",
+      "source_story_ids": [
+        "story-191f2a6d4501d545e19858cd"
+      ],
+      "delivery": {
+        "tone": "amused"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s011",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "But the memories themselves are so specific. He worked as a soda skeet for seventeen and a half cents an hour.",
+      "source_story_ids": [
+        "story-191f2a6d4501d545e19858cd"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "soda skeet": "SOH-duh skeet"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s012",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And a bowl of chili for a dime—then you just kept adding crackers and ketchup until you felt full. That's not nostalgia as mood. That's nostalgia as exact price.",
+      "source_story_ids": [
+        "story-191f2a6d4501d545e19858cd"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s013",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "He remembers carrying groceries from the Piggly Wiggly two or three blocks to somebody's house and putting the milk in their ice box. A whole economy of proximity that's just gone.",
+      "source_story_ids": [
+        "story-191f2a6d4501d545e19858cd"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Piggly Wiggly": "PIG-lee WIG-lee"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s014",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Now, both of those writers are wistful. But the Andover letter? That's a different temperature entirely.",
+      "source_story_ids": [
+        "story-7125f780a8df384e1a7cc5ea"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Andover": "AN-doh-ver"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s015",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "This is a letter to the editor of the Andover Townsman, published November 2012, crawled over a year later. A man comes back to Andover, Massachusetts after decades away and he is angry. The town used to be known as 'Mill, Hill and Till'—and now he calls it a smaller version of New York City.",
+      "source_story_ids": [
+        "story-7125f780a8df384e1a7cc5ea"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Shawsheen": "SHAW-sheen"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s016",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "He goes through landmarks—the Shawsheen River, historic dams, an old high school—and each one is either demolished, degraded, or renamed. He sees the river and compares it to a Love Canal wasteland.",
+      "source_story_ids": [
+        "story-7125f780a8df384e1a7cc5ea"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Shawsheen": "SHAW-sheen",
+        "Punchard": "PUN-chard"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s017",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "There's something uncomfortable in it too, though. Part of his argument is that newcomers don't understand the town's history, that they've diluted its values. Who gets to define a place's real identity? The person who left, or the people who live there now?",
+      "source_story_ids": [
+        "story-7125f780a8df384e1a7cc5ea"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m4-s018",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "That's the tension. The Iowa and Texas writers grieve what's gone but they hold it lightly—they know the loss is partly theirs, inside them. The Andover letter says no, the town itself is wrong now. And I think that's a really human fork in the road when your hometown changes.",
+      "source_story_ids": [
+        "story-7125f780a8df384e1a7cc5ea",
+        "story-8164ced3b394d9c7d72cb322",
+        "story-191f2a6d4501d545e19858cd"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m4-s019",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Meanwhile, there's a very different kind of homecoming buried in a personal blog post from Christmas Eve, 2009—captured nearly four years later. Someone's home visiting family, loves them genuinely, but feels an ache because London has become their real center of gravity. They can't quite name the feeling.",
+      "source_story_ids": [
+        "story-fa70a536d9be15a3a1c079d4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s020",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "That one's truncated too—mid-sentence, right at the start of an anecdote. And the blog references two earlier installments we don't have in this capture. So we're getting a fragment of a fragment.",
+      "source_story_ids": [
+        "story-fa70a536d9be15a3a1c079d4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s021",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "But the fragment is enough. It's someone realizing that home has split in two—the place where your family is, and the place where you became yourself. And those might never be the same place again.",
+      "source_story_ids": [
+        "story-fa70a536d9be15a3a1c079d4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m4-s022",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "And then there's a songwriter named Xanthe Littlemore who puts that exact feeling to music—or at least a lyrics site tried to. The crawler grabbed preview snippets from a page whose URL slug says 'hurry up with the robots,' which doesn't match any song title on the page.",
+      "source_story_ids": [
+        "story-4cabb58067e9770676b8af02"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Xanthe Littlemore": "ZAN-thee LIT-uhl-more"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s023",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Total metadata mismatch. And the lyrics themselves are gated—only preview fragments made it through. There's even a Unicode replacement character where the encoding broke. We're reading through frosted glass.",
+      "source_story_ids": [
+        "story-4cabb58067e9770676b8af02"
+      ],
+      "delivery": {
+        "tone": "wryly amused"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s024",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "But look what survived. Under the title 'Don't Say Goodbye'—",
+      "source_story_ids": [
+        "story-4cabb58067e9770676b8af02"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m4-s025",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "There is a town where I used to live as a child\nThey tore down everything that was growing wild\nAnd I don't like going back home, I hate to see what they've done\n'Cause when I do, well, it makes me cry",
+      "source_story_ids": [
+        "story-4cabb58067e9770676b8af02"
+      ],
+      "delivery": {
+        "tone": "lyrical, tender"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 800
+    },
+    {
+      "segment_id": "m4-s026",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "That could be the Andover letter writer. That could be any of them.",
+      "source_story_ids": [
+        "story-4cabb58067e9770676b8af02",
+        "story-7125f780a8df384e1a7cc5ea"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m4-s027",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And we can't even hear the melody. The full lyrics were behind a login wall. We've got a few lines from a song by an artist most people haven't heard of, on a page that doesn't match its own URL. That's the archive—generous and stingy in the same breath.",
+      "source_story_ids": [
+        "story-4cabb58067e9770676b8af02"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m4-s028",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "What strikes me across all of these is that no one finds what they went back for. Not the cemetery visitor, not the courthouse walker, not the angry letter writer, not the blogger at Christmas. The place can't hold what they need it to hold. So what do you do with the love that has nowhere to land?",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322",
+        "story-191f2a6d4501d545e19858cd",
+        "story-7125f780a8df384e1a7cc5ea",
+        "story-fa70a536d9be15a3a1c079d4"
+      ],
+      "delivery": {
+        "tone": "quietly searching"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m4-s029",
+      "speaker": "curious_guide",
+      "kind": "transition",
+      "text": "You find other containers for it. And that's where these stories take us next.",
+      "source_story_ids": [
+        "story-8164ced3b394d9c7d72cb322",
+        "story-fa70a536d9be15a3a1c079d4"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m5-s001",
+      "speaker": "connector",
+      "kind": "transition",
+      "text": "So we've been talking about sensory triggers and how powerfully they pull us backward. But there's another layer here — what happens when the longing isn't even for something you actually had?",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m5-s002",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Okay, this one genuinely surprised me. There's a blogger who ran a site called Branded in the 80s — the whole project was basically a personal archive of childhood consumer culture. And he's writing about how old packaging, old toys, can hit you like a physical force.",
+      "source_story_ids": [
+        "story-1e3a5bda38becad9ce688edc"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s003",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "He's not exaggerating, either. He describes it as being punched in the gut.",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s004",
+      "speaker": "curious_guide",
+      "kind": "quote",
+      "text": "There have been moments where I stumble across something that I completely forgot about and literally doubled over as if I were punched in the gut.",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m5-s005",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And the example he gives is so specific — sucking on an Otter Pop, sitting on a hot green electrical transformer box, feeling it burn through his surf shorts while he talks skateboarding with a friend. That's not a concept. That's a full-body memory.",
+      "source_story_ids": [
+        "story-1e3a5bda38becad9ce688edc"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Otter Pop": "AW-ter pop"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s006",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "But then he finds a People magazine ad for Lacoste polo shirts — you know, the little alligator patch — and he gets that same wave of nostalgia. And then he realizes: he never owned one.",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d",
+        "story-1e3a5bda38becad9ce688edc"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Lacoste": "lah-KOHST"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s007",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "He calls it false nostalgia — longing for something you never actually had or experienced. He grew up in Florida surrounded by gator imagery, so the Lacoste logo felt like home even though the brand was never in his closet.",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d",
+        "story-1e3a5bda38becad9ce688edc"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s008",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And the regional pride woven in there is so tender. As a kid he believed Florida was the center of cool.",
+      "source_story_ids": [
+        "story-1e3a5bda38becad9ce688edc"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s009",
+      "speaker": "curious_guide",
+      "kind": "quote",
+      "text": "It played into this sense that I had at the time that Florida was the center of the country, the center of cool",
+      "source_story_ids": [
+        "story-1e3a5bda38becad9ce688edc"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m5-s010",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Now, web-artifact note: we're reading this from two different tag-archive pages on his blog — one filed under 'Lacoste Gator,' one under 'False Nostalgia.' Same post, two doorways. And both versions cut off mid-sentence with a bare less-than character — the crawler hit an image tag it couldn't extract. He was probably showing us the little alligator logo, but that image is just gone.",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d",
+        "story-1e3a5bda38becad9ce688edc"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s011",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "So we have the nostalgia but not the thing that triggered it. That's almost poetic.",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m5-s012",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "What's interesting is how that same ache shows up across centuries. Because sitting right next to this blog post in the same crawl month is a letter from the 1800s — someone writing to a reverend named Cochrane, explaining why he can't attend the centennial anniversary of a town called Antrim.",
+      "source_story_ids": [
+        "story-d11d07357380985cd742c37e"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Antrim": "AN-trim",
+        "Cochrane": "COCK-rin"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s013",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "And for this man, Antrim isn't just a town. It's the only place on earth he could call home — for thirty-eight years.",
+      "source_story_ids": [
+        "story-d11d07357380985cd742c37e"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s014",
+      "speaker": "archive_nerd",
+      "kind": "quote",
+      "text": "For thirty-eight years it has been the only spot on earth that I could call by that peerless name, — home!",
+      "source_story_ids": [
+        "story-d11d07357380985cd742c37e"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m5-s015",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "He buried his father, his mother, three sisters, and a brother in that town's cemeteries. His only son was born there. He entered the ministry there. The homestead at Clinton holds — as he puts it — all those memories, painful and joyous, that give the word home its indescribable fascination.",
+      "source_story_ids": [
+        "story-d11d07357380985cd742c37e"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Clinton": "KLIN-ton"
+      },
+      "pause_after_ms": 500
+    },
+    {
+      "segment_id": "m5-s016",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "That's a man who knows exactly what home costs.",
+      "source_story_ids": [
+        "story-d11d07357380985cd742c37e"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m5-s017",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And we only have this letter because it was printed in a commemorative book, which was scanned and OCR'd into a plain-text stream on the Internet Archive. There's even a stray page header jammed into the middle of it — 'Response of Col. Silas Dinsmore' — which isn't him at all. It's just the scanner turning a page.",
+      "source_story_ids": [
+        "story-d11d07357380985cd742c37e"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Silas Dinsmore": "SY-lus DINZ-more"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s018",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "So we can't even be sure of the writer's name from this fragment alone.",
+      "source_story_ids": [
+        "story-d11d07357380985cd742c37e"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s019",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "There's another voice from a similar book — a Hancock County history — where Reverend William Nichols stands up at an old settlers' meeting and says something that could be an instruction manual for what we're doing right now.",
+      "source_story_ids": [
+        "story-74513b87ad36dc153aa9fad9"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Nichols": "NIK-ulz"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s020",
+      "speaker": "archive_nerd",
+      "kind": "quote",
+      "text": "At old settlers' meetings it is fitting and proper to call up the past and rehearse memories and events past and gone.",
+      "source_story_ids": [
+        "story-74513b87ad36dc153aa9fad9"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m5-s021",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Nichols was born before Indiana was even a state. He remembers hiding in a hollow stump as a four-year-old because a party of Indigenous people came to his father's house to trade. And we should note — he's telling this from a settler's point of view. The fear he felt was real to him as a child, but the story doesn't include the perspective of the people who were already there.",
+      "source_story_ids": [
+        "story-74513b87ad36dc153aa9fad9"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Metamora": "met-uh-MORE-uh"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s022",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And his schoolhouse — a log hut with windows made by cutting out a log and pasting oiled paper over the hole. That's the landscape these people are building memory from.",
+      "source_story_ids": [
+        "story-74513b87ad36dc153aa9fad9"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m5-s023",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Which brings us to someone who grew up in a landscape most people wouldn't think to feel nostalgic about at all. A professor named Michael Rustad, writing about the Red River Valley in northwestern Minnesota — flat black-loam prairie, endless horizon.",
+      "source_story_ids": [
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Rustad": "ROO-stad"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s024",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "I grew up longing to leave the flat land.",
+      "source_story_ids": [
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 200
+    },
+    {
+      "segment_id": "m5-s025",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "He calls himself a discontent farm boy. He thought being a flat-lander was second-rate — no mountains, no ocean.",
+      "source_story_ids": [
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s026",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "He didn't appreciate the golden wheat fields, the endless sunflowers. Not until later.",
+      "source_story_ids": [
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s027",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And what changed him was a sixth-grade teacher — Dale Finney Miller — who taught Scandinavian mythology and local history, the Alexandria runestone, stories about the land under his feet. That teacher made the place legible to him. Made it worth loving.",
+      "source_story_ids": [
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Alexandria": "al-ig-ZAN-dree-uh"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s028",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "And this essay was written in 2001, posted on a RootsWeb genealogy page — hand-coded HTML, no content-management system — and crawled twelve years later in December 2013. We have no idea if it was touched in between.",
+      "source_story_ids": [
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m5-s029",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "The extraction cuts off mid-sentence too, by the way. He was about to say something about learning from his teachers, and then — nothing. The crawler just stopped.",
+      "source_story_ids": [
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m5-s030",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "So here's the pattern. A blogger misses a shirt he never wore. A nineteenth-century minister can't attend his town's birthday but pours his whole heart into a letter. A pioneer remembers hiding in a stump. A farm boy learns to love flat land only after he's already gone. Every one of them is producing evidence of longing.",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d",
+        "story-d11d07357380985cd742c37e",
+        "story-74513b87ad36dc153aa9fad9",
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 300
+    },
+    {
+      "segment_id": "m5-s031",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And the archive caught every one of them. But it can't give us back the alligator logo, or the minister's full name, or the end of Rustad's sentence. It preserves the ache without restoring the thing that was ached for.",
+      "source_story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d",
+        "story-d11d07357380985cd742c37e",
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m5-s032",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "The longing survives. The home doesn't. Not as it was.",
+      "source_story_ids": [
+        "story-d11d07357380985cd742c37e",
+        "story-ebfd9618c8f744211076515b"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m6-s001",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "So we've been talking about the places people leave behind, and the things people build to hold onto them. And I want to end with a guy who did something I find kind of beautiful: he named his whole company after a park.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s002",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Ed Romanoff, founder of a company called PineRock. His about-us page, crawled December 2013, tells this origin story: when he was a kid in Connecticut, there was a park called PineRock Park. Baseball, live music, giant swings.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "PineRock": "PINE-rock",
+        "Romanoff": "ROH-mah-noff"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s003",
+      "speaker": "curious_guide",
+      "kind": "quote",
+      "text": "I didn't know what I wanted to be when I grew up, but I did know that I wanted to create something that moved me in that same way. And I decided that when I did, I would call it PineRock.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m6-s004",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Now, this is a corporate page—it's branding, not a diary entry. But the impulse is real, right? You take a childhood feeling and you pour it into a name so it outlives the place.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s005",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And we can't even confirm whether PineRock Park still exists. The crawl gives us his memory of it, not the park itself.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s006",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Which—honestly, that's what we keep finding. The archive holds evidence of longing, not the thing longed for. And sometimes longing shows up in the weirdest containers. Theo, tell them about the Halloween candle guy.",
+      "source_story_ids": [
+        "story-5cf48617f5335d0e3579c911"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s007",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Okay, so there's a blogger on Branded in the 80s who writes about retro toys—ThunderCats, G.I. Joe, all of it. And he's self-aware about it. He says—",
+      "source_story_ids": [
+        "story-5cf48617f5335d0e3579c911"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s008",
+      "speaker": "archive_nerd",
+      "kind": "quote",
+      "text": "“This junk doesn’t hold a candle to the stuff from back in my day…” I’m not that guy, or at least I don’t want to be.",
+      "source_story_ids": [
+        "story-5cf48617f5335d0e3579c911"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s009",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "He calls himself an amateur semiotician. Which is a wonderful thing to call yourself on a blog about Smurfs.",
+      "source_story_ids": [
+        "story-5cf48617f5335d0e3579c911"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Smurfs": "SMURFS"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s010",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "But then he says his year has been rough, and Halloween is the one season where he can let go and just feel something good. He ends up at a Yankee Candle browsing the Boney Bunch collection with his spouse, and the blog entry literally cuts off mid-sentence during that visit.",
+      "source_story_ids": [
+        "story-5cf48617f5335d0e3579c911"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Boney Bunch": "BOH-nee BUNCH"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s011",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "The crawl just… stops. We never find out what happened at Yankee Candle.",
+      "source_story_ids": [
+        "story-5cf48617f5335d0e3579c911"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m6-s012",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And that's a kind of cliffhanger nobody meant to write. A seasonal ritual that mattered to someone, preserved exactly up to the moment it can't tell us any more.",
+      "source_story_ids": [
+        "story-5cf48617f5335d0e3579c911"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s013",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Fragments seem to be the theme. There's a poem on PoetrySoup by Andrew Nashat—just a name on a community poetry site, we don't know more—and it's called \"Do you remember.\" The whole thing is built on that phrase, repeated like a heartbeat.",
+      "source_story_ids": [
+        "story-3b61e67ea1fdabc77b154676"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Nashat": "nah-SHAHT"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s014",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "I remember the days when all we wanted to do was be together, I remember the days when all we wanted to do was be there for each other, I remember the days when all we did was reminisce our childhood memories, I remember those days my dear.",
+      "source_story_ids": [
+        "story-3b61e67ea1fdabc77b154676"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 800
+    },
+    {
+      "segment_id": "m6-s015",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "And then it shifts. He asks: why is there a block of ice forming between us? Home isn't a place in this poem. It's a person. And it's melting away.",
+      "source_story_ids": [
+        "story-3b61e67ea1fdabc77b154676"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m6-s016",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Which brings us, weirdly, all the way back to Beethoven. The crawl picked up an OCR scan of a printed edition of his letters, served as a text file on archive.org. And in this fragment—and I mean fragment, it opens and closes mid-sentence—he's writing about leaving his fatherland, and about a friend.",
+      "source_story_ids": [
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Breuning": "BROY-ning"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s017",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "since I left my fatherland, you are one of those to whom my heart specially clings.",
+      "source_story_ids": [
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m6-s018",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "He's talking about Stephan von Breuning, a childhood friend who's come back into his life. And what makes it devastating is what comes next—he says he has to withdraw from everyone because of his hearing loss. The people he most wants to reach are the ones he's being pulled away from.",
+      "source_story_ids": [
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {
+        "Stephan von Breuning": "SHTEH-fahn fon BROY-ning"
+      },
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m6-s019",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And what we're reading isn't even the manuscript. It's an OCR scan of a printed edition, with editorial brackets and a probable gap where a name got lost in the machine reading. The chapter heading—\"Appeal to Friendship\"—is a label some nineteenth-century editor gave it, not Beethoven's words.",
+      "source_story_ids": [
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s020",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Layer after layer between us and the voice. A hand writes a letter, an editor prints it, a scanner reads it, a crawler captures it, and we find it two hundred years later in a text file named beethovensletter001beet underscore djvu dot txt.",
+      "source_story_ids": [
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s021",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "And still—through all of that—the longing comes through.",
+      "source_story_ids": [
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 600
+    },
+    {
+      "segment_id": "m6-s022",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "That's what an archive actually does, isn't it? A company named for a park that may be gone. A Halloween blog that stops mid-sentence. A poem to someone drifting away. A letter from a man going deaf, reaching for a friend. The archive keeps the reaching. It can't give back the thing that was reached for.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88",
+        "story-5cf48617f5335d0e3579c911",
+        "story-3b61e67ea1fdabc77b154676",
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 800
+    },
+    {
+      "segment_id": "m6-s023",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "We can't restore the home, the person, the page, or even the full context that produced any of these. We just know someone was here, and they wanted something badly enough to write it down.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88",
+        "story-5cf48617f5335d0e3579c911",
+        "story-3b61e67ea1fdabc77b154676",
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m6-s024",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "And that the web remembered it—even partially, even broken—matters.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88",
+        "story-5cf48617f5335d0e3579c911",
+        "story-3b61e67ea1fdabc77b154676",
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 400
+    },
+    {
+      "segment_id": "m6-s025",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Thanks for listening. The homes we leave behind don't disappear. They just change shape—into names, into rituals, into poems, into letters that open and close mid-sentence. We'll see you next time.",
+      "source_story_ids": [
+        "story-25f49668a3daff7a300d7c88",
+        "story-5cf48617f5335d0e3579c911",
+        "story-3b61e67ea1fdabc77b154676",
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {},
+      "pronunciation": {},
+      "pause_after_ms": 0
+    }
+  ]
+}

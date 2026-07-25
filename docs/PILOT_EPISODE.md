@@ -50,6 +50,22 @@ The regeneration allowance covers pronunciation fixes, delivery retakes, and
 limited alternate takes. Music, silence, and already-rendered ambience do not
 need TTS.
 
+## Current script draft
+
+The first source-validated script was generated with
+`anthropic/claude-opus-4-6`:
+
+- 158 speaking turns
+- 5,341 spoken words
+- 30,141 spoken characters
+- approximately 35.6 minutes at 150 words per minute
+- all 27 selected stories cited
+- all exact quotations verified against source text
+
+This is a complete long first cut. Before speech generation, trim roughly
+800–900 words to approach the 30-minute editorial target while preserving
+coverage of all 27 stories.
+
 ## Estimated TTS cost
 
 | Provider | Nominal pilot cost with 1.5x generation | Capacity note |

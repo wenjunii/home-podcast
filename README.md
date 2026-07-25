@@ -213,7 +213,7 @@ python -m home_podcast generate-script `
 Remove-Item Env:CAPRIOLE_API_KEY
 ```
 
-The generator uses Capriole's OpenAI-compatible streaming endpoint and caches
+The generator uses Capriole's protocol-compatible streaming endpoint and caches
 each outline section separately. A validated script is written to
 `episodes/2013-12.01/script.json`; an invalid candidate remains under `work/`
 with a validation report and does not replace the episode script.
