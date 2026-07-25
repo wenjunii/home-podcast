@@ -169,6 +169,7 @@ def prepare_tts_jobs(
                 "segment_id": segment["segment_id"],
                 "speaker": segment["speaker"],
                 "display_name": host.get("display_name", segment["speaker"]),
+                "accent": host.get("accent"),
                 "provider": provider,
                 "model": model,
                 "voice_id": voice_id,

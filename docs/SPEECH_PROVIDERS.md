@@ -22,8 +22,15 @@ economical production benchmark. Gemini is a valuable podcast-oriented
 contender, but its current TTS model is preview software and supports at most
 two speakers in a single request.
 
-The pilot voices passed their audition. New roster candidates should still be
+The pilot voices passed their audition. New roster candidates must still be
 blind-scored before their voice IDs are added to the rotation.
+
+The project now uses an ElevenLabs Creator subscription with 121,616 monthly
+credits and 192 kbps API output. Community Voice Library voices are available
+through the API on this paid tier. Nine English-verified candidates are saved
+for audition across Canadian, Chinese-influenced, French-influenced, Indian,
+Irish, Nigerian, Scottish, South African, and Spanish-influenced English.
+Every candidate has a 730-day availability notice and a 1x credit rate.
 
 ## Current pilot audition
 
@@ -57,8 +64,30 @@ shift, an exact quotation, and nonverbal reactions in one request.
 Natural and Creative versions use the same 1,760 rendered characters and differ
 only in stability. Natural runs 118.05 seconds and favors consistency. Creative
 runs 115.15 seconds and permits broader emotion with a higher artifact risk.
-The full 128-turn pilot should not be rendered until listening review selects a
-stability mode and confirms that contextual dialogue solves the flatness.
+A Creative+ follow-up runs 115.41 seconds with stronger direction and moderate
+style exaggeration. The full 128-turn pilot should not be rendered until
+listening review selects Creative or Creative+ and confirms that contextual
+dialogue solves the flatness.
+
+## Accent-aware rotation
+
+The production roster currently supports American, British, and Australian
+voices. The casting algorithm maximizes distinct accents within each valid
+three-person lineup, then uses a deterministic episode hash as the tie-break.
+Once saved, an episode cast is immutable.
+
+The broader candidate pool is deliberately staged outside the production
+roster. Metadata screening requires verified English, at least a one-year
+availability notice, and no custom credit multiplier. The same-script audition
+then tests a light opening, a serious turn, archive uncertainty, emotional
+restraint, and multilingual pronunciation. No accent is synthesized through
+an imitation instruction.
+
+Community voices remain a supply-chain dependency. Availability notice reduces
+but does not eliminate replacement risk. ElevenLabs also states that its
+current default voices expire on December 31, 2026, so future production should
+migrate approved hosts to stable community or authorized custom voices rather
+than assuming default voice IDs are permanent.
 
 ## Comparison
 
@@ -102,6 +131,9 @@ commercial rights, latency, and measured cost.
 - [ElevenLabs models](https://elevenlabs.io/docs/overview/models)
 - [ElevenLabs text-to-dialogue API](https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert/)
 - [ElevenLabs API pricing](https://elevenlabs.io/pricing/api)
+- [ElevenLabs Voice Library](https://elevenlabs.io/docs/eleven-creative/voices/voice-library)
+- [ElevenLabs shared voice search](https://elevenlabs.io/docs/api-reference/voices/voice-library/get-shared)
+- [ElevenLabs voice overview](https://elevenlabs.io/docs/overview/capabilities/voices)
 - [Hume text-to-speech overview](https://dev.hume.ai/docs/text-to-speech-tts/overview)
 - [Hume file synthesis API](https://dev.hume.ai/reference/text-to-speech-tts/synthesize-file)
 - [Hume pricing](https://www.hume.ai/pricing)

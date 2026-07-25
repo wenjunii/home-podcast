@@ -85,11 +85,22 @@ recording or as audio captured from a story's people, place, or event.
 
 The show bible defines three conversational functions, while
 `config/voice_roster.json` contains several role-matched people and voices.
-Each episode selects a deterministic pseudo-random lineup and freezes it in
+Each episode evaluates every valid role-compatible lineup, keeps the lineups
+with maximum accent diversity, applies a deterministic pseudo-random
+episode-level tie-break, and freezes the result in
 `episodes/<episode>/cast.json`. Rebuilding an episode reuses that file; adding
 voices later cannot silently change an existing cast.
 
 The on-air conversation treats the cast as ordinary podcast hosts and never
 discusses how their voices are produced. Internal cast metadata retains the
-provider and voice IDs for reproducibility. Fragment readings never claim to
-be interviews, impersonations, or recordings of the original writers.
+provider, voice IDs, and verified accent labels for reproducibility. Fragment
+readings never claim to be interviews, impersonations, or recordings of the
+original writers.
+
+New community voices follow a two-stage gate. Metadata screening checks
+verified English, availability notice, and credit multiplier; a same-script
+audition then checks naturalness, emotion, pronunciation, fatigue, and
+artifacts. Only candidates that pass listening review move from
+`config/accent_voice_candidates.json` into `config/voice_roster.json`.
+Accents are cast from natural voice characteristics and never requested through
+caricature or imitation tags.

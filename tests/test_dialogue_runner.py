@@ -166,6 +166,7 @@ def _write_contracts(root: Path) -> tuple[Path, Path]:
                 "display_name": "Maya",
                 "voice_name": "Bella",
                 "voice_id": "voice-1",
+                "accent": "american",
             },
             {
                 "id": "archive_nerd",
@@ -173,6 +174,7 @@ def _write_contracts(root: Path) -> tuple[Path, Path]:
                 "display_name": "Theo",
                 "voice_name": "Roger",
                 "voice_id": "voice-2",
+                "accent": "american",
             },
             {
                 "id": "connector",
@@ -180,6 +182,7 @@ def _write_contracts(root: Path) -> tuple[Path, Path]:
                 "display_name": "Lina",
                 "voice_name": "Lily",
                 "voice_id": "voice-3",
+                "accent": "british",
             },
         ],
     }

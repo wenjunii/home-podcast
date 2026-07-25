@@ -113,6 +113,37 @@ class TtsRunnerTests(unittest.TestCase):
             self.assertEqual(report["estimated_credits"], 0)
             generate.assert_not_called()
 
+    @unittest.skipUnless(shutil.which("ffmpeg"), "ffmpeg is required")
+    def test_copies_audition_preview_without_storing_credential(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            jobs_path = _write_jobs(root, ["A recovered home."])
+            job = json.loads(jobs_path.read_text(encoding="utf-8"))
+            preview = root / "previews" / "candidate.mp3"
+            job["preview_mp3"] = str(preview)
+            jobs_path.write_text(json.dumps(job) + "\n", encoding="utf-8")
+            response = ElevenLabsSpeechResponse(
+                audio=_wav_bytes(),
+                content_type="audio/mpeg",
+                request_id="request-test",
+                character_cost="17",
+            )
+            with (
+                patch.dict(os.environ, {"ELEVENLABS_API_KEY": "test-secret"}),
+                patch(
+                    "home_podcast.tts_runner.ElevenLabsSpeechClient.generate",
+                    return_value=response,
+                ),
+            ):
+                report = generate_tts_jobs(
+                    _config(),
+                    jobs_path,
+                    execute=True,
+                    max_credits=17,
+                )
+            self.assertTrue(preview.is_file())
+            self.assertEqual(report["previews"], [str(preview)])
+
 
 def _config() -> SimpleNamespace:
     return SimpleNamespace(

@@ -271,9 +271,12 @@ Validation fails if even one selected story has no traceable use.
 ## Speech, sound design, audio, and transcripts
 
 Each new episode selects a role-matched lineup from
-`config/voice_roster.json` and freezes it in `episodes/<episode>/cast.json`.
-The same episode always reuses its saved cast, while later episodes rotate to
-different people. Create one cached speech job per speaking turn:
+`config/voice_roster.json`, maximizes distinct verified accents, and freezes
+the result in `episodes/<episode>/cast.json`. The same episode always reuses
+its saved cast, while later episodes rotate to different people. Accent
+selection comes from the voice's verified metadata and listening review, never
+from imitation instructions in the script. Create one cached speech job per
+speaking turn:
 
 ```powershell
 python -m home_podcast prepare-tts `
@@ -311,6 +314,26 @@ three-host casting audition is versioned at
 listening copies remain local and ignored under
 `work/tts/audition-2013-12.01/`.
 
+The Creator subscription enables 192 kbps API output and community Voice
+Library auditions. Prepare the same-script comparison for the nine
+metadata-screened international English candidates:
+
+```powershell
+python -m home_podcast prepare-voice-audition `
+  --audition .\episodes\2013-12.01\accent-voice-audition.json `
+  --candidates .\config\accent_voice_candidates.json
+
+# Dry run reports the remaining credit ceiling
+python -m home_podcast generate-tts `
+  --jobs .\work\tts\accent-voice-audition-2026-07-jobs.jsonl
+```
+
+The local audition covers Canadian, Chinese-influenced, French-influenced,
+Indian, Irish, Nigerian, Scottish, South African, and Spanish-influenced
+English. Candidates remain outside the production roster until their samples
+pass the listening rubric. See
+[docs/ACCENT_CASTING.md](docs/ACCENT_CASTING.md).
+
 For natural interaction, test a short excerpt through ElevenLabs Text to
 Dialogue before rendering the complete episode. This preserves the surrounding
 speakers and emotional arc in one provider call instead of synthesizing every
@@ -336,6 +359,18 @@ Remove-Item Env:ELEVENLABS_API_KEY
 Each variant contains eight turns and 1,760 rendered characters, below the
 provider's 2,000-character reliability recommendation. Provider responses,
 normalized cache files, and listening copies remain ignored locally.
+
+A more adventurous Creative+ version uses the same eight source-preserving
+turns with richer emotional direction and moderate style exaggeration:
+
+```powershell
+python -m home_podcast prepare-dialogue-audition `
+  --audition .\episodes\2013-12.01\creative-plus-audition.json `
+  --cast .\episodes\2013-12.01\cast.json
+```
+
+It runs 115.41 seconds and used 1,884 credits. It remains a listening candidate,
+not the automatically selected production setting.
 
 The current speech-provider shortlist and pilot audition recommendation are in
 [docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).

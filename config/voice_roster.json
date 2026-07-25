@@ -1,7 +1,23 @@
 {
   "contract_version": 1,
   "provider": "elevenlabs",
-  "rotation_policy": "Choose one role-matched person per episode, then freeze the saved episode cast.",
+  "rotation_policy": "Choose a unique role-compatible person for each host, maximize distinct verified voice accents, break ties with a deterministic episode shuffle, then freeze the saved cast.",
+  "accent_policy": {
+    "allow_multilingual_english_accents": true,
+    "require_verified_or_auditioned_voice_accent": true,
+    "forbid_unreviewed_accent_imitation_tags": true,
+    "planned_expansion": [
+      "irish",
+      "scottish",
+      "canadian",
+      "indian english",
+      "nigerian english",
+      "south african english",
+      "french-influenced english",
+      "spanish-influenced english",
+      "mandarin-influenced english"
+    ]
+  },
   "roles": [
     {
       "id": "curious_guide",
@@ -10,19 +26,36 @@
           "person_id": "maya",
           "display_name": "Maya",
           "voice_name": "Bella",
-          "voice_id": "hpp4J3VqNfWAUOO0d1Us"
+          "voice_id": "hpp4J3VqNfWAUOO0d1Us",
+          "accent": "american"
         },
         {
           "person_id": "nora",
           "display_name": "Nora",
           "voice_name": "Sarah",
-          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+          "voice_id": "EXAVITQu4vr4xnSDxMaL",
+          "accent": "american"
         },
         {
           "person_id": "zoe",
           "display_name": "Zoe",
           "voice_name": "Jessica",
-          "voice_id": "cgSgspJ2msm6clMCkdW9"
+          "voice_id": "cgSgspJ2msm6clMCkdW9",
+          "accent": "american"
+        },
+        {
+          "person_id": "alice",
+          "display_name": "Alice",
+          "voice_name": "Alice",
+          "voice_id": "Xb7hH8MSUJpSbSDYk0k2",
+          "accent": "british"
+        },
+        {
+          "person_id": "charlie",
+          "display_name": "Charlie",
+          "voice_name": "Charlie",
+          "voice_id": "IKne3meq5aSn9XLyUdCD",
+          "accent": "australian"
         }
       ]
     },
@@ -33,19 +66,36 @@
           "person_id": "theo",
           "display_name": "Theo",
           "voice_name": "Roger",
-          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17",
+          "accent": "american"
         },
         {
           "person_id": "julian",
           "display_name": "Julian",
           "voice_name": "Chris",
-          "voice_id": "iP95p4xoKVk53GoZ742B"
+          "voice_id": "iP95p4xoKVk53GoZ742B",
+          "accent": "american"
         },
         {
           "person_id": "marcus",
           "display_name": "Marcus",
           "voice_name": "Eric",
-          "voice_id": "cjVigY5qzO86Huf0OWal"
+          "voice_id": "cjVigY5qzO86Huf0OWal",
+          "accent": "american"
+        },
+        {
+          "person_id": "daniel",
+          "display_name": "Daniel",
+          "voice_name": "Daniel",
+          "voice_id": "onwK4e9ZLuTAKqWW03F9",
+          "accent": "british"
+        },
+        {
+          "person_id": "charlie",
+          "display_name": "Charlie",
+          "voice_name": "Charlie",
+          "voice_id": "IKne3meq5aSn9XLyUdCD",
+          "accent": "australian"
         }
       ]
     },
@@ -56,19 +106,29 @@
           "person_id": "lina",
           "display_name": "Lina",
           "voice_name": "Lily",
-          "voice_id": "pFZP5JQG7iQjIQuC4Bku"
+          "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+          "accent": "british"
         },
         {
           "person_id": "rowan",
           "display_name": "Rowan",
           "voice_name": "River",
-          "voice_id": "SAz9YHcvj6GT2YYXdXww"
+          "voice_id": "SAz9YHcvj6GT2YYXdXww",
+          "accent": "american"
         },
         {
           "person_id": "elias",
           "display_name": "Elias",
           "voice_name": "George",
-          "voice_id": "JBFqnCBsd6RMkjVDRZzb"
+          "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+          "accent": "british"
+        },
+        {
+          "person_id": "charlie",
+          "display_name": "Charlie",
+          "voice_name": "Charlie",
+          "voice_id": "IKne3meq5aSn9XLyUdCD",
+          "accent": "australian"
         }
       ]
     }

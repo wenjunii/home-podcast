@@ -1,0 +1,30 @@
+{
+  "contract_version": 1,
+  "audition_id": "accent-voice-audition-2026-07",
+  "title": "International English Host Voice Audition",
+  "purpose": "A same-script comparison of metadata-screened voices before any candidate is admitted to automatic episode rotation.",
+  "text": "Okay, so a web crawler walks into December 2013—except this is not quite a joke. It saves a page from Kenya, a damp-clothes confession from England, and one German word: Sehnsucht. That means a longing for somewhere distant, but the archive gives us only fragments. What was home to the person who wrote them? What changed after the page disappeared? We cannot pretend to know. We can listen closely, laugh when the story invites us to, and leave room for the silence around it.",
+  "delivery": {
+    "tone": "bright, curious, conversational; a small amused beat near the opening, then gradually intimate and reflective",
+    "audio_tags": [
+      "chuckles softly",
+      "voice softens"
+    ]
+  },
+  "pronunciation": {
+    "Kenya": "KEHN-yuh",
+    "Sehnsucht": "ZAYN-zookt"
+  },
+  "evaluation_criteria": [
+    "natural friend-like delivery",
+    "emotional range without melodrama",
+    "clarity for a general international audience",
+    "warmth and curiosity",
+    "digital-archaeology explanation",
+    "pronunciation of names and multilingual fragments",
+    "absence of caricature or exaggerated accent performance",
+    "low fatigue over long-form listening",
+    "role fit",
+    "audio artifacts"
+  ]
+}
