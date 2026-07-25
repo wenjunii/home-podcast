@@ -73,6 +73,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     plan.add_argument("--month", required=True)
     plan.add_argument("--cohort", help="Frozen cohort manifest to restrict exact stories")
+    plan.add_argument(
+        "--single-episode",
+        action="store_true",
+        help="Combine every eligible cohort story into one proposed episode",
+    )
+    plan.add_argument("--title", help="Title used with --single-episode")
     plan.add_argument("--output", help="Proposal JSON path")
 
     lock = subparsers.add_parser(
@@ -199,6 +205,8 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             args.month,
             output,
             cohort_path=Path(args.cohort).resolve() if args.cohort else None,
+            single_episode=args.single_episode,
+            single_episode_title=args.title,
         )
         return {
             "output": str(output),

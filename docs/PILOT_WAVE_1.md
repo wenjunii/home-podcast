@@ -19,34 +19,26 @@ will not incur analysis, script, or speech-generation costs for this pilot.
 The all-English composition reflects which API calls finished first. It is not
 representative of the complete December corpus.
 
-## Proposed three-part structure
+## Proposed single-episode structure
 
-### 2013-12.W1.01 — The Homes We Leave
+### 2013-12.01 — 91 Fragments of Home
 
-34 stories:
+One approximately 55-minute episode with three internal acts:
 
-- Exile, Return, and Nostalgia: 27
-- Lost and Inaccessible Places: 4
-- Migration, Borders, and Displacement: 3
+#### Act 1 — The Homes We Leave
 
-### 2013-12.W1.02 — What We Carry Forward
+34 stories about exile, nostalgia, lost places, migration, borders, and
+displacement.
 
-27 stories:
+#### Act 2 — What We Carry Forward
 
-- Family, Ancestry, and Inheritance: 19
-- Objects, Food, and Rituals: 5
-- Memory, Forgetting, and the Archive: 2
-- Language and Cultural Belonging: 1
+27 stories about family, inheritance, objects, food, rituals, memory, archives,
+language, and cultural belonging.
 
-### 2013-12.W1.03 — How We Make Home
+#### Act 3 — How We Make Home
 
-30 stories:
-
-- Identity and Contested Belonging: 13
-- Home as a Place: 10
-- Chosen Family and Community: 4
-- Housing, Homelessness, and Precarity: 2
-- The Internet as Home: 1
+30 stories about identity, physical places, chosen community, housing
+precarity, and the internet as home.
 
 Every story is assigned exactly once. Individual stories can receive anchor,
 featured, supporting, fragment, or contextual treatment so coverage does not
@@ -54,13 +46,13 @@ make the conversation sound like a list.
 
 ## Runtime and text assumptions
 
-Target each part at 28 minutes:
+Target the complete episode at about 55 minutes:
 
-- final program audio: about 84 minutes
-- final spoken script: about 12,600 words at 150 words per minute
-- estimated final TTS text: about 84,000 characters
+- final program audio: about 55 minutes
+- final spoken script: about 8,250 words at 150 words per minute
+- estimated final TTS text: about 55,000 characters
 - production allowance: 1.5 generations per retained line
-- estimated billed generation: about 126,000 characters or 126 audio minutes
+- estimated billed generation: about 82,500 characters or 82.5 audio minutes
 
 The regeneration allowance covers pronunciation fixes, delivery retakes, and
 limited alternate takes. Music, silence, and already-rendered ambience do not
@@ -70,10 +62,10 @@ need TTS.
 
 | Provider | Nominal pilot cost with 1.5x generation | Capacity note |
 | --- | ---: | --- |
-| ElevenLabs Eleven v3 | About $12.60 pay as you go | $0.10 per 1,000 characters. The current Creator offer is $11 for the first month and includes 220,000 Multilingual v2/v3 characters; regular Creator is $22/month. |
-| Hume Octave 2 | $7 first month; $14 thereafter | Creator includes 140,000 characters, enough for the estimated 126,000. Overage is $0.15 per 1,000 characters. |
-| Google Gemini 3.1 Flash TTS Preview | About $3.81 standard, or $1.91 batch | Estimate includes about 189,000 audio tokens at 25 tokens/second plus a few cents of text input. Preview pricing and behavior may change. |
-| Cartesia Sonic 3.5 | $5 Pro plan | Pro includes about 133 generated minutes, leaving roughly seven minutes above the 1.5x estimate. More extensive rerendering would require added capacity. |
+| ElevenLabs Eleven v3 | About $8.25 pay as you go | $0.10 per 1,000 characters. The current Creator offer is $11 for the first month and includes 220,000 Multilingual v2/v3 characters; regular Creator is $22/month. |
+| Hume Octave 2 | $7 first month; $14 thereafter | Creator includes 140,000 characters, comfortably above the estimated 82,500. |
+| Google Gemini 3.1 Flash TTS Preview | About $2.50 standard, or $1.25 batch | Estimate includes about 123,750 audio tokens at 25 tokens/second plus a few cents of text input. Preview pricing and behavior may change. |
+| Cartesia Sonic 3.5 | $5 Pro plan | Pro includes about 133 generated minutes, leaving roughly 50 minutes beyond the 1.5x estimate. |
 
 These are API-generation estimates, not total production budgets. They exclude
 the script-writing LLM, music licensing, human review, hosting, and taxes.
@@ -86,9 +78,9 @@ generation.
 2. Render it once with all four providers.
 3. Blind-score voices and delivery.
 4. Select one provider and stable voice IDs.
-5. Generate the three complete parts segment by segment.
+5. Generate the complete episode segment by segment.
 
-Do not render all 84 minutes with all four providers. The provider audition
+Do not render the full episode with all four providers. The provider audition
 should be small; only the selected engine should receive the full script.
 
 ## Pricing sources

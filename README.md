@@ -164,13 +164,15 @@ After the month has story cards:
 ```powershell
 python -m home_podcast plan `
   --month 2013-12 `
-  --cohort .\cohorts\2013-12-pilot.json
+  --cohort .\cohorts\2013-12-pilot.json `
+  --single-episode `
+  --title "91 Fragments of Home"
 ```
 
-The proposal uses all eligible stories, groups them by primary theme, and
-splits large themes into parts based on `target_stories_per_installment`.
-Stories are not silently discarded: the proposal reports assigned,
-unanalyzed, and ineligible records separately.
+The pilot proposal assigns all 91 eligible stories to one episode. Their
+primary themes remain attached so the script can arrange them into three
+internal acts. Stories are not silently discarded: the proposal reports
+assigned, unanalyzed, and ineligible records separately.
 
 The proposal is editorial input, not a published manifest. During the pilot,
 lock the preferred installment before script generation:

@@ -16,6 +16,9 @@ def create_month_proposal(
     month: str,
     output_path: Path,
     cohort_path: Path | None = None,
+    *,
+    single_episode: bool = False,
+    single_episode_title: str | None = None,
 ) -> dict[str, Any]:
     theme_config = config.load_themes()["themes"]
     theme_by_slug = {theme["slug"]: theme for theme in theme_config}
@@ -98,6 +101,8 @@ def create_month_proposal(
                 "language": row["language"],
                 "crawl_timestamp": row["crawl_timestamp"],
                 "source_url": row["source_url"],
+                "primary_theme": slug,
+                "primary_theme_name": theme_by_slug[slug]["name"],
                 "usage_type": card.get("usage_recommendation", "supporting"),
                 "anchor_score": float(card.get("anchor_score", 0)),
                 "theme_fit": float(card.get("theme_fit", 0)),
@@ -107,44 +112,84 @@ def create_month_proposal(
         )
 
     installments: list[dict[str, Any]] = []
-    sequence = 0
-    for theme in theme_config:
-        stories = grouped.get(theme["slug"], [])
-        if not stories:
-            continue
-        stories.sort(
-            key=lambda item: (
-                -item["anchor_score"],
-                -item["theme_fit"],
-                item["crawl_timestamp"],
-                item["story_id"],
+    if single_episode:
+        all_stories: list[dict[str, Any]] = []
+        for theme in theme_config:
+            stories = grouped.get(theme["slug"], [])
+            stories.sort(
+                key=lambda item: (
+                    -item["anchor_score"],
+                    -item["theme_fit"],
+                    item["crawl_timestamp"],
+                    item["story_id"],
+                )
             )
-        )
-        part_count = math.ceil(len(stories) / config.target_stories_per_installment)
-        for part_index in range(part_count):
-            sequence += 1
-            start = part_index * config.target_stories_per_installment
-            chunk = stories[start : start + config.target_stories_per_installment]
-            title = theme["name"]
-            if part_count > 1:
-                title += f", Part {part_index + 1}"
+            all_stories.extend(stories)
+        if all_stories:
             installments.append(
                 {
-                    "episode_id": f"{month}.{sequence:02d}",
+                    "episode_id": f"{month}.01",
                     "archive_volume": month,
-                    "sequence": sequence,
-                    "title": title,
-                    "theme_slug": theme["slug"],
-                    "theme_name": theme["name"],
-                    "theme_description": theme["description"],
-                    "archaeology_question": theme["archaeology_questions"][
-                        part_index % len(theme["archaeology_questions"])
-                    ],
+                    "sequence": 1,
+                    "title": single_episode_title or "Fragments of Home",
+                    "theme_slug": "multi-theme",
+                    "theme_name": "Home and Belonging",
+                    "theme_description": (
+                        "A three-act journey through leaving home, carrying it "
+                        "forward, and making it again."
+                    ),
+                    "archaeology_question": (
+                        "What do these captured fragments reveal about how people "
+                        "remember, leave, inherit, and remake home?"
+                    ),
                     "status": "proposed",
-                    "story_count": len(chunk),
-                    "stories": chunk,
+                    "story_count": len(all_stories),
+                    "stories": all_stories,
                 }
             )
+    else:
+        sequence = 0
+        for theme in theme_config:
+            stories = grouped.get(theme["slug"], [])
+            if not stories:
+                continue
+            stories.sort(
+                key=lambda item: (
+                    -item["anchor_score"],
+                    -item["theme_fit"],
+                    item["crawl_timestamp"],
+                    item["story_id"],
+                )
+            )
+            part_count = math.ceil(
+                len(stories) / config.target_stories_per_installment
+            )
+            for part_index in range(part_count):
+                sequence += 1
+                start = part_index * config.target_stories_per_installment
+                chunk = stories[
+                    start : start + config.target_stories_per_installment
+                ]
+                title = theme["name"]
+                if part_count > 1:
+                    title += f", Part {part_index + 1}"
+                installments.append(
+                    {
+                        "episode_id": f"{month}.{sequence:02d}",
+                        "archive_volume": month,
+                        "sequence": sequence,
+                        "title": title,
+                        "theme_slug": theme["slug"],
+                        "theme_name": theme["name"],
+                        "theme_description": theme["description"],
+                        "archaeology_question": theme["archaeology_questions"][
+                            part_index % len(theme["archaeology_questions"])
+                        ],
+                        "status": "proposed",
+                        "story_count": len(chunk),
+                        "stories": chunk,
+                    }
+                )
 
     proposal = {
         "contract_version": 1,
@@ -167,6 +212,7 @@ def create_month_proposal(
         "policy": {
             "coverage": "maximum_responsible_coverage",
             "target_stories_per_installment": config.target_stories_per_installment,
+            "single_episode": single_episode,
             "published_episodes_are_immutable": True,
             "late_arrivals": "supplement_or_later_cross_month_episode",
         },

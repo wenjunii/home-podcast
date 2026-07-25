@@ -271,6 +271,98 @@ class PlanningTests(unittest.TestCase):
             )
             self.assertEqual(cohort["stories"][0]["story_id"], analyzed["id"])
 
+    def test_single_episode_plan_combines_all_eligible_stories(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            exports = root / "exports"
+            exports.mkdir()
+            (exports / "stories_en.md").write_text(
+                fixture("A story about carrying home in memory."),
+                encoding="utf-8",
+            )
+            (root / "themes.json").write_text(
+                json.dumps(
+                    {
+                        "themes": [
+                            {
+                                "slug": "memory-archive",
+                                "name": "Memory and Archive",
+                                "description": "Remembering home.",
+                                "archaeology_questions": ["Why did this survive?"],
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (root / "bible.json").write_text(
+                json.dumps({"hosts": []}), encoding="utf-8"
+            )
+            config_path = root / "podcast.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "project_name": "Test",
+                        "exports_dir": "exports",
+                        "catalog_path": "catalog.sqlite3",
+                        "themes_path": "themes.json",
+                        "show_bible_path": "bible.json",
+                        "episodes_dir": "episodes",
+                        "work_dir": "work",
+                        "audio_dir": "audio",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            config = ProjectConfig.load(config_path)
+            ingest_exports(config.catalog_path, config.exports_dir)
+            connection = connect(config.catalog_path)
+            story = connection.execute(
+                "SELECT id, content_hash FROM stories"
+            ).fetchone()
+            connection.execute(
+                """
+                INSERT INTO story_cards (
+                    story_id, content_hash, analyzer, analyzer_version,
+                    card_json, created_at
+                ) VALUES (?, ?, 'test', '1', ?, '2026-01-01T00:00:00Z')
+                """,
+                (
+                    story["id"],
+                    story["content_hash"],
+                    json.dumps(
+                        {
+                            "eligible": True,
+                            "summary": "A remembered home.",
+                            "primary_theme": "memory-archive",
+                            "secondary_themes": [],
+                            "theme_fit": 0.9,
+                            "anchor_score": 0.8,
+                            "usage_recommendation": "anchor",
+                        }
+                    ),
+                ),
+            )
+            connection.commit()
+            connection.close()
+
+            proposal = create_month_proposal(
+                config,
+                "2013-05",
+                root / "single.json",
+                single_episode=True,
+                single_episode_title="91 Fragments of Home",
+            )
+            self.assertEqual(len(proposal["installments"]), 1)
+            self.assertEqual(
+                proposal["installments"][0]["title"], "91 Fragments of Home"
+            )
+            self.assertEqual(proposal["installments"][0]["story_count"], 1)
+            self.assertEqual(
+                proposal["installments"][0]["stories"][0]["primary_theme"],
+                "memory-archive",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
