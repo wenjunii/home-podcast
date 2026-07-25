@@ -41,10 +41,10 @@ the three audience-facing movements, not additional sub-episodes.
 Target the episode at about 30 minutes:
 
 - final program audio: about 30 minutes
-- final spoken script: about 4,500 words at 150 words per minute
-- estimated final TTS text: about 30,000 characters
+- final spoken script: 4,498 words at about 150 words per minute
+- final TTS text: 25,344 characters
 - production allowance: 1.5 generations per retained line
-- estimated billed generation: about 45,000 characters or 45 audio minutes
+- estimated billed generation: about 38,016 characters or 45 audio minutes
 
 The regeneration allowance covers pronunciation fixes, delivery retakes, and
 limited alternate takes. Music, silence, and already-rendered ambience do not
@@ -52,25 +52,25 @@ need TTS.
 
 ## Current script draft
 
-The first source-validated script was generated with
-`anthropic/claude-opus-4-6`:
+The source-validated script was generated with
+`anthropic/claude-opus-4-6` and then tightened with a reproducible,
+hash-bound editorial plan:
 
-- 158 speaking turns
-- 5,341 spoken words
-- 30,141 spoken characters
-- approximately 35.6 minutes at 150 words per minute
+- 129 speaking turns
+- 4,498 spoken words
+- 25,344 spoken characters
+- approximately 30.0 minutes at 150 words per minute
 - all 27 selected stories cited
 - all exact quotations verified against source text
 
-This is a complete long first cut. Before speech generation, trim roughly
-800–900 words to approach the 30-minute editorial target while preserving
-coverage of all 27 stories.
+The saved plan removes 29 redundant turns and repairs four checkpoint
+transitions. It does not rewrite quotations or factual story narration.
 
 ## Estimated TTS cost
 
 | Provider | Nominal pilot cost with 1.5x generation | Capacity note |
 | --- | ---: | --- |
-| ElevenLabs Eleven v3 | About $4.50 pay as you go | $0.10 per 1,000 characters. The current Creator offer is $11 for the first month and includes ample capacity; regular Creator is $22/month. |
+| ElevenLabs Eleven v3 | About $3.80 pay as you go | $0.10 per 1,000 characters. The current Creator offer is $11 for the first month and includes ample capacity; regular Creator is $22/month. |
 | Hume Octave 2 | $7 first month; $14 thereafter | Creator includes 140,000 characters. The $3 Starter tier covers only about one clean 30-minute pass, with little room for retakes. |
 | Google Gemini 3.1 Flash TTS Preview | About $1.37 standard, or $0.69 batch | Estimate includes about 67,500 audio tokens at 25 tokens/second plus a few cents of text input. Preview pricing and behavior may change. |
 | Cartesia Sonic 3.5 | $5 Pro plan | Pro includes about 133 generated minutes, leaving ample retake capacity. |

@@ -218,6 +218,15 @@ each outline section separately. A validated script is written to
 `episodes/2013-12.01/script.json`; an invalid candidate remains under `work/`
 with a validation report and does not replace the episode script.
 
+Apply the reviewed, hash-bound pilot trim without another model call:
+
+```powershell
+python -m home_podcast trim-script `
+  --script .\episodes\2013-12.01\script.json `
+  --evidence .\work\scripts\2013-12.01-evidence.json `
+  --plan .\episodes\2013-12.01\trim-plan.json
+```
+
 Validate story coverage, speakers, citations, and exact quotations:
 
 ```powershell

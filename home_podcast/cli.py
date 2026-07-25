@@ -11,6 +11,7 @@ from .audio import render_episode_audio
 from .catalog import catalog_status
 from .config import ProjectConfig
 from .doctor import run_doctor
+from .editor import trim_episode_script
 from .ingest import ingest_exports
 from .planning import create_month_proposal, lock_episode_manifest, prepare_script_packet
 from .planning import snapshot_crawl_month
@@ -124,6 +125,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="Validated script JSON path; defaults to the episode directory",
     )
 
+    trim_script = subparsers.add_parser(
+        "trim-script",
+        help="Create and apply a deletion-only editorial trim plan",
+    )
+    trim_script.add_argument("--script", required=True)
+    trim_script.add_argument("--evidence", required=True)
+    trim_script.add_argument("--target-min", type=int, default=4400)
+    trim_script.add_argument("--target-max", type=int, default=4600)
+    trim_script.add_argument(
+        "--plan",
+        help="Apply a saved deletion plan without making a provider call",
+    )
+    trim_script.add_argument(
+        "--output",
+        help="Validated trimmed script path; defaults to replacing --script",
+    )
+
     tts = subparsers.add_parser(
         "prepare-tts", help="Create cached, segment-level TTS jobs from a valid script"
     )
@@ -157,6 +175,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "validate-script" and not result["valid"]:
             return 2
         if args.command == "generate-script" and not result["valid"]:
+            return 2
+        if args.command == "trim-script" and not result["valid"]:
             return 2
         return 0
     except (FileNotFoundError, ValueError, RuntimeError) as error:
@@ -278,6 +298,19 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             config.episodes_dir / episode_id / "outline.json",
         )
         return generate_episode_script(config, evidence_path, outline, output)
+    if args.command == "trim-script":
+        script_path = Path(args.script).resolve()
+        evidence_path = Path(args.evidence).resolve()
+        output = _path_or_default(args.output, script_path)
+        return trim_episode_script(
+            config,
+            script_path,
+            evidence_path,
+            output,
+            target_words_min=args.target_min,
+            target_words_max=args.target_max,
+            plan_path=Path(args.plan).resolve() if args.plan else None,
+        )
     if args.command == "prepare-tts":
         script = json.loads(Path(args.script).read_text(encoding="utf-8"))
         output = _path_or_default(
