@@ -311,6 +311,32 @@ three-host casting audition is versioned at
 listening copies remain local and ignored under
 `work/tts/audition-2013-12.01/`.
 
+For natural interaction, test a short excerpt through ElevenLabs Text to
+Dialogue before rendering the complete episode. This preserves the surrounding
+speakers and emotional arc in one provider call instead of synthesizing every
+short line in isolation:
+
+```powershell
+python -m home_podcast prepare-dialogue-audition `
+  --audition .\episodes\2013-12.01\continuity-audition.json `
+  --cast .\episodes\2013-12.01\cast.json
+
+# Dry run: reports both Natural and Creative variants
+python -m home_podcast generate-dialogue-audition `
+  --jobs .\work\tts\2013-12.01-expressive-dialogue-audition-dialogue-jobs.jsonl
+
+$env:ELEVENLABS_API_KEY = "..."
+python -m home_podcast generate-dialogue-audition `
+  --jobs .\work\tts\2013-12.01-expressive-dialogue-audition-dialogue-jobs.jsonl `
+  --execute `
+  --max-credits 3520
+Remove-Item Env:ELEVENLABS_API_KEY
+```
+
+Each variant contains eight turns and 1,760 rendered characters, below the
+provider's 2,000-character reliability recommendation. Provider responses,
+normalized cache files, and listening copies remain ignored locally.
+
 The current speech-provider shortlist and pilot audition recommendation are in
 [docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).
 The selected one-theme pilot and its TTS cost model are in

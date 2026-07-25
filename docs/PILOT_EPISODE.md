@@ -92,11 +92,16 @@ published API rate. Its level-matched copies total 118.24 seconds and remain
 ignored under `work/tts/audition-2013-12.01/`.
 
 Later episodes use deterministic episode-level rotation across the role-matched
-voice roster. A second, 10-turn continuity audition of the revised friend-like
-dialogue used 2,183 input characters and all three hosts. It runs 141.02
-seconds, exercises a chuckle and a soft sigh, and remains ignored under
-`work/tts/continuity-audition-2013-12.01/`. The next gate is listening approval
-of that audition before the full 128-turn render.
+voice roster. The first line-by-line continuity audition sounded too flat, so
+it has been superseded by an eight-turn contextual Text-to-Dialogue test. The
+new test sends all three hosts and the complete emotional arc in one 1,760-
+character call. Its Natural version runs 118.05 seconds; its Creative version
+runs 115.15 seconds. Together they cost 3,520 credits, or about $0.35 at the
+configured rate, and remain ignored under
+`work/tts/2013-12.01-expressive-dialogue-audition/`.
+
+The next gate is choosing Natural, Creative, or a revised middle setting before
+adapting the full 128-turn render to contextual dialogue chunks.
 
 ## Pilot sound design
 
@@ -116,7 +121,7 @@ workflow, and official provider references.
 
 ## Recommended spend sequence
 
-1. Listen to the 10-turn continuity audition and approve or adjust delivery.
+1. Compare the Natural and Creative contextual dialogue auditions.
 2. Approve the illustrative sound-design map and source-excerpt policy.
 3. Generate the selected themed sub-episode segment by segment with the frozen
    pilot cast.

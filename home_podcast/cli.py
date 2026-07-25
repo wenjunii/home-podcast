@@ -12,6 +12,10 @@ from .casting import create_episode_cast
 from .catalog import catalog_status
 from .config import ProjectConfig
 from .doctor import run_doctor
+from .dialogue_runner import (
+    generate_dialogue_audition_jobs,
+    prepare_dialogue_audition_jobs,
+)
 from .editor import trim_episode_script
 from .ingest import ingest_exports
 from .planning import create_month_proposal, lock_episode_manifest, prepare_script_packet
@@ -202,6 +206,34 @@ def build_parser() -> argparse.ArgumentParser:
         help="Required spending ceiling when --execute is used",
     )
 
+    prepare_dialogue = subparsers.add_parser(
+        "prepare-dialogue-audition",
+        help="Create cached multi-speaker ElevenLabs dialogue audition jobs",
+    )
+    prepare_dialogue.add_argument("--audition", required=True)
+    prepare_dialogue.add_argument("--cast", required=True)
+    prepare_dialogue.add_argument("--output", help="Dialogue jobs JSONL path")
+
+    generate_dialogue = subparsers.add_parser(
+        "generate-dialogue-audition",
+        help="Dry-run or execute cached ElevenLabs dialogue audition jobs",
+    )
+    generate_dialogue.add_argument("--jobs", required=True)
+    generate_dialogue.add_argument(
+        "--variant",
+        help="Generate only one named audition variant",
+    )
+    generate_dialogue.add_argument(
+        "--execute",
+        action="store_true",
+        help="Make paid provider calls; otherwise report pending cost only",
+    )
+    generate_dialogue.add_argument(
+        "--max-credits",
+        type=float,
+        help="Required spending ceiling when --execute is used",
+    )
+
     validate_sound = subparsers.add_parser(
         "validate-sound-design",
         help="Validate a sound-design cue sheet against its episode script",
@@ -283,7 +315,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "validate-sound-design" and not result["valid"]:
             return 2
         if (
-            args.command in {"generate-sfx", "generate-tts"}
+            args.command
+            in {"generate-dialogue-audition", "generate-sfx", "generate-tts"}
             and result["execution_requested"]
             and result["failed"]
         ):
@@ -490,6 +523,29 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             execute=args.execute,
             max_credits=args.max_credits,
             limit=args.limit,
+        )
+    if args.command == "prepare-dialogue-audition":
+        audition_path = Path(args.audition).resolve()
+        audition = json.loads(audition_path.read_text(encoding="utf-8"))
+        output = _path_or_default(
+            args.output,
+            config.work_dir
+            / "tts"
+            / f"{audition['episode_id']}-dialogue-jobs.jsonl",
+        )
+        return prepare_dialogue_audition_jobs(
+            config,
+            audition_path,
+            Path(args.cast).resolve(),
+            output,
+        )
+    if args.command == "generate-dialogue-audition":
+        return generate_dialogue_audition_jobs(
+            config,
+            Path(args.jobs).resolve(),
+            execute=args.execute,
+            max_credits=args.max_credits,
+            variant=args.variant,
         )
     if args.command == "validate-sound-design":
         return validate_sound_design(

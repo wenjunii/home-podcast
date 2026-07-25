@@ -9,6 +9,7 @@ from email.message import Message
 from unittest.mock import patch
 
 from home_podcast.providers.elevenlabs import (
+    ElevenLabsDialogueClient,
     ElevenLabsSpeechClient,
     ElevenLabsSoundEffectsClient,
     _safe_error_body,
@@ -34,6 +35,54 @@ class _Response:
 
 
 class ElevenLabsClientTests(unittest.TestCase):
+    def test_builds_documented_dialogue_request(self) -> None:
+        client = ElevenLabsDialogueClient(
+            endpoint="https://api.example.test/v1/text-to-dialogue",
+            model="eleven_v3",
+            max_attempts=1,
+        )
+        inputs = [
+            {"text": "[curious] A recovered home?", "voice_id": "voice-1"},
+            {"text": "[warmly] Let's look closer.", "voice_id": "voice-2"},
+        ]
+        with (
+            patch.dict(os.environ, {"ELEVENLABS_API_KEY": "secret-test-value"}),
+            patch(
+                "home_podcast.providers.elevenlabs.urllib.request.urlopen",
+                return_value=_Response(),
+            ) as urlopen,
+        ):
+            response = client.generate(
+                inputs,
+                settings={"stability": 0},
+                seed=42,
+            )
+
+        request = urlopen.call_args.args[0]
+        body = json.loads(request.data)
+        self.assertEqual(
+            request.full_url,
+            "https://api.example.test/v1/text-to-dialogue"
+            "?output_format=mp3_44100_128",
+        )
+        self.assertEqual(request.get_header("Xi-api-key"), "secret-test-value")
+        self.assertEqual(body["inputs"], inputs)
+        self.assertEqual(body["model_id"], "eleven_v3")
+        self.assertEqual(body["settings"], {"stability": 0})
+        self.assertEqual(body["seed"], 42)
+        self.assertEqual(response.audio, b"ID3-test-audio")
+
+    def test_dialogue_enforces_reliable_character_limit(self) -> None:
+        client = ElevenLabsDialogueClient(
+            endpoint="https://api.example.test/v1/text-to-dialogue",
+            max_attempts=1,
+        )
+        with patch.dict(os.environ, {"ELEVENLABS_API_KEY": "secret-test-value"}):
+            with self.assertRaisesRegex(ValueError, "2000-character"):
+                client.generate(
+                    [{"text": "x" * 2001, "voice_id": "voice-1"}]
+                )
+
     def test_builds_documented_speech_request(self) -> None:
         client = ElevenLabsSpeechClient(
             endpoint="https://api.example.test/v1/text-to-speech",

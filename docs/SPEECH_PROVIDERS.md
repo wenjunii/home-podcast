@@ -48,11 +48,17 @@ model. This matters for production: ElevenLabs also warns that very short v3
 prompts are less consistent. The audition therefore uses one long,
 multi-delivery passage per host.
 
-The follow-up continuity audition spot-tests 10 turns from the revised script,
-including all three hosts, fast handoffs, a chuckle, a soft sigh, a tonal
-transition, and one exact quotation. It used 2,183 input characters and runs
-141.02 seconds. The full 128-turn pilot should not be rendered until this
-audition passes listening review.
+The first follow-up continuity audition rendered 10 short turns independently.
+It preserved caching granularity but sounded too flat because Eleven v3 could
+not hear the other speakers' turns as context. It has been superseded by an
+eight-turn Text-to-Dialogue audition that keeps all three hosts, humor, a tonal
+shift, an exact quotation, and nonverbal reactions in one request.
+
+Natural and Creative versions use the same 1,760 rendered characters and differ
+only in stability. Natural runs 118.05 seconds and favors consistency. Creative
+runs 115.15 seconds and permits broader emotion with a higher artifact risk.
+The full 128-turn pilot should not be rendered until listening review selects a
+stability mode and confirms that contextual dialogue solves the flatness.
 
 ## Comparison
 

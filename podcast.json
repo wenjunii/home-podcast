@@ -47,6 +47,18 @@
     "credits_per_character": 1,
     "usd_per_thousand_characters": 0.1
   },
+  "dialogue_provider": {
+    "type": "elevenlabs_dialogue",
+    "endpoint": "https://api.elevenlabs.io/v1/text-to-dialogue",
+    "model": "eleven_v3",
+    "api_key_env": "ELEVENLABS_API_KEY",
+    "timeout_seconds": 180,
+    "max_attempts": 4,
+    "output_format": "mp3_44100_128",
+    "language_code": "en",
+    "credits_per_character": 1,
+    "usd_per_thousand_characters": 0.1
+  },
   "sound_effects_provider": {
     "type": "elevenlabs_sound_effects",
     "endpoint": "https://api.elevenlabs.io/v1/sound-generation",

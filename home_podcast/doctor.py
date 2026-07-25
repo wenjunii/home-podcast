@@ -59,6 +59,7 @@ def run_doctor(config: ProjectConfig) -> dict[str, Any]:
         "analysis_provider",
         "script_provider",
         "speech_provider",
+        "dialogue_provider",
         "sound_effects_provider",
     ):
         value = getattr(config, provider_name)
