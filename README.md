@@ -83,13 +83,18 @@ credential only through the process environment:
 $env:CAPRIOLE_API_KEY = Read-Host -MaskInput "Capriole API key"
 ```
 
-Freeze the exact pilot cohort before analysis, then export and analyze only
-those records:
+The complete December snapshot is preserved separately, while the official
+budget-limited pilot contains only the 91 stories whose analysis completed:
 
 ```powershell
 python -m home_podcast snapshot-volume `
   --month 2013-12 `
-  --label pilot
+  --label full-corpus
+
+python -m home_podcast snapshot-volume `
+  --month 2013-12 `
+  --label pilot `
+  --analyzed-only
 
 python -m home_podcast export-analysis `
   --cohort .\cohorts\2013-12-pilot.json `
@@ -99,6 +104,10 @@ python -m home_podcast analyze `
   --input .\work\analysis\2013-12-pilot-jobs.jsonl `
   --workers 3
 ```
+
+For the current pilot, all 91 selected records already have story cards, so no
+additional analysis request is required. The remaining 330 December stories
+stay in `cohorts/2013-12-full-corpus.json` for future work.
 
 The analyzer caches each completed model response separately and imports it
 immediately. Rerunning the command skips completed work and retries only
@@ -218,6 +227,8 @@ regeneration.
 
 The current speech-provider shortlist and pilot audition recommendation are in
 [docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).
+The 91-story first wave and its TTS cost model are in
+[docs/PILOT_WAVE_1.md](docs/PILOT_WAVE_1.md).
 
 Once every clip exists:
 

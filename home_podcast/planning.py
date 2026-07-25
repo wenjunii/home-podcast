@@ -190,15 +190,30 @@ def snapshot_crawl_month(
     month: str,
     label: str,
     output_path: Path,
+    *,
+    analyzed_only: bool = False,
 ) -> tuple[dict[str, Any], bool]:
     connection = connect(config.catalog_path)
-    rows = connection.execute(
+    analysis_condition = (
         """
+           AND EXISTS (
+               SELECT 1
+                 FROM story_cards AS c
+                WHERE c.story_id = stories.id
+                  AND c.content_hash = stories.content_hash
+           )
+        """
+        if analyzed_only
+        else ""
+    )
+    rows = connection.execute(
+        f"""
         SELECT id, content_hash, language, crawl_dataset, crawl_timestamp
           FROM stories
          WHERE is_present = 1
            AND duplicate_of IS NULL
            AND crawl_month = ?
+           {analysis_condition}
          ORDER BY crawl_timestamp, language, id
         """,
         (month,),
@@ -213,6 +228,11 @@ def snapshot_crawl_month(
         "crawl_month": month,
         "story_count": len(rows),
         "snapshot_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "selection_policy": (
+            "present unique stories with a current story card"
+            if analyzed_only
+            else "all present unique stories"
+        ),
         "capture_time_basis": (
             "Timestamp embedded in Source File. For this December 2013 cohort it "
             "matches the upstream WARC capture month."

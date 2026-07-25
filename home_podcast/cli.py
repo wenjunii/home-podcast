@@ -54,6 +54,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     snapshot.add_argument("--month", required=True)
     snapshot.add_argument("--label", default="pilot")
+    snapshot.add_argument(
+        "--analyzed-only",
+        action="store_true",
+        help="Freeze only stories that already have a current story card",
+    )
     snapshot.add_argument("--output", help="Cohort JSON path")
 
     analyze = subparsers.add_parser(
@@ -166,7 +171,11 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             config.project_root / "cohorts" / f"{args.month}-{args.label}.json",
         )
         snapshot, created = snapshot_crawl_month(
-            config, args.month, args.label, output
+            config,
+            args.month,
+            args.label,
+            output,
+            analyzed_only=args.analyzed_only,
         )
         return {
             "output": str(output),

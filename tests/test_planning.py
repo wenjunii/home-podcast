@@ -209,6 +209,68 @@ class PlanningTests(unittest.TestCase):
             self.assertEqual(proposal["coverage"]["assigned_eligible_stories"], 1)
             self.assertEqual(proposal["cohort"]["label"], "pilot")
 
+    def test_snapshot_can_select_only_analyzed_stories(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            exports = root / "exports"
+            exports.mkdir()
+            (exports / "stories_en.md").write_text(
+                fixture("First story.", SECOND), encoding="utf-8"
+            )
+            (root / "themes.json").write_text(
+                json.dumps({"themes": []}), encoding="utf-8"
+            )
+            (root / "bible.json").write_text(
+                json.dumps({"hosts": []}), encoding="utf-8"
+            )
+            config_path = root / "podcast.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "project_name": "Test",
+                        "exports_dir": "exports",
+                        "catalog_path": "catalog.sqlite3",
+                        "themes_path": "themes.json",
+                        "show_bible_path": "bible.json",
+                        "episodes_dir": "episodes",
+                        "work_dir": "work",
+                        "audio_dir": "audio",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            config = ProjectConfig.load(config_path)
+            ingest_exports(config.catalog_path, config.exports_dir)
+            connection = connect(config.catalog_path)
+            analyzed = connection.execute(
+                "SELECT id, content_hash FROM stories ORDER BY id LIMIT 1"
+            ).fetchone()
+            connection.execute(
+                """
+                INSERT INTO story_cards (
+                    story_id, content_hash, analyzer, analyzer_version,
+                    card_json, created_at
+                ) VALUES (?, ?, 'test', '1', '{}', '2026-01-01T00:00:00Z')
+                """,
+                (analyzed["id"], analyzed["content_hash"]),
+            )
+            connection.commit()
+            connection.close()
+
+            cohort, _ = snapshot_crawl_month(
+                config,
+                "2013-05",
+                "wave-1",
+                root / "wave-1.json",
+                analyzed_only=True,
+            )
+            self.assertEqual(cohort["story_count"], 1)
+            self.assertEqual(
+                cohort["selection_policy"],
+                "present unique stories with a current story card",
+            )
+            self.assertEqual(cohort["stories"][0]["story_id"], analyzed["id"])
+
 
 if __name__ == "__main__":
     unittest.main()

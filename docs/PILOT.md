@@ -43,13 +43,18 @@ Do not clone an identifiable real person without permission.
 The researched shortlist and recommended bakeoff are recorded in
 [SPEECH_PROVIDERS.md](SPEECH_PROVIDERS.md).
 
+The first 91 completed story cards are the official budget-limited pilot.
+Its three-part editorial structure and TTS budget are recorded in
+[PILOT_WAVE_1.md](PILOT_WAVE_1.md).
+
 ## 3. Editorial choices
 
 Confirmed:
 
 - primary spoken language: English
 - pilot crawl month: December 2013
-- frozen pilot cohort: 421 stories
+- frozen pilot cohort: 91 analyzed English-language stories
+- complete December backlog: 421 stories, with 330 deferred
 - coverage policy: use all eligible stories, at different depths
 - host format: three disclosed synthetic hosts
 - AI budget preference: premium
