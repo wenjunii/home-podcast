@@ -39,6 +39,13 @@ story text changes
 script line changes
   → new speech cache key
   → only that audio clip is regenerated
+
+sound prompt, generator, or duration changes
+  → new sound-effect cache key
+  → no speech clip is regenerated
+
+cue placement, gain, fades, or ducking changes
+  → only the final mix is rebuilt
 ```
 
 No high-water mark is used. A later extraction can add a previously unseen
@@ -65,6 +72,14 @@ the source.
 
 AI checks are useful for tone and unsupported-claim detection, but deterministic
 validation remains the final gate wherever a machine-checkable rule exists.
+
+## Sound-design trust boundary
+
+Non-voice audio is not evidence. Every cue must be marked either as
+illustrative sound design or as a licensed recording with a source and credit.
+The production transcript discloses the sound-design layer and can caption
+each audible cue. Generated sound must never be described as an archival
+recording or as audio captured from a story's people, place, or event.
 
 ## Synthetic-host disclosure
 

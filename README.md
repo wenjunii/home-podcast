@@ -25,7 +25,8 @@ stories_*.md
   → locked episode evidence packet
   → grounded multi-host script
   → cached segment-level speech jobs
-  → normalized WAV + MP3
+  → optional provenance-tracked sound-design cues
+  → mixed and normalized WAV + MP3
   → Markdown + WebVTT + SRT transcripts
 ```
 
@@ -237,7 +238,7 @@ python -m home_podcast validate-script `
 
 Validation fails if even one selected story has no traceable use.
 
-## Speech, audio, and transcripts
+## Speech, sound design, audio, and transcripts
 
 After assigning stable voice IDs in `config/show_bible.json`, create one cached
 speech job per speaking turn:
@@ -259,16 +260,39 @@ The current speech-provider shortlist and pilot audition recommendation are in
 The selected one-theme pilot and its TTS cost model are in
 [docs/PILOT_EPISODE.md](docs/PILOT_EPISODE.md).
 
-Once every clip exists:
+Non-voice audio is an independent layer. The pilot contains 11 sparse,
+illustrative cues—not simulated historical recordings. Validate them and
+prepare provider-neutral generation jobs:
+
+```powershell
+python -m home_podcast validate-sound-design `
+  --sound-design .\episodes\2013-12.01\sound-design.json `
+  --script .\episodes\2013-12.01\script.json
+
+python -m home_podcast prepare-sfx `
+  --sound-design .\episodes\2013-12.01\sound-design.json `
+  --script .\episodes\2013-12.01\script.json `
+  --provider elevenlabs `
+  --model eleven_text_to_sound_v2
+```
+
+The cue contract, provider research, provenance policy, and mixing behavior are
+documented in [docs/SOUND_DESIGN.md](docs/SOUND_DESIGN.md).
+
+Once every speech and generated-effect clip exists:
 
 ```powershell
 python -m home_podcast render-audio `
-  --jobs .\work\tts\2013-12.01-jobs.jsonl
+  --jobs .\work\tts\2013-12.01-jobs.jsonl `
+  --sound-design .\episodes\2013-12.01\sound-design.json `
+  --sfx-jobs .\work\sfx\2013-12.01-jobs.jsonl
 ```
 
 The renderer uses FFmpeg to normalize clips to 48 kHz stereo, insert scripted
-pauses, target podcast loudness, and create a WAV master, MP3 distribution
-copy, and exact segment timeline.
+pauses, place and fade sound cues, duck selected sounds under speech, target
+podcast loudness, and create a WAV master, MP3 distribution copy, and exact
+speech-and-sound timeline. Omitting the two sound-design arguments still
+produces the clean speech-only render.
 
 Generate deliverable transcripts:
 
@@ -277,8 +301,9 @@ python -m home_podcast transcript `
   --timeline .\episodes\2013-12.01\audio\2013-12.01-timeline.json
 ```
 
-Outputs include speaker-labeled Markdown, WebVTT, and SRT with a story-to-script
-source map.
+Outputs include speaker-labeled Markdown, WebVTT, and SRT with accessible
+non-speech labels, the sound-design disclosure, and a story-to-script source
+map.
 
 ## Project layout
 

@@ -1,17 +1,24 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 import shutil
 import subprocess
 import wave
 from pathlib import Path
 from typing import Any
 
+from .sound_design import resolve_sound_cues
+
 
 def render_episode_audio(
     jobs_path: Path,
     work_dir: Path,
     output_dir: Path,
+    *,
+    sound_design_path: Path | None = None,
+    sfx_jobs_path: Path | None = None,
 ) -> dict[str, Any]:
     jobs = _read_jobs(jobs_path)
     if not jobs:
@@ -27,6 +34,8 @@ def render_episode_audio(
         raise RuntimeError("ffmpeg and ffprobe must be installed and available on PATH")
 
     episode_id = jobs[0]["episode_id"]
+    if any(job.get("episode_id") != episode_id for job in jobs):
+        raise ValueError("All TTS jobs must belong to the same episode")
     render_dir = (work_dir / "render" / episode_id).resolve()
     normalized_dir = render_dir / "normalized"
     normalized_dir.mkdir(parents=True, exist_ok=True)
@@ -80,8 +89,7 @@ def render_episode_audio(
         "".join(f"file '{_ffmpeg_path(path)}'\n" for path in concat_parts),
         encoding="utf-8",
     )
-    master_path = (output_dir / f"{episode_id}-master.wav").resolve()
-    mp3_path = (output_dir / f"{episode_id}.mp3").resolve()
+    voice_assembly_path = render_dir / "voice-assembly.wav"
     _run(
         [
             ffmpeg,
@@ -94,13 +102,66 @@ def render_episode_audio(
             "0",
             "-i",
             str(concat_file),
-            "-af",
-            "loudnorm=I=-16:TP=-1.5:LRA=11",
             "-c:a",
             "pcm_s16le",
-            str(master_path),
+            str(voice_assembly_path),
         ]
     )
+
+    sound_cues: list[dict[str, Any]] = []
+    prepared_cues: list[Path] = []
+    sound_design: dict[str, Any] | None = None
+    if sound_design_path is not None:
+        sound_design = json.loads(sound_design_path.read_text(encoding="utf-8"))
+        if sound_design.get("episode_id") != episode_id:
+            raise ValueError(
+                f"Sound design belongs to {sound_design.get('episode_id')!r}, "
+                f"not {episode_id!r}"
+            )
+        sound_cues = resolve_sound_cues(
+            sound_design_path,
+            timeline_segments,
+            sfx_jobs_path,
+        )
+        overrun = [cue for cue in sound_cues if cue["end_ms"] > cursor_ms]
+        if overrun:
+            cue = overrun[0]
+            raise ValueError(
+                f"Sound cue {cue['cue_id']!r} ends after the voice timeline "
+                f"({cue['end_ms']} ms > {cursor_ms} ms)"
+            )
+        prepared_cues = [
+            _prepare_sound_cue(ffmpeg, cue, render_dir / "sound-cues")
+            for cue in sound_cues
+        ]
+
+    master_path = (output_dir / f"{episode_id}-master.wav").resolve()
+    mp3_path = (output_dir / f"{episode_id}.mp3").resolve()
+    if sound_cues:
+        _mix_voice_and_sound_cues(
+            ffmpeg,
+            voice_assembly_path,
+            sound_cues,
+            prepared_cues,
+            master_path,
+            cursor_ms,
+        )
+    else:
+        _run(
+            [
+                ffmpeg,
+                "-y",
+                "-loglevel",
+                "error",
+                "-i",
+                str(voice_assembly_path),
+                "-af",
+                "loudnorm=I=-16:TP=-1.5:LRA=11",
+                "-c:a",
+                "pcm_s16le",
+                str(master_path),
+            ]
+        )
     _run(
         [
             ffmpeg,
@@ -123,12 +184,166 @@ def render_episode_audio(
         "master_audio": str(master_path),
         "distribution_audio": str(mp3_path),
         "segments": timeline_segments,
+        "sound_design": (
+            {
+                "cue_sheet": str(sound_design_path.resolve()),
+                "disclosure": sound_design["sound_design_disclosure"],
+            }
+            if sound_design_path is not None and sound_design is not None
+            else None
+        ),
+        "sound_cues": sound_cues,
     }
     timeline_path = output_dir / f"{episode_id}-timeline.json"
     timeline_path.write_text(
         json.dumps(timeline, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     return timeline
+
+
+def _prepare_sound_cue(
+    ffmpeg: str,
+    cue: dict[str, Any],
+    output_dir: Path,
+) -> Path:
+    asset = Path(cue["asset_audio"])
+    stat = asset.stat()
+    fingerprint = json.dumps(
+        {
+            "asset": str(asset.resolve()),
+            "asset_size": stat.st_size,
+            "asset_mtime_ns": stat.st_mtime_ns,
+            "duration_ms": cue["duration_ms"],
+            "gain_db": cue["gain_db"],
+            "fade_in_ms": cue["fade_in_ms"],
+            "fade_out_ms": cue["fade_out_ms"],
+            "loop": cue["loop"],
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    cache_key = hashlib.sha256(fingerprint.encode("utf-8")).hexdigest()[:16]
+    safe_id = re.sub(r"[^A-Za-z0-9._-]+", "-", cue["cue_id"]).strip("-")
+    output = output_dir / f"{safe_id}-{cache_key}.wav"
+    if output.exists():
+        return output
+    output_dir.mkdir(parents=True, exist_ok=True)
+    duration_seconds = cue["duration_ms"] / 1000
+    filters = [
+        "asetpts=PTS-STARTPTS",
+        f"volume={cue['gain_db']}dB",
+        f"apad=pad_dur={duration_seconds:.3f}",
+        f"atrim=0:{duration_seconds:.3f}",
+    ]
+    fade_in_seconds = cue["fade_in_ms"] / 1000
+    if fade_in_seconds:
+        filters.append(f"afade=t=in:st=0:d={fade_in_seconds:.3f}")
+    fade_out_seconds = cue["fade_out_ms"] / 1000
+    if fade_out_seconds:
+        fade_start = max(0.0, duration_seconds - fade_out_seconds)
+        filters.append(
+            f"afade=t=out:st={fade_start:.3f}:d={fade_out_seconds:.3f}"
+        )
+    command = [ffmpeg, "-y", "-loglevel", "error"]
+    if cue["loop"]:
+        command.extend(["-stream_loop", "-1"])
+    command.extend(
+        [
+            "-i",
+            str(asset),
+            "-af",
+            ",".join(filters),
+            "-ar",
+            "48000",
+            "-ac",
+            "2",
+            "-c:a",
+            "pcm_s16le",
+            str(output),
+        ]
+    )
+    _run(command)
+    return output
+
+
+def _mix_voice_and_sound_cues(
+    ffmpeg: str,
+    voice_path: Path,
+    cues: list[dict[str, Any]],
+    cue_paths: list[Path],
+    output_path: Path,
+    duration_ms: int,
+) -> None:
+    command = [ffmpeg, "-y", "-loglevel", "error", "-i", str(voice_path)]
+    for cue_path in cue_paths:
+        command.extend(["-i", str(cue_path)])
+
+    filters: list[str] = []
+    has_ducked_cues = any(cue["duck_under_dialogue"] for cue in cues)
+    voice_format = (
+        "aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo"
+    )
+    if has_ducked_cues:
+        filters.append(f"[0:a]{voice_format},asplit=2[voice][speechkey]")
+    else:
+        filters.append(f"[0:a]{voice_format}[voice]")
+    ducked_labels: list[str] = []
+    unducked_labels: list[str] = []
+    for index, cue in enumerate(cues, start=1):
+        delayed_label = f"cue{index}"
+        delay = cue["start_ms"]
+        filters.append(
+            f"[{index}:a]{voice_format},adelay={delay}|{delay}[{delayed_label}]"
+        )
+        if cue["duck_under_dialogue"]:
+            ducked_labels.append(f"[{delayed_label}]")
+        else:
+            unducked_labels.append(f"[{delayed_label}]")
+
+    final_inputs = ["[voice]"]
+    if ducked_labels:
+        duck_bus = _sound_bus(filters, ducked_labels, "duckbus")
+        filters.append(
+            f"{duck_bus}[speechkey]sidechaincompress="
+            "threshold=0.015:ratio=6:attack=20:release=350[ducked]"
+        )
+        final_inputs.append("[ducked]")
+    if unducked_labels:
+        final_inputs.append(_sound_bus(filters, unducked_labels, "plainbus"))
+
+    duration_seconds = duration_ms / 1000
+    filters.append(
+        "".join(final_inputs)
+        + f"amix=inputs={len(final_inputs)}:duration=first,"
+        + f"atrim=0:{duration_seconds:.3f},"
+        + "loudnorm=I=-16:TP=-1.5:LRA=11[mixed]"
+    )
+    command.extend(
+        [
+            "-filter_complex",
+            ";".join(filters),
+            "-map",
+            "[mixed]",
+            "-ar",
+            "48000",
+            "-ac",
+            "2",
+            "-c:a",
+            "pcm_s16le",
+            str(output_path),
+        ]
+    )
+    _run(command)
+
+
+def _sound_bus(filters: list[str], labels: list[str], output_label: str) -> str:
+    if len(labels) == 1:
+        return labels[0]
+    filters.append(
+        "".join(labels)
+        + f"amix=inputs={len(labels)}:dropout_transition=0[{output_label}]"
+    )
+    return f"[{output_label}]"
 
 
 def _read_jobs(path: Path) -> list[dict[str, Any]]:

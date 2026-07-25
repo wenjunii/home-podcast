@@ -18,6 +18,7 @@ from .planning import snapshot_crawl_month
 from .provider_runner import analyze_story_jobs
 from .script import prepare_tts_jobs, validate_script
 from .script_runner import generate_episode_script
+from .sound_design import prepare_sfx_jobs, validate_sound_design
 from .transcripts import render_transcripts
 
 
@@ -150,11 +151,34 @@ def build_parser() -> argparse.ArgumentParser:
     tts.add_argument("--provider", required=True)
     tts.add_argument("--model", required=True)
 
+    validate_sound = subparsers.add_parser(
+        "validate-sound-design",
+        help="Validate a sound-design cue sheet against its episode script",
+    )
+    validate_sound.add_argument("--sound-design", required=True)
+    validate_sound.add_argument("--script", required=True)
+
+    sfx = subparsers.add_parser(
+        "prepare-sfx",
+        help="Create cached, provider-neutral jobs for generated sound cues",
+    )
+    sfx.add_argument("--sound-design", required=True)
+    sfx.add_argument("--script", required=True)
+    sfx.add_argument("--output", help="SFX jobs JSONL path")
+    sfx.add_argument("--provider", required=True)
+    sfx.add_argument("--model", required=True)
+
     audio = subparsers.add_parser(
-        "render-audio", help="Normalize and assemble completed TTS clips"
+        "render-audio",
+        help="Normalize and mix completed speech clips with optional sound design",
     )
     audio.add_argument("--jobs", required=True)
     audio.add_argument("--output-dir", help="Episode audio output directory")
+    audio.add_argument("--sound-design", help="Optional sound-design cue sheet")
+    audio.add_argument(
+        "--sfx-jobs",
+        help="Completed generated-SFX jobs referenced by the sound-design cue sheet",
+    )
 
     transcript = subparsers.add_parser(
         "transcript", help="Render Markdown, WebVTT, and SRT from an audio timeline"
@@ -177,6 +201,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "generate-script" and not result["valid"]:
             return 2
         if args.command == "trim-script" and not result["valid"]:
+            return 2
+        if args.command == "validate-sound-design" and not result["valid"]:
             return 2
         return 0
     except (FileNotFoundError, ValueError, RuntimeError) as error:
@@ -326,6 +352,27 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             model=args.model,
         )
         return {"output": str(output), "jobs": count}
+    if args.command == "validate-sound-design":
+        return validate_sound_design(
+            Path(args.sound_design).resolve(),
+            Path(args.script).resolve(),
+        )
+    if args.command == "prepare-sfx":
+        sound_design_path = Path(args.sound_design).resolve()
+        sound_design = json.loads(sound_design_path.read_text(encoding="utf-8"))
+        output = _path_or_default(
+            args.output,
+            config.work_dir / "sfx" / f"{sound_design['episode_id']}-jobs.jsonl",
+        )
+        count = prepare_sfx_jobs(
+            sound_design_path,
+            Path(args.script).resolve(),
+            output,
+            config.audio_dir / "cache" / "sfx",
+            provider=args.provider,
+            model=args.model,
+        )
+        return {"output": str(output), "jobs": count}
     if args.command == "render-audio":
         jobs_path = Path(args.jobs).resolve()
         first_job = next(
@@ -336,7 +383,15 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
         output_dir = _path_or_default(
             args.output_dir, config.episodes_dir / first_job["episode_id"] / "audio"
         )
-        return render_episode_audio(jobs_path, config.work_dir, output_dir)
+        return render_episode_audio(
+            jobs_path,
+            config.work_dir,
+            output_dir,
+            sound_design_path=(
+                Path(args.sound_design).resolve() if args.sound_design else None
+            ),
+            sfx_jobs_path=Path(args.sfx_jobs).resolve() if args.sfx_jobs else None,
+        )
     if args.command == "transcript":
         timeline_path = Path(args.timeline).resolve()
         timeline = json.loads(timeline_path.read_text(encoding="utf-8"))

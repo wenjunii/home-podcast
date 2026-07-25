@@ -80,6 +80,22 @@ the script-writing LLM, music licensing, human review, hosting, and taxes.
 Actual TTS billing should be recalculated from the validated script before
 generation.
 
+## Pilot sound design
+
+The episode now has a separate 11-cue sound-design map. It uses sparse paper,
+machine, distance, threshold, material-memory, and digital-fragment textures
+rather than a continuous background bed. Every cue is explicitly illustrative;
+none is presented as a recording from the archived stories.
+
+The prompts request 74 seconds of generated source audio. If ElevenLabs Sound
+Effects v2 is selected, the currently published specified-duration rule implies
+about 814 credits for one pass or about 1,221 credits with the same 1.5x retake
+allowance used for speech. This is separate from TTS cost and should be
+rechecked before generation.
+
+See [SOUND_DESIGN.md](SOUND_DESIGN.md) for the cue palette, provenance policy,
+workflow, and official provider references.
+
 ## Recommended spend sequence
 
 1. Write one source-grounded 3–5 minute audition scene.

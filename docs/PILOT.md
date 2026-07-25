@@ -66,7 +66,8 @@ Confirmed:
 Still confirm before final audio generation:
 
 - public series title (the current title is a working title)
-- whether music and ambience are used
+- final approval of the 11-cue illustrative sound-design map
+- sound-effects provider and generated-versus-licensed asset decisions
 - publication/licensing policy for source excerpts
 - sensitivity and translation review standard
 

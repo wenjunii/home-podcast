@@ -26,24 +26,69 @@ def render_transcripts(
         "of archived source material, not simulations of the original authors._",
         "",
     ]
-    vtt_lines = ["WEBVTT", ""]
-    srt_lines: list[str] = []
-    story_index: dict[str, list[str]] = {}
-    for cue_number, segment in enumerate(timeline["segments"], start=1):
-        speaker = display_names.get(segment["speaker"], segment["speaker"])
-        start = int(segment["start_ms"])
-        end = int(segment["end_ms"])
-        text = str(segment["text"])
+    sound_design = timeline.get("sound_design")
+    if isinstance(sound_design, dict) and sound_design.get("disclosure"):
         markdown_lines.extend(
             [
-                f"**[{_clock(start)}] {speaker}:** {text}",
+                f"_Sound design note: {sound_design['disclosure']}_",
                 "",
             ]
         )
+    vtt_lines = ["WEBVTT", ""]
+    srt_lines: list[str] = []
+    story_index: dict[str, list[str]] = {}
+
+    caption_items: list[dict[str, Any]] = []
+    for segment in timeline["segments"]:
+        caption_items.append(
+            {
+                "type": "speech",
+                "start_ms": int(segment["start_ms"]),
+                "end_ms": int(segment["end_ms"]),
+                "segment": segment,
+            }
+        )
+        for story_id in segment.get("source_story_ids", []):
+            story_index.setdefault(story_id, []).append(segment["segment_id"])
+    for cue in timeline.get("sound_cues", []):
+        label = str(cue.get("transcript_label", "")).strip()
+        if label:
+            caption_items.append(
+                {
+                    "type": "sound",
+                    "start_ms": int(cue["start_ms"]),
+                    "end_ms": int(cue["end_ms"]),
+                    "text": f"[{label}]",
+                }
+            )
+
+    caption_items.sort(
+        key=lambda item: (
+            item["start_ms"],
+            0 if item["type"] == "sound" else 1,
+            item["end_ms"],
+        )
+    )
+    for cue_number, item in enumerate(caption_items, start=1):
+        start = item["start_ms"]
+        end = item["end_ms"]
+        if item["type"] == "speech":
+            segment = item["segment"]
+            speaker = display_names.get(segment["speaker"], segment["speaker"])
+            text = str(segment["text"])
+            markdown_text = f"**[{_clock(start)}] {speaker}:** {text}"
+            vtt_text = f"<v {speaker}>{text}"
+            srt_text = f"{speaker}: {text}"
+        else:
+            text = item["text"]
+            markdown_text = f"*[{_clock(start)}] {text}*"
+            vtt_text = text
+            srt_text = text
+        markdown_lines.extend([markdown_text, ""])
         vtt_lines.extend(
             [
                 f"{_vtt_time(start)} --> {_vtt_time(end)}",
-                f"<v {speaker}>{text}",
+                vtt_text,
                 "",
             ]
         )
@@ -51,12 +96,11 @@ def render_transcripts(
             [
                 str(cue_number),
                 f"{_srt_time(start)} --> {_srt_time(end)}",
-                f"{speaker}: {text}",
+                srt_text,
                 "",
             ]
         )
-        for story_id in segment.get("source_story_ids", []):
-            story_index.setdefault(story_id, []).append(segment["segment_id"])
+
     markdown_lines.extend(["## Story source map", ""])
     for story_id, segment_ids in sorted(story_index.items()):
         markdown_lines.append(f"- `{story_id}` — segments {', '.join(segment_ids)}")

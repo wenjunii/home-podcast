@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sound-design.schema.json",
+  "title": "Recovered Homes Sound Design",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "episode_id",
+    "sound_design_disclosure",
+    "editorial_principles",
+    "cues"
+  ],
+  "properties": {
+    "contract_version": {"const": 1},
+    "episode_id": {"type": "string", "minLength": 1},
+    "sound_design_disclosure": {"type": "string", "minLength": 1},
+    "editorial_principles": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "cues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cue_id",
+          "kind",
+          "anchor",
+          "duration_ms",
+          "gain_db",
+          "fade_in_ms",
+          "fade_out_ms",
+          "loop",
+          "duck_under_dialogue",
+          "transcript_label",
+          "editorial_note",
+          "provenance",
+          "source"
+        ],
+        "properties": {
+          "cue_id": {"type": "string", "minLength": 1},
+          "kind": {
+            "enum": ["ident", "ambience", "spot", "transition"]
+          },
+          "anchor": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["segment_id", "point", "offset_ms"],
+            "properties": {
+              "segment_id": {"type": "string", "minLength": 1},
+              "point": {"enum": ["start", "end"]},
+              "offset_ms": {
+                "type": "integer",
+                "minimum": -60000,
+                "maximum": 60000
+              }
+            }
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 300000
+          },
+          "gain_db": {
+            "type": "number",
+            "minimum": -60,
+            "maximum": 0
+          },
+          "fade_in_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 30000
+          },
+          "fade_out_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 30000
+          },
+          "loop": {"type": "boolean"},
+          "duck_under_dialogue": {"type": "boolean"},
+          "transcript_label": {"type": "string", "minLength": 1},
+          "editorial_note": {"type": "string"},
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["presentation", "disclosure"],
+            "properties": {
+              "presentation": {
+                "enum": ["illustrative_sound_design", "licensed_recording"]
+              },
+              "disclosure": {"type": "string", "minLength": 1}
+            }
+          },
+          "source": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["type", "prompt", "generation_duration_ms"],
+                "properties": {
+                  "type": {"const": "generated"},
+                  "prompt": {"type": "string", "minLength": 1},
+                  "generation_duration_ms": {
+                    "type": "integer",
+                    "minimum": 100,
+                    "maximum": 30000
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["type", "path", "license", "credit"],
+                "properties": {
+                  "type": {"const": "licensed"},
+                  "path": {"type": "string", "minLength": 1},
+                  "license": {"type": "string", "minLength": 1},
+                  "credit": {"type": "string", "minLength": 1}
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
