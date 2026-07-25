@@ -112,7 +112,8 @@ def prepare_tts_jobs(
     show_bible = load_json(show_bible_path)
     hosts = {host["id"]: host for host in show_bible["hosts"]}
     jobs = []
-    for segment in script["segments"]:
+    segments = script["segments"]
+    for index, segment in enumerate(segments):
         host = hosts.get(segment["speaker"])
         if host is None:
             raise ValueError(f"Unknown speaker {segment['speaker']!r}")
@@ -121,12 +122,27 @@ def prepare_tts_jobs(
             raise ValueError(
                 f"Host {segment['speaker']!r} has no voice_id in the show bible"
             )
+        render_text = render_tts_text(
+            segment["text"],
+            segment.get("pronunciation", {}),
+        )
+        supports_context = model != "eleven_v3"
+        previous_text = (
+            segments[index - 1]["text"] if supports_context and index else None
+        )
+        next_text = (
+            segments[index + 1]["text"]
+            if supports_context and index + 1 < len(segments)
+            else None
+        )
         fingerprint = json.dumps(
             {
                 "provider": provider,
                 "model": model,
                 "voice_id": voice_id,
-                "text": segment["text"],
+                "render_text": render_text,
+                "previous_text": previous_text,
+                "next_text": next_text,
                 "delivery": segment.get("delivery", {}),
                 "pronunciation": segment.get("pronunciation", {}),
             },
@@ -146,6 +162,9 @@ def prepare_tts_jobs(
                 "model": model,
                 "voice_id": voice_id,
                 "text": segment["text"],
+                "render_text": render_text,
+                "previous_text": previous_text,
+                "next_text": next_text,
                 "delivery": segment.get("delivery", {}),
                 "pronunciation": segment.get("pronunciation", {}),
                 "pause_after_ms": segment.get("pause_after_ms", 0),
@@ -160,6 +179,23 @@ def prepare_tts_jobs(
         for job in jobs:
             handle.write(json.dumps(job, ensure_ascii=False) + "\n")
     return len(jobs)
+
+
+def render_tts_text(text: str, pronunciation: dict[str, Any]) -> str:
+    if not isinstance(pronunciation, dict):
+        raise ValueError("pronunciation must be an object")
+    rendered = text
+    for written, spoken in sorted(
+        pronunciation.items(),
+        key=lambda item: len(str(item[0])),
+        reverse=True,
+    ):
+        if not isinstance(written, str) or not written:
+            raise ValueError("pronunciation keys must be non-empty strings")
+        if not isinstance(spoken, str) or not spoken:
+            raise ValueError("pronunciation values must be non-empty strings")
+        rendered = rendered.replace(written, spoken)
+    return rendered
 
 
 def _normalize_quote(value: str) -> str:

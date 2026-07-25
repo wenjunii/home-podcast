@@ -254,14 +254,36 @@ speech job per speaking turn:
 ```powershell
 python -m home_podcast prepare-tts `
   --script .\episodes\2013-12.01\script.json `
-  --provider PROVIDER_NAME `
-  --model MODEL_NAME
+  --provider elevenlabs `
+  --model eleven_v3
+
+# Dry run: no credential and no provider call
+python -m home_podcast generate-tts `
+  --jobs .\work\tts\2013-12.01-jobs.jsonl
 ```
 
-The chosen speech adapter consumes the JSONL jobs and writes WAV files to each
-job's `output_audio` path. The cache key includes provider, model, voice, text,
-delivery direction, and pronunciation settings, so only changed lines require
-regeneration.
+Paid speech generation is opt-in and requires both `--execute` and an explicit
+`--max-credits` ceiling:
+
+```powershell
+$env:ELEVENLABS_API_KEY = "..."
+python -m home_podcast generate-tts `
+  --jobs .\work\tts\2013-12.01-jobs.jsonl `
+  --execute `
+  --max-credits 25416
+Remove-Item Env:ELEVENLABS_API_KEY
+```
+
+The adapter saves the raw provider response before producing a 48 kHz stereo
+WAV. Rerunning uses the valid WAV cache, or recovers from the raw response
+without another paid call. The cache key includes provider, model, voice,
+rendered text, supported continuity context, delivery direction, and
+pronunciation settings, so only changed lines require regeneration.
+
+The current provisional three-host casting audition is versioned at
+`episodes/2013-12.01/voice-audition.json`. Its generated, level-matched
+listening copies remain local and ignored under
+`work/tts/audition-2013-12.01/`.
 
 The current speech-provider shortlist and pilot audition recommendation are in
 [docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).

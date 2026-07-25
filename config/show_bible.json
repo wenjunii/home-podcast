@@ -17,7 +17,10 @@
       "role": "The Curious Guide",
       "writing_profile": "Warm, energetic, accessible, and willing to ask the question a listener is thinking.",
       "voice_profile": "Warm and clear; medium pace; expressive without sounding theatrical.",
-      "voice_id": null
+      "voice_provider": "elevenlabs",
+      "voice_name": "Bella",
+      "voice_id": "hpp4J3VqNfWAUOO0d1Us",
+      "casting_status": "provisional"
     },
     {
       "id": "archive_nerd",
@@ -25,7 +28,10 @@
       "role": "The Archive Nerd",
       "writing_profile": "Playful about metadata and odd web artifacts; precise without lecturing; dry rather than cynical.",
       "voice_profile": "Sonically distinct from Maya; medium-high energy; slightly quicker pace.",
-      "voice_id": null
+      "voice_provider": "elevenlabs",
+      "voice_name": "Roger",
+      "voice_id": "CwhRBWXzGAHq8TQ4Fs17",
+      "casting_status": "provisional"
     },
     {
       "id": "connector",
@@ -33,7 +39,10 @@
       "role": "The Connector",
       "writing_profile": "Emotionally perceptive and cross-cultural; notices echoes and contradictions without forcing a moral.",
       "voice_profile": "Grounded, intimate, and unhurried; capable of restrained emotional turns.",
-      "voice_id": null
+      "voice_provider": "elevenlabs",
+      "voice_name": "Lily",
+      "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+      "casting_status": "provisional"
     }
   ],
   "editorial_rules": [

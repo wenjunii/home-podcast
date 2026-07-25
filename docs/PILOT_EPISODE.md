@@ -42,9 +42,10 @@ Target the episode at about 30 minutes:
 
 - final program audio: about 30 minutes
 - final spoken script: 4,498 words at about 150 words per minute
-- final TTS text: 25,344 characters
+- final script text: 25,344 characters
+- provider-rendered text after pronunciation substitutions: 25,416 characters
 - production allowance: 1.5 generations per retained line
-- estimated billed generation: about 38,016 characters or 45 audio minutes
+- estimated billed generation: about 38,124 characters or 45 audio minutes
 
 The regeneration allowance covers pronunciation fixes, delivery retakes, and
 limited alternate takes. Music, silence, and already-rendered ambience do not
@@ -70,7 +71,7 @@ transitions. It does not rewrite quotations or factual story narration.
 
 | Provider | Nominal pilot cost with 1.5x generation | Capacity note |
 | --- | ---: | --- |
-| ElevenLabs Eleven v3 | About $3.80 pay as you go | $0.10 per 1,000 characters. The current Creator offer is $11 for the first month and includes ample capacity; regular Creator is $22/month. |
+| ElevenLabs Eleven v3 | About $3.81 pay as you go | $0.10 per 1,000 characters. One clean pass is currently 25,416 characters, or about $2.54. |
 | Hume Octave 2 | $7 first month; $14 thereafter | Creator includes 140,000 characters. The $3 Starter tier covers only about one clean 30-minute pass, with little room for retakes. |
 | Google Gemini 3.1 Flash TTS Preview | About $1.37 standard, or $0.69 batch | Estimate includes about 67,500 audio tokens at 25 tokens/second plus a few cents of text input. Preview pricing and behavior may change. |
 | Cartesia Sonic 3.5 | $5 Pro plan | Pro includes about 133 generated minutes, leaving ample retake capacity. |
@@ -79,6 +80,19 @@ These are API-generation estimates, not total production budgets. They exclude
 the script-writing LLM, music licensing, human review, hosting, and taxes.
 Actual TTS billing should be recalculated from the validated script before
 generation.
+
+## Provisional host casting
+
+The current pilot cast is Bella for Maya, Roger for Theo, and Lily for Lina.
+These assignments remain explicitly provisional in `config/show_bible.json`.
+A 1,797-character, three-voice audition was generated for $0.1797 at the
+published API rate. Its level-matched copies total 118.24 seconds and remain
+ignored under `work/tts/audition-2013-12.01/`.
+
+The next gate is a listening review for host distinction, warmth, archive
+clarity, emotional restraint, fatigue, and whether Eleven v3 speaks or
+misinterprets any performance direction. Approve or revise the cast before the
+full 129-turn render.
 
 ## Pilot sound design
 

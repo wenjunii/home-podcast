@@ -1,0 +1,80 @@
+{
+  "contract_version": 1,
+  "episode_id": "2013-12.01-voice-audition",
+  "title": "December Pilot Host Voice Audition",
+  "purpose": "A low-cost casting test assembled from source-grounded lines in the locked pilot script. Bracketed text is Eleven v3 performance direction and is not spoken copy.",
+  "segments": [
+    {
+      "segment_id": "audition-maya",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "[warmly] Quick thing before we dive in: every voice you're hearing on this show is synthetic. We are AI hosts exploring real human stories preserved in web archives.\n\n[lightly amused] A commenter named Marina chimes in from England and says she hasn't worn completely dry clothes in nearly two years. She misses the sun. And avocados.\n\n[curious] But Sehnsucht changes when the distant place becomes a destination. What happens when you actually go back?\n\n[quietly] And that the web remembered it—even partially, even broken—matters.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca",
+        "story-0eadd80cefbcbd94e33a66f1",
+        "story-25f49668a3daff7a300d7c88",
+        "story-5cf48617f5335d0e3579c911",
+        "story-3b61e67ea1fdabc77b154676",
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {
+        "test_dimensions": [
+          "warm disclosure",
+          "light humor",
+          "curiosity",
+          "emotional restraint"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 900
+    },
+    {
+      "segment_id": "audition-theo",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "[precisely, with dry warmth] And all the material today comes from pages crawled in December 2013. That's when a web crawler grabbed them, not necessarily when they were written. Some of these stories are much older. That 1859 letter, for instance, was sitting as a raw text file on the Internet Archive—an OCR dump of a scanned book, complete with broken line breaks and a page number header.\n\n[grounded] We can't restore the home, the person, the page, or even the full context that produced any of these. We just know someone was here, and they wanted something badly enough to write it down.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39",
+        "story-25f49668a3daff7a300d7c88",
+        "story-5cf48617f5335d0e3579c911",
+        "story-3b61e67ea1fdabc77b154676",
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {
+        "test_dimensions": [
+          "archive explanation",
+          "dry warmth",
+          "serious close"
+        ]
+      },
+      "pronunciation": {
+        "OCR": "O C R"
+      },
+      "pause_after_ms": 900
+    },
+    {
+      "segment_id": "audition-lina",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "[reflectively] And then there's Kathleen, on a WordPress blog called My 8×10 Life. She grew up in the rural Midwest and moved reluctantly to Brooklyn. And she writes about driving back through Midwestern landscapes and feeling like she could finally stretch and breathe again after months of swallowing the grit of New York.\n\n[intimately, with restraint] That's what an archive actually does, isn't it? A company named for a park that may be gone. A Halloween blog that stops mid-sentence. A poem to someone drifting away. A letter from a man going deaf, reaching for a friend. The archive keeps the reaching. It can't give back the thing that was reached for.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5",
+        "story-25f49668a3daff7a300d7c88",
+        "story-5cf48617f5335d0e3579c911",
+        "story-3b61e67ea1fdabc77b154676",
+        "story-51a1bc8af9ca9a8857b06f68"
+      ],
+      "delivery": {
+        "test_dimensions": [
+          "cross-cultural observation",
+          "intimacy",
+          "emotional restraint"
+        ]
+      },
+      "pronunciation": {
+        "8×10": "eight by ten"
+      },
+      "pause_after_ms": 0
+    }
+  ]
+}
