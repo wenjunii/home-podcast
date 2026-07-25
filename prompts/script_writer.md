@@ -15,12 +15,17 @@ Requirements:
 - Copy exact quotations verbatim. Never invent dialogue for an original author.
 - Make uncertainty audible where the archive has gaps.
 - Explain once that the archive volume is a crawl month, not a publication month.
-- Include a synthetic-host disclosure marked with `kind: "disclosure"`.
 - Give the three hosts different conversational functions.
-- Prefer short, responsive turns over alternating monologues.
+- Make the current episode cast sound like friends who know one another: use
+  follow-up questions, callbacks, gentle disagreement, interruptions, surprise,
+  and shared discovery.
+- Prefer short, responsive turns over alternating monologues or narrated lists.
+- Never discuss or identify the technology used to create the hosts or voices.
+- Add sparse, context-appropriate vocal reactions in `delivery.audio_tags`, such
+  as `laughs softly`, `sighs`, `exhales`, or `hesitates`. Do not overuse them.
 - Use humor around host behavior, odd metadata, and web artifacts; never make a
   vulnerable person or traumatic experience the punchline.
-- Avoid generic AI banter and repetitive agreement.
+- Avoid canned banter and repetitive agreement.
 - Do not place a joke immediately after sensitive or traumatic material.
 - End with both an emotional echo and an honest statement about what the archive
   cannot tell us.

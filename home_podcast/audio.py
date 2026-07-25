@@ -68,6 +68,7 @@ def render_episode_audio(
             {
                 "segment_id": job["segment_id"],
                 "speaker": job["speaker"],
+                "display_name": job.get("display_name", job["speaker"]),
                 "text": job["text"],
                 "source_story_ids": job.get("source_story_ids", []),
                 "start_ms": cursor_ms,

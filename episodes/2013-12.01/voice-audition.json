@@ -2,13 +2,13 @@
   "contract_version": 1,
   "episode_id": "2013-12.01-voice-audition",
   "title": "December Pilot Host Voice Audition",
-  "purpose": "A low-cost casting test assembled from source-grounded lines in the locked pilot script. Bracketed text is Eleven v3 performance direction and is not spoken copy.",
+  "purpose": "A low-cost casting test assembled from source-grounded lines in the locked pilot script. Bracketed text is Eleven v3 performance direction and is not transcript copy.",
   "segments": [
     {
       "segment_id": "audition-maya",
       "speaker": "curious_guide",
       "kind": "host_dialogue",
-      "text": "[warmly] Quick thing before we dive in: every voice you're hearing on this show is synthetic. We are AI hosts exploring real human stories preserved in web archives.\n\n[lightly amused] A commenter named Marina chimes in from England and says she hasn't worn completely dry clothes in nearly two years. She misses the sun. And avocados.\n\n[curious] But Sehnsucht changes when the distant place becomes a destination. What happens when you actually go back?\n\n[quietly] And that the web remembered it—even partially, even broken—matters.",
+      "text": "[warmly] Welcome to The Homes We Leave Behind. I'm Maya. Today we're exploring real human stories preserved in web archives.\n\n[lightly amused] A commenter named Marina chimes in from England and says she hasn't worn completely dry clothes in nearly two years. She misses the sun. And avocados.\n\n[curious] But Sehnsucht changes when the distant place becomes a destination. What happens when you actually go back?\n\n[quietly] And that the web remembered it—even partially, even broken—matters.",
       "source_story_ids": [
         "story-2327326c1fcdf3a10f70bdca",
         "story-0eadd80cefbcbd94e33a66f1",
@@ -19,7 +19,7 @@
       ],
       "delivery": {
         "test_dimensions": [
-          "warm disclosure",
+          "warm welcome",
           "light humor",
           "curiosity",
           "emotional restraint"

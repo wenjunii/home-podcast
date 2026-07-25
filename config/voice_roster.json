@@ -1,0 +1,76 @@
+{
+  "contract_version": 1,
+  "provider": "elevenlabs",
+  "rotation_policy": "Choose one role-matched person per episode, then freeze the saved episode cast.",
+  "roles": [
+    {
+      "id": "curious_guide",
+      "candidates": [
+        {
+          "person_id": "maya",
+          "display_name": "Maya",
+          "voice_name": "Bella",
+          "voice_id": "hpp4J3VqNfWAUOO0d1Us"
+        },
+        {
+          "person_id": "nora",
+          "display_name": "Nora",
+          "voice_name": "Sarah",
+          "voice_id": "EXAVITQu4vr4xnSDxMaL"
+        },
+        {
+          "person_id": "zoe",
+          "display_name": "Zoe",
+          "voice_name": "Jessica",
+          "voice_id": "cgSgspJ2msm6clMCkdW9"
+        }
+      ]
+    },
+    {
+      "id": "archive_nerd",
+      "candidates": [
+        {
+          "person_id": "theo",
+          "display_name": "Theo",
+          "voice_name": "Roger",
+          "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+        },
+        {
+          "person_id": "julian",
+          "display_name": "Julian",
+          "voice_name": "Chris",
+          "voice_id": "iP95p4xoKVk53GoZ742B"
+        },
+        {
+          "person_id": "marcus",
+          "display_name": "Marcus",
+          "voice_name": "Eric",
+          "voice_id": "cjVigY5qzO86Huf0OWal"
+        }
+      ]
+    },
+    {
+      "id": "connector",
+      "candidates": [
+        {
+          "person_id": "lina",
+          "display_name": "Lina",
+          "voice_name": "Lily",
+          "voice_id": "pFZP5JQG7iQjIQuC4Bku"
+        },
+        {
+          "person_id": "rowan",
+          "display_name": "Rowan",
+          "voice_name": "River",
+          "voice_id": "SAz9YHcvj6GT2YYXdXww"
+        },
+        {
+          "person_id": "elias",
+          "display_name": "Elias",
+          "voice_name": "George",
+          "voice_id": "JBFqnCBsd6RMkjVDRZzb"
+        }
+      ]
+    }
+  ]
+}

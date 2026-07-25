@@ -16,6 +16,7 @@ class ProjectConfig:
     catalog_path: Path
     themes_path: Path
     show_bible_path: Path
+    voice_roster_path: Path
     episodes_dir: Path
     work_dir: Path
     audio_dir: Path
@@ -46,6 +47,9 @@ class ProjectConfig:
             catalog_path=resolve(data.get("catalog_path", "data/catalog.sqlite3")),
             themes_path=resolve(data.get("themes_path", "config/themes.json")),
             show_bible_path=resolve(data.get("show_bible_path", "config/show_bible.json")),
+            voice_roster_path=resolve(
+                data.get("voice_roster_path", "config/voice_roster.json")
+            ),
             episodes_dir=resolve(data.get("episodes_dir", "episodes")),
             work_dir=resolve(data.get("work_dir", "work")),
             audio_dir=resolve(data.get("audio_dir", "audio")),
@@ -65,6 +69,9 @@ class ProjectConfig:
 
     def load_show_bible(self) -> dict[str, Any]:
         return json.loads(self.show_bible_path.read_text(encoding="utf-8"))
+
+    def load_voice_roster(self) -> dict[str, Any]:
+        return json.loads(self.voice_roster_path.read_text(encoding="utf-8"))
 
     def ensure_runtime_directories(self) -> None:
         self.catalog_path.parent.mkdir(parents=True, exist_ok=True)

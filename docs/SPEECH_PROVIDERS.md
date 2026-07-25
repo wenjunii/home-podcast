@@ -1,13 +1,13 @@
 # Speech provider research
 
-Reviewed July 25, 2026 for an English-first, three-host synthetic podcast with
+Reviewed July 25, 2026 for an English-first, three-host rotating-cast podcast with
 occasional source-language fragments. Prices and preview status can change, so
 recheck them immediately before purchasing production capacity.
 
 ## Recommendation
 
 ElevenLabs Eleven v3 is selected for the pilot implementation. The broader
-shortlist remains useful if the provisional voices fail the listening review:
+shortlist remains useful if later rotating-cast voices fail listening review:
 
 1. ElevenLabs Eleven v3
 2. Hume Octave 2
@@ -22,17 +22,16 @@ economical production benchmark. Gemini is a valuable podcast-oriented
 contender, but its current TTS model is preview software and supports at most
 two speakers in a single request.
 
-Do not select voices from a short audition alone. Render the same
-three-to-five-minute scene with every engine, hide provider names from
-reviewers, and score the results before assigning permanent voice IDs.
+The pilot voices passed their audition. New roster candidates should still be
+blind-scored before their voice IDs are added to the rotation.
 
 ## Current pilot audition
 
 The first casting pass uses three deliberately distinct default voices:
 
-| Host | Provisional voice | Audition focus |
+| Host | Approved pilot voice | Audition focus |
 | --- | --- | --- |
-| Maya | Bella (`hpp4J3VqNfWAUOO0d1Us`) | Warm disclosure, light humor, curiosity, and a restrained close |
+| Maya | Bella (`hpp4J3VqNfWAUOO0d1Us`) | Warm welcome, light humor, curiosity, and a restrained close |
 | Theo | Roger (`CwhRBWXzGAHq8TQ4Fs17`) | Clear archive explanation, dry warmth, and a serious close |
 | Lina | Lily (`pFZP5JQG7iQjIQuC4Bku`) | Cross-cultural observation, intimacy, and emotional restraint |
 
@@ -47,8 +46,13 @@ The Eleven v3 TTS endpoint rejected `previous_text` and `next_text` during the
 live preflight, so the adapter omits those generic endpoint fields for this
 model. This matters for production: ElevenLabs also warns that very short v3
 prompts are less consistent. The audition therefore uses one long,
-multi-delivery passage per host. The 129-turn pilot should not be rendered
-until the cast is approved and short-turn continuity has been spot-tested.
+multi-delivery passage per host.
+
+The follow-up continuity audition spot-tests 10 turns from the revised script,
+including all three hosts, fast handoffs, a chuckle, a soft sigh, a tonal
+transition, and one exact quotation. It used 2,183 input characters and runs
+141.02 seconds. The full 128-turn pilot should not be rendered until this
+audition passes listening review.
 
 ## Comparison
 

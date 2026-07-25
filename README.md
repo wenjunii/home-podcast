@@ -1,8 +1,8 @@
 # Recovered Homes
 
 Recovered Homes is an incremental production pipeline for a popular,
-multi-host synthetic podcast about home, belonging, digital history, and
-digital archaeology.
+rotating-cast podcast about home, belonging, digital history, and digital
+archaeology.
 
 The source corpus lives in the sibling extractor project. This project reads
 only `stories_*.md` files and deliberately ignores `matches` exports and the
@@ -22,7 +22,7 @@ stories_*.md
   → incremental SQLite catalog
   → cached story-analysis jobs
   → thematic crawl-month proposal
-  → locked episode evidence packet
+  → locked episode evidence + frozen rotating cast
   → grounded multi-host script
   → cached segment-level speech jobs
   → optional provenance-tracked sound-design cues
@@ -32,7 +32,7 @@ stories_*.md
 
 Deterministic code owns parsing, WARC dates, IDs, history, manifests, caching,
 audio assembly, and transcripts. AI providers are used only for semantic story
-cards, scriptwriting/editorial passes, and synthetic speech.
+cards, scriptwriting/editorial passes, and voice performance.
 
 ## Quick start
 
@@ -193,6 +193,9 @@ lock the preferred installment before script generation:
 python -m home_podcast lock-episode `
   --proposal .\work\planning\2013-12-proposal.json `
   --episode 2013-12.01
+
+python -m home_podcast cast-episode `
+  --episode 2013-12.01
 ```
 
 This creates `episodes/2013-12.01/manifest.json` with the exact story IDs and
@@ -236,6 +239,25 @@ python -m home_podcast trim-script `
   --plan .\episodes\2013-12.01\trim-plan.json
 ```
 
+Then polish the trimmed, validated script into a more natural conversation
+while locking speakers, citations, quotations, pronunciations, pauses, and
+section order:
+
+```powershell
+$env:CAPRIOLE_API_KEY = "..."
+python -m home_podcast polish-script `
+  --script .\episodes\2013-12.01\script.json `
+  --evidence .\work\scripts\2013-12.01-evidence.json `
+  --cast .\episodes\2013-12.01\cast.json
+Remove-Item Env:CAPRIOLE_API_KEY
+```
+
+The polisher caches each original generation section independently. Audible
+reactions such as a chuckle, sigh, or exhale are stored in TTS-only delivery
+metadata and do not appear as bracketed text in transcripts. The pilot trim
+plan is now a historical pre-polish record and must not be reapplied to the
+polished script.
+
 Validate story coverage, speakers, citations, and exact quotations:
 
 ```powershell
@@ -248,12 +270,15 @@ Validation fails if even one selected story has no traceable use.
 
 ## Speech, sound design, audio, and transcripts
 
-After assigning stable voice IDs in `config/show_bible.json`, create one cached
-speech job per speaking turn:
+Each new episode selects a role-matched lineup from
+`config/voice_roster.json` and freezes it in `episodes/<episode>/cast.json`.
+The same episode always reuses its saved cast, while later episodes rotate to
+different people. Create one cached speech job per speaking turn:
 
 ```powershell
 python -m home_podcast prepare-tts `
   --script .\episodes\2013-12.01\script.json `
+  --cast .\episodes\2013-12.01\cast.json `
   --provider elevenlabs `
   --model eleven_v3
 
@@ -270,7 +295,7 @@ $env:ELEVENLABS_API_KEY = "..."
 python -m home_podcast generate-tts `
   --jobs .\work\tts\2013-12.01-jobs.jsonl `
   --execute `
-  --max-credits 25416
+  --max-credits 27125
 Remove-Item Env:ELEVENLABS_API_KEY
 ```
 
@@ -280,7 +305,8 @@ without another paid call. The cache key includes provider, model, voice,
 rendered text, supported continuity context, delivery direction, and
 pronunciation settings, so only changed lines require regeneration.
 
-The current provisional three-host casting audition is versioned at
+The approved pilot cast is Maya/Bella, Theo/Roger, and Lina/Lily. Its
+three-host casting audition is versioned at
 `episodes/2013-12.01/voice-audition.json`. Its generated, level-matched
 listening copies remain local and ignored under
 `work/tts/audition-2013-12.01/`.

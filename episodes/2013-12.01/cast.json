@@ -1,0 +1,30 @@
+{
+  "contract_version": 1,
+  "episode_id": "2013-12.01",
+  "provider": "elevenlabs",
+  "selection": "pinned_from_approved_pilot_audition",
+  "status": "approved",
+  "hosts": [
+    {
+      "id": "curious_guide",
+      "person_id": "maya",
+      "display_name": "Maya",
+      "voice_name": "Bella",
+      "voice_id": "hpp4J3VqNfWAUOO0d1Us"
+    },
+    {
+      "id": "archive_nerd",
+      "person_id": "theo",
+      "display_name": "Theo",
+      "voice_name": "Roger",
+      "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+    },
+    {
+      "id": "connector",
+      "person_id": "lina",
+      "display_name": "Lina",
+      "voice_name": "Lily",
+      "voice_id": "pFZP5JQG7iQjIQuC4Bku"
+    }
+  ]
+}

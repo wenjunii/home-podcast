@@ -41,11 +41,11 @@ the three audience-facing movements, not additional sub-episodes.
 Target the episode at about 30 minutes:
 
 - final program audio: about 30 minutes
-- final spoken script: 4,498 words at about 150 words per minute
-- final script text: 25,344 characters
-- provider-rendered text after pronunciation substitutions: 25,416 characters
+- final spoken script: 4,441 words at about 150 words per minute
+- final speaking turns: 128
+- provider-rendered text with pronunciation and performance direction: 27,125 characters
 - production allowance: 1.5 generations per retained line
-- estimated billed generation: about 38,124 characters or 45 audio minutes
+- estimated billed generation: about 40,688 characters or 44 audio minutes
 
 The regeneration allowance covers pronunciation fixes, delivery retakes, and
 limited alternate takes. Music, silence, and already-rendered ambience do not
@@ -57,12 +57,14 @@ The source-validated script was generated with
 `anthropic/claude-opus-4-6` and then tightened with a reproducible,
 hash-bound editorial plan:
 
-- 129 speaking turns
-- 4,498 spoken words
-- 25,344 spoken characters
-- approximately 30.0 minutes at 150 words per minute
+- 128 speaking turns
+- 4,441 spoken words
+- approximately 29.6 minutes at 150 words per minute
 - all 27 selected stories cited
 - all exact quotations verified against source text
+- 97 host turns conversationally polished
+- seven sparse audible reactions: chuckles, sighs, and exhales
+- no on-air host-generation disclosure
 
 The saved plan removes 29 redundant turns and repairs four checkpoint
 transitions. It does not rewrite quotations or factual story narration.
@@ -71,7 +73,7 @@ transitions. It does not rewrite quotations or factual story narration.
 
 | Provider | Nominal pilot cost with 1.5x generation | Capacity note |
 | --- | ---: | --- |
-| ElevenLabs Eleven v3 | About $3.81 pay as you go | $0.10 per 1,000 characters. One clean pass is currently 25,416 characters, or about $2.54. |
+| ElevenLabs Eleven v3 | About $4.07 pay as you go | $0.10 per 1,000 characters. One clean pass is currently 27,125 rendered characters, or about $2.71. |
 | Hume Octave 2 | $7 first month; $14 thereafter | Creator includes 140,000 characters. The $3 Starter tier covers only about one clean 30-minute pass, with little room for retakes. |
 | Google Gemini 3.1 Flash TTS Preview | About $1.37 standard, or $0.69 batch | Estimate includes about 67,500 audio tokens at 25 tokens/second plus a few cents of text input. Preview pricing and behavior may change. |
 | Cartesia Sonic 3.5 | $5 Pro plan | Pro includes about 133 generated minutes, leaving ample retake capacity. |
@@ -81,18 +83,20 @@ the script-writing LLM, music licensing, human review, hosting, and taxes.
 Actual TTS billing should be recalculated from the validated script before
 generation.
 
-## Provisional host casting
+## Approved pilot cast
 
 The current pilot cast is Bella for Maya, Roger for Theo, and Lily for Lina.
-These assignments remain explicitly provisional in `config/show_bible.json`.
+These assignments are approved and frozen in `episodes/2013-12.01/cast.json`.
 A 1,797-character, three-voice audition was generated for $0.1797 at the
 published API rate. Its level-matched copies total 118.24 seconds and remain
 ignored under `work/tts/audition-2013-12.01/`.
 
-The next gate is a listening review for host distinction, warmth, archive
-clarity, emotional restraint, fatigue, and whether Eleven v3 speaks or
-misinterprets any performance direction. Approve or revise the cast before the
-full 129-turn render.
+Later episodes use deterministic episode-level rotation across the role-matched
+voice roster. A second, 10-turn continuity audition of the revised friend-like
+dialogue used 2,183 input characters and all three hosts. It runs 141.02
+seconds, exercises a chuckle and a soft sigh, and remains ignored under
+`work/tts/continuity-audition-2013-12.01/`. The next gate is listening approval
+of that audition before the full 128-turn render.
 
 ## Pilot sound design
 
@@ -112,14 +116,12 @@ workflow, and official provider references.
 
 ## Recommended spend sequence
 
-1. Write one source-grounded 3–5 minute audition scene.
-2. Render it once with all four providers.
-3. Blind-score voices and delivery.
-4. Select one provider and stable voice IDs.
-5. Generate the selected themed sub-episode segment by segment.
-
-Do not render the full episode with all four providers. The provider audition
-should be small; only the selected engine should receive the full script.
+1. Listen to the 10-turn continuity audition and approve or adjust delivery.
+2. Approve the illustrative sound-design map and source-excerpt policy.
+3. Generate the selected themed sub-episode segment by segment with the frozen
+   pilot cast.
+4. Render the full speech-and-sound mix.
+5. Run loudness, clipping, transcript, source-map, and listening QA.
 
 ## Pricing sources
 

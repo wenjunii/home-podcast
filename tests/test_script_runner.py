@@ -4,7 +4,6 @@ import unittest
 
 from home_podcast.script_runner import (
     _compact_evidence_packet,
-    _keep_first_disclosure,
     _normalize_movement_segments,
     _parse_script_output,
     _script_metrics,
@@ -42,6 +41,7 @@ class ScriptRunnerTests(unittest.TestCase):
         packet = {
             "episode": {"episode_id": "2013-12.01"},
             "show_bible": {"hosts": []},
+            "episode_cast": {"hosts": []},
             "writing_requirements": {},
             "evidence": [
                 {
@@ -85,19 +85,6 @@ class ScriptRunnerTests(unittest.TestCase):
         }
         normalized = _normalize_movement_segments(segments, 1, evidence)
         self.assertEqual(normalized[0]["text"], "I’m going home — now.")
-
-    def test_keeps_only_first_disclosure(self) -> None:
-        segments = [
-            {"kind": "disclosure", "text": "Opening disclosure."},
-            {"kind": "host_dialogue", "text": "Episode."},
-            {"kind": "disclosure", "text": "Closing disclosure."},
-        ]
-        kept = _keep_first_disclosure(segments)
-        self.assertEqual([segment["text"] for segment in kept], [
-            "Opening disclosure.",
-            "Episode.",
-        ])
-
 
 if __name__ == "__main__":
     unittest.main()

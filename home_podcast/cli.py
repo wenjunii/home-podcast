@@ -8,6 +8,7 @@ from typing import Any
 
 from .analysis import export_analysis_packets, import_story_cards
 from .audio import render_episode_audio
+from .casting import create_episode_cast
 from .catalog import catalog_status
 from .config import ProjectConfig
 from .doctor import run_doctor
@@ -15,6 +16,7 @@ from .editor import trim_episode_script
 from .ingest import ingest_exports
 from .planning import create_month_proposal, lock_episode_manifest, prepare_script_packet
 from .planning import snapshot_crawl_month
+from .polisher import polish_episode_conversation
 from .provider_runner import analyze_story_jobs
 from .script import prepare_tts_jobs, validate_script
 from .script_runner import generate_episode_script
@@ -99,6 +101,13 @@ def build_parser() -> argparse.ArgumentParser:
     lock.add_argument("--proposal", required=True)
     lock.add_argument("--episode", required=True)
 
+    cast = subparsers.add_parser(
+        "cast-episode",
+        help="Select and freeze a rotating three-person voice cast for an episode",
+    )
+    cast.add_argument("--episode", required=True)
+    cast.add_argument("--output", help="Episode cast JSON path")
+
     packet = subparsers.add_parser(
         "prepare-script", help="Build a source-grounded script evidence packet"
     )
@@ -145,6 +154,25 @@ def build_parser() -> argparse.ArgumentParser:
         help="Validated trimmed script path; defaults to replacing --script",
     )
 
+    polish_script = subparsers.add_parser(
+        "polish-script",
+        help="Polish a grounded script into natural, friend-like host conversation",
+    )
+    polish_script.add_argument("--script", required=True)
+    polish_script.add_argument("--evidence", required=True)
+    polish_script.add_argument("--cast", required=True)
+    polish_script.add_argument("--target-min", type=int, default=4400)
+    polish_script.add_argument("--target-max", type=int, default=4600)
+    polish_script.add_argument(
+        "--max-new-calls",
+        type=int,
+        help="Generate at most this many uncached sections, then stop resumably",
+    )
+    polish_script.add_argument(
+        "--output",
+        help="Validated polished script path; defaults to replacing --script",
+    )
+
     tts = subparsers.add_parser(
         "prepare-tts", help="Create cached, segment-level TTS jobs from a valid script"
     )
@@ -152,6 +180,10 @@ def build_parser() -> argparse.ArgumentParser:
     tts.add_argument("--output", help="TTS jobs JSONL path")
     tts.add_argument("--provider", required=True)
     tts.add_argument("--model", required=True)
+    tts.add_argument(
+        "--cast",
+        help="Frozen episode cast; defaults to episodes/<episode>/cast.json",
+    )
 
     generate_tts = subparsers.add_parser(
         "generate-tts",
@@ -221,6 +253,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     transcript.add_argument("--timeline", required=True)
     transcript.add_argument("--output-dir", help="Transcript output directory")
+    transcript.add_argument(
+        "--cast",
+        help="Frozen episode cast; defaults to episodes/<episode>/cast.json",
+    )
     return parser
 
 
@@ -237,6 +273,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "generate-script" and not result["valid"]:
             return 2
         if args.command == "trim-script" and not result["valid"]:
+            return 2
+        if (
+            args.command == "polish-script"
+            and result.get("complete")
+            and not result["valid"]
+        ):
             return 2
         if args.command == "validate-sound-design" and not result["valid"]:
             return 2
@@ -331,6 +373,29 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             config, Path(args.proposal).resolve(), args.episode
         )
         return {"manifest": str(path), "created": created, "episode_id": args.episode}
+    if args.command == "cast-episode":
+        output = _path_or_default(
+            args.output,
+            config.episodes_dir / args.episode / "cast.json",
+        )
+        episode_cast, created = create_episode_cast(
+            config.voice_roster_path,
+            args.episode,
+            output,
+        )
+        return {
+            "output": str(output),
+            "created": created,
+            "episode_id": args.episode,
+            "hosts": [
+                {
+                    "role": host["id"],
+                    "display_name": host["display_name"],
+                    "voice_name": host["voice_name"],
+                }
+                for host in episode_cast["hosts"]
+            ],
+        }
     if args.command == "prepare-script":
         output = _path_or_default(
             args.output,
@@ -379,15 +444,39 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             target_words_max=args.target_max,
             plan_path=Path(args.plan).resolve() if args.plan else None,
         )
+    if args.command == "polish-script":
+        script_path = Path(args.script).resolve()
+        output = _path_or_default(args.output, script_path)
+        return polish_episode_conversation(
+            config,
+            script_path,
+            Path(args.evidence).resolve(),
+            Path(args.cast).resolve(),
+            output,
+            target_words_min=args.target_min,
+            target_words_max=args.target_max,
+            max_new_calls=args.max_new_calls,
+        )
     if args.command == "prepare-tts":
         script = json.loads(Path(args.script).read_text(encoding="utf-8"))
+        episode_id = script["episode_id"]
         output = _path_or_default(
             args.output,
-            config.work_dir / "tts" / f"{script['episode_id']}-jobs.jsonl",
+            config.work_dir / "tts" / f"{episode_id}-jobs.jsonl",
         )
+        cast_path = _path_or_default(
+            args.cast,
+            config.episodes_dir / episode_id / "cast.json",
+        )
+        if args.cast is None:
+            create_episode_cast(
+                config.voice_roster_path,
+                episode_id,
+                cast_path,
+            )
         count = prepare_tts_jobs(
             Path(args.script).resolve(),
-            config.show_bible_path,
+            cast_path,
             output,
             config.audio_dir / "cache" / "tts",
             provider=args.provider,
@@ -453,11 +542,18 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
     if args.command == "transcript":
         timeline_path = Path(args.timeline).resolve()
         timeline = json.loads(timeline_path.read_text(encoding="utf-8"))
+        cast_path = _path_or_default(
+            args.cast,
+            config.episodes_dir / timeline["episode_id"] / "cast.json",
+        )
+        speaker_config_path = (
+            cast_path if cast_path.is_file() else config.show_bible_path
+        )
         output_dir = _path_or_default(
             args.output_dir,
             config.episodes_dir / timeline["episode_id"] / "transcripts",
         )
-        paths = render_transcripts(timeline_path, config.show_bible_path, output_dir)
+        paths = render_transcripts(timeline_path, speaker_config_path, output_dir)
         return {key: str(value) for key, value in paths.items()}
     raise ValueError(f"Unsupported command: {args.command}")
 

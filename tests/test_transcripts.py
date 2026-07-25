@@ -62,6 +62,7 @@ class TranscriptTests(unittest.TestCase):
             self.assertIn("Sound design note: All sounds are illustrative.", markdown)
             self.assertIn("[soft paper movement]", markdown)
             self.assertIn("[soft paper movement]", vtt)
+            self.assertNotIn("synthetic hosts", markdown)
             self.assertLess(
                 markdown.index("[soft paper movement]"),
                 markdown.index("Maya:"),

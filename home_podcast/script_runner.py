@@ -109,7 +109,6 @@ def generate_episode_script(
             flush=True,
         )
 
-    all_segments = _keep_first_disclosure(all_segments)
     script = {
         "contract_version": 1,
         "episode_id": episode_id,
@@ -161,8 +160,9 @@ def _build_section_prompt(
     placement_rules = {
         1: (
             "This is the opening section. Start with a cold open, then introduce "
-            "the show and include the disclosure that every host voice is synthetic. "
-            "Explain once that December 2013 is capture time, not publication time."
+            "the show and the current hosts naturally, as friends would. Do not "
+            "discuss how the voices or hosts are produced. Explain once that December "
+            "2013 is capture time, not publication time."
         ),
         section_count: (
             "This is the final section. Do not reintroduce the show. End with an "
@@ -178,12 +178,22 @@ def _build_section_prompt(
     compact_evidence = [
         _compact_evidence_story(story) for story in evidence
     ]
+    episode_map = json.dumps(
+        _compact_episode_map(outline),
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    host_roles = json.dumps(
+        _compact_show_bible(packet["show_bible"], packet["episode_cast"]),
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
     segment_contract = {
         "segments": [
             {
                 "segment_id": "locally unique string",
                 "speaker": "curious_guide | archive_nerd | connector",
-                "kind": "host_dialogue | quote | disclosure | transition",
+                "kind": "host_dialogue | quote | transition",
                 "text": "spoken words only",
                 "source_story_ids": ["story ID(s) supporting this turn"],
                 "delivery": {},
@@ -206,7 +216,15 @@ def _build_section_prompt(
         "- Use every supplied story and include each story ID in source_story_ids "
         "at least once. Do not speak IDs aloud.\n"
         "- Keep this a lively three-host conversation, not three essays. Use short "
-        "responsive turns and let emotionally difficult material breathe.\n"
+        "responsive turns, genuine follow-up questions, gentle disagreement, "
+        "callbacks, and occasional surprise. Let emotionally difficult material "
+        "breathe.\n"
+        "- The hosts know each other and sound like friends, not presenters reading "
+        "independent notes. Do not use canned agreement or explain their production "
+        "technology.\n"
+        "- Add delivery.audio_tags only for audible reactions that fit the moment, "
+        "such as laughs softly, sighs, exhales, or hesitates. Keep them sparse and "
+        "never use a joke or laugh immediately after trauma.\n"
         "- Use kind=quote only when the entire text is copied verbatim from exactly "
         "one memorable_passages entry. Prefer grounded paraphrase if uncertain.\n"
         "- Treat each story_card summary as the boundary for factual claims. The "
@@ -217,9 +235,9 @@ def _build_section_prompt(
         "SEGMENT CONTRACT EXAMPLE\n"
         f"{json.dumps(segment_contract, ensure_ascii=False, separators=(',', ':'))}\n\n"
         "EPISODE MAP\n"
-        f"{json.dumps(_compact_episode_map(outline), ensure_ascii=False, separators=(',', ':'))}\n\n"
+        f"{episode_map}\n\n"
         "HOST ROLES\n"
-        f"{json.dumps(_compact_show_bible(packet['show_bible']), ensure_ascii=False, separators=(',', ':'))}\n\n"
+        f"{host_roles}\n\n"
         "EVIDENCE FOR THIS SECTION\n"
         f"{json.dumps(compact_evidence, ensure_ascii=False, separators=(',', ':'))}"
     )
@@ -267,13 +285,17 @@ def _compact_episode_map(outline: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _compact_show_bible(show_bible: dict[str, Any]) -> dict[str, Any]:
+def _compact_show_bible(
+    show_bible: dict[str, Any],
+    episode_cast: dict[str, Any],
+) -> dict[str, Any]:
+    cast_by_id = {host["id"]: host for host in episode_cast["hosts"]}
     return {
         "promise": show_bible["promise"],
         "hosts": [
             {
                 "id": host["id"],
-                "display_name": host["display_name"],
+                "display_name": cast_by_id[host["id"]]["display_name"],
                 "role": host["role"],
                 "writing_profile": host["writing_profile"],
             }
@@ -286,6 +308,7 @@ def _compact_evidence_packet(packet: dict[str, Any]) -> dict[str, Any]:
     return {
         "episode": packet["episode"],
         "show_bible": packet["show_bible"],
+        "episode_cast": packet["episode_cast"],
         "evidence": [
             _compact_evidence_story(story) for story in packet["evidence"]
         ],
@@ -421,20 +444,6 @@ def _script_metrics(script: dict[str, Any]) -> dict[str, Any]:
         "spoken_characters": characters,
         "estimated_minutes": round(words / 150, 1),
     }
-
-
-def _keep_first_disclosure(
-    segments: list[dict[str, Any]],
-) -> list[dict[str, Any]]:
-    kept: list[dict[str, Any]] = []
-    disclosure_seen = False
-    for segment in segments:
-        if segment.get("kind") == "disclosure":
-            if disclosure_seen:
-                continue
-            disclosure_seen = True
-        kept.append(segment)
-    return kept
 
 
 def _normalize_quote(value: str) -> str:

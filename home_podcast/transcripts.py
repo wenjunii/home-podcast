@@ -7,12 +7,15 @@ from typing import Any
 
 def render_transcripts(
     timeline_path: Path,
-    show_bible_path: Path,
+    speaker_config_path: Path,
     output_dir: Path,
 ) -> dict[str, Path]:
     timeline = json.loads(timeline_path.read_text(encoding="utf-8"))
-    show_bible = json.loads(show_bible_path.read_text(encoding="utf-8"))
-    display_names = {host["id"]: host["display_name"] for host in show_bible["hosts"]}
+    speaker_config = json.loads(speaker_config_path.read_text(encoding="utf-8"))
+    display_names = {
+        host["id"]: host.get("display_name", host["id"])
+        for host in speaker_config["hosts"]
+    }
     episode_id = timeline["episode_id"]
     output_dir.mkdir(parents=True, exist_ok=True)
     markdown_path = output_dir / f"{episode_id}-transcript.md"
@@ -21,9 +24,6 @@ def render_transcripts(
 
     markdown_lines = [
         f"# Transcript: {episode_id}",
-        "",
-        "_This program is performed by synthetic hosts. Story fragments are readings "
-        "of archived source material, not simulations of the original authors._",
         "",
     ]
     sound_design = timeline.get("sound_design")
@@ -74,7 +74,10 @@ def render_transcripts(
         end = item["end_ms"]
         if item["type"] == "speech":
             segment = item["segment"]
-            speaker = display_names.get(segment["speaker"], segment["speaker"])
+            speaker = segment.get(
+                "display_name",
+                display_names.get(segment["speaker"], segment["speaker"]),
+            )
             text = str(segment["text"])
             markdown_text = f"**[{_clock(start)}] {speaker}:** {text}"
             vtt_text = f"<v {speaker}>{text}"

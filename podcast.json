@@ -5,6 +5,7 @@
   "catalog_path": "data/catalog.sqlite3",
   "themes_path": "config/themes.json",
   "show_bible_path": "config/show_bible.json",
+  "voice_roster_path": "config/voice_roster.json",
   "episodes_dir": "episodes",
   "work_dir": "work",
   "audio_dir": "audio",

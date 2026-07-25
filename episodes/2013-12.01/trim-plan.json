@@ -1,6 +1,8 @@
 {
   "contract_version": 1,
   "episode_id": "2013-12.01",
+  "status": "historical_pre_conversation_polish_record",
+  "superseded_by": "The validated friend-like conversation polish saved in script.json.",
   "operation": "delete_segments_and_polish_transitions",
   "source_script_sha256": "bfa229795a8d7443d49f37940d55e82dbe460bba3852545fc8269d9055f85387",
   "source_hash_basis": "canonical JSON with sorted keys and compact separators",
@@ -59,5 +61,5 @@
       "reason": "Continue the new handoff without falsely implying that sensory triggers were already discussed."
     }
   ],
-  "editorial_note": "Opus selected 25 redundant or over-explanatory turns. Four additional locally reviewed cuts remove repeated setup and recaps. Four transition-only rewrites repair checkpoint continuity without changing quotations, disclosure, factual story narration, section coverage, or any story's surviving citations."
+  "editorial_note": "Opus selected 25 redundant or over-explanatory turns. Four additional locally reviewed cuts remove repeated setup and recaps. Four transition-only rewrites repair checkpoint continuity without changing quotations, factual story narration, section coverage, or any story's surviving citations."
 }
