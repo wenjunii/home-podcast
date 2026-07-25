@@ -1,0 +1,81 @@
+# Speech provider research
+
+Reviewed July 25, 2026 for an English-first, three-host synthetic podcast with
+occasional source-language fragments. Prices and preview status can change, so
+recheck them immediately before purchasing production capacity.
+
+## Recommendation
+
+Run one blind casting audition across:
+
+1. ElevenLabs Eleven v3
+2. Hume Octave 2
+3. Google Gemini 3.1 Flash TTS Preview
+4. Cartesia Sonic 3.5
+
+ElevenLabs is the leading default because Eleven v3 directly supports
+multi-speaker dialogue, expressive delivery, and more than 70 languages. Hume
+is the strongest alternative for acting direction and emotional continuity.
+Cartesia is the safest broad-language fallback for source fragments and an
+economical production benchmark. Gemini is a valuable podcast-oriented
+contender, but its current TTS model is preview software and supports at most
+two speakers in a single request.
+
+Do not select voices from a short audition alone. Render the same
+three-to-five-minute scene with every engine, hide provider names from
+reviewers, and score the results before assigning permanent voice IDs.
+
+## Comparison
+
+| Provider | Best fit here | Main strengths | Main cautions | Published pricing observed |
+| --- | --- | --- | --- | --- |
+| ElevenLabs Eleven v3 | Leading primary engine | Natural multi-speaker dialogue, up to ten voices per dialogue request, 70+ languages, strong emotional range, voice design/library | Dialogue requests are most reliable at 2,000 characters or less; use stable licensed voices rather than expiring defaults | Multilingual v2/v3 is $0.10 per 1,000 characters; paid plan tiers add included capacity |
+| Hume Octave 2 | Emotional/acting finalist | Per-utterance delivery descriptions, context continuation, voice design/cloning, word and phoneme timestamps | Octave 2 is preview; official language coverage is narrower than this corpus | Creator $14/month for 140k characters; Pro $70 for 1M; Scale $200 for 3.3M, plus overages |
+| Google Gemini 3.1 Flash TTS Preview | Controllable podcast finalist | Exact text recitation, natural-language direction for style/accent/pace/tone, podcast focus, batch API | Preview; only two speakers per request, so three-host turns need separate or paired calls | $1 per million text-input tokens and $20 per million audio-output tokens; batch is half those rates |
+| Cartesia Sonic 3.5 | Multilingual fallback and benchmark | Stable pin-able snapshot, 42 languages covering this corpus, expressive conversational speech, pronunciation dictionaries | Sonic 3.5 temporarily lacks the speed/volume controls present in Sonic 3 | Pro $5/month for about 133 minutes; Startup $49 for about 1,667; Scale $299 for about 10,667 |
+
+Pricing comparisons are not perfectly equivalent: vendors meter characters,
+audio tokens, credits, or included minutes differently. The casting bakeoff
+should record the actual billed cost of the same script.
+
+## OpenAI assessment
+
+OpenAI remains useful as a benchmark, but is not a finalist for this pilot.
+The current model catalog marks `gpt-4o-mini-tts` as deprecated; `tts-1-hd` is
+an older quality-optimized TTS model; and `gpt-audio-1.5` is aimed more broadly
+at audio interaction than deterministic, line-by-line podcast rendering.
+
+## Audition design
+
+Use one source-grounded script containing:
+
+- all three hosts, including a short interruption and fast handoff
+- warm banter that does not make fun of a source author
+- a concise explanation of crawl timestamps and missing web context
+- a restrained emotional passage with a deliberate pause
+- names and short fragments in German, Spanish, French, Italian, Dutch,
+  Norwegian, Portuguese, and Swedish
+- at least one correction or pronunciation dictionary entry
+
+Score each blind sample from 1–5 for naturalness, character distinction,
+emotional restraint, pronunciation, multilingual consistency, listening
+fatigue, continuity between separately rendered turns, reproducibility,
+commercial rights, latency, and measured cost.
+
+## Official sources
+
+- [ElevenLabs models](https://elevenlabs.io/docs/overview/models)
+- [ElevenLabs text-to-dialogue API](https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert/)
+- [ElevenLabs API pricing](https://elevenlabs.io/pricing/api)
+- [Hume text-to-speech overview](https://dev.hume.ai/docs/text-to-speech-tts/overview)
+- [Hume file synthesis API](https://dev.hume.ai/reference/text-to-speech-tts/synthesize-file)
+- [Hume pricing](https://www.hume.ai/pricing)
+- [Google Gemini speech generation](https://ai.google.dev/gemini-api/docs/speech-generation)
+- [Gemini 3.1 Flash TTS Preview](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-tts-preview)
+- [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)
+- [Cartesia Sonic models](https://docs.cartesia.ai/build-with-cartesia/tts-models/latest)
+- [Cartesia custom pronunciations](https://docs.cartesia.ai/build-with-cartesia/capability-guides/custom-pronunciations)
+- [Cartesia pricing](https://www.cartesia.ai/pricing)
+- [OpenAI model catalog](https://developers.openai.com/api/docs/models/all)
+- [OpenAI TTS-1 HD](https://developers.openai.com/api/docs/models/tts-1-hd)
+- [OpenAI GPT Audio 1.5](https://developers.openai.com/api/docs/models/gpt-audio-1.5)

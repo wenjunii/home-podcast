@@ -12,10 +12,29 @@ from .database import connect
 
 
 def create_month_proposal(
-    config: ProjectConfig, month: str, output_path: Path
+    config: ProjectConfig,
+    month: str,
+    output_path: Path,
+    cohort_path: Path | None = None,
 ) -> dict[str, Any]:
     theme_config = config.load_themes()["themes"]
     theme_by_slug = {theme["slug"]: theme for theme in theme_config}
+    cohort: dict[str, Any] | None = None
+    expected_cohort: dict[str, str] | None = None
+    if cohort_path is not None:
+        cohort = json.loads(cohort_path.read_text(encoding="utf-8"))
+        if cohort.get("kind") != "crawl_month_cohort":
+            raise ValueError(f"Not a crawl-month cohort manifest: {cohort_path}")
+        if cohort.get("crawl_month") != month:
+            raise ValueError(
+                f"Cohort month {cohort.get('crawl_month')} does not match {month}"
+            )
+        expected_cohort = {
+            item["story_id"]: item["content_hash"] for item in cohort["stories"]
+        }
+        if len(expected_cohort) != len(cohort["stories"]):
+            raise ValueError(f"Cohort contains duplicate story IDs: {cohort_path}")
+
     connection = connect(config.catalog_path)
     rows = connection.execute(
         """
@@ -37,6 +56,21 @@ def create_month_proposal(
         (month,),
     ).fetchall()
     connection.close()
+    if expected_cohort is not None:
+        rows_by_id = {row["id"]: row for row in rows}
+        missing_or_changed = [
+            story_id
+            for story_id, content_hash in expected_cohort.items()
+            if story_id not in rows_by_id
+            or rows_by_id[story_id]["content_hash"] != content_hash
+        ]
+        if missing_or_changed:
+            preview = ", ".join(missing_or_changed[:5])
+            raise ValueError(
+                "Frozen cohort stories changed or disappeared; "
+                f"first affected IDs: {preview}"
+            )
+        rows = [row for row in rows if row["id"] in expected_cohort]
     if not rows:
         raise ValueError(f"No present, unique stories found for crawl month {month}")
 
@@ -121,6 +155,15 @@ def create_month_proposal(
             "not necessarily the story publication month."
         ),
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "cohort": (
+            {
+                "path": str(cohort_path),
+                "label": cohort.get("label"),
+                "story_count": cohort.get("story_count"),
+            }
+            if cohort is not None
+            else None
+        ),
         "policy": {
             "coverage": "maximum_responsible_coverage",
             "target_stories_per_installment": config.target_stories_per_installment,
@@ -140,6 +183,68 @@ def create_month_proposal(
         json.dumps(proposal, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     return proposal
+
+
+def snapshot_crawl_month(
+    config: ProjectConfig,
+    month: str,
+    label: str,
+    output_path: Path,
+) -> tuple[dict[str, Any], bool]:
+    connection = connect(config.catalog_path)
+    rows = connection.execute(
+        """
+        SELECT id, content_hash, language, crawl_dataset, crawl_timestamp
+          FROM stories
+         WHERE is_present = 1
+           AND duplicate_of IS NULL
+           AND crawl_month = ?
+         ORDER BY crawl_timestamp, language, id
+        """,
+        (month,),
+    ).fetchall()
+    connection.close()
+    if not rows:
+        raise ValueError(f"No present, unique stories found for crawl month {month}")
+    snapshot = {
+        "contract_version": 1,
+        "kind": "crawl_month_cohort",
+        "label": label,
+        "crawl_month": month,
+        "story_count": len(rows),
+        "snapshot_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "capture_time_basis": (
+            "Timestamp embedded in Source File. For this December 2013 cohort it "
+            "matches the upstream WARC capture month."
+        ),
+        "stories": [
+            {
+                "story_id": row["id"],
+                "content_hash": row["content_hash"],
+                "language": row["language"],
+                "crawl_dataset": row["crawl_dataset"],
+                "crawl_timestamp": row["crawl_timestamp"],
+            }
+            for row in rows
+        ],
+    }
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    if output_path.exists():
+        existing = json.loads(output_path.read_text(encoding="utf-8"))
+        same = (
+            existing.get("crawl_month") == month
+            and existing.get("stories") == snapshot["stories"]
+        )
+        if same:
+            return existing, False
+        raise ValueError(
+            f"Refusing to overwrite a different frozen cohort: {output_path}"
+        )
+    output_path.write_text(
+        json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return snapshot, True
 
 
 def prepare_script_packet(

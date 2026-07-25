@@ -13,6 +13,8 @@ from .config import ProjectConfig
 from .doctor import run_doctor
 from .ingest import ingest_exports
 from .planning import create_month_proposal, lock_episode_manifest, prepare_script_packet
+from .planning import snapshot_crawl_month
+from .provider_runner import analyze_story_jobs
 from .script import prepare_tts_jobs, validate_script
 from .transcripts import render_transcripts
 
@@ -35,6 +37,7 @@ def build_parser() -> argparse.ArgumentParser:
         "export-analysis", help="Export uncached stories as provider-neutral JSONL jobs"
     )
     export.add_argument("--month", help="Restrict to crawl month YYYY-MM")
+    export.add_argument("--cohort", help="Frozen cohort manifest to restrict exact stories")
     export.add_argument("--output", help="Output JSONL path")
     export.add_argument("--limit", type=int)
     export.add_argument("--include-existing", action="store_true")
@@ -46,10 +49,25 @@ def build_parser() -> argparse.ArgumentParser:
     import_cards.add_argument("--analyzer", required=True)
     import_cards.add_argument("--analyzer-version", required=True)
 
+    snapshot = subparsers.add_parser(
+        "snapshot-volume", help="Freeze the current stories in a crawl-month cohort"
+    )
+    snapshot.add_argument("--month", required=True)
+    snapshot.add_argument("--label", default="pilot")
+    snapshot.add_argument("--output", help="Cohort JSON path")
+
+    analyze = subparsers.add_parser(
+        "analyze", help="Analyze exported story jobs with the configured LLM"
+    )
+    analyze.add_argument("--input", required=True, help="Story jobs JSONL path")
+    analyze.add_argument("--workers", type=int, default=3)
+    analyze.add_argument("--limit", type=int)
+
     plan = subparsers.add_parser(
         "plan", help="Create a maximum-coverage thematic proposal for a crawl month"
     )
     plan.add_argument("--month", required=True)
+    plan.add_argument("--cohort", help="Frozen cohort manifest to restrict exact stories")
     plan.add_argument("--output", help="Proposal JSON path")
 
     lock = subparsers.add_parser(
@@ -129,6 +147,7 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             config,
             output,
             month=args.month,
+            cohort_path=Path(args.cohort).resolve() if args.cohort else None,
             include_existing=args.include_existing,
             limit=args.limit,
         )
@@ -141,11 +160,37 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             analyzer_version=args.analyzer_version,
         )
         return {"imported": imported, "skipped_stale_or_missing": skipped}
+    if args.command == "snapshot-volume":
+        output = _path_or_default(
+            args.output,
+            config.project_root / "cohorts" / f"{args.month}-{args.label}.json",
+        )
+        snapshot, created = snapshot_crawl_month(
+            config, args.month, args.label, output
+        )
+        return {
+            "output": str(output),
+            "created": created,
+            "story_count": snapshot["story_count"],
+            "crawl_month": snapshot["crawl_month"],
+        }
+    if args.command == "analyze":
+        return analyze_story_jobs(
+            config,
+            Path(args.input).resolve(),
+            workers=max(1, args.workers),
+            limit=args.limit,
+        )
     if args.command == "plan":
         output = _path_or_default(
             args.output, config.work_dir / "planning" / f"{args.month}-proposal.json"
         )
-        proposal = create_month_proposal(config, args.month, output)
+        proposal = create_month_proposal(
+            config,
+            args.month,
+            output,
+            cohort_path=Path(args.cohort).resolve() if args.cohort else None,
+        )
         return {
             "output": str(output),
             "installments": len(proposal["installments"]),

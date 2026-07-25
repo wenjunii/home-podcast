@@ -5,7 +5,11 @@ following decisions and credentials are needed.
 
 ## 1. Analysis and script model
 
-Choose a model capable of:
+Selected: Capriole Fable 5 (`anthropic/claude-fable-5`) for both story analysis
+and script generation. The adapter reads `CAPRIOLE_API_KEY` from the process
+environment and caches model outputs by story content and prompt version.
+
+The model must continue to demonstrate:
 
 - reliable structured JSON
 - long multilingual evidence
@@ -13,8 +17,8 @@ Choose a model capable of:
 - nuanced translation
 - source-grounded multi-speaker writing
 
-The analysis model and script model may be the same service, but their prompts,
-model versions, and cached outputs remain separate.
+Analysis and script prompts, model versions, and cached outputs remain
+separate even though they use the same service.
 
 ## 2. Speech casting
 
@@ -36,13 +40,23 @@ rights, and per-episode cost.
 Use licensed stock synthetic voices or explicitly authorized custom voices.
 Do not clone an identifiable real person without permission.
 
+The researched shortlist and recommended bakeoff are recorded in
+[SPEECH_PROVIDERS.md](SPEECH_PROVIDERS.md).
+
 ## 3. Editorial choices
 
-Confirm before generating a pilot:
+Confirmed:
+
+- primary spoken language: English
+- pilot crawl month: December 2013
+- frozen pilot cohort: 421 stories
+- coverage policy: use all eligible stories, at different depths
+- host format: three disclosed synthetic hosts
+- AI budget preference: premium
+
+Still confirm before final audio generation:
 
 - public series title (the current title is a working title)
-- primary spoken language
-- desired pilot crawl month
 - approximate duration
 - whether music and ambience are used
 - publication/licensing policy for source excerpts

@@ -76,21 +76,43 @@ python -m home_podcast status --month 2013-12
 
 ## Story analysis
 
-Export only stories that do not have a current cached story card:
+The configured analysis and script model is Capriole Fable 5. Supply its
+credential only through the process environment:
 
 ```powershell
-python -m home_podcast export-analysis --month 2013-12
+$env:CAPRIOLE_API_KEY = Read-Host -MaskInput "Capriole API key"
 ```
 
-This creates:
+Freeze the exact pilot cohort before analysis, then export and analyze only
+those records:
 
-```text
-work/analysis/2013-12-story-jobs.jsonl
+```powershell
+python -m home_podcast snapshot-volume `
+  --month 2013-12 `
+  --label pilot
+
+python -m home_podcast export-analysis `
+  --cohort .\cohorts\2013-12-pilot.json `
+  --output .\work\analysis\2013-12-pilot-jobs.jsonl
+
+python -m home_podcast analyze `
+  --input .\work\analysis\2013-12-pilot-jobs.jsonl `
+  --workers 3
 ```
 
-Each line contains one story, its provenance, the controlled theme vocabulary,
-and the required result contract. The analysis model should follow
-`prompts/story_analysis.md` and return JSONL shaped like:
+The analyzer caches each completed model response separately and imports it
+immediately. Rerunning the command skips completed work and retries only
+unfinished or failed stories. Start with three workers; raise concurrency only
+when the provider's documented traffic limits support it. Clear the environment
+variable when the run is done:
+
+```powershell
+Remove-Item Env:CAPRIOLE_API_KEY
+```
+
+The exported JSONL contains one story per line, including provenance, the
+controlled theme vocabulary, and the required result contract. The analysis
+model follows `prompts/story_analysis.md` and returns data shaped like:
 
 ```json
 {
@@ -115,7 +137,7 @@ and the required result contract. The analysis model should follow
 }
 ```
 
-Import cards only after validating the provider output:
+Provider-produced cards can also be imported manually:
 
 ```powershell
 python -m home_podcast import-cards .\cards.jsonl `
@@ -131,7 +153,9 @@ automatically reappear in the next export.
 After the month has story cards:
 
 ```powershell
-python -m home_podcast plan --month 2013-12
+python -m home_podcast plan `
+  --month 2013-12 `
+  --cohort .\cohorts\2013-12-pilot.json
 ```
 
 The proposal uses all eligible stories, groups them by primary theme, and
@@ -191,6 +215,9 @@ The chosen speech adapter consumes the JSONL jobs and writes WAV files to each
 job's `output_audio` path. The cache key includes provider, model, voice, text,
 delivery direction, and pronunciation settings, so only changed lines require
 regeneration.
+
+The current speech-provider shortlist and pilot audition recommendation are in
+[docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).
 
 Once every clip exists:
 
