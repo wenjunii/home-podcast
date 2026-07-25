@@ -7,14 +7,16 @@ from pathlib import Path
 from typing import Any
 
 from .analysis import export_analysis_packets, import_story_cards
-from .audio import render_episode_audio
+from .audio import render_dialogue_episode_audio, render_episode_audio
 from .casting import create_episode_cast
 from .catalog import catalog_status
 from .config import ProjectConfig
 from .doctor import run_doctor
 from .dialogue_runner import (
     generate_dialogue_audition_jobs,
+    generate_dialogue_episode_jobs,
     prepare_dialogue_audition_jobs,
+    prepare_dialogue_episode_jobs,
 )
 from .editor import trim_episode_script
 from .ingest import ingest_exports
@@ -243,6 +245,44 @@ def build_parser() -> argparse.ArgumentParser:
         help="Required spending ceiling when --execute is used",
     )
 
+    prepare_dialogue_episode = subparsers.add_parser(
+        "prepare-dialogue-episode",
+        help="Chunk a complete episode for contextual timestamped dialogue generation",
+    )
+    prepare_dialogue_episode.add_argument("--script", required=True)
+    prepare_dialogue_episode.add_argument("--cast", required=True)
+    prepare_dialogue_episode.add_argument(
+        "--performance",
+        required=True,
+        help="Dialogue audition or performance contract containing the selected settings",
+    )
+    prepare_dialogue_episode.add_argument(
+        "--variant",
+        default="creative-plus",
+        help="Settings variant from --performance",
+    )
+    prepare_dialogue_episode.add_argument(
+        "--output",
+        help="Episode dialogue jobs JSONL path",
+    )
+
+    generate_dialogue_episode = subparsers.add_parser(
+        "generate-dialogue-episode",
+        help="Dry-run or execute resumable timestamped episode dialogue jobs",
+    )
+    generate_dialogue_episode.add_argument("--jobs", required=True)
+    generate_dialogue_episode.add_argument("--limit", type=int)
+    generate_dialogue_episode.add_argument(
+        "--execute",
+        action="store_true",
+        help="Make paid provider calls; otherwise report pending cost only",
+    )
+    generate_dialogue_episode.add_argument(
+        "--max-credits",
+        type=float,
+        help="Required spending ceiling when --execute is used",
+    )
+
     validate_sound = subparsers.add_parser(
         "validate-sound-design",
         help="Validate a sound-design cue sheet against its episode script",
@@ -289,6 +329,24 @@ def build_parser() -> argparse.ArgumentParser:
         help="Completed generated-SFX jobs referenced by the sound-design cue sheet",
     )
 
+    dialogue_audio = subparsers.add_parser(
+        "render-dialogue-audio",
+        help="Render timestamped contextual dialogue with optional sound design",
+    )
+    dialogue_audio.add_argument("--jobs", required=True)
+    dialogue_audio.add_argument(
+        "--output-dir",
+        help="Episode audio output directory",
+    )
+    dialogue_audio.add_argument(
+        "--sound-design",
+        help="Optional sound-design cue sheet",
+    )
+    dialogue_audio.add_argument(
+        "--sfx-jobs",
+        help="Completed generated-SFX jobs referenced by the sound-design cue sheet",
+    )
+
     transcript = subparsers.add_parser(
         "transcript", help="Render Markdown, WebVTT, and SRT from an audio timeline"
     )
@@ -325,7 +383,12 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         if (
             args.command
-            in {"generate-dialogue-audition", "generate-sfx", "generate-tts"}
+            in {
+                "generate-dialogue-audition",
+                "generate-dialogue-episode",
+                "generate-sfx",
+                "generate-tts",
+            }
             and result["execution_requested"]
             and result["failed"]
         ):
@@ -572,6 +635,31 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             max_credits=args.max_credits,
             variant=args.variant,
         )
+    if args.command == "prepare-dialogue-episode":
+        script_path = Path(args.script).resolve()
+        script = json.loads(script_path.read_text(encoding="utf-8"))
+        output = _path_or_default(
+            args.output,
+            config.work_dir
+            / "tts"
+            / f"{script['episode_id']}-dialogue-episode-jobs.jsonl",
+        )
+        return prepare_dialogue_episode_jobs(
+            config,
+            script_path,
+            Path(args.cast).resolve(),
+            Path(args.performance).resolve(),
+            output,
+            variant=args.variant,
+        )
+    if args.command == "generate-dialogue-episode":
+        return generate_dialogue_episode_jobs(
+            config,
+            Path(args.jobs).resolve(),
+            execute=args.execute,
+            max_credits=args.max_credits,
+            limit=args.limit,
+        )
     if args.command == "validate-sound-design":
         return validate_sound_design(
             Path(args.sound_design).resolve(),
@@ -619,6 +707,28 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
                 Path(args.sound_design).resolve() if args.sound_design else None
             ),
             sfx_jobs_path=Path(args.sfx_jobs).resolve() if args.sfx_jobs else None,
+        )
+    if args.command == "render-dialogue-audio":
+        jobs_path = Path(args.jobs).resolve()
+        first_job = next(
+            json.loads(line)
+            for line in jobs_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        )
+        output_dir = _path_or_default(
+            args.output_dir,
+            config.episodes_dir / first_job["episode_id"] / "audio",
+        )
+        return render_dialogue_episode_audio(
+            jobs_path,
+            config.work_dir,
+            output_dir,
+            sound_design_path=(
+                Path(args.sound_design).resolve() if args.sound_design else None
+            ),
+            sfx_jobs_path=(
+                Path(args.sfx_jobs).resolve() if args.sfx_jobs else None
+            ),
         )
     if args.command == "transcript":
         timeline_path = Path(args.timeline).resolve()

@@ -34,7 +34,7 @@ episode script + sound-design.json
   -> validate anchors, provenance, levels, fades, and durations
   -> provider-neutral generated-SFX jobs
   -> generated or licensed audio assets
-  -> normalize every asset to 48 kHz stereo
+  -> normalize every asset to its cue loudness target at 48 kHz stereo
   -> extend section beds across the exact speech timeline
   -> suppress short handoffs and inherit the preceding bed
   -> render voices-only at -16 LUFS
@@ -81,7 +81,11 @@ actual speech timeline, not estimated word counts:
    automatically inherits the previous ambience.
 5. The timeline records every suppressed cue and its reason.
 
-The base layer remains underneath section beds at a much lower gain. This
+`gain_db` is interpreted as the cue's integrated-loudness target, not as blind
+attenuation of an unknown provider level. This keeps unusually quiet generated
+assets audible and makes rerenders consistent across providers.
+
+The base layer remains underneath section beds at a much lower level. This
 prevents accidental silence if a section cue is unavailable while keeping the
 soundscape subtle enough for intimate speech.
 
@@ -173,8 +177,8 @@ the command safe to resume.
 Once speech and effects exist:
 
 ```powershell
-python -m home_podcast render-audio `
-  --jobs .\work\tts\2013-12.01-jobs.jsonl `
+python -m home_podcast render-dialogue-audio `
+  --jobs .\work\tts\2013-12.01-dialogue-episode-jobs.jsonl `
   --sound-design .\episodes\2013-12.01\sound-design.json `
   --sfx-jobs .\work\sfx\2013-12.01-jobs.jsonl
 ```

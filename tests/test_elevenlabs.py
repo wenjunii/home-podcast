@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import io
 import json
 import os
@@ -32,6 +33,12 @@ class _Response:
 
     def read(self) -> bytes:
         return self.audio
+
+
+class _JsonResponse(_Response):
+    def __init__(self, payload: dict) -> None:
+        super().__init__(json.dumps(payload).encode("utf-8"))
+        self.headers.replace_header("Content-Type", "application/json")
 
 
 class ElevenLabsClientTests(unittest.TestCase):
@@ -71,6 +78,64 @@ class ElevenLabsClientTests(unittest.TestCase):
         self.assertEqual(body["settings"], {"stability": 0})
         self.assertEqual(body["seed"], 42)
         self.assertEqual(response.audio, b"ID3-test-audio")
+
+    def test_builds_documented_timestamped_dialogue_request(self) -> None:
+        client = ElevenLabsDialogueClient(
+            endpoint="https://api.example.test/v1/text-to-dialogue",
+            model="eleven_v3",
+            max_attempts=1,
+            output_format="mp3_44100_192",
+        )
+        inputs = [
+            {"text": "[curious] A recovered home?", "voice_id": "voice-1"},
+            {"text": "[warmly] Let's look closer.", "voice_id": "voice-2"},
+        ]
+        payload = {
+            "audio_base64": base64.b64encode(b"ID3-timestamped").decode("ascii"),
+            "voice_segments": [
+                {
+                    "voice_id": "voice-1",
+                    "start_time_seconds": 0,
+                    "end_time_seconds": 1,
+                    "character_start_index": 0,
+                    "character_end_index": 17,
+                    "dialogue_input_index": 0,
+                },
+                {
+                    "voice_id": "voice-2",
+                    "start_time_seconds": 1,
+                    "end_time_seconds": 2,
+                    "character_start_index": 17,
+                    "character_end_index": 35,
+                    "dialogue_input_index": 1,
+                },
+            ],
+            "alignment": {"characters": ["A"]},
+            "normalized_alignment": None,
+        }
+        with (
+            patch.dict(os.environ, {"ELEVENLABS_API_KEY": "secret-test-value"}),
+            patch(
+                "home_podcast.providers.elevenlabs.urllib.request.urlopen",
+                return_value=_JsonResponse(payload),
+            ) as urlopen,
+        ):
+            response = client.generate_with_timestamps(
+                inputs,
+                settings={"stability": 0},
+                seed=42,
+            )
+
+        request = urlopen.call_args.args[0]
+        self.assertEqual(
+            request.full_url,
+            "https://api.example.test/v1/text-to-dialogue/with-timestamps"
+            "?output_format=mp3_44100_192",
+        )
+        self.assertEqual(request.get_header("Accept"), "application/json")
+        self.assertEqual(response.audio, b"ID3-timestamped")
+        self.assertEqual(response.content_type, "audio/mpeg")
+        self.assertEqual(response.voice_segments[1]["dialogue_input_index"], 1)
 
     def test_dialogue_enforces_reliable_character_limit(self) -> None:
         client = ElevenLabsDialogueClient(

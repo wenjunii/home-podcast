@@ -66,7 +66,8 @@
           "gain_db": {
             "type": "number",
             "minimum": -60,
-            "maximum": 0
+            "maximum": -5,
+            "description": "Integrated loudness target in LUFS for the prepared cue."
           },
           "fade_in_ms": {
             "type": "integer",

@@ -13,6 +13,7 @@ audio/cache/
 audio/normalized/
 episodes/**/audio/*.wav
 episodes/**/audio/*.mp3
+episodes/**/audio/*-timeline.json
 
 # Provider credentials belong in the environment, never in this project.
 .env
