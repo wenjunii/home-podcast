@@ -64,7 +64,7 @@ literal reenactments.
 ## Provider strategy
 
 The speech and sound-effects providers do not need to match. ElevenLabs is the
-leading pilot option for generated effects because its separate Sound Effects
+selected pilot generator because its separate Sound Effects
 API accepts prompts, duration, and looping instructions. The documented API
 limit is 30 seconds per generation, which is why long beds use short seamless
 source clips and loop only in the local mixer.
@@ -79,6 +79,7 @@ Official references:
 - [ElevenLabs Sound Effects overview](https://elevenlabs.io/docs/overview/capabilities/sound-effects)
 - [ElevenLabs text-to-sound-effects API](https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert)
 - [ElevenLabs sound-effects credit calculation](https://elevenlabs.io/docs/help-center/product/content-production/sound-effects/how-much-does-it-cost-to-generate-sound-effects)
+- [ElevenLabs API authentication and key restrictions](https://elevenlabs.io/docs/api-reference/authentication)
 
 Licensed field recordings remain preferable when a recognizable real-world
 environment and strong provenance matter. Generated audio is particularly
@@ -104,9 +105,37 @@ python -m home_podcast prepare-sfx `
   --model eleven_text_to_sound_v2
 ```
 
-The selected provider adapter must write one audio file to each JSONL job's
-`output_audio` path. This is deliberately the same handoff pattern used for
-speech jobs.
+Inspect the current cache and paid-call estimate without a credential or API
+request:
+
+```powershell
+python -m home_podcast generate-sfx `
+  --jobs .\work\sfx\2013-12.01-jobs.jsonl
+```
+
+The command is a dry run unless `--execute` is present. Paid generation also
+requires an explicit ceiling:
+
+```powershell
+$env:ELEVENLABS_API_KEY = Read-Host -MaskInput "ElevenLabs API key"
+
+python -m home_podcast generate-sfx `
+  --jobs .\work\sfx\2013-12.01-jobs.jsonl `
+  --execute `
+  --max-credits 814
+
+Remove-Item Env:ELEVENLABS_API_KEY
+```
+
+Never place the key in `podcast.json`, a shell command, a job file, or source
+control. ElevenLabs supports API-key scope restrictions and credit quotas;
+apply both in its dashboard. The local `--max-credits` check is an additional
+guard, not a replacement for the provider quota.
+
+Each response is cached before FFmpeg converts it to a 48 kHz stereo WAV. If
+conversion is interrupted, the next run recovers from that raw cache instead
+of purchasing the sound again. Completed WAV files are also skipped, making
+the command safe to resume.
 
 Once speech and effects exist:
 
