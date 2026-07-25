@@ -73,8 +73,19 @@ def validate_script(
                 source_text = evidence_by_id[source_ids[0]]["story_text"]
                 if _normalize_quote(text) not in _normalize_quote(source_text):
                     errors.append(f"{label} quote is not verbatim in its source story")
-        if kind not in {"host_dialogue", "quote", "disclosure", "transition"}:
+        if kind not in {"host_dialogue", "quote", "transition"}:
             errors.append(f"{label} has unsupported kind {kind!r}")
+        if (
+            kind != "quote"
+            and isinstance(text, str)
+            and re.search(
+                r"\b(?:AI hosts?|synthetic (?:hosts?|voices?)|"
+                r"artificial intelligence hosts?)\b",
+                text,
+                flags=re.IGNORECASE,
+            )
+        ):
+            errors.append(f"{label} discusses host generation technology on air")
         pause = segment.get("pause_after_ms", 0)
         if not isinstance(pause, int) or pause < 0 or pause > 10000:
             errors.append(f"{label}.pause_after_ms must be an integer from 0 to 10000")
@@ -85,9 +96,6 @@ def validate_script(
             f"{len(uncovered)} evidence stories are unused: {', '.join(uncovered[:10])}"
             + ("…" if len(uncovered) > 10 else "")
         )
-    disclosure = any(segment.get("kind") == "disclosure" for segment in segments)
-    if not disclosure:
-        errors.append("No segment is marked as the synthetic-host disclosure")
     return {
         "valid": not errors,
         "episode_id": episode_id,
@@ -125,6 +133,8 @@ def prepare_tts_jobs(
         render_text = render_tts_text(
             segment["text"],
             segment.get("pronunciation", {}),
+            segment.get("delivery", {}),
+            supports_audio_tags=model == "eleven_v3",
         )
         supports_context = model != "eleven_v3"
         previous_text = (
@@ -158,6 +168,7 @@ def prepare_tts_jobs(
                 "episode_id": script["episode_id"],
                 "segment_id": segment["segment_id"],
                 "speaker": segment["speaker"],
+                "display_name": host.get("display_name", segment["speaker"]),
                 "provider": provider,
                 "model": model,
                 "voice_id": voice_id,
@@ -181,7 +192,13 @@ def prepare_tts_jobs(
     return len(jobs)
 
 
-def render_tts_text(text: str, pronunciation: dict[str, Any]) -> str:
+def render_tts_text(
+    text: str,
+    pronunciation: dict[str, Any],
+    delivery: dict[str, Any] | None = None,
+    *,
+    supports_audio_tags: bool = True,
+) -> str:
     if not isinstance(pronunciation, dict):
         raise ValueError("pronunciation must be an object")
     rendered = text
@@ -195,7 +212,35 @@ def render_tts_text(text: str, pronunciation: dict[str, Any]) -> str:
         if not isinstance(spoken, str) or not spoken:
             raise ValueError("pronunciation values must be non-empty strings")
         rendered = rendered.replace(written, spoken)
-    return rendered
+    if not supports_audio_tags:
+        return rendered
+    if delivery is None:
+        delivery = {}
+    if not isinstance(delivery, dict):
+        raise ValueError("delivery must be an object")
+    tags: list[str] = []
+    tone = delivery.get("tone")
+    if tone is not None:
+        if not isinstance(tone, str) or not tone.strip():
+            raise ValueError("delivery.tone must be a non-empty string")
+        tags.append(tone.strip())
+    audio_tags = delivery.get("audio_tags", [])
+    if not isinstance(audio_tags, list):
+        raise ValueError("delivery.audio_tags must be an array")
+    for tag in audio_tags:
+        if not isinstance(tag, str) or not tag.strip():
+            raise ValueError("delivery.audio_tags entries must be non-empty strings")
+        tags.append(tag.strip())
+    normalized_tags = []
+    for tag in tags:
+        normalized = tag.removeprefix("[").removesuffix("]").strip()
+        if normalized and normalized.casefold() not in {
+            value.casefold() for value in normalized_tags
+        }:
+            normalized_tags.append(normalized)
+    if not normalized_tags:
+        return rendered
+    return " ".join(f"[{tag}]" for tag in normalized_tags[:3]) + " " + rendered
 
 
 def _normalize_quote(value: str) -> str:

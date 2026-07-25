@@ -46,12 +46,14 @@ class PlanningTests(unittest.TestCase):
             (root / "bible.json").write_text(
                 json.dumps({"hosts": []}), encoding="utf-8"
             )
+            _write_voice_roster(root / "roster.json")
             config_data = {
                 "project_name": "Test",
                 "exports_dir": "exports",
                 "catalog_path": "catalog.sqlite3",
                 "themes_path": "themes.json",
                 "show_bible_path": "bible.json",
+                "voice_roster_path": "roster.json",
                 "episodes_dir": "episodes",
                 "work_dir": "work",
                 "audio_dir": "audio",
@@ -400,6 +402,33 @@ class PlanningTests(unittest.TestCase):
                 themed["installments"][0]["title"],
                 "The Homes We Leave Behind",
             )
+
+
+def _write_voice_roster(path: Path) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "contract_version": 1,
+                "provider": "test",
+                "roles": [
+                    {
+                        "id": role,
+                        "candidates": [
+                            {
+                                "person_id": f"{role}-{index}",
+                                "display_name": f"{role}-{index}",
+                                "voice_name": f"Voice {index}",
+                                "voice_id": f"voice-{role}-{index}",
+                            }
+                            for index in range(2)
+                        ],
+                    }
+                    for role in ("curious_guide", "archive_nerd", "connector")
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
 
 
 if __name__ == "__main__":

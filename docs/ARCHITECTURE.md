@@ -81,8 +81,15 @@ The production transcript discloses the sound-design layer and can caption
 each audible cue. Generated sound must never be described as an archival
 recording or as audio captured from a story's people, place, or event.
 
-## Synthetic-host disclosure
+## Rotating episode cast
 
-Every episode must explain that its hosts and fragment readers are synthetic.
-Fragment readers perform archived text; they never impersonate or simulate the
-original writers.
+The show bible defines three conversational functions, while
+`config/voice_roster.json` contains several role-matched people and voices.
+Each episode selects a deterministic pseudo-random lineup and freezes it in
+`episodes/<episode>/cast.json`. Rebuilding an episode reuses that file; adding
+voices later cannot silently change an existing cast.
+
+The on-air conversation treats the cast as ordinary podcast hosts and never
+discusses how their voices are produced. Internal cast metadata retains the
+provider and voice IDs for reproducibility. Fragment readings never claim to
+be interviews, impersonations, or recordings of the original writers.

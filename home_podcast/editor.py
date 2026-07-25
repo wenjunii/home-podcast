@@ -188,7 +188,7 @@ def _apply_deletion_plan(
     protected = sorted(
         segment_id
         for segment_id in delete_ids
-        if by_id[segment_id].get("kind") in {"quote", "disclosure"}
+        if by_id[segment_id].get("kind") == "quote"
     )
     if protected:
         raise ValueError(

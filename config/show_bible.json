@@ -8,41 +8,27 @@
     "target_minutes_max": 35,
     "cold_open": true,
     "original_language_fragments": true,
-    "synthetic_voice_disclosure": true
+    "rotating_episode_cast": true,
+    "on_air_generation_disclosure": false
   },
   "hosts": [
     {
       "id": "curious_guide",
-      "display_name": "Maya",
       "role": "The Curious Guide",
       "writing_profile": "Warm, energetic, accessible, and willing to ask the question a listener is thinking.",
-      "voice_profile": "Warm and clear; medium pace; expressive without sounding theatrical.",
-      "voice_provider": "elevenlabs",
-      "voice_name": "Bella",
-      "voice_id": "hpp4J3VqNfWAUOO0d1Us",
-      "casting_status": "provisional"
+      "voice_profile": "Warm and clear; medium pace; expressive without sounding theatrical."
     },
     {
       "id": "archive_nerd",
-      "display_name": "Theo",
       "role": "The Archive Nerd",
       "writing_profile": "Playful about metadata and odd web artifacts; precise without lecturing; dry rather than cynical.",
-      "voice_profile": "Sonically distinct from Maya; medium-high energy; slightly quicker pace.",
-      "voice_provider": "elevenlabs",
-      "voice_name": "Roger",
-      "voice_id": "CwhRBWXzGAHq8TQ4Fs17",
-      "casting_status": "provisional"
+      "voice_profile": "Medium-high energy and slightly quicker; dry, friendly, and never professorial."
     },
     {
       "id": "connector",
-      "display_name": "Lina",
       "role": "The Connector",
       "writing_profile": "Emotionally perceptive and cross-cultural; notices echoes and contradictions without forcing a moral.",
-      "voice_profile": "Grounded, intimate, and unhurried; capable of restrained emotional turns.",
-      "voice_provider": "elevenlabs",
-      "voice_name": "Lily",
-      "voice_id": "pFZP5JQG7iQjIQuC4Bku",
-      "casting_status": "provisional"
+      "voice_profile": "Grounded, intimate, and unhurried; capable of restrained emotional turns."
     }
   ],
   "editorial_rules": [
@@ -53,9 +39,11 @@
     "Use as many eligible stories as the theme can hold; vary depth instead of silently dropping stories.",
     "Direct humor at host behavior, surprising metadata, or web artifacts—not at vulnerable people.",
     "Allow emotional breathing room; do not place a joke immediately after trauma.",
-    "Avoid repetitive synthetic banter such as constant agreement or 'that's fascinating'.",
+    "The hosts speak like friends: they ask follow-up questions, build on each other, disagree gently, and occasionally interrupt or surprise one another.",
+    "Use laughter, sighs, hesitations, and other audible reactions sparingly and only when they fit the moment.",
+    "Avoid canned banter such as constant agreement or 'that's fascinating'.",
     "Give each host a distinct function in the conversation.",
-    "Disclose that the hosts and fragment readers are synthetic."
+    "Do not discuss or identify the hosts' generation technology on air."
   ],
   "recurring_segments": [
     "What Did the Crawler Catch?",

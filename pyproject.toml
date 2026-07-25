@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "home-podcast"
 version = "0.1.0"
-description = "Incremental, source-grounded production pipeline for a synthetic-host podcast about home, belonging, and the archived web."
+description = "Incremental, source-grounded production pipeline for a rotating multi-host podcast about home, belonging, and the archived web."
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{name = "Home Podcast"}]

@@ -5,8 +5,9 @@ following decisions and credentials are needed.
 
 ## 1. Analysis and script model
 
-Selected: Capriole Fable 5 (`anthropic/claude-fable-5`) for both story analysis
-and script generation. The adapter reads `CAPRIOLE_API_KEY` from the process
+Selected: Capriole Fable 5 (`anthropic/claude-fable-5`) for story analysis and
+Claude Opus 4.6 (`anthropic/claude-opus-4-6`) for script generation and
+conversation polish. The adapter reads `CAPRIOLE_API_KEY` from the process
 environment and caches model outputs by story content and prompt version.
 
 The model must continue to demonstrate:
@@ -22,9 +23,9 @@ separate even though they use the same service.
 
 ## 2. Speech casting
 
-Run a blind casting test before assigning `voice_id` values. Use the same
-three-to-five-minute audition script for every candidate speech engine. It
-should contain:
+The pilot casting test is complete. Future episodes draw a different
+role-matched lineup from `config/voice_roster.json` and freeze the result before
+script and audio production. Casting checks should include:
 
 - light banter
 - an emotional but restrained passage
@@ -37,7 +38,7 @@ Score naturalness, host distinctness, emotional restraint, pronunciation,
 cross-language consistency, long-form fatigue, output stability, commercial
 rights, and per-episode cost.
 
-Use licensed stock synthetic voices or explicitly authorized custom voices.
+Use licensed stock voices or explicitly authorized custom voices.
 Do not clone an identifiable real person without permission.
 
 The researched shortlist and recommended bakeoff are recorded in
@@ -60,7 +61,9 @@ Confirmed:
 - deferred after the pilot: 64 analyzed stories and 330 unanalyzed stories
 - pilot release: one approximately 30-minute themed sub-episode
 - coverage policy: use all 27 selected stories, at different depths
-- host format: three disclosed synthetic hosts
+- host format: three natural, friend-like hosts with a frozen rotating cast
+- pilot cast: Maya/Bella, Theo/Roger, and Lina/Lily
+- on-air host-generation disclosure: omitted
 - AI budget preference: premium
 
 Still confirm before final audio generation:
@@ -84,7 +87,7 @@ The pilot is ready to publish only when:
 - every selected story has a traceable use
 - quotations match archived evidence
 - translations and pronunciations are reviewed
-- synthetic-host disclosure is present
+- no on-air dialogue discusses host-generation technology
 - no source is presented as an interview or simulated author
 - the rendered audio is listenable without visual context
 - loudness, clipping, captions, and source maps pass QA

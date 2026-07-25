@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from .casting import create_episode_cast
 from .config import ProjectConfig
 from .database import connect
 
@@ -421,10 +422,17 @@ def prepare_script_packet(
                 ),
             }
         )
+    cast_path = config.episodes_dir / episode_id / "cast.json"
+    episode_cast, _ = create_episode_cast(
+        config.voice_roster_path,
+        episode_id,
+        cast_path,
+    )
     packet = {
         "contract_version": 1,
         "episode": {key: value for key, value in installment.items() if key != "stories"},
         "show_bible": config.load_show_bible(),
+        "episode_cast": episode_cast,
         "evidence": evidence,
         "writing_requirements": {
             "use_every_evidence_story": True,
@@ -438,7 +446,9 @@ def prepare_script_packet(
             "source_ids_required_per_grounded_segment": True,
             "exact_quotes_must_be_verbatim": True,
             "invented_author_dialogue_forbidden": True,
-            "synthetic_host_disclosure_required": True,
+            "on_air_generation_disclosure_forbidden": True,
+            "friend_like_host_interaction_required": True,
+            "contextual_vocal_reactions_encouraged": True,
             "output_contract": "contracts/script.schema.json",
         },
     }

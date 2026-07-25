@@ -5,6 +5,7 @@
   "catalog_path": "data/catalog.sqlite3",
   "themes_path": "config/themes.json",
   "show_bible_path": "config/show_bible.json",
+  "voice_roster_path": "config/voice_roster.json",
   "episodes_dir": "episodes",
   "work_dir": "work",
   "audio_dir": "audio",
@@ -43,6 +44,18 @@
       "style": 0,
       "use_speaker_boost": true
     },
+    "credits_per_character": 1,
+    "usd_per_thousand_characters": 0.1
+  },
+  "dialogue_provider": {
+    "type": "elevenlabs_dialogue",
+    "endpoint": "https://api.elevenlabs.io/v1/text-to-dialogue",
+    "model": "eleven_v3",
+    "api_key_env": "ELEVENLABS_API_KEY",
+    "timeout_seconds": 180,
+    "max_attempts": 4,
+    "output_format": "mp3_44100_128",
+    "language_code": "en",
     "credits_per_character": 1,
     "usd_per_thousand_characters": 0.1
   },

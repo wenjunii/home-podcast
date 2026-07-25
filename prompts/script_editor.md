@@ -12,7 +12,7 @@ Rules:
 - Reach the supplied target word range.
 - Preserve every story: each evidence story ID must remain cited by at least one
   surviving segment.
-- Never delete a `quote` or `disclosure` segment.
+- Never delete a `quote` segment.
 - Preserve the cold open, the crawl-month explanation, the three-movement arc,
   emotional breathing room after trauma, and the final archive-limit reflection.
 - Prefer cutting repetition, over-explanation, generic reactions, duplicated

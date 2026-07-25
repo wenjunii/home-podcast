@@ -33,6 +33,11 @@ def run_doctor(config: ProjectConfig) -> dict[str, Any]:
         str(config.show_bible_path),
     )
     add(
+        "voice_roster",
+        config.voice_roster_path.is_file(),
+        str(config.voice_roster_path),
+    )
+    add(
         "catalog",
         config.catalog_path.is_file(),
         str(config.catalog_path)
@@ -54,6 +59,7 @@ def run_doctor(config: ProjectConfig) -> dict[str, Any]:
         "analysis_provider",
         "script_provider",
         "speech_provider",
+        "dialogue_provider",
         "sound_effects_provider",
     ):
         value = getattr(config, provider_name)
@@ -63,22 +69,24 @@ def run_doctor(config: ProjectConfig) -> dict[str, Any]:
             str(value) if value else "Not selected; required before the pilot stage",
             required=False,
         )
-    voices: list[str] = []
-    if config.show_bible_path.is_file():
-        voices = [
-            host["id"]
-            for host in config.load_show_bible().get("hosts", [])
-            if not host.get("voice_id")
-        ]
+    roster_roles: list[dict[str, Any]] = []
+    if config.voice_roster_path.is_file():
+        roster_roles = config.load_voice_roster().get("roles", [])
+    uncast_roles = [
+        str(role.get("id", "unknown"))
+        for role in roster_roles
+        if not isinstance(role.get("candidates"), list)
+        or len(role["candidates"]) < 2
+    ]
     add(
-        "host_voice_ids",
-        not voices,
-        "All recurring hosts are cast"
-        if not voices
-        else f"Uncast hosts: {', '.join(voices)}",
+        "rotating_voice_roster",
+        len(roster_roles) == 3 and not uncast_roles,
+        "Three rotating host roles have at least two candidates each"
+        if len(roster_roles) == 3 and not uncast_roles
+        else f"Incomplete rotating roles: {', '.join(uncast_roles) or 'unknown'}",
         required=False,
     )
-    ingest_check_names = {"story_exports", "themes", "show_bible"}
+    ingest_check_names = {"story_exports", "themes", "show_bible", "voice_roster"}
     return {
         "ready_for_ingest": all(
             check["ok"] for check in checks if check["name"] in ingest_check_names
@@ -86,7 +94,7 @@ def run_doctor(config: ProjectConfig) -> dict[str, Any]:
         "ready_for_audio_render": all(
             check["ok"]
             for check in checks
-            if check["name"] in {"ffmpeg", "ffprobe", "host_voice_ids"}
+            if check["name"] in {"ffmpeg", "ffprobe", "rotating_voice_roster"}
         ),
         "checks": checks,
     }
