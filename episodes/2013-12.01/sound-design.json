@@ -1,0 +1,299 @@
+{
+  "contract_version": 1,
+  "episode_id": "2013-12.01",
+  "sound_design_disclosure": "All non-voice sounds are illustrative sound design. None are recordings of the people, places, or events described in the archived stories.",
+  "editorial_principles": [
+    "Sound may evoke an idea or transition but must never masquerade as historical evidence.",
+    "Keep exact quotations intelligible and avoid literal reenactment beneath sensitive material.",
+    "Use silence as part of the design; effects should mark structure rather than fill every moment.",
+    "Direct the recurring sonic language toward paper, imperfect machines, distance, and digital fragments."
+  ],
+  "cues": [
+    {
+      "cue_id": "cold-open-paper-room",
+      "kind": "ambience",
+      "anchor": {
+        "segment_id": "m1-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 9000,
+      "gain_db": -29,
+      "fade_in_ms": 1200,
+      "fade_out_ms": 2000,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "quiet paper movement and soft room tone",
+      "editorial_note": "An abstract opening texture, not the sound of the 1859 letter or its writer.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic illustrative ambience; not an archival recording."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Subtle close-microphone paper movement in a very quiet neutral room, delicate page fibers and one restrained page turn, no writing, no voices, no music, no dramatic impact, clean documentary sound design, seamless loop",
+        "generation_duration_ms": 6000
+      }
+    },
+    {
+      "cue_id": "pen-to-pixel",
+      "kind": "transition",
+      "anchor": {
+        "segment_id": "m1-s003",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 7500,
+      "gain_db": -26,
+      "fade_in_ms": 800,
+      "fade_out_ms": 1800,
+      "loop": false,
+      "duck_under_dialogue": true,
+      "transcript_label": "paper texture dissolves into a faint digital shimmer",
+      "editorial_note": "Introduces the series language of physical records moving through machines.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic transition effect; not an archival recording."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "A restrained documentary transition: one soft paper texture gradually dissolving into tiny scanner movement, distant hard-drive ticks and a warm digital shimmer, elegant and curious, no voice, no melody, no harsh glitch, seven seconds",
+        "generation_duration_ms": 7500
+      }
+    },
+    {
+      "cue_id": "series-ident",
+      "kind": "ident",
+      "anchor": {
+        "segment_id": "m1-s004",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 5000,
+      "gain_db": -23,
+      "fade_in_ms": 300,
+      "fade_out_ms": 1200,
+      "loop": false,
+      "duck_under_dialogue": true,
+      "transcript_label": "brief Recovered Homes sonic signature",
+      "editorial_note": "A reusable five-second show identity that stays underneath the spoken welcome.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic program-ident sound."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Five-second premium podcast sonic logo for digital archaeology and recovered memories: a soft wooden resonance, two tiny data-like sparkles, and a warm unresolved breath of tone, intimate not corporate, no vocals, no percussion hit",
+        "generation_duration_ms": 5000
+      }
+    },
+    {
+      "cue_id": "distance-air",
+      "kind": "ambience",
+      "anchor": {
+        "segment_id": "m2-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 12000,
+      "gain_db": -31,
+      "fade_in_ms": 1800,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "low, distant movement like a journey heard from far away",
+      "editorial_note": "Suggests distance without assigning a real vehicle or geography to any source.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic illustrative ambience; not a recording of a journey in the stories."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Very subtle abstract ambience of distance and departure, low airy movement with a barely perceptible road-like hush heard from far away, contemplative, no identifiable vehicle, no horn, no footsteps, no voices, seamless loop",
+        "generation_duration_ms": 8000
+      }
+    },
+    {
+      "cue_id": "returning-threshold",
+      "kind": "transition",
+      "anchor": {
+        "segment_id": "m3-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 11000,
+      "gain_db": -30,
+      "fade_in_ms": 1500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "soft wind and the resonance of an empty threshold",
+      "editorial_note": "An emotional threshold, not a reconstruction of Honaker, Virginia, or any house.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic illustrative ambience; not a location recording."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Sparse abstract threshold ambience, soft wind moving around an empty wooden space with one almost imperceptible settling creak, emotionally restrained, no storm, no footsteps, no voices, seamless documentary texture",
+        "generation_duration_ms": 8000
+      }
+    },
+    {
+      "cue_id": "archive-cutoff",
+      "kind": "spot",
+      "anchor": {
+        "segment_id": "m3-s007",
+        "point": "end",
+        "offset_ms": -1200
+      },
+      "duration_ms": 3000,
+      "gain_db": -25,
+      "fade_in_ms": 150,
+      "fade_out_ms": 1000,
+      "loop": false,
+      "duck_under_dialogue": true,
+      "transcript_label": "a digital fragment thins into silence",
+      "editorial_note": "Marks a textual cutoff without suggesting missing words or a real machine failure.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic digital transition effect."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Three-second subtle digital fragment that loses a few grains and thins into clean silence, like an incomplete text extraction, gentle and poignant, no alarm, no error beep, no voice, no melody",
+        "generation_duration_ms": 3000
+      }
+    },
+    {
+      "cue_id": "memory-map",
+      "kind": "ambience",
+      "anchor": {
+        "segment_id": "m4-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 12000,
+      "gain_db": -32,
+      "fade_in_ms": 1800,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "an indistinct small-town exterior, heard as memory",
+      "editorial_note": "Intentionally unspecific so it cannot be mistaken for Iowa, Texas, or Massachusetts.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic composite ambience; not a recording of a town in the stories."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Distant dreamlike small-town exterior ambience reduced to soft air, one far-off door and an indistinct passing presence, no readable location, no speech, no church bell, no traffic foreground, nostalgic but unsentimental, seamless loop",
+        "generation_duration_ms": 8000
+      }
+    },
+    {
+      "cue_id": "objects-remember",
+      "kind": "transition",
+      "anchor": {
+        "segment_id": "m5-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 9000,
+      "gain_db": -29,
+      "fade_in_ms": 1000,
+      "fade_out_ms": 2200,
+      "loop": false,
+      "duck_under_dialogue": true,
+      "transcript_label": "small household textures surface and recede",
+      "editorial_note": "Signals material memory without reproducing a branded object.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic illustrative transition."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Quiet tactile montage for a documentary: a cardboard package shifting, smooth plastic tapped once, a small drawer closing softly, all becoming a faint warm memory haze, no brand cues, no voices, no music, nine seconds",
+        "generation_duration_ms": 9000
+      }
+    },
+    {
+      "cue_id": "missing-image",
+      "kind": "spot",
+      "anchor": {
+        "segment_id": "m5-s010",
+        "point": "end",
+        "offset_ms": -1000
+      },
+      "duration_ms": 3500,
+      "gain_db": -26,
+      "fade_in_ms": 200,
+      "fade_out_ms": 1200,
+      "loop": false,
+      "duck_under_dialogue": true,
+      "transcript_label": "a tiny browser-like texture breaks off",
+      "editorial_note": "A playful extraction artifact, with no imitation of a trademarked alert.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic digital transition effect."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Tiny friendly browser-era data texture, a soft loading flutter that breaks off before completion and leaves a few digital grains, understated and playful, no recognizable operating-system alert, no voice, three and a half seconds",
+        "generation_duration_ms": 3500
+      }
+    },
+    {
+      "cue_id": "digital-dust-finale",
+      "kind": "ambience",
+      "anchor": {
+        "segment_id": "m6-s022",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18000,
+      "gain_db": -31,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 3500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "paper, machine noise, and digital dust settle together",
+      "editorial_note": "Returns to the physical-to-digital palette while leaving room for the closing thought.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic illustrative ambience; not archival audio."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Intimate closing documentary ambience combining almost-silent paper fibers, distant gentle scanner mechanics and sparse digital dust, warm and reflective, no melody, no voices, no dramatic swell, seamless loop",
+        "generation_duration_ms": 9000
+      }
+    },
+    {
+      "cue_id": "closing-ident",
+      "kind": "ident",
+      "anchor": {
+        "segment_id": "m6-s025",
+        "point": "start",
+        "offset_ms": 3000
+      },
+      "duration_ms": 7000,
+      "gain_db": -25,
+      "fade_in_ms": 1800,
+      "fade_out_ms": 2000,
+      "loop": false,
+      "duck_under_dialogue": true,
+      "transcript_label": "the Recovered Homes sonic signature returns",
+      "editorial_note": "A gentler variation of the opening ident under the final line.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic program-ident sound."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seven-second closing variation of a premium digital-archaeology podcast sonic logo: soft wooden resonance, two tiny data sparkles and a warm tone resolving gently, intimate and human-scaled, no vocals, no percussion hit",
+        "generation_duration_ms": 7000
+      }
+    }
+  ]
+}

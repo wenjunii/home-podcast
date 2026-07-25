@@ -25,8 +25,12 @@ def validate_script(
     errors: list[str] = []
     warnings: list[str] = []
     episode_id = packet["episode"]["episode_id"]
+    if script.get("contract_version") != 1:
+        errors.append("contract_version must be 1")
     if script.get("episode_id") != episode_id:
         errors.append(f"episode_id must be {episode_id!r}")
+    if not isinstance(script.get("title"), str) or not script["title"].strip():
+        errors.append("title must be a non-empty string")
     allowed_speakers = {host["id"] for host in show_bible["hosts"]}
     evidence_by_id = {item["story_id"]: item for item in packet["evidence"]}
     used_story_ids: set[str] = set()
@@ -83,7 +87,7 @@ def validate_script(
         )
     disclosure = any(segment.get("kind") == "disclosure" for segment in segments)
     if not disclosure:
-        warnings.append("No segment is marked as the synthetic-host disclosure")
+        errors.append("No segment is marked as the synthetic-host disclosure")
     return {
         "valid": not errors,
         "episode_id": episode_id,

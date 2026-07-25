@@ -11,7 +11,22 @@
   "target_stories_per_installment": 30,
   "target_minutes_min": 20,
   "target_minutes_max": 35,
-  "analysis_provider": null,
-  "script_provider": null,
+  "analysis_provider": {
+    "type": "capriole",
+    "endpoint": "https://api.caprioletech.com/v1/chat",
+    "model": "anthropic/claude-fable-5",
+    "api_key_env": "CAPRIOLE_API_KEY",
+    "timeout_seconds": 180
+  },
+  "script_provider": {
+    "type": "capriole",
+    "endpoint": "https://api.caprioletech.com/v1/messages",
+    "model": "anthropic/claude-opus-4-6",
+    "api_key_env": "CAPRIOLE_API_KEY",
+    "timeout_seconds": 600,
+    "max_attempts": 1,
+    "protocol": "anthropic_messages_stream",
+    "max_tokens": 4096
+  },
   "speech_provider": null
 }

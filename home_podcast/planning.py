@@ -12,10 +12,32 @@ from .database import connect
 
 
 def create_month_proposal(
-    config: ProjectConfig, month: str, output_path: Path
+    config: ProjectConfig,
+    month: str,
+    output_path: Path,
+    cohort_path: Path | None = None,
+    *,
+    single_episode: bool = False,
+    single_episode_title: str | None = None,
 ) -> dict[str, Any]:
     theme_config = config.load_themes()["themes"]
     theme_by_slug = {theme["slug"]: theme for theme in theme_config}
+    cohort: dict[str, Any] | None = None
+    expected_cohort: dict[str, str] | None = None
+    if cohort_path is not None:
+        cohort = json.loads(cohort_path.read_text(encoding="utf-8"))
+        if cohort.get("kind") != "crawl_month_cohort":
+            raise ValueError(f"Not a crawl-month cohort manifest: {cohort_path}")
+        if cohort.get("crawl_month") != month:
+            raise ValueError(
+                f"Cohort month {cohort.get('crawl_month')} does not match {month}"
+            )
+        expected_cohort = {
+            item["story_id"]: item["content_hash"] for item in cohort["stories"]
+        }
+        if len(expected_cohort) != len(cohort["stories"]):
+            raise ValueError(f"Cohort contains duplicate story IDs: {cohort_path}")
+
     connection = connect(config.catalog_path)
     rows = connection.execute(
         """
@@ -37,6 +59,21 @@ def create_month_proposal(
         (month,),
     ).fetchall()
     connection.close()
+    if expected_cohort is not None:
+        rows_by_id = {row["id"]: row for row in rows}
+        missing_or_changed = [
+            story_id
+            for story_id, content_hash in expected_cohort.items()
+            if story_id not in rows_by_id
+            or rows_by_id[story_id]["content_hash"] != content_hash
+        ]
+        if missing_or_changed:
+            preview = ", ".join(missing_or_changed[:5])
+            raise ValueError(
+                "Frozen cohort stories changed or disappeared; "
+                f"first affected IDs: {preview}"
+            )
+        rows = [row for row in rows if row["id"] in expected_cohort]
     if not rows:
         raise ValueError(f"No present, unique stories found for crawl month {month}")
 
@@ -64,6 +101,8 @@ def create_month_proposal(
                 "language": row["language"],
                 "crawl_timestamp": row["crawl_timestamp"],
                 "source_url": row["source_url"],
+                "primary_theme": slug,
+                "primary_theme_name": theme_by_slug[slug]["name"],
                 "usage_type": card.get("usage_recommendation", "supporting"),
                 "anchor_score": float(card.get("anchor_score", 0)),
                 "theme_fit": float(card.get("theme_fit", 0)),
@@ -73,44 +112,86 @@ def create_month_proposal(
         )
 
     installments: list[dict[str, Any]] = []
-    sequence = 0
-    for theme in theme_config:
-        stories = grouped.get(theme["slug"], [])
-        if not stories:
-            continue
-        stories.sort(
-            key=lambda item: (
-                -item["anchor_score"],
-                -item["theme_fit"],
-                item["crawl_timestamp"],
-                item["story_id"],
+    if single_episode:
+        all_stories: list[dict[str, Any]] = []
+        for theme in theme_config:
+            stories = grouped.get(theme["slug"], [])
+            stories.sort(
+                key=lambda item: (
+                    -item["anchor_score"],
+                    -item["theme_fit"],
+                    item["crawl_timestamp"],
+                    item["story_id"],
+                )
             )
-        )
-        part_count = math.ceil(len(stories) / config.target_stories_per_installment)
-        for part_index in range(part_count):
-            sequence += 1
-            start = part_index * config.target_stories_per_installment
-            chunk = stories[start : start + config.target_stories_per_installment]
-            title = theme["name"]
-            if part_count > 1:
-                title += f", Part {part_index + 1}"
+            all_stories.extend(stories)
+        if all_stories:
             installments.append(
                 {
-                    "episode_id": f"{month}.{sequence:02d}",
+                    "episode_id": f"{month}.01",
                     "archive_volume": month,
-                    "sequence": sequence,
-                    "title": title,
-                    "theme_slug": theme["slug"],
-                    "theme_name": theme["name"],
-                    "theme_description": theme["description"],
-                    "archaeology_question": theme["archaeology_questions"][
-                        part_index % len(theme["archaeology_questions"])
-                    ],
+                    "sequence": 1,
+                    "title": single_episode_title or "Fragments of Home",
+                    "theme_slug": "multi-theme",
+                    "theme_name": "Home and Belonging",
+                    "theme_description": (
+                        "A three-act journey through leaving home, carrying it "
+                        "forward, and making it again."
+                    ),
+                    "archaeology_question": (
+                        "What do these captured fragments reveal about how people "
+                        "remember, leave, inherit, and remake home?"
+                    ),
                     "status": "proposed",
-                    "story_count": len(chunk),
-                    "stories": chunk,
+                    "story_count": len(all_stories),
+                    "stories": all_stories,
                 }
             )
+    else:
+        sequence = 0
+        for theme in theme_config:
+            stories = grouped.get(theme["slug"], [])
+            if not stories:
+                continue
+            stories.sort(
+                key=lambda item: (
+                    -item["anchor_score"],
+                    -item["theme_fit"],
+                    item["crawl_timestamp"],
+                    item["story_id"],
+                )
+            )
+            part_count = math.ceil(
+                len(stories) / config.target_stories_per_installment
+            )
+            for part_index in range(part_count):
+                sequence += 1
+                start = part_index * config.target_stories_per_installment
+                chunk = stories[
+                    start : start + config.target_stories_per_installment
+                ]
+                title = theme["name"]
+                if part_count > 1:
+                    title += f", Part {part_index + 1}"
+                installments.append(
+                    {
+                        "episode_id": f"{month}.{sequence:02d}",
+                        "archive_volume": month,
+                        "sequence": sequence,
+                        "title": title,
+                        "theme_slug": theme["slug"],
+                        "theme_name": theme["name"],
+                        "theme_description": theme["description"],
+                        "archaeology_question": theme["archaeology_questions"][
+                            part_index % len(theme["archaeology_questions"])
+                        ],
+                        "status": "proposed",
+                        "story_count": len(chunk),
+                        "stories": chunk,
+                    }
+                )
+        if single_episode_title and len(installments) == 1:
+            installments[0]["title"] = single_episode_title
 
     proposal = {
         "contract_version": 1,
@@ -121,9 +202,19 @@ def create_month_proposal(
             "not necessarily the story publication month."
         ),
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "cohort": (
+            {
+                "path": str(cohort_path),
+                "label": cohort.get("label"),
+                "story_count": cohort.get("story_count"),
+            }
+            if cohort is not None
+            else None
+        ),
         "policy": {
             "coverage": "maximum_responsible_coverage",
             "target_stories_per_installment": config.target_stories_per_installment,
+            "single_episode": single_episode,
             "published_episodes_are_immutable": True,
             "late_arrivals": "supplement_or_later_cross_month_episode",
         },
@@ -140,6 +231,126 @@ def create_month_proposal(
         json.dumps(proposal, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     return proposal
+
+
+def snapshot_crawl_month(
+    config: ProjectConfig,
+    month: str,
+    label: str,
+    output_path: Path,
+    *,
+    analyzed_only: bool = False,
+    primary_theme: str | None = None,
+) -> tuple[dict[str, Any], bool]:
+    if primary_theme is not None:
+        allowed_themes = {
+            theme["slug"] for theme in config.load_themes()["themes"]
+        }
+        if primary_theme not in allowed_themes:
+            raise ValueError(
+                f"Unknown primary theme {primary_theme!r}; "
+                f"expected one of {sorted(allowed_themes)}"
+            )
+    require_analysis = analyzed_only or primary_theme is not None
+    connection = connect(config.catalog_path)
+    analysis_condition = (
+        """
+           AND EXISTS (
+               SELECT 1
+                 FROM story_cards AS c
+                WHERE c.story_id = stories.id
+                  AND c.content_hash = stories.content_hash
+           )
+        """
+        if require_analysis
+        else ""
+    )
+    rows = connection.execute(
+        f"""
+        SELECT stories.id, stories.content_hash, stories.language,
+               stories.crawl_dataset, stories.crawl_timestamp,
+               (
+                   SELECT c.card_json
+                     FROM story_cards AS c
+                    WHERE c.story_id = stories.id
+                      AND c.content_hash = stories.content_hash
+                    ORDER BY c.created_at DESC
+                    LIMIT 1
+               ) AS card_json
+          FROM stories
+         WHERE stories.is_present = 1
+           AND stories.duplicate_of IS NULL
+           AND stories.crawl_month = ?
+           {analysis_condition}
+         ORDER BY stories.crawl_timestamp, stories.language, stories.id
+        """,
+        (month,),
+    ).fetchall()
+    connection.close()
+    if primary_theme is not None:
+        rows = [
+            row
+            for row in rows
+            if row["card_json"]
+            and (card := json.loads(row["card_json"])).get("eligible", False)
+            and card.get("primary_theme") == primary_theme
+        ]
+    if not rows:
+        scope = (
+            f" and primary theme {primary_theme}" if primary_theme else ""
+        )
+        raise ValueError(
+            f"No present, unique stories found for crawl month {month}{scope}"
+        )
+    snapshot = {
+        "contract_version": 1,
+        "kind": "crawl_month_cohort",
+        "label": label,
+        "crawl_month": month,
+        "story_count": len(rows),
+        "snapshot_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "primary_theme": primary_theme,
+        "selection_policy": (
+            f"eligible analyzed stories with primary theme {primary_theme}"
+            if primary_theme
+            else (
+                "present unique stories with a current story card"
+                if analyzed_only
+                else "all present unique stories"
+            )
+        ),
+        "capture_time_basis": (
+            "Timestamp embedded in Source File. For this December 2013 cohort it "
+            "matches the upstream WARC capture month."
+        ),
+        "stories": [
+            {
+                "story_id": row["id"],
+                "content_hash": row["content_hash"],
+                "language": row["language"],
+                "crawl_dataset": row["crawl_dataset"],
+                "crawl_timestamp": row["crawl_timestamp"],
+            }
+            for row in rows
+        ],
+    }
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    if output_path.exists():
+        existing = json.loads(output_path.read_text(encoding="utf-8"))
+        same = (
+            existing.get("crawl_month") == month
+            and existing.get("stories") == snapshot["stories"]
+        )
+        if same:
+            return existing, False
+        raise ValueError(
+            f"Refusing to overwrite a different frozen cohort: {output_path}"
+        )
+    output_path.write_text(
+        json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return snapshot, True
 
 
 def prepare_script_packet(
@@ -173,7 +384,20 @@ def prepare_script_packet(
     connection = connect(config.catalog_path)
     placeholders = ",".join("?" for _ in story_ids)
     rows = connection.execute(
-        f"SELECT * FROM stories WHERE id IN ({placeholders})", story_ids
+        f"""
+        SELECT stories.*,
+               (
+                   SELECT c.card_json
+                     FROM story_cards AS c
+                    WHERE c.story_id = stories.id
+                      AND c.content_hash = stories.content_hash
+                    ORDER BY c.created_at DESC
+                    LIMIT 1
+               ) AS card_json
+          FROM stories
+         WHERE stories.id IN ({placeholders})
+        """,
+        story_ids,
     ).fetchall()
     connection.close()
     row_by_id = {row["id"]: row for row in rows}
@@ -192,6 +416,9 @@ def prepare_script_packet(
                 "accepted_filter_text": row["accepted_text"],
                 "story_text": row["story_text"],
                 "quality_flags": json.loads(row["quality_flags_json"]),
+                "story_card": (
+                    json.loads(row["card_json"]) if row["card_json"] else None
+                ),
             }
         )
     packet = {

@@ -1,0 +1,63 @@
+{
+  "contract_version": 1,
+  "episode_id": "2013-12.01",
+  "operation": "delete_segments_and_polish_transitions",
+  "source_script_sha256": "bfa229795a8d7443d49f37940d55e82dbe460bba3852545fc8269d9055f85387",
+  "source_hash_basis": "canonical JSON with sorted keys and compact separators",
+  "target_words_min": 4400,
+  "target_words_max": 4600,
+  "delete_segment_ids": [
+    "m1-s010",
+    "m1-s012",
+    "m2-s002",
+    "m2-s006",
+    "m2-s011",
+    "m2-s023",
+    "m3-s009",
+    "m3-s013",
+    "m3-s015",
+    "m3-s017",
+    "m3-s019",
+    "m3-s020",
+    "m4-s005",
+    "m4-s006",
+    "m4-s020",
+    "m4-s026",
+    "m5-s008",
+    "m5-s011",
+    "m5-s016",
+    "m5-s018",
+    "m5-s025",
+    "m5-s026",
+    "m5-s030",
+    "m5-s032",
+    "m6-s005",
+    "m6-s011",
+    "m6-s012",
+    "m6-s019",
+    "m6-s021"
+  ],
+  "replace_segments": [
+    {
+      "segment_id": "m1-s029",
+      "text": "Distance does something stranger, too: it enlarges the ordinary. That's where we're headed next.",
+      "reason": "The generated handoff jumped ahead to returning home instead of introducing the next section about what distance magnifies."
+    },
+    {
+      "segment_id": "m3-s001",
+      "text": "But Sehnsucht changes when the distant place becomes a destination. What happens when you actually go back?",
+      "reason": "Remove a repeated recap and connect the established concept directly to the return movement."
+    },
+    {
+      "segment_id": "m4-s029",
+      "text": "Sometimes the place can't hold the love, so a smell, a logo, or an old object does. That's where these stories take us next.",
+      "reason": "Introduce the next section's sensory-memory material rather than jumping ahead to the later containers section."
+    },
+    {
+      "segment_id": "m5-s001",
+      "text": "And sometimes the longing isn't even for something you actually had.",
+      "reason": "Continue the new handoff without falsely implying that sensory triggers were already discussed."
+    }
+  ],
+  "editorial_note": "Opus selected 25 redundant or over-explanatory turns. Four additional locally reviewed cuts remove repeated setup and recaps. Four transition-only rewrites repair checkpoint continuity without changing quotations, disclosure, factual story narration, section coverage, or any story's surviving citations."
+}

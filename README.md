@@ -25,7 +25,8 @@ stories_*.md
   → locked episode evidence packet
   → grounded multi-host script
   → cached segment-level speech jobs
-  → normalized WAV + MP3
+  → optional provenance-tracked sound-design cues
+  → mixed and normalized WAV + MP3
   → Markdown + WebVTT + SRT transcripts
 ```
 
@@ -76,21 +77,58 @@ python -m home_podcast status --month 2013-12
 
 ## Story analysis
 
-Export only stories that do not have a current cached story card:
+The configured analysis and script model is Capriole Fable 5. Supply its
+credential only through the process environment:
 
 ```powershell
-python -m home_podcast export-analysis --month 2013-12
+$env:CAPRIOLE_API_KEY = Read-Host -MaskInput "Capriole API key"
 ```
 
-This creates:
+The complete December snapshot, analyzed pool, and one-theme pilot are frozen
+separately:
 
-```text
-work/analysis/2013-12-story-jobs.jsonl
+```powershell
+python -m home_podcast snapshot-volume `
+  --month 2013-12 `
+  --label full-corpus
+
+python -m home_podcast snapshot-volume `
+  --month 2013-12 `
+  --label analyzed-pool `
+  --analyzed-only
+
+python -m home_podcast snapshot-volume `
+  --month 2013-12 `
+  --label pilot `
+  --theme exile-return-nostalgia
+
+python -m home_podcast export-analysis `
+  --cohort .\cohorts\2013-12-pilot.json `
+  --output .\work\analysis\2013-12-pilot-jobs.jsonl
+
+python -m home_podcast analyze `
+  --input .\work\analysis\2013-12-pilot-jobs.jsonl `
+  --workers 3
 ```
 
-Each line contains one story, its provenance, the controlled theme vocabulary,
-and the required result contract. The analysis model should follow
-`prompts/story_analysis.md` and return JSONL shaped like:
+For the current pilot, all 27 selected records already have story cards, so no
+additional analysis request is required. The other 64 analyzed stories remain
+in `cohorts/2013-12-analyzed-pool.json`; the complete 421-story corpus remains
+in `cohorts/2013-12-full-corpus.json`.
+
+The analyzer caches each completed model response separately and imports it
+immediately. Rerunning the command skips completed work and retries only
+unfinished or failed stories. Start with three workers; raise concurrency only
+when the provider's documented traffic limits support it. Clear the environment
+variable when the run is done:
+
+```powershell
+Remove-Item Env:CAPRIOLE_API_KEY
+```
+
+The exported JSONL contains one story per line, including provenance, the
+controlled theme vocabulary, and the required result contract. The analysis
+model follows `prompts/story_analysis.md` and returns data shaped like:
 
 ```json
 {
@@ -115,7 +153,7 @@ and the required result contract. The analysis model should follow
 }
 ```
 
-Import cards only after validating the provider output:
+Provider-produced cards can also be imported manually:
 
 ```powershell
 python -m home_podcast import-cards .\cards.jsonl `
@@ -131,13 +169,14 @@ automatically reappear in the next export.
 After the month has story cards:
 
 ```powershell
-python -m home_podcast plan --month 2013-12
+python -m home_podcast plan `
+  --month 2013-12 `
+  --cohort .\cohorts\2013-12-pilot.json
 ```
 
-The proposal uses all eligible stories, groups them by primary theme, and
-splits large themes into parts based on `target_stories_per_installment`.
-Stories are not silently discarded: the proposal reports assigned,
-unanalyzed, and ineligible records separately.
+The pilot cohort contains only the selected theme, so the regular multi-theme
+planner produces one installment containing all 27 eligible stories. Future
+cohorts can still produce multiple themed sub-episodes.
 
 The proposal is editorial input, not a published manifest. During the pilot,
 lock the preferred installment before script generation:
@@ -165,24 +204,48 @@ python -m home_podcast prepare-script `
 The script model receives this packet plus `prompts/script_writer.md`. Its
 output must conform to `contracts/script.schema.json`.
 
+Generate the episode from its locked evidence and editorial outline:
+
+```powershell
+$env:CAPRIOLE_API_KEY = "..."
+python -m home_podcast generate-script `
+  --evidence .\work\scripts\2013-12.01-evidence.json `
+  --outline .\episodes\2013-12.01\outline.json
+Remove-Item Env:CAPRIOLE_API_KEY
+```
+
+The generator uses Capriole's protocol-compatible streaming endpoint and caches
+each outline section separately. A validated script is written to
+`episodes/2013-12.01/script.json`; an invalid candidate remains under `work/`
+with a validation report and does not replace the episode script.
+
+Apply the reviewed, hash-bound pilot trim without another model call:
+
+```powershell
+python -m home_podcast trim-script `
+  --script .\episodes\2013-12.01\script.json `
+  --evidence .\work\scripts\2013-12.01-evidence.json `
+  --plan .\episodes\2013-12.01\trim-plan.json
+```
+
 Validate story coverage, speakers, citations, and exact quotations:
 
 ```powershell
 python -m home_podcast validate-script `
-  --script .\work\scripts\2013-12.01-script.json `
+  --script .\episodes\2013-12.01\script.json `
   --evidence .\work\scripts\2013-12.01-evidence.json
 ```
 
 Validation fails if even one selected story has no traceable use.
 
-## Speech, audio, and transcripts
+## Speech, sound design, audio, and transcripts
 
 After assigning stable voice IDs in `config/show_bible.json`, create one cached
 speech job per speaking turn:
 
 ```powershell
 python -m home_podcast prepare-tts `
-  --script .\work\scripts\2013-12.01-script.json `
+  --script .\episodes\2013-12.01\script.json `
   --provider PROVIDER_NAME `
   --model MODEL_NAME
 ```
@@ -192,16 +255,44 @@ job's `output_audio` path. The cache key includes provider, model, voice, text,
 delivery direction, and pronunciation settings, so only changed lines require
 regeneration.
 
-Once every clip exists:
+The current speech-provider shortlist and pilot audition recommendation are in
+[docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).
+The selected one-theme pilot and its TTS cost model are in
+[docs/PILOT_EPISODE.md](docs/PILOT_EPISODE.md).
+
+Non-voice audio is an independent layer. The pilot contains 11 sparse,
+illustrative cues—not simulated historical recordings. Validate them and
+prepare provider-neutral generation jobs:
+
+```powershell
+python -m home_podcast validate-sound-design `
+  --sound-design .\episodes\2013-12.01\sound-design.json `
+  --script .\episodes\2013-12.01\script.json
+
+python -m home_podcast prepare-sfx `
+  --sound-design .\episodes\2013-12.01\sound-design.json `
+  --script .\episodes\2013-12.01\script.json `
+  --provider elevenlabs `
+  --model eleven_text_to_sound_v2
+```
+
+The cue contract, provider research, provenance policy, and mixing behavior are
+documented in [docs/SOUND_DESIGN.md](docs/SOUND_DESIGN.md).
+
+Once every speech and generated-effect clip exists:
 
 ```powershell
 python -m home_podcast render-audio `
-  --jobs .\work\tts\2013-12.01-jobs.jsonl
+  --jobs .\work\tts\2013-12.01-jobs.jsonl `
+  --sound-design .\episodes\2013-12.01\sound-design.json `
+  --sfx-jobs .\work\sfx\2013-12.01-jobs.jsonl
 ```
 
 The renderer uses FFmpeg to normalize clips to 48 kHz stereo, insert scripted
-pauses, target podcast loudness, and create a WAV master, MP3 distribution
-copy, and exact segment timeline.
+pauses, place and fade sound cues, duck selected sounds under speech, target
+podcast loudness, and create a WAV master, MP3 distribution copy, and exact
+speech-and-sound timeline. Omitting the two sound-design arguments still
+produces the clean speech-only render.
 
 Generate deliverable transcripts:
 
@@ -210,8 +301,9 @@ python -m home_podcast transcript `
   --timeline .\episodes\2013-12.01\audio\2013-12.01-timeline.json
 ```
 
-Outputs include speaker-labeled Markdown, WebVTT, and SRT with a story-to-script
-source map.
+Outputs include speaker-labeled Markdown, WebVTT, and SRT with accessible
+non-speech labels, the sound-design disclosure, and a story-to-script source
+map.
 
 ## Project layout
 

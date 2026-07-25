@@ -11,9 +11,14 @@ from .audio import render_episode_audio
 from .catalog import catalog_status
 from .config import ProjectConfig
 from .doctor import run_doctor
+from .editor import trim_episode_script
 from .ingest import ingest_exports
 from .planning import create_month_proposal, lock_episode_manifest, prepare_script_packet
+from .planning import snapshot_crawl_month
+from .provider_runner import analyze_story_jobs
 from .script import prepare_tts_jobs, validate_script
+from .script_runner import generate_episode_script
+from .sound_design import prepare_sfx_jobs, validate_sound_design
 from .transcripts import render_transcripts
 
 
@@ -35,6 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
         "export-analysis", help="Export uncached stories as provider-neutral JSONL jobs"
     )
     export.add_argument("--month", help="Restrict to crawl month YYYY-MM")
+    export.add_argument("--cohort", help="Frozen cohort manifest to restrict exact stories")
     export.add_argument("--output", help="Output JSONL path")
     export.add_argument("--limit", type=int)
     export.add_argument("--include-existing", action="store_true")
@@ -46,10 +52,43 @@ def build_parser() -> argparse.ArgumentParser:
     import_cards.add_argument("--analyzer", required=True)
     import_cards.add_argument("--analyzer-version", required=True)
 
+    snapshot = subparsers.add_parser(
+        "snapshot-volume", help="Freeze the current stories in a crawl-month cohort"
+    )
+    snapshot.add_argument("--month", required=True)
+    snapshot.add_argument("--label", default="pilot")
+    snapshot.add_argument(
+        "--analyzed-only",
+        action="store_true",
+        help="Freeze only stories that already have a current story card",
+    )
+    snapshot.add_argument(
+        "--theme",
+        help="Freeze only eligible analyzed stories with this primary theme",
+    )
+    snapshot.add_argument("--output", help="Cohort JSON path")
+
+    analyze = subparsers.add_parser(
+        "analyze", help="Analyze exported story jobs with the configured LLM"
+    )
+    analyze.add_argument("--input", required=True, help="Story jobs JSONL path")
+    analyze.add_argument("--workers", type=int, default=3)
+    analyze.add_argument("--limit", type=int)
+
     plan = subparsers.add_parser(
         "plan", help="Create a maximum-coverage thematic proposal for a crawl month"
     )
     plan.add_argument("--month", required=True)
+    plan.add_argument("--cohort", help="Frozen cohort manifest to restrict exact stories")
+    plan.add_argument(
+        "--single-episode",
+        action="store_true",
+        help="Combine every eligible cohort story into one proposed episode",
+    )
+    plan.add_argument(
+        "--title",
+        help="Override the title when the proposal contains exactly one episode",
+    )
     plan.add_argument("--output", help="Proposal JSON path")
 
     lock = subparsers.add_parser(
@@ -73,6 +112,37 @@ def build_parser() -> argparse.ArgumentParser:
     validate.add_argument("--script", required=True)
     validate.add_argument("--evidence", required=True)
 
+    generate_script = subparsers.add_parser(
+        "generate-script",
+        help="Generate and source-validate a complete episode script",
+    )
+    generate_script.add_argument("--evidence", required=True)
+    generate_script.add_argument(
+        "--outline",
+        help="Episode movement outline; defaults to episodes/<episode>/outline.json",
+    )
+    generate_script.add_argument(
+        "--output",
+        help="Validated script JSON path; defaults to the episode directory",
+    )
+
+    trim_script = subparsers.add_parser(
+        "trim-script",
+        help="Create and apply a deletion-only editorial trim plan",
+    )
+    trim_script.add_argument("--script", required=True)
+    trim_script.add_argument("--evidence", required=True)
+    trim_script.add_argument("--target-min", type=int, default=4400)
+    trim_script.add_argument("--target-max", type=int, default=4600)
+    trim_script.add_argument(
+        "--plan",
+        help="Apply a saved deletion plan without making a provider call",
+    )
+    trim_script.add_argument(
+        "--output",
+        help="Validated trimmed script path; defaults to replacing --script",
+    )
+
     tts = subparsers.add_parser(
         "prepare-tts", help="Create cached, segment-level TTS jobs from a valid script"
     )
@@ -81,11 +151,34 @@ def build_parser() -> argparse.ArgumentParser:
     tts.add_argument("--provider", required=True)
     tts.add_argument("--model", required=True)
 
+    validate_sound = subparsers.add_parser(
+        "validate-sound-design",
+        help="Validate a sound-design cue sheet against its episode script",
+    )
+    validate_sound.add_argument("--sound-design", required=True)
+    validate_sound.add_argument("--script", required=True)
+
+    sfx = subparsers.add_parser(
+        "prepare-sfx",
+        help="Create cached, provider-neutral jobs for generated sound cues",
+    )
+    sfx.add_argument("--sound-design", required=True)
+    sfx.add_argument("--script", required=True)
+    sfx.add_argument("--output", help="SFX jobs JSONL path")
+    sfx.add_argument("--provider", required=True)
+    sfx.add_argument("--model", required=True)
+
     audio = subparsers.add_parser(
-        "render-audio", help="Normalize and assemble completed TTS clips"
+        "render-audio",
+        help="Normalize and mix completed speech clips with optional sound design",
     )
     audio.add_argument("--jobs", required=True)
     audio.add_argument("--output-dir", help="Episode audio output directory")
+    audio.add_argument("--sound-design", help="Optional sound-design cue sheet")
+    audio.add_argument(
+        "--sfx-jobs",
+        help="Completed generated-SFX jobs referenced by the sound-design cue sheet",
+    )
 
     transcript = subparsers.add_parser(
         "transcript", help="Render Markdown, WebVTT, and SRT from an audio timeline"
@@ -104,6 +197,12 @@ def main(argv: list[str] | None = None) -> int:
         result = _dispatch(config, args)
         _print_json(result)
         if args.command == "validate-script" and not result["valid"]:
+            return 2
+        if args.command == "generate-script" and not result["valid"]:
+            return 2
+        if args.command == "trim-script" and not result["valid"]:
+            return 2
+        if args.command == "validate-sound-design" and not result["valid"]:
             return 2
         return 0
     except (FileNotFoundError, ValueError, RuntimeError) as error:
@@ -129,6 +228,7 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             config,
             output,
             month=args.month,
+            cohort_path=Path(args.cohort).resolve() if args.cohort else None,
             include_existing=args.include_existing,
             limit=args.limit,
         )
@@ -141,11 +241,44 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             analyzer_version=args.analyzer_version,
         )
         return {"imported": imported, "skipped_stale_or_missing": skipped}
+    if args.command == "snapshot-volume":
+        output = _path_or_default(
+            args.output,
+            config.project_root / "cohorts" / f"{args.month}-{args.label}.json",
+        )
+        snapshot, created = snapshot_crawl_month(
+            config,
+            args.month,
+            args.label,
+            output,
+            analyzed_only=args.analyzed_only,
+            primary_theme=args.theme,
+        )
+        return {
+            "output": str(output),
+            "created": created,
+            "story_count": snapshot["story_count"],
+            "crawl_month": snapshot["crawl_month"],
+        }
+    if args.command == "analyze":
+        return analyze_story_jobs(
+            config,
+            Path(args.input).resolve(),
+            workers=max(1, args.workers),
+            limit=args.limit,
+        )
     if args.command == "plan":
         output = _path_or_default(
             args.output, config.work_dir / "planning" / f"{args.month}-proposal.json"
         )
-        proposal = create_month_proposal(config, args.month, output)
+        proposal = create_month_proposal(
+            config,
+            args.month,
+            output,
+            cohort_path=Path(args.cohort).resolve() if args.cohort else None,
+            single_episode=args.single_episode,
+            single_episode_title=args.title,
+        )
         return {
             "output": str(output),
             "installments": len(proposal["installments"]),
@@ -178,6 +311,32 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             Path(args.evidence).resolve(),
             config.show_bible_path,
         )
+    if args.command == "generate-script":
+        evidence_path = Path(args.evidence).resolve()
+        packet = json.loads(evidence_path.read_text(encoding="utf-8"))
+        episode_id = packet["episode"]["episode_id"]
+        output = _path_or_default(
+            args.output,
+            config.episodes_dir / episode_id / "script.json",
+        )
+        outline = _path_or_default(
+            args.outline,
+            config.episodes_dir / episode_id / "outline.json",
+        )
+        return generate_episode_script(config, evidence_path, outline, output)
+    if args.command == "trim-script":
+        script_path = Path(args.script).resolve()
+        evidence_path = Path(args.evidence).resolve()
+        output = _path_or_default(args.output, script_path)
+        return trim_episode_script(
+            config,
+            script_path,
+            evidence_path,
+            output,
+            target_words_min=args.target_min,
+            target_words_max=args.target_max,
+            plan_path=Path(args.plan).resolve() if args.plan else None,
+        )
     if args.command == "prepare-tts":
         script = json.loads(Path(args.script).read_text(encoding="utf-8"))
         output = _path_or_default(
@@ -193,6 +352,27 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             model=args.model,
         )
         return {"output": str(output), "jobs": count}
+    if args.command == "validate-sound-design":
+        return validate_sound_design(
+            Path(args.sound_design).resolve(),
+            Path(args.script).resolve(),
+        )
+    if args.command == "prepare-sfx":
+        sound_design_path = Path(args.sound_design).resolve()
+        sound_design = json.loads(sound_design_path.read_text(encoding="utf-8"))
+        output = _path_or_default(
+            args.output,
+            config.work_dir / "sfx" / f"{sound_design['episode_id']}-jobs.jsonl",
+        )
+        count = prepare_sfx_jobs(
+            sound_design_path,
+            Path(args.script).resolve(),
+            output,
+            config.audio_dir / "cache" / "sfx",
+            provider=args.provider,
+            model=args.model,
+        )
+        return {"output": str(output), "jobs": count}
     if args.command == "render-audio":
         jobs_path = Path(args.jobs).resolve()
         first_job = next(
@@ -203,7 +383,15 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
         output_dir = _path_or_default(
             args.output_dir, config.episodes_dir / first_job["episode_id"] / "audio"
         )
-        return render_episode_audio(jobs_path, config.work_dir, output_dir)
+        return render_episode_audio(
+            jobs_path,
+            config.work_dir,
+            output_dir,
+            sound_design_path=(
+                Path(args.sound_design).resolve() if args.sound_design else None
+            ),
+            sfx_jobs_path=Path(args.sfx_jobs).resolve() if args.sfx_jobs else None,
+        )
     if args.command == "transcript":
         timeline_path = Path(args.timeline).resolve()
         timeline = json.loads(timeline_path.read_text(encoding="utf-8"))

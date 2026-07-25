@@ -1,0 +1,202 @@
+{
+  "contract_version": 1,
+  "kind": "crawl_month_cohort",
+  "label": "pilot",
+  "crawl_month": "2013-12",
+  "story_count": 27,
+  "snapshot_at": "2026-07-25T14:02:45+00:00",
+  "primary_theme": "exile-return-nostalgia",
+  "selection_policy": "eligible analyzed stories with primary theme exile-return-nostalgia",
+  "capture_time_basis": "Timestamp embedded in Source File. For this December 2013 cohort it matches the upstream WARC capture month.",
+  "stories": [
+    {
+      "story_id": "story-33794ca00b8257365b2cd670",
+      "content_hash": "eb0bbe6243399a64ef7845f9bfad77fb94d337b45a471184b424356ceab40fed",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:15Z"
+    },
+    {
+      "story_id": "story-25f49668a3daff7a300d7c88",
+      "content_hash": "7de6b1c4e4b22904450308ecbbebbf75b5ba680636bce7b234ad6745058f6266",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:17Z"
+    },
+    {
+      "story_id": "story-1e3a5bda38becad9ce688edc",
+      "content_hash": "12ca4d9e5cdc676e5d6cd4b6bb52d8d7e98a9e1f4e82a0c89563d53aad359b05",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:19Z"
+    },
+    {
+      "story_id": "story-74513b87ad36dc153aa9fad9",
+      "content_hash": "c1eb17d40355322431f367709b22c610a37bd9e53407ba5f1ca73c532c894147",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:19Z"
+    },
+    {
+      "story_id": "story-8164ced3b394d9c7d72cb322",
+      "content_hash": "b612787a22878a5918faa24ac0620277e881df25ce60763a79b51ce94313aa54",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:19Z"
+    },
+    {
+      "story_id": "story-7125f780a8df384e1a7cc5ea",
+      "content_hash": "edfda12d1299c6b043fdb78b5465fa73600b7bb26d98781ad1494299d1eb732d",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:20Z"
+    },
+    {
+      "story_id": "story-5cf48617f5335d0e3579c911",
+      "content_hash": "a0cc3e0233ff49e7a3b8d89906acfe9eadfb639a12f7cdc74de2e3a744ba3f82",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:21Z"
+    },
+    {
+      "story_id": "story-7ac236ec06ced47546d91a19",
+      "content_hash": "7b80ce0ed90434d27f656f78bddf38c03b0b3c93d22c721406a9cb68c57305ea",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:23Z"
+    },
+    {
+      "story_id": "story-0df1f0c21c6c8791e42dba65",
+      "content_hash": "7a2b4d8f7ca6c20ec01fb92c0d98c34b98dd6f49f9c38193d4514f6848757dfc",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:26Z"
+    },
+    {
+      "story_id": "story-d11d07357380985cd742c37e",
+      "content_hash": "8f5b22025621786783b5153bf060d9c572376a2d130afef3458cc37205a94daf",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:26Z"
+    },
+    {
+      "story_id": "story-191f2a6d4501d545e19858cd",
+      "content_hash": "474dfc81cba5be7ca28dc7fce472fa81781b3381f8ae19d2f3430c8c5a7c1801",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:27Z"
+    },
+    {
+      "story_id": "story-657fb3417e6c0c0cd4539e4d",
+      "content_hash": "09ade8a714d246f6305fab98a67128c57c5c637961a262dacfe52061a883178e",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:27Z"
+    },
+    {
+      "story_id": "story-e58ed78f41114cade2acc8c5",
+      "content_hash": "fab11cea677da4a517e4dc00fb5a033e174eebbddd1d60e58ac96f03cd7e9ebf",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:28Z"
+    },
+    {
+      "story_id": "story-25945a71670ab26747eae7ff",
+      "content_hash": "f87a6f64575ca8c4d7677f1f7b74bc3045419d835a5922763b1ca5f82a2a83ad",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:29Z"
+    },
+    {
+      "story_id": "story-4ed05cb194b517ab41b3f7e6",
+      "content_hash": "8931c1b2023885a1d469abc3ad3b77f23963436e7e52c72e3acacff87d5108b4",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:29Z"
+    },
+    {
+      "story_id": "story-ec32dd5b7c69997097358090",
+      "content_hash": "0c597362eb2a496234a9924aa373e01a5ab1ea48276b5dffd15f1a0935db4206",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:29Z"
+    },
+    {
+      "story_id": "story-0eadd80cefbcbd94e33a66f1",
+      "content_hash": "362b6c21d9ea05d180a1adfa59f7f17305ed152e8f0b277bab0b8085424fee65",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-2327326c1fcdf3a10f70bdca",
+      "content_hash": "71e5812ba847ea1b6ba2e872027b91c983a7a798f61f3c9cbf5c15f1cc70cf9a",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-3b61e67ea1fdabc77b154676",
+      "content_hash": "9820f9ac6c204d2471fb2e11832d62ea4d4b800ee0e9afc76e77531b3feef182",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-4cabb58067e9770676b8af02",
+      "content_hash": "e133593d1b853dbc888f78569945d553172bc5290a8bc9906b179c25a2451144",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-51a1bc8af9ca9a8857b06f68",
+      "content_hash": "b5f52cc2e04ada2935e3648eb8586cdf1c30d4cec3f8bb49dcff2f13814fafe3",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-9608b65eb8ddfa6ae62b0e39",
+      "content_hash": "7b688062b2e283d5f9806bacf9f592c3f5a48c45707dba59a71bc24123117c93",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-b97029685f681ec4175a39e4",
+      "content_hash": "1b0a4856bf7ef8f4e11340e09cf6284145a05a2882f58062cdefc3133b176136",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-bc88fb883cd14b8f55e78065",
+      "content_hash": "ae667fcf29a712fd690701afe7923dfeeccc06339ac2cc89f33e0f79bcd7d46c",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-ea05fee5897c7db8f73cc06a",
+      "content_hash": "4017d3e601ef05b887bf8eeba768d645e9864d4d7bc3c1c3c1477e0682790db4",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-ebfd9618c8f744211076515b",
+      "content_hash": "43638ea6ca3b4948b61de508ef4c343f1d1d109ad1595093b1476a424db764f8",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    },
+    {
+      "story_id": "story-fa70a536d9be15a3a1c079d4",
+      "content_hash": "798b8e3b60bcb60b131bed16e830d7f2257e4fea213def947cf6b48e6c520505",
+      "language": "en",
+      "crawl_dataset": "CC-MAIN-2013-48",
+      "crawl_timestamp": "2013-12-04T13:17:31Z"
+    }
+  ]
+}

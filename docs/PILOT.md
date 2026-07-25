@@ -5,7 +5,11 @@ following decisions and credentials are needed.
 
 ## 1. Analysis and script model
 
-Choose a model capable of:
+Selected: Capriole Fable 5 (`anthropic/claude-fable-5`) for both story analysis
+and script generation. The adapter reads `CAPRIOLE_API_KEY` from the process
+environment and caches model outputs by story content and prompt version.
+
+The model must continue to demonstrate:
 
 - reliable structured JSON
 - long multilingual evidence
@@ -13,8 +17,8 @@ Choose a model capable of:
 - nuanced translation
 - source-grounded multi-speaker writing
 
-The analysis model and script model may be the same service, but their prompts,
-model versions, and cached outputs remain separate.
+Analysis and script prompts, model versions, and cached outputs remain
+separate even though they use the same service.
 
 ## 2. Speech casting
 
@@ -36,15 +40,34 @@ rights, and per-episode cost.
 Use licensed stock synthetic voices or explicitly authorized custom voices.
 Do not clone an identifiable real person without permission.
 
+The researched shortlist and recommended bakeoff are recorded in
+[SPEECH_PROVIDERS.md](SPEECH_PROVIDERS.md).
+
+The 91 completed story cards form the analyzed production pool. The official
+budget-limited pilot selects its strongest single theme: 27 stories about
+Exile, Return, and Nostalgia. Its episode structure and TTS budget are recorded
+in [PILOT_EPISODE.md](PILOT_EPISODE.md).
+
 ## 3. Editorial choices
 
-Confirm before generating a pilot:
+Confirmed:
+
+- primary spoken language: English
+- pilot crawl month: December 2013
+- analyzed production pool: 91 English-language stories
+- frozen pilot cohort: 27 stories in Exile, Return, and Nostalgia
+- complete December corpus: 421 stories
+- deferred after the pilot: 64 analyzed stories and 330 unanalyzed stories
+- pilot release: one approximately 30-minute themed sub-episode
+- coverage policy: use all 27 selected stories, at different depths
+- host format: three disclosed synthetic hosts
+- AI budget preference: premium
+
+Still confirm before final audio generation:
 
 - public series title (the current title is a working title)
-- primary spoken language
-- desired pilot crawl month
-- approximate duration
-- whether music and ambience are used
+- final approval of the 11-cue illustrative sound-design map
+- sound-effects provider and generated-versus-licensed asset decisions
 - publication/licensing policy for source excerpts
 - sensitivity and translation review standard
 

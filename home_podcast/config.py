@@ -22,9 +22,9 @@ class ProjectConfig:
     target_stories_per_installment: int
     target_minutes_min: int
     target_minutes_max: int
-    analysis_provider: str | None
-    script_provider: str | None
-    speech_provider: str | None
+    analysis_provider: dict[str, Any] | None
+    script_provider: dict[str, Any] | None
+    speech_provider: dict[str, Any] | None
 
     @classmethod
     def load(cls, path: str | Path = "podcast.json") -> "ProjectConfig":
