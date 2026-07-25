@@ -45,7 +45,7 @@ sound prompt, generator, or duration changes
   → no speech clip is regenerated
 
 cue placement, gain, fades, or ducking changes
-  → only the final mix is rebuilt
+  → only the soundscape stem and combined review mix are rebuilt
 ```
 
 No high-water mark is used. A later extraction can add a previously unseen
@@ -80,6 +80,13 @@ illustrative sound design or as a licensed recording with a source and credit.
 The production transcript discloses the sound-design layer and can caption
 each audible cue. Generated sound must never be described as an archival
 recording or as audio captured from a story's people, place, or event.
+
+The renderer emits synchronized voices-only and non-human-only tracks, plus a
+combined review mix. A nearly subliminal base ambience spans the full speech
+timeline. Thematic section beds are generated as 30-second seamless sources and
+extended locally until the next eligible section. If a proposed section is
+shorter than the configured minimum, its cue is suppressed and the preceding
+bed continues. This coverage decision is written into the timeline.
 
 ## Rotating episode cast
 

@@ -5,25 +5,62 @@
   "editorial_principles": [
     "Sound may evoke an idea or transition but must never masquerade as historical evidence.",
     "Keep exact quotations intelligible and avoid literal reenactment beneath sensitive material.",
-    "Use silence as part of the design; effects should mark structure rather than fill every moment.",
+    "Keep the continuous base bed nearly subliminal so the program still has perceived quiet and emotional breathing room.",
+    "Let long thematic ambiences carry across short sections instead of triggering distracting micro-changes.",
     "Direct the recurring sonic language toward paper, imperfect machines, distance, and digital fragments."
   ],
+  "continuous_background": {
+    "enabled": true,
+    "base_cue_id": "continuous-archive-air",
+    "minimum_specific_span_ms": 15000,
+    "short_span_policy": "inherit_previous"
+  },
   "cues": [
     {
-      "cue_id": "cold-open-paper-room",
+      "cue_id": "continuous-archive-air",
       "kind": "ambience",
+      "coverage_role": "base",
       "anchor": {
         "segment_id": "m1-s001",
         "point": "start",
         "offset_ms": 0
       },
-      "duration_ms": 9000,
+      "duration_ms": 300000,
+      "gain_db": -44,
+      "fade_in_ms": 5000,
+      "fade_out_ms": 7000,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a nearly subliminal archival room tone continues throughout",
+      "caption_duration_ms": 5000,
+      "editorial_note": "The full-episode safety bed prevents dead air without claiming a real room, archive, or machine.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic continuous ambience; not an archival recording."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Thirty-second seamless loop of nearly silent neutral archival air: soft room tone, faint paper-fiber hush and extremely sparse warm digital grain, stable and unobtrusive, no identifiable place, no voices, no melody, no pulse, no dramatic events, designed to sit underneath an entire documentary podcast",
+        "generation_duration_ms": 30000
+      }
+    },
+    {
+      "cue_id": "cold-open-paper-room",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "anchor": {
+        "segment_id": "m1-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 300000,
       "gain_db": -29,
       "fade_in_ms": 1200,
       "fade_out_ms": 2000,
       "loop": true,
       "duck_under_dialogue": true,
       "transcript_label": "quiet paper movement and soft room tone",
+      "caption_duration_ms": 6000,
       "editorial_note": "An abstract opening texture, not the sound of the 1859 letter or its writer.",
       "provenance": {
         "presentation": "illustrative_sound_design",
@@ -32,7 +69,7 @@
       "source": {
         "type": "generated",
         "prompt": "Subtle close-microphone paper movement in a very quiet neutral room, delicate page fibers and one restrained page turn, no writing, no voices, no music, no dramatic impact, clean documentary sound design, seamless loop",
-        "generation_duration_ms": 6000
+        "generation_duration_ms": 30000
       }
     },
     {
@@ -90,18 +127,20 @@
     {
       "cue_id": "distance-air",
       "kind": "ambience",
+      "coverage_role": "section",
       "anchor": {
         "segment_id": "m2-s001",
         "point": "start",
         "offset_ms": 0
       },
-      "duration_ms": 12000,
+      "duration_ms": 300000,
       "gain_db": -31,
       "fade_in_ms": 1800,
       "fade_out_ms": 2500,
       "loop": true,
       "duck_under_dialogue": true,
       "transcript_label": "low, distant movement like a journey heard from far away",
+      "caption_duration_ms": 6000,
       "editorial_note": "Suggests distance without assigning a real vehicle or geography to any source.",
       "provenance": {
         "presentation": "illustrative_sound_design",
@@ -110,24 +149,26 @@
       "source": {
         "type": "generated",
         "prompt": "Very subtle abstract ambience of distance and departure, low airy movement with a barely perceptible road-like hush heard from far away, contemplative, no identifiable vehicle, no horn, no footsteps, no voices, seamless loop",
-        "generation_duration_ms": 8000
+        "generation_duration_ms": 30000
       }
     },
     {
       "cue_id": "returning-threshold",
       "kind": "transition",
+      "coverage_role": "section",
       "anchor": {
         "segment_id": "m3-s001",
         "point": "start",
         "offset_ms": 0
       },
-      "duration_ms": 11000,
+      "duration_ms": 300000,
       "gain_db": -30,
       "fade_in_ms": 1500,
       "fade_out_ms": 2500,
       "loop": true,
       "duck_under_dialogue": true,
       "transcript_label": "soft wind and the resonance of an empty threshold",
+      "caption_duration_ms": 6000,
       "editorial_note": "An emotional threshold, not a reconstruction of Honaker, Virginia, or any house.",
       "provenance": {
         "presentation": "illustrative_sound_design",
@@ -136,7 +177,7 @@
       "source": {
         "type": "generated",
         "prompt": "Sparse abstract threshold ambience, soft wind moving around an empty wooden space with one almost imperceptible settling creak, emotionally restrained, no storm, no footsteps, no voices, seamless documentary texture",
-        "generation_duration_ms": 8000
+        "generation_duration_ms": 30000
       }
     },
     {
@@ -168,18 +209,20 @@
     {
       "cue_id": "memory-map",
       "kind": "ambience",
+      "coverage_role": "section",
       "anchor": {
         "segment_id": "m4-s001",
         "point": "start",
         "offset_ms": 0
       },
-      "duration_ms": 12000,
+      "duration_ms": 300000,
       "gain_db": -32,
       "fade_in_ms": 1800,
       "fade_out_ms": 2500,
       "loop": true,
       "duck_under_dialogue": true,
       "transcript_label": "an indistinct small-town exterior, heard as memory",
+      "caption_duration_ms": 6000,
       "editorial_note": "Intentionally unspecific so it cannot be mistaken for Iowa, Texas, or Massachusetts.",
       "provenance": {
         "presentation": "illustrative_sound_design",
@@ -188,24 +231,26 @@
       "source": {
         "type": "generated",
         "prompt": "Distant dreamlike small-town exterior ambience reduced to soft air, one far-off door and an indistinct passing presence, no readable location, no speech, no church bell, no traffic foreground, nostalgic but unsentimental, seamless loop",
-        "generation_duration_ms": 8000
+        "generation_duration_ms": 30000
       }
     },
     {
       "cue_id": "objects-remember",
-      "kind": "transition",
+      "kind": "ambience",
+      "coverage_role": "section",
       "anchor": {
         "segment_id": "m5-s001",
         "point": "start",
         "offset_ms": 0
       },
-      "duration_ms": 9000,
+      "duration_ms": 300000,
       "gain_db": -29,
       "fade_in_ms": 1000,
       "fade_out_ms": 2200,
-      "loop": false,
+      "loop": true,
       "duck_under_dialogue": true,
       "transcript_label": "small household textures surface and recede",
+      "caption_duration_ms": 6000,
       "editorial_note": "Signals material memory without reproducing a branded object.",
       "provenance": {
         "presentation": "illustrative_sound_design",
@@ -213,8 +258,8 @@
       },
       "source": {
         "type": "generated",
-        "prompt": "Quiet tactile montage for a documentary: a cardboard package shifting, smooth plastic tapped once, a small drawer closing softly, all becoming a faint warm memory haze, no brand cues, no voices, no music, nine seconds",
-        "generation_duration_ms": 9000
+        "prompt": "Thirty-second seamless documentary ambience of material memory: a stable warm room haze with very occasional distant cardboard movement, smooth plastic settling and a soft drawer resonance, sparse enough to loop without an obvious rhythm, no brand cues, no voices, no music, no foreground impacts",
+        "generation_duration_ms": 30000
       }
     },
     {
@@ -244,20 +289,50 @@
       }
     },
     {
+      "cue_id": "archive-limits",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "anchor": {
+        "segment_id": "m6-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 300000,
+      "gain_db": -33,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 3500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a sparse machine-room texture leaves audible gaps",
+      "caption_duration_ms": 6000,
+      "editorial_note": "Suggests the archive's limits without presenting a real server, crawler, or missing page.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic illustrative ambience; not archival system audio."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Thirty-second seamless abstract ambience about the limits of a web archive: low neutral machine-room air, rare distant scanner motion and small gaps where digital grains disappear, restrained and thoughtful, no alarms, no recognizable computer, no voices, no melody, no dramatic glitch",
+        "generation_duration_ms": 30000
+      }
+    },
+    {
       "cue_id": "digital-dust-finale",
       "kind": "ambience",
+      "coverage_role": "section",
       "anchor": {
         "segment_id": "m6-s022",
         "point": "start",
         "offset_ms": 0
       },
-      "duration_ms": 18000,
+      "duration_ms": 300000,
       "gain_db": -31,
       "fade_in_ms": 2500,
       "fade_out_ms": 3500,
       "loop": true,
       "duck_under_dialogue": true,
       "transcript_label": "paper, machine noise, and digital dust settle together",
+      "caption_duration_ms": 6000,
       "editorial_note": "Returns to the physical-to-digital palette while leaving room for the closing thought.",
       "provenance": {
         "presentation": "illustrative_sound_design",
@@ -266,7 +341,7 @@
       "source": {
         "type": "generated",
         "prompt": "Intimate closing documentary ambience combining almost-silent paper fibers, distant gentle scanner mechanics and sparse digital dust, warm and reflective, no melody, no voices, no dramatic swell, seamless loop",
-        "generation_duration_ms": 9000
+        "generation_duration_ms": 30000
       }
     },
     {

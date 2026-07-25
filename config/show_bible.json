@@ -9,6 +9,9 @@
     "cold_open": true,
     "original_language_fragments": true,
     "rotating_episode_cast": true,
+    "pilot_performance_style": "creative_plus",
+    "separate_voice_and_soundscape_tracks": true,
+    "continuous_non_human_background": true,
     "on_air_generation_disclosure": false
   },
   "hosts": [

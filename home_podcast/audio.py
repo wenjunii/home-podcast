@@ -9,7 +9,7 @@ import wave
 from pathlib import Path
 from typing import Any
 
-from .sound_design import resolve_sound_cues
+from .sound_design import resolve_soundscape
 
 
 def render_episode_audio(
@@ -111,6 +111,7 @@ def render_episode_audio(
     )
 
     sound_cues: list[dict[str, Any]] = []
+    soundscape_coverage: dict[str, Any] | None = None
     prepared_cues: list[Path] = []
     sound_design: dict[str, Any] | None = None
     if sound_design_path is not None:
@@ -120,11 +121,12 @@ def render_episode_audio(
                 f"Sound design belongs to {sound_design.get('episode_id')!r}, "
                 f"not {episode_id!r}"
             )
-        sound_cues = resolve_sound_cues(
+        soundscape_coverage = resolve_soundscape(
             sound_design_path,
             timeline_segments,
             sfx_jobs_path,
         )
+        sound_cues = soundscape_coverage["cues"]
         overrun = [cue for cue in sound_cues if cue["end_ms"] > cursor_ms]
         if overrun:
             cue = overrun[0]
@@ -137,9 +139,38 @@ def render_episode_audio(
             for cue in sound_cues
         ]
 
+    voices_master_path = (
+        output_dir / f"{episode_id}-voices-only-master.wav"
+    ).resolve()
+    voices_mp3_path = (output_dir / f"{episode_id}-voices-only.mp3").resolve()
+    _normalize_audio(
+        ffmpeg,
+        voice_assembly_path,
+        voices_master_path,
+        integrated_loudness=-16,
+        true_peak=-1.5,
+    )
+    _encode_mp3(ffmpeg, voices_master_path, voices_mp3_path)
+
     master_path = (output_dir / f"{episode_id}-master.wav").resolve()
     mp3_path = (output_dir / f"{episode_id}.mp3").resolve()
+    soundscape_master_path: Path | None = None
+    soundscape_mp3_path: Path | None = None
     if sound_cues:
+        soundscape_master_path = (
+            output_dir / f"{episode_id}-soundscape-only-master.wav"
+        ).resolve()
+        soundscape_mp3_path = (
+            output_dir / f"{episode_id}-soundscape-only.mp3"
+        ).resolve()
+        _mix_sound_cues(
+            ffmpeg,
+            sound_cues,
+            prepared_cues,
+            soundscape_master_path,
+            cursor_ms,
+        )
+        _encode_mp3(ffmpeg, soundscape_master_path, soundscape_mp3_path)
         _mix_voice_and_sound_cues(
             ffmpeg,
             voice_assembly_path,
@@ -149,42 +180,36 @@ def render_episode_audio(
             cursor_ms,
         )
     else:
-        _run(
-            [
-                ffmpeg,
-                "-y",
-                "-loglevel",
-                "error",
-                "-i",
-                str(voice_assembly_path),
-                "-af",
-                "loudnorm=I=-16:TP=-1.5:LRA=11",
-                "-c:a",
-                "pcm_s16le",
-                str(master_path),
-            ]
-        )
-    _run(
-        [
-            ffmpeg,
-            "-y",
-            "-loglevel",
-            "error",
-            "-i",
-            str(master_path),
-            "-codec:a",
-            "libmp3lame",
-            "-b:a",
-            "192k",
-            str(mp3_path),
-        ]
-    )
+        shutil.copyfile(voices_master_path, master_path)
+    _encode_mp3(ffmpeg, master_path, mp3_path)
+    tracks: dict[str, Any] = {
+        "voices_only": {
+            "master_audio": str(voices_master_path),
+            "distribution_audio": str(voices_mp3_path),
+            "contains": "human_voices_only",
+        },
+    }
+    if soundscape_master_path is not None and soundscape_mp3_path is not None:
+        tracks["soundscape_only"] = {
+            "master_audio": str(soundscape_master_path),
+            "distribution_audio": str(soundscape_mp3_path),
+            "contains": "non_human_sound_only",
+            "continuous": bool(
+                soundscape_coverage and soundscape_coverage.get("continuous")
+            ),
+        }
+        tracks["combined_preview"] = {
+            "master_audio": str(master_path),
+            "distribution_audio": str(mp3_path),
+            "contains": "voices_and_soundscape",
+        }
     timeline = {
         "contract_version": 1,
         "episode_id": episode_id,
         "duration_ms": cursor_ms,
         "master_audio": str(master_path),
         "distribution_audio": str(mp3_path),
+        "tracks": tracks,
         "segments": timeline_segments,
         "sound_design": (
             {
@@ -195,12 +220,63 @@ def render_episode_audio(
             else None
         ),
         "sound_cues": sound_cues,
+        "soundscape_coverage": soundscape_coverage,
     }
     timeline_path = output_dir / f"{episode_id}-timeline.json"
     timeline_path.write_text(
         json.dumps(timeline, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     return timeline
+
+
+def _normalize_audio(
+    ffmpeg: str,
+    input_path: Path,
+    output_path: Path,
+    *,
+    integrated_loudness: float,
+    true_peak: float,
+) -> None:
+    _run(
+        [
+            ffmpeg,
+            "-y",
+            "-loglevel",
+            "error",
+            "-i",
+            str(input_path),
+            "-af",
+            (
+                f"loudnorm=I={integrated_loudness:g}:"
+                f"TP={true_peak:g}:LRA=11"
+            ),
+            "-ar",
+            "48000",
+            "-ac",
+            "2",
+            "-c:a",
+            "pcm_s16le",
+            str(output_path),
+        ]
+    )
+
+
+def _encode_mp3(ffmpeg: str, input_path: Path, output_path: Path) -> None:
+    _run(
+        [
+            ffmpeg,
+            "-y",
+            "-loglevel",
+            "error",
+            "-i",
+            str(input_path),
+            "-codec:a",
+            "libmp3lame",
+            "-b:a",
+            "192k",
+            str(output_path),
+        ]
+    )
 
 
 def _prepare_sound_cue(
@@ -326,6 +402,56 @@ def _mix_voice_and_sound_cues(
             ";".join(filters),
             "-map",
             "[mixed]",
+            "-ar",
+            "48000",
+            "-ac",
+            "2",
+            "-c:a",
+            "pcm_s16le",
+            str(output_path),
+        ]
+    )
+    _run(command)
+
+
+def _mix_sound_cues(
+    ffmpeg: str,
+    cues: list[dict[str, Any]],
+    cue_paths: list[Path],
+    output_path: Path,
+    duration_ms: int,
+) -> None:
+    if not cues:
+        raise ValueError("Cannot render a soundscape-only track without sound cues")
+    command = [ffmpeg, "-y", "-loglevel", "error"]
+    for cue_path in cue_paths:
+        command.extend(["-i", str(cue_path)])
+
+    audio_format = (
+        "aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo"
+    )
+    filters: list[str] = []
+    labels: list[str] = []
+    for index, cue in enumerate(cues):
+        label = f"sound{index}"
+        delay = cue["start_ms"]
+        filters.append(
+            f"[{index}:a]{audio_format},adelay={delay}|{delay}[{label}]"
+        )
+        labels.append(f"[{label}]")
+    sound_bus = _sound_bus(filters, labels, "soundscape")
+    duration_seconds = duration_ms / 1000
+    filters.append(
+        f"{sound_bus}apad=pad_dur={duration_seconds:.3f},"
+        f"atrim=0:{duration_seconds:.3f},"
+        "loudnorm=I=-23:TP=-2:LRA=11[soundonly]"
+    )
+    command.extend(
+        [
+            "-filter_complex",
+            ";".join(filters),
+            "-map",
+            "[soundonly]",
             "-ar",
             "48000",
             "-ac",

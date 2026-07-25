@@ -12,6 +12,7 @@ SOUND_KINDS = {"ident", "ambience", "spot", "transition"}
 ANCHOR_POINTS = {"start", "end"}
 SOURCE_TYPES = {"generated", "licensed"}
 PRESENTATIONS = {"illustrative_sound_design", "licensed_recording"}
+COVERAGE_ROLES = {"base", "section"}
 
 
 def validate_sound_design(
@@ -30,6 +31,31 @@ def validate_sound_design(
     disclosure = sound_design.get("sound_design_disclosure")
     if not isinstance(disclosure, str) or not disclosure.strip():
         errors.append("sound_design_disclosure must be a non-empty string")
+    continuous_background = sound_design.get("continuous_background")
+    if continuous_background is not None and not isinstance(
+        continuous_background, dict
+    ):
+        errors.append("continuous_background must be an object")
+        continuous_background = None
+    if isinstance(continuous_background, dict):
+        if continuous_background.get("enabled") is not True:
+            errors.append("continuous_background.enabled must be true")
+        base_cue_id = continuous_background.get("base_cue_id")
+        if not isinstance(base_cue_id, str) or not base_cue_id.strip():
+            errors.append("continuous_background.base_cue_id must be a non-empty string")
+        minimum_span = continuous_background.get("minimum_specific_span_ms")
+        if (
+            not isinstance(minimum_span, int)
+            or not 1000 <= minimum_span <= 300000
+        ):
+            errors.append(
+                "continuous_background.minimum_specific_span_ms must be "
+                "an integer from 1000 to 300000"
+            )
+        if continuous_background.get("short_span_policy") != "inherit_previous":
+            errors.append(
+                "continuous_background.short_span_policy must be 'inherit_previous'"
+            )
 
     segment_ids = {
         segment.get("segment_id")
@@ -55,6 +81,11 @@ def validate_sound_design(
             cue_ids.add(cue_id)
         if cue.get("kind") not in SOUND_KINDS:
             errors.append(f"{label} has unsupported kind {cue.get('kind')!r}")
+        coverage_role = cue.get("coverage_role")
+        if coverage_role is not None and coverage_role not in COVERAGE_ROLES:
+            errors.append(
+                f"{label}.coverage_role must be 'base', 'section', or omitted"
+            )
 
         anchor = cue.get("anchor")
         if not isinstance(anchor, dict):
@@ -96,6 +127,17 @@ def validate_sound_design(
         transcript_label = cue.get("transcript_label")
         if not isinstance(transcript_label, str) or not transcript_label.strip():
             errors.append(f"{label}.transcript_label must be a non-empty string")
+        caption_duration = cue.get("caption_duration_ms")
+        if (
+            caption_duration is not None
+            and (
+                not isinstance(caption_duration, int)
+                or not 500 <= caption_duration <= 30000
+            )
+        ):
+            errors.append(
+                f"{label}.caption_duration_ms must be an integer from 500 to 30000"
+            )
 
         provenance = cue.get("provenance")
         if not isinstance(provenance, dict):
@@ -131,10 +173,10 @@ def validate_sound_design(
             )
             if (
                 not isinstance(generation_duration, int)
-                or not 100 <= generation_duration <= 30000
+                or not 500 <= generation_duration <= 30000
             ):
                 errors.append(
-                    f"{label}.source.generation_duration_ms must be from 100 to 30000"
+                    f"{label}.source.generation_duration_ms must be from 500 to 30000"
                 )
         elif source_type == "licensed":
             for field in ("path", "license", "credit"):
@@ -147,6 +189,37 @@ def validate_sound_design(
                 f"{label} editorial note may imply that designed audio is historical evidence"
             )
 
+    if isinstance(continuous_background, dict):
+        base_cue_id = continuous_background.get("base_cue_id")
+        base_cues = [
+            cue
+            for cue in cues
+            if isinstance(cue, dict) and cue.get("coverage_role") == "base"
+        ]
+        if len(base_cues) != 1:
+            errors.append(
+                "continuous_background requires exactly one cue with "
+                "coverage_role 'base'"
+            )
+        elif base_cues[0].get("cue_id") != base_cue_id:
+            errors.append(
+                "continuous_background.base_cue_id must identify the base cue"
+            )
+        elif base_cues[0].get("loop") is not True:
+            errors.append("continuous background base cue must be loopable")
+        section_cues = [
+            cue
+            for cue in cues
+            if isinstance(cue, dict) and cue.get("coverage_role") == "section"
+        ]
+        if not section_cues:
+            errors.append("continuous_background requires at least one section cue")
+        for cue in section_cues:
+            if cue.get("loop") is not True:
+                errors.append(
+                    f"section cue {cue.get('cue_id')!r} must be loopable"
+                )
+
     return {
         "valid": not errors,
         "episode_id": script.get("episode_id"),
@@ -158,6 +231,7 @@ def validate_sound_design(
             and isinstance(cue.get("source"), dict)
             and cue["source"].get("type") == "generated"
         ),
+        "continuous_background": isinstance(continuous_background, dict),
         "errors": errors,
         "warnings": warnings,
     }
@@ -226,12 +300,32 @@ def resolve_sound_cues(
     timeline_segments: list[dict[str, Any]],
     sfx_jobs_path: Path | None = None,
 ) -> list[dict[str, Any]]:
+    return resolve_soundscape(
+        sound_design_path,
+        timeline_segments,
+        sfx_jobs_path,
+    )["cues"]
+
+
+def resolve_soundscape(
+    sound_design_path: Path,
+    timeline_segments: list[dict[str, Any]],
+    sfx_jobs_path: Path | None = None,
+) -> dict[str, Any]:
     sound_design = load_json(sound_design_path)
     segment_by_id = {
         segment["segment_id"]: segment
         for segment in timeline_segments
         if isinstance(segment, dict) and "segment_id" in segment
     }
+    episode_duration_ms = max(
+        (
+            int(segment.get("end_ms", 0))
+            for segment in timeline_segments
+            if isinstance(segment, dict)
+        ),
+        default=0,
+    )
     generated_assets = _read_generated_assets(sfx_jobs_path)
     resolved: list[dict[str, Any]] = []
     for cue in sound_design.get("cues", []):
@@ -264,25 +358,96 @@ def resolve_sound_cues(
             raise FileNotFoundError(
                 f"Sound asset for cue {cue['cue_id']!r} does not exist: {asset_path}"
             )
+        coverage_role = cue.get("coverage_role")
+        if coverage_role == "base":
+            start_ms = 0
+            duration_ms = episode_duration_ms
+        else:
+            duration_ms = cue["duration_ms"]
         resolved.append(
             {
                 "cue_id": cue["cue_id"],
                 "kind": cue["kind"],
+                "coverage_role": coverage_role,
                 "start_ms": start_ms,
-                "end_ms": start_ms + cue["duration_ms"],
-                "duration_ms": cue["duration_ms"],
+                "end_ms": start_ms + duration_ms,
+                "duration_ms": duration_ms,
                 "gain_db": cue["gain_db"],
                 "fade_in_ms": cue.get("fade_in_ms", 0),
                 "fade_out_ms": cue.get("fade_out_ms", 0),
                 "loop": cue["loop"],
                 "duck_under_dialogue": cue["duck_under_dialogue"],
                 "transcript_label": cue["transcript_label"],
+                "caption_duration_ms": cue.get("caption_duration_ms"),
                 "asset_audio": str(asset_path),
                 "source_type": source["type"],
                 "provenance": cue["provenance"],
             }
         )
-    return sorted(resolved, key=lambda cue: (cue["start_ms"], cue["cue_id"]))
+
+    continuous = sound_design.get("continuous_background")
+    suppressed: list[dict[str, Any]] = []
+    if isinstance(continuous, dict) and continuous.get("enabled") is True:
+        minimum_span_ms = int(continuous["minimum_specific_span_ms"])
+        section_cues = sorted(
+            (
+                cue
+                for cue in resolved
+                if cue.get("coverage_role") == "section"
+            ),
+            key=lambda cue: (cue["start_ms"], cue["cue_id"]),
+        )
+        retained_sections: list[dict[str, Any]] = []
+        for index, cue in enumerate(section_cues):
+            next_start_ms = (
+                section_cues[index + 1]["start_ms"]
+                if index + 1 < len(section_cues)
+                else episode_duration_ms
+            )
+            raw_span_ms = max(0, next_start_ms - cue["start_ms"])
+            if raw_span_ms < minimum_span_ms:
+                suppressed.append(
+                    {
+                        "cue_id": cue["cue_id"],
+                        "start_ms": cue["start_ms"],
+                        "raw_span_ms": raw_span_ms,
+                        "reason": "short_span_inherits_previous",
+                    }
+                )
+            else:
+                retained_sections.append(cue)
+
+        retained_ids = {cue["cue_id"] for cue in retained_sections}
+        resolved = [
+            cue
+            for cue in resolved
+            if cue.get("coverage_role") != "section"
+            or cue["cue_id"] in retained_ids
+        ]
+        for index, cue in enumerate(retained_sections):
+            next_start_ms = (
+                retained_sections[index + 1]["start_ms"]
+                if index + 1 < len(retained_sections)
+                else episode_duration_ms
+            )
+            cue["duration_ms"] = max(0, next_start_ms - cue["start_ms"])
+            cue["end_ms"] = next_start_ms
+
+    return {
+        "cues": sorted(
+            resolved,
+            key=lambda cue: (cue["start_ms"], cue["cue_id"]),
+        ),
+        "continuous": isinstance(continuous, dict)
+        and continuous.get("enabled") is True,
+        "episode_duration_ms": episode_duration_ms,
+        "suppressed_section_cues": suppressed,
+        "short_span_policy": (
+            continuous.get("short_span_policy")
+            if isinstance(continuous, dict)
+            else None
+        ),
+    }
 
 
 def _read_generated_assets(path: Path | None) -> dict[str, Path]:

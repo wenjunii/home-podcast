@@ -102,8 +102,8 @@ configured rate, and remain ignored under
 
 A Creative+ follow-up preserves the same eight turns while strengthening
 timing, emotional contrast, and nonverbal delivery. It runs 115.41 seconds and
-used 1,884 credits. The next gate is choosing Creative or Creative+ before
-adapting the full 128-turn render to contextual dialogue chunks.
+used 1,884 credits. Creative+ is selected for the pilot; the next speech step
+is adapting the full 128-turn render to contextual dialogue chunks.
 
 The approved pilot cast remains frozen regardless of that choice. A separate
 nine-voice, same-script accent audition has been generated at 192 kbps for
@@ -113,28 +113,37 @@ English. These candidates do not enter rotation until listening review.
 
 ## Pilot sound design
 
-The episode now has a separate 11-cue sound-design map. It uses sparse paper,
-machine, distance, threshold, material-memory, and digital-fragment textures
-rather than a continuous background bed. Every cue is explicitly illustrative;
-none is presented as a recording from the archived stories.
+The episode now has a 13-cue continuous soundscape map: one nearly subliminal
+full-episode base bed, seven long thematic beds, and five structural or spot
+cues. Every cue is explicitly illustrative; none is presented as a recording
+from the archived stories.
 
-The prompts request 74 seconds of generated source audio. If ElevenLabs Sound
-Effects v2 is selected, the currently published specified-duration rule implies
-about 814 credits for one pass or about 1,221 credits with the same 1.5x retake
-allowance used for speech. This is separate from TTS cost and should be
-rechecked before generation.
+The eight background sources were generated as 30-second seamless loops, the
+maximum supported duration. Their conservative API ceiling was 2,640 credits;
+the five fixed cues reuse the prior cache. The final renderer extends each
+thematic bed to the next eligible handoff. A handoff shorter than 15 seconds is
+discarded and the preceding bed continues.
+
+The pilot will deliver two synchronized primary tracks:
+
+- voices only
+- non-human soundscape only
+
+A combined mix remains available for review. The soundscape-only track has a
+basic background for the entire speech timeline, even where no specific
+description calls for a new sound.
 
 See [SOUND_DESIGN.md](SOUND_DESIGN.md) for the cue palette, provenance policy,
 workflow, and official provider references.
 
 ## Recommended spend sequence
 
-1. Compare the Creative and Creative+ contextual dialogue auditions.
-2. Score the nine international English voice samples for future episodes.
-3. Approve the illustrative sound-design map and source-excerpt policy.
-4. Generate the selected themed sub-episode segment by segment with the frozen
+1. Score the nine international English voice samples for future episodes.
+2. Review the eight new 30-second continuous sound beds.
+3. Approve the source-excerpt policy.
+4. Generate the Creative+ themed sub-episode segment by segment with the frozen
    pilot cast.
-5. Render the full speech-and-sound mix.
+5. Render the voices-only track, non-human-only track, and combined review mix.
 6. Run loudness, clipping, transcript, source-map, and listening QA.
 
 ## Pricing sources

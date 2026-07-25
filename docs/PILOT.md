@@ -68,6 +68,9 @@ Confirmed:
 - coverage policy: use all 27 selected stories, at different depths
 - host format: three natural, friend-like hosts with a frozen rotating cast
 - pilot cast: Maya/Bella, Theo/Roger, and Lina/Lily
+- pilot performance style: Creative+
+- audio deliverables: synchronized voices-only and non-human-only tracks
+- non-human coverage: continuous base bed with long thematic handoffs
 - future cast policy: rotating people and verified accents, frozen per episode
 - speech subscription: ElevenLabs Creator, with 192 kbps production output
 - on-air host-generation disclosure: omitted
@@ -76,7 +79,7 @@ Confirmed:
 Still confirm before final audio generation:
 
 - public series title (the current title is a working title)
-- final approval of the 11-cue illustrative sound-design map
+- final listening approval of the 13-cue continuous soundscape map
 - final approval of ElevenLabs-generated effect candidates and any licensed replacements
 - publication/licensing policy for source excerpts
 - sensitivity and translation review standard
