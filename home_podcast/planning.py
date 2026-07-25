@@ -238,7 +238,18 @@ def snapshot_crawl_month(
     output_path: Path,
     *,
     analyzed_only: bool = False,
+    primary_theme: str | None = None,
 ) -> tuple[dict[str, Any], bool]:
+    if primary_theme is not None:
+        allowed_themes = {
+            theme["slug"] for theme in config.load_themes()["themes"]
+        }
+        if primary_theme not in allowed_themes:
+            raise ValueError(
+                f"Unknown primary theme {primary_theme!r}; "
+                f"expected one of {sorted(allowed_themes)}"
+            )
+    require_analysis = analyzed_only or primary_theme is not None
     connection = connect(config.catalog_path)
     analysis_condition = (
         """
@@ -249,24 +260,46 @@ def snapshot_crawl_month(
                   AND c.content_hash = stories.content_hash
            )
         """
-        if analyzed_only
+        if require_analysis
         else ""
     )
     rows = connection.execute(
         f"""
-        SELECT id, content_hash, language, crawl_dataset, crawl_timestamp
+        SELECT stories.id, stories.content_hash, stories.language,
+               stories.crawl_dataset, stories.crawl_timestamp,
+               (
+                   SELECT c.card_json
+                     FROM story_cards AS c
+                    WHERE c.story_id = stories.id
+                      AND c.content_hash = stories.content_hash
+                    ORDER BY c.created_at DESC
+                    LIMIT 1
+               ) AS card_json
           FROM stories
-         WHERE is_present = 1
-           AND duplicate_of IS NULL
-           AND crawl_month = ?
+         WHERE stories.is_present = 1
+           AND stories.duplicate_of IS NULL
+           AND stories.crawl_month = ?
            {analysis_condition}
-         ORDER BY crawl_timestamp, language, id
+         ORDER BY stories.crawl_timestamp, stories.language, stories.id
         """,
         (month,),
     ).fetchall()
     connection.close()
+    if primary_theme is not None:
+        rows = [
+            row
+            for row in rows
+            if row["card_json"]
+            and (card := json.loads(row["card_json"])).get("eligible", False)
+            and card.get("primary_theme") == primary_theme
+        ]
     if not rows:
-        raise ValueError(f"No present, unique stories found for crawl month {month}")
+        scope = (
+            f" and primary theme {primary_theme}" if primary_theme else ""
+        )
+        raise ValueError(
+            f"No present, unique stories found for crawl month {month}{scope}"
+        )
     snapshot = {
         "contract_version": 1,
         "kind": "crawl_month_cohort",
@@ -274,10 +307,15 @@ def snapshot_crawl_month(
         "crawl_month": month,
         "story_count": len(rows),
         "snapshot_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "primary_theme": primary_theme,
         "selection_policy": (
-            "present unique stories with a current story card"
-            if analyzed_only
-            else "all present unique stories"
+            f"eligible analyzed stories with primary theme {primary_theme}"
+            if primary_theme
+            else (
+                "present unique stories with a current story card"
+                if analyzed_only
+                else "all present unique stories"
+            )
         ),
         "capture_time_basis": (
             "Timestamp embedded in Source File. For this December 2013 cohort it "

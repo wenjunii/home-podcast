@@ -218,7 +218,19 @@ class PlanningTests(unittest.TestCase):
                 fixture("First story.", SECOND), encoding="utf-8"
             )
             (root / "themes.json").write_text(
-                json.dumps({"themes": []}), encoding="utf-8"
+                json.dumps(
+                    {
+                        "themes": [
+                            {
+                                "slug": "memory-archive",
+                                "name": "Memory and Archive",
+                                "description": "Remembering home.",
+                                "archaeology_questions": ["Why did this survive?"],
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
             )
             (root / "bible.json").write_text(
                 json.dumps({"hosts": []}), encoding="utf-8"
@@ -250,7 +262,11 @@ class PlanningTests(unittest.TestCase):
                 INSERT INTO story_cards (
                     story_id, content_hash, analyzer, analyzer_version,
                     card_json, created_at
-                ) VALUES (?, ?, 'test', '1', '{}', '2026-01-01T00:00:00Z')
+                ) VALUES (
+                    ?, ?, 'test', '1',
+                    '{"eligible": true, "primary_theme": "memory-archive"}',
+                    '2026-01-01T00:00:00Z'
+                )
                 """,
                 (analyzed["id"], analyzed["content_hash"]),
             )
@@ -270,6 +286,16 @@ class PlanningTests(unittest.TestCase):
                 "present unique stories with a current story card",
             )
             self.assertEqual(cohort["stories"][0]["story_id"], analyzed["id"])
+
+            themed, _ = snapshot_crawl_month(
+                config,
+                "2013-05",
+                "theme-pilot",
+                root / "theme-pilot.json",
+                primary_theme="memory-archive",
+            )
+            self.assertEqual(themed["story_count"], 1)
+            self.assertEqual(themed["primary_theme"], "memory-archive")
 
     def test_single_episode_plan_combines_all_eligible_stories(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

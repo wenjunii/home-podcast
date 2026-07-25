@@ -83,8 +83,8 @@ credential only through the process environment:
 $env:CAPRIOLE_API_KEY = Read-Host -MaskInput "Capriole API key"
 ```
 
-The complete December snapshot is preserved separately, while the official
-budget-limited pilot contains only the 91 stories whose analysis completed:
+The complete December snapshot, analyzed pool, and one-theme pilot are frozen
+separately:
 
 ```powershell
 python -m home_podcast snapshot-volume `
@@ -93,8 +93,13 @@ python -m home_podcast snapshot-volume `
 
 python -m home_podcast snapshot-volume `
   --month 2013-12 `
-  --label pilot `
+  --label analyzed-pool `
   --analyzed-only
+
+python -m home_podcast snapshot-volume `
+  --month 2013-12 `
+  --label pilot `
+  --theme exile-return-nostalgia
 
 python -m home_podcast export-analysis `
   --cohort .\cohorts\2013-12-pilot.json `
@@ -105,9 +110,10 @@ python -m home_podcast analyze `
   --workers 3
 ```
 
-For the current pilot, all 91 selected records already have story cards, so no
-additional analysis request is required. The remaining 330 December stories
-stay in `cohorts/2013-12-full-corpus.json` for future work.
+For the current pilot, all 27 selected records already have story cards, so no
+additional analysis request is required. The other 64 analyzed stories remain
+in `cohorts/2013-12-analyzed-pool.json`; the complete 421-story corpus remains
+in `cohorts/2013-12-full-corpus.json`.
 
 The analyzer caches each completed model response separately and imports it
 immediately. Rerunning the command skips completed work and retries only
@@ -164,15 +170,12 @@ After the month has story cards:
 ```powershell
 python -m home_podcast plan `
   --month 2013-12 `
-  --cohort .\cohorts\2013-12-pilot.json `
-  --single-episode `
-  --title "91 Fragments of Home"
+  --cohort .\cohorts\2013-12-pilot.json
 ```
 
-The pilot proposal assigns all 91 eligible stories to one episode. Their
-primary themes remain attached so the script can arrange them into three
-internal acts. Stories are not silently discarded: the proposal reports
-assigned, unanalyzed, and ineligible records separately.
+The pilot cohort contains only the selected theme, so the regular multi-theme
+planner produces one installment containing all 27 eligible stories. Future
+cohorts can still produce multiple themed sub-episodes.
 
 The proposal is editorial input, not a published manifest. During the pilot,
 lock the preferred installment before script generation:
@@ -229,8 +232,8 @@ regeneration.
 
 The current speech-provider shortlist and pilot audition recommendation are in
 [docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).
-The 91-story first wave and its TTS cost model are in
-[docs/PILOT_WAVE_1.md](docs/PILOT_WAVE_1.md).
+The selected one-theme pilot and its TTS cost model are in
+[docs/PILOT_EPISODE.md](docs/PILOT_EPISODE.md).
 
 Once every clip exists:
 

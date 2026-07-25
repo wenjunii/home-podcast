@@ -43,9 +43,10 @@ Do not clone an identifiable real person without permission.
 The researched shortlist and recommended bakeoff are recorded in
 [SPEECH_PROVIDERS.md](SPEECH_PROVIDERS.md).
 
-The first 91 completed story cards are the official budget-limited pilot.
-Its single-episode, three-act structure and TTS budget are recorded in
-[PILOT_WAVE_1.md](PILOT_WAVE_1.md).
+The 91 completed story cards form the analyzed production pool. The official
+budget-limited pilot selects its strongest single theme: 27 stories about
+Exile, Return, and Nostalgia. Its episode structure and TTS budget are recorded
+in [PILOT_EPISODE.md](PILOT_EPISODE.md).
 
 ## 3. Editorial choices
 
@@ -53,10 +54,12 @@ Confirmed:
 
 - primary spoken language: English
 - pilot crawl month: December 2013
-- frozen pilot cohort: 91 analyzed English-language stories
-- complete December backlog: 421 stories, with 330 deferred
-- pilot release: one approximately 55-minute episode with three internal acts
-- coverage policy: use all eligible stories, at different depths
+- analyzed production pool: 91 English-language stories
+- frozen pilot cohort: 27 stories in Exile, Return, and Nostalgia
+- complete December corpus: 421 stories
+- deferred after the pilot: 64 analyzed stories and 330 unanalyzed stories
+- pilot release: one approximately 30-minute themed sub-episode
+- coverage policy: use all 27 selected stories, at different depths
 - host format: three disclosed synthetic hosts
 - AI budget preference: premium
 

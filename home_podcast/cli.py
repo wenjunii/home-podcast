@@ -59,6 +59,10 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Freeze only stories that already have a current story card",
     )
+    snapshot.add_argument(
+        "--theme",
+        help="Freeze only eligible analyzed stories with this primary theme",
+    )
     snapshot.add_argument("--output", help="Cohort JSON path")
 
     analyze = subparsers.add_parser(
@@ -182,6 +186,7 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             args.label,
             output,
             analyzed_only=args.analyzed_only,
+            primary_theme=args.theme,
         )
         return {
             "output": str(output),
