@@ -81,7 +81,15 @@ The configured analysis and script model is Capriole Fable 5. Supply its
 credential only through the process environment:
 
 ```powershell
-$env:CAPRIOLE_API_KEY = Read-Host -MaskInput "Capriole API key"
+$secureKey = Read-Host "Capriole API key" -AsSecureString
+$keyPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
+try {
+  $env:CAPRIOLE_API_KEY = `
+    [Runtime.InteropServices.Marshal]::PtrToStringBSTR($keyPointer)
+} finally {
+  [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($keyPointer)
+}
+Remove-Variable secureKey, keyPointer
 ```
 
 The complete December snapshot, analyzed pool, and one-theme pilot are frozen

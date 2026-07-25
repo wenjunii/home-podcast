@@ -117,7 +117,15 @@ The command is a dry run unless `--execute` is present. Paid generation also
 requires an explicit ceiling:
 
 ```powershell
-$env:ELEVENLABS_API_KEY = Read-Host -MaskInput "ElevenLabs API key"
+$secureKey = Read-Host "ElevenLabs API key" -AsSecureString
+$keyPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
+try {
+  $env:ELEVENLABS_API_KEY = `
+    [Runtime.InteropServices.Marshal]::PtrToStringBSTR($keyPointer)
+} finally {
+  [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($keyPointer)
+}
+Remove-Variable secureKey, keyPointer
 
 python -m home_podcast generate-sfx `
   --jobs .\work\sfx\2013-12.01-jobs.jsonl `
