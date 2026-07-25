@@ -36,7 +36,7 @@
     "api_key_env": "ELEVENLABS_API_KEY",
     "timeout_seconds": 180,
     "max_attempts": 4,
-    "output_format": "mp3_44100_128",
+    "output_format": "mp3_44100_192",
     "language_code": "en",
     "voice_settings": {
       "stability": 0.5,
@@ -54,7 +54,7 @@
     "api_key_env": "ELEVENLABS_API_KEY",
     "timeout_seconds": 180,
     "max_attempts": 4,
-    "output_format": "mp3_44100_128",
+    "output_format": "mp3_44100_192",
     "language_code": "en",
     "credits_per_character": 1,
     "usd_per_thousand_characters": 0.1

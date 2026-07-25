@@ -10,21 +10,24 @@
       "person_id": "maya",
       "display_name": "Maya",
       "voice_name": "Bella",
-      "voice_id": "hpp4J3VqNfWAUOO0d1Us"
+      "voice_id": "hpp4J3VqNfWAUOO0d1Us",
+      "accent": "american"
     },
     {
       "id": "archive_nerd",
       "person_id": "theo",
       "display_name": "Theo",
       "voice_name": "Roger",
-      "voice_id": "CwhRBWXzGAHq8TQ4Fs17"
+      "voice_id": "CwhRBWXzGAHq8TQ4Fs17",
+      "accent": "american"
     },
     {
       "id": "connector",
       "person_id": "lina",
       "display_name": "Lina",
       "voice_name": "Lily",
-      "voice_id": "pFZP5JQG7iQjIQuC4Bku"
+      "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+      "accent": "british"
     }
   ]
 }

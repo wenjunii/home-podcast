@@ -62,7 +62,14 @@ def generate_tts_jobs(
         "failed": 0,
         "remaining": len(pending_jobs),
         "failures": [],
+        "previews": [
+            str(job["preview_mp3"])
+            for job in jobs
+            if isinstance(job.get("preview_mp3"), str)
+        ],
     }
+    for job in cached_jobs:
+        _copy_preview(job)
     if not execute or not pending_jobs:
         return report
     if paid_jobs and max_credits is None:
@@ -122,6 +129,7 @@ def generate_tts_jobs(
                     },
                 )
                 report["generated"] += 1
+            _copy_preview(job)
             completed_pending += 1
             print(
                 f"[{completed_pending}/{len(pending_jobs)}] generated TTS {segment_id}",
@@ -203,6 +211,19 @@ def _raw_path(job: dict[str, Any]) -> Path:
     return Path(job["output_audio"]).expanduser().resolve().with_suffix(
         ".response.mp3"
     )
+
+
+def _copy_preview(job: dict[str, Any]) -> None:
+    preview_value = job.get("preview_mp3")
+    if not isinstance(preview_value, str) or not preview_value.strip():
+        return
+    raw_path = _raw_path(job)
+    if not raw_path.is_file():
+        return
+    preview_path = Path(preview_value).expanduser().resolve()
+    preview_path.parent.mkdir(parents=True, exist_ok=True)
+    if not preview_path.is_file() or preview_path.stat().st_size != raw_path.stat().st_size:
+        shutil.copyfile(raw_path, preview_path)
 
 
 def _normalize_to_wav(ffmpeg: str, raw_path: Path, output_path: Path) -> None:

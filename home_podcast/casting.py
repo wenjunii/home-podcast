@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import itertools
 import json
 from pathlib import Path
 from typing import Any
@@ -25,23 +26,59 @@ def create_episode_cast(
 
     seed_basis = f"episode-cast-v1:{episode_id}"
     role_by_id = {role["id"]: role for role in roster["roles"]}
-    hosts = []
-    for role_id in EXPECTED_ROLES:
-        candidates = role_by_id[role_id]["candidates"]
-        digest = hashlib.sha256(
-            f"{seed_basis}:{role_id}".encode("utf-8")
-        ).digest()
-        selected = candidates[int.from_bytes(digest[:8], "big") % len(candidates)]
-        hosts.append({"id": role_id, **selected})
+    combinations = itertools.product(
+        *(role_by_id[role_id]["candidates"] for role_id in EXPECTED_ROLES)
+    )
+    valid_combinations = [
+        combination
+        for combination in combinations
+        if len({candidate["person_id"] for candidate in combination})
+        == len(EXPECTED_ROLES)
+        and len({candidate["voice_id"] for candidate in combination})
+        == len(EXPECTED_ROLES)
+    ]
+    if not valid_combinations:
+        raise ValueError("Voice roster has no valid three-person cast")
+    maximum_accent_diversity = max(
+        len({candidate["accent"] for candidate in combination})
+        for combination in valid_combinations
+    )
+    accent_diverse_combinations = [
+        combination
+        for combination in valid_combinations
+        if len({candidate["accent"] for candidate in combination})
+        == maximum_accent_diversity
+    ]
+
+    def selection_key(combination: tuple[dict[str, Any], ...]) -> str:
+        lineup = ":".join(candidate["person_id"] for candidate in combination)
+        return hashlib.sha256(f"{seed_basis}:{lineup}".encode("utf-8")).hexdigest()
+
+    selected_combination = min(
+        accent_diverse_combinations,
+        key=selection_key,
+    )
+    hosts = [
+        {"id": role_id, **selected}
+        for role_id, selected in zip(
+            EXPECTED_ROLES,
+            selected_combination,
+            strict=True,
+        )
+    ]
 
     episode_cast = {
         "contract_version": 1,
         "episode_id": episode_id,
         "provider": roster["provider"],
-        "selection": "deterministic_episode_rotation",
+        "selection": "deterministic_accent_aware_episode_rotation",
         "selection_seed_sha256": hashlib.sha256(
             seed_basis.encode("utf-8")
         ).hexdigest(),
+        "accent_diversity": {
+            "distinct_accents": maximum_accent_diversity,
+            "accents": sorted({host["accent"] for host in hosts}),
+        },
         "status": "selected",
         "hosts": hosts,
     }
@@ -86,7 +123,13 @@ def validate_episode_cast(
     voice_ids: set[str] = set()
     display_names: set[str] = set()
     for host in hosts:
-        for field in ("person_id", "display_name", "voice_name", "voice_id"):
+        for field in (
+            "person_id",
+            "display_name",
+            "voice_name",
+            "voice_id",
+            "accent",
+        ):
             if not isinstance(host.get(field), str) or not host[field].strip():
                 raise ValueError(f"Episode cast host {host.get('id')!r} needs {field}")
         if host["person_id"] in person_ids:
@@ -115,8 +158,8 @@ def _validate_roster(roster: dict[str, Any]) -> None:
         raise ValueError(
             f"Voice roster roles must be {', '.join(EXPECTED_ROLES)}"
         )
-    all_people: set[str] = set()
-    all_voices: set[str] = set()
+    people: dict[str, dict[str, str]] = {}
+    voices: dict[str, dict[str, str]] = {}
     for role_id in EXPECTED_ROLES:
         candidates = role_by_id[role_id].get("candidates")
         if not isinstance(candidates, list) or len(candidates) < 2:
@@ -126,7 +169,13 @@ def _validate_roster(roster: dict[str, Any]) -> None:
         for candidate in candidates:
             if not isinstance(candidate, dict):
                 raise ValueError(f"Voice roster role {role_id!r} has an invalid candidate")
-            for field in ("person_id", "display_name", "voice_name", "voice_id"):
+            for field in (
+                "person_id",
+                "display_name",
+                "voice_name",
+                "voice_id",
+                "accent",
+            ):
                 if (
                     not isinstance(candidate.get(field), str)
                     or not candidate[field].strip()
@@ -134,16 +183,28 @@ def _validate_roster(roster: dict[str, Any]) -> None:
                     raise ValueError(
                         f"Voice roster candidate for {role_id!r} needs {field}"
                     )
-            if candidate["person_id"] in all_people:
-                raise ValueError(
-                    f"Duplicate roster person_id {candidate['person_id']!r}"
+            identity = {
+                field: candidate[field]
+                for field in (
+                    "person_id",
+                    "display_name",
+                    "voice_name",
+                    "voice_id",
+                    "accent",
                 )
-            if candidate["voice_id"] in all_voices:
+            }
+            person_id = candidate["person_id"]
+            voice_id = candidate["voice_id"]
+            if person_id in people and people[person_id] != identity:
                 raise ValueError(
-                    f"Duplicate roster voice_id {candidate['voice_id']!r}"
+                    f"Inconsistent roster person_id {person_id!r} across roles"
                 )
-            all_people.add(candidate["person_id"])
-            all_voices.add(candidate["voice_id"])
+            if voice_id in voices and voices[voice_id] != identity:
+                raise ValueError(
+                    f"Inconsistent roster voice_id {voice_id!r} across roles"
+                )
+            people[person_id] = identity
+            voices[voice_id] = identity
 
 
 def _load_object(path: Path) -> dict[str, Any]:

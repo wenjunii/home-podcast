@@ -44,6 +44,7 @@ def prepare_dialogue_audition_jobs(
         host["id"]: {
             "voice_id": host["voice_id"],
             "display_name": host["display_name"],
+            "accent": host["accent"],
         }
         for host in episode_cast["hosts"]
     }
@@ -75,6 +76,7 @@ def prepare_dialogue_audition_jobs(
                 "speaker": speaker,
                 "display_name": voices[speaker]["display_name"],
                 "voice_id": voices[speaker]["voice_id"],
+                "accent": voices[speaker]["accent"],
                 "text": text,
             }
         )

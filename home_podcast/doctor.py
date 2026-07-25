@@ -86,6 +86,33 @@ def run_doctor(config: ProjectConfig) -> dict[str, Any]:
         else f"Incomplete rotating roles: {', '.join(uncast_roles) or 'unknown'}",
         required=False,
     )
+    role_accents = {
+        str(role.get("id", "unknown")): {
+            str(candidate.get("accent", "")).strip().casefold()
+            for candidate in role.get("candidates", [])
+            if isinstance(candidate, dict)
+            and str(candidate.get("accent", "")).strip()
+        }
+        for role in roster_roles
+        if isinstance(role, dict)
+    }
+    all_accents = set().union(*role_accents.values()) if role_accents else set()
+    accent_ready = (
+        len(role_accents) == 3
+        and all(len(accents) >= 2 for accents in role_accents.values())
+        and len(all_accents) >= 3
+    )
+    add(
+        "accent_aware_voice_roster",
+        accent_ready,
+        (
+            f"{len(all_accents)} verified accents; every host role can rotate "
+            "across at least two"
+        )
+        if accent_ready
+        else "Accent rotation needs three verified accents and two per host role",
+        required=False,
+    )
     ingest_check_names = {"story_exports", "themes", "show_bible", "voice_roster"}
     return {
         "ready_for_ingest": all(
@@ -94,7 +121,13 @@ def run_doctor(config: ProjectConfig) -> dict[str, Any]:
         "ready_for_audio_render": all(
             check["ok"]
             for check in checks
-            if check["name"] in {"ffmpeg", "ffprobe", "rotating_voice_roster"}
+            if check["name"]
+            in {
+                "ffmpeg",
+                "ffprobe",
+                "rotating_voice_roster",
+                "accent_aware_voice_roster",
+            }
         ),
         "checks": checks,
     }

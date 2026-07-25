@@ -419,6 +419,9 @@ def _write_voice_roster(path: Path) -> None:
                                 "display_name": f"{role}-{index}",
                                 "voice_name": f"Voice {index}",
                                 "voice_id": f"voice-{role}-{index}",
+                                "accent": (
+                                    "american" if index == 0 else "british"
+                                ),
                             }
                             for index in range(2)
                         ],

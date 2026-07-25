@@ -1,0 +1,201 @@
+{
+  "contract_version": 1,
+  "provider": "elevenlabs",
+  "screening_policy": {
+    "required_language": "en",
+    "minimum_notice_period_days": 365,
+    "maximum_credit_rate": 1,
+    "admit_to_rotation_only_after_listening_review": true
+  },
+  "candidates": [
+    {
+      "candidate_id": "irish-jessica",
+      "display_name": "Jessica",
+      "voice_name": "Jessica Gallagher - Clear and Neutral",
+      "voice_id": "DbwWo4rVEd5NrejHYUnm",
+      "public_owner_id": "6bff1e8929a62ecb7a6d3034c63b96fe6e8b5ffe94495a33b690a25f5946035c",
+      "accent": "irish",
+      "locale": "en-IE",
+      "gender": "female",
+      "age": "middle-aged",
+      "character": "confident",
+      "use_case": "informative and educational",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "curious_guide",
+        "archive_nerd"
+      ],
+      "status": "metadata_screened"
+    },
+    {
+      "candidate_id": "scottish-isla",
+      "display_name": "Isla",
+      "voice_name": "Isla - Youthful, Relaxed, and Warm",
+      "voice_id": "h8eW5xfRUGVJrZhAFxqK",
+      "public_owner_id": "5bef9583ed80e9300f3cb1fbdcad0e849f658837038f9625845d8aaa06c5c8ec",
+      "accent": "scottish",
+      "locale": "en-GB",
+      "gender": "female",
+      "age": "middle-aged",
+      "character": "relaxed",
+      "use_case": "conversational",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "curious_guide",
+        "connector"
+      ],
+      "status": "metadata_screened"
+    },
+    {
+      "candidate_id": "indian-monika",
+      "display_name": "Monika",
+      "voice_name": "Monika Sogam - Deep and Natural",
+      "voice_id": "2zRM7PkgwBPiau2jvVXc",
+      "public_owner_id": "f87f057c2250691953ac2e6227859706764bd08c88a055a18c74261957885a51",
+      "accent": "indian english",
+      "locale": "en-IN",
+      "gender": "female",
+      "age": "young",
+      "character": "pleasant",
+      "use_case": "social media",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "curious_guide",
+        "connector"
+      ],
+      "status": "metadata_screened"
+    },
+    {
+      "candidate_id": "south-african-thandi",
+      "display_name": "Thandi",
+      "voice_name": "Thandi - Clear and Engaging Narrator",
+      "voice_id": "BcpjRWrYhDBHmOnetmBl",
+      "public_owner_id": "484d02720295084a253dbe6f98f74ded11b94803caac664e616abb62b11f5554",
+      "accent": "south african english",
+      "locale": "en-ZA",
+      "gender": "female",
+      "age": "young",
+      "character": "professional",
+      "use_case": "narrative story",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "archive_nerd",
+        "connector"
+      ],
+      "status": "metadata_screened"
+    },
+    {
+      "candidate_id": "nigerian-stella",
+      "display_name": "Stella",
+      "voice_name": "Stella - Warm and Natural",
+      "voice_id": "2vbhUP8zyKg4dEZaTWGn",
+      "public_owner_id": "a57f1d90294002273862dd0f1c00e7e6a9f2e67a1e28230f4e4891658d86fd95",
+      "accent": "nigerian english",
+      "locale": "en-NG",
+      "gender": "female",
+      "age": "young",
+      "character": "casual",
+      "use_case": "conversational",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "curious_guide",
+        "connector"
+      ],
+      "status": "metadata_screened"
+    },
+    {
+      "candidate_id": "canadian-danielle",
+      "display_name": "Danielle",
+      "voice_name": "Danielle - Gentle and Engaging Narrator",
+      "voice_id": "FVQMzxJGPUBtfz1Azdoy",
+      "public_owner_id": "d889c1cdba465a81fc8850d5bfee402977934f5613b9378af4c4e811b24092d0",
+      "accent": "canadian",
+      "locale": "en-CA",
+      "gender": "female",
+      "age": "young",
+      "character": "calm",
+      "use_case": "narrative story",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "curious_guide",
+        "connector"
+      ],
+      "status": "metadata_screened"
+    },
+    {
+      "candidate_id": "french-chloe",
+      "display_name": "Chloe",
+      "voice_name": "Chloe - French Accent, Lively and Expressive",
+      "voice_id": "xNtG3W2oqJs0cJZuTyBc",
+      "public_owner_id": "09298f102c8256124b1a9105b63018af44d6529a253ef238e2a752b854e18697",
+      "accent": "french-influenced english",
+      "locale": "en-GB",
+      "gender": "female",
+      "age": "middle-aged",
+      "character": "lively",
+      "use_case": "character and animation",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "curious_guide",
+        "connector"
+      ],
+      "status": "metadata_screened"
+    },
+    {
+      "candidate_id": "spanish-ernesto",
+      "display_name": "Ernesto",
+      "voice_name": "Ernesto - Mexican-American Accent",
+      "voice_id": "ZwLTvq6uCfb4W00YFl7F",
+      "public_owner_id": "8179bdc5adf877c4d8ddbd8e9d81b9a08e7b3f34ab005f44bb3416ebf34cc395",
+      "accent": "spanish-influenced english",
+      "locale": "en-US",
+      "gender": "male",
+      "age": "young",
+      "character": "neutral",
+      "use_case": "narrative story",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "archive_nerd",
+        "connector"
+      ],
+      "status": "metadata_screened"
+    },
+    {
+      "candidate_id": "chinese-lee",
+      "display_name": "Lee",
+      "voice_name": "Lee - Youthful, Calm, and Relaxed",
+      "voice_id": "mBoVD3461U2BagYEwjeo",
+      "public_owner_id": "e257549b3e0afe3c041d515fc510e65114912d35d7c686047b7053dc89e33d9d",
+      "accent": "chinese-influenced english",
+      "locale": "en-GB",
+      "gender": "male",
+      "age": "young",
+      "character": "casual",
+      "use_case": "conversational",
+      "notice_period_days": 730,
+      "credit_rate": 1,
+      "english_verified": true,
+      "proposed_roles": [
+        "archive_nerd",
+        "connector"
+      ],
+      "status": "metadata_screened"
+    }
+  ]
+}

@@ -23,9 +23,11 @@ separate even though they use the same service.
 
 ## 2. Speech casting
 
-The pilot casting test is complete. Future episodes draw a different
+The pilot casting test is complete. Future episodes draw an accent-diverse,
 role-matched lineup from `config/voice_roster.json` and freeze the result before
-script and audio production. Casting checks should include:
+script and audio production. The pilot cast itself remains frozen. Nine
+additional international English candidates are in same-script listening
+review and are not yet eligible for rotation. Casting checks should include:
 
 - light banter
 - an emotional but restrained passage
@@ -40,6 +42,9 @@ rights, and per-episode cost.
 
 Use licensed stock voices or explicitly authorized custom voices.
 Do not clone an identifiable real person without permission.
+An accent is ordinary cast metadata, not a performance joke. Do not prompt a
+voice to imitate a nationality, and do not use accent as shorthand for a
+character's knowledge, personality, or social role.
 
 The researched shortlist and recommended bakeoff are recorded in
 [SPEECH_PROVIDERS.md](SPEECH_PROVIDERS.md).
@@ -63,6 +68,8 @@ Confirmed:
 - coverage policy: use all 27 selected stories, at different depths
 - host format: three natural, friend-like hosts with a frozen rotating cast
 - pilot cast: Maya/Bella, Theo/Roger, and Lina/Lily
+- future cast policy: rotating people and verified accents, frozen per episode
+- speech subscription: ElevenLabs Creator, with 192 kbps production output
 - on-air host-generation disclosure: omitted
 - AI budget preference: premium
 

@@ -100,8 +100,16 @@ runs 115.15 seconds. Together they cost 3,520 credits, or about $0.35 at the
 configured rate, and remain ignored under
 `work/tts/2013-12.01-expressive-dialogue-audition/`.
 
-The next gate is choosing Natural, Creative, or a revised middle setting before
+A Creative+ follow-up preserves the same eight turns while strengthening
+timing, emotional contrast, and nonverbal delivery. It runs 115.41 seconds and
+used 1,884 credits. The next gate is choosing Creative or Creative+ before
 adapting the full 128-turn render to contextual dialogue chunks.
+
+The approved pilot cast remains frozen regardless of that choice. A separate
+nine-voice, same-script accent audition has been generated at 192 kbps for
+future episodes. It covers Canadian, Chinese-influenced, French-influenced,
+Indian, Irish, Nigerian, Scottish, South African, and Spanish-influenced
+English. These candidates do not enter rotation until listening review.
 
 ## Pilot sound design
 
@@ -121,12 +129,13 @@ workflow, and official provider references.
 
 ## Recommended spend sequence
 
-1. Compare the Natural and Creative contextual dialogue auditions.
-2. Approve the illustrative sound-design map and source-excerpt policy.
-3. Generate the selected themed sub-episode segment by segment with the frozen
+1. Compare the Creative and Creative+ contextual dialogue auditions.
+2. Score the nine international English voice samples for future episodes.
+3. Approve the illustrative sound-design map and source-excerpt policy.
+4. Generate the selected themed sub-episode segment by segment with the frozen
    pilot cast.
-4. Render the full speech-and-sound mix.
-5. Run loudness, clipping, transcript, source-map, and listening QA.
+5. Render the full speech-and-sound mix.
+6. Run loudness, clipping, transcript, source-map, and listening QA.
 
 ## Pricing sources
 

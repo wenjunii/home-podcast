@@ -1,0 +1,151 @@
+{
+  "contract_version": 2,
+  "episode_id": "2013-12.01-creative-plus-dialogue-audition",
+  "cast_episode_id": "2013-12.01",
+  "title": "Creative Plus Contextual Performance Test",
+  "purpose": "A source-preserving test of stronger emotional direction, playful timing, nonverbal reactions, and a pronounced light-to-serious transition using the approved pilot cast.",
+  "variants": [
+    {
+      "id": "creative-plus",
+      "description": "Minimum stability with moderate style exaggeration and richer contextual performance direction.",
+      "settings": {
+        "stability": 0,
+        "similarity_boost": 0.75,
+        "style": 0.35,
+        "use_speaker_boost": true,
+        "speed": 1
+      }
+    }
+  ],
+  "segments": [
+    {
+      "segment_id": "m2-s007",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "But that impulse—cataloguing exactly what you miss—it doesn't go away. A blogger named Emily does the same thing in 2012, from Kenya. She's on a site called One Trailing Spouse, and she writes this list of five things she misses about the U.S. after five months abroad. And the list is so specific it's almost funny.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {
+        "tone": "animated, delighted by the specificity"
+      },
+      "pronunciation": {
+        "Kenya": "KEHN-yuh"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m2-s008",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Purple corduroy pants. Her muffin tin. Netflix.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {
+        "tone": "jumping in, perfectly deadpan",
+        "audio_tags": [
+          "chuckles"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m2-s009",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And driving—just the freedom to get in a car by herself after dark. She's candid that this is a privileged perspective, she says so. But missing the feeling of casual safety? That's real no matter how you frame it.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {
+        "tone": "gently, the smile fading into concern"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m2-s010",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "A commenter named Marina chimes in from England and says she hasn't worn completely dry clothes in nearly two years. She misses the sun. And avocados.",
+      "source_story_ids": [
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "delivery": {
+        "tone": "warmly amused",
+        "audio_tags": [
+          "laughs softly"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m2-s012",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Then there's Kathleen, on a WordPress blog called My 8×10 Life. She grew up in the rural Midwest, moved reluctantly to Brooklyn. And she writes about driving back through those Midwestern landscapes and feeling like she could finally stretch and breathe again—after months of swallowing the grit of New York.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5"
+      ],
+      "delivery": {
+        "tone": "thoughtful, breathing in the remembered space",
+        "audio_tags": [
+          "inhales deeply"
+        ]
+      },
+      "pronunciation": {
+        "Kathleen": "kath-LEEN",
+        "8×10": "eight by ten"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m2-s013",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "But she says something that really gets me. She talks about the details of home growing fuzzy, and it bothers her. Like the feelings of belonging are still sharp, but the specifics—they're slipping away.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5"
+      ],
+      "delivery": {
+        "tone": "voice softening, genuinely unsettled"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m2-s014",
+      "speaker": "connector",
+      "kind": "quote",
+      "text": "But, I don’t think I’ll ever allow myself to like it, and will never love it no matter how well I adapt to the urban life. I guess it makes me feel disloyal to my roots.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5"
+      ],
+      "delivery": {
+        "tone": "intimate, almost confessional"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "m2-s015",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "Disloyal. That word. Homesickness isn't just missing a place—it becomes a kind of moral obligation to keep missing it.",
+      "source_story_ids": [
+        "story-e58ed78f41114cade2acc8c5"
+      ],
+      "delivery": {
+        "tone": "struck by the word, then reflective",
+        "audio_tags": [
+          "exhales slowly"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    }
+  ]
+}

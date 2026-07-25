@@ -28,6 +28,7 @@ from .sfx_runner import generate_sound_effect_jobs
 from .sound_design import prepare_sfx_jobs, validate_sound_design
 from .transcripts import render_transcripts
 from .tts_runner import generate_tts_jobs
+from .voice_audition import prepare_voice_candidate_audition_jobs
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -205,6 +206,14 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         help="Required spending ceiling when --execute is used",
     )
+
+    prepare_voice_audition = subparsers.add_parser(
+        "prepare-voice-audition",
+        help="Create same-script TTS jobs for screened accent candidates",
+    )
+    prepare_voice_audition.add_argument("--audition", required=True)
+    prepare_voice_audition.add_argument("--candidates", required=True)
+    prepare_voice_audition.add_argument("--output", help="Voice audition jobs JSONL path")
 
     prepare_dialogue = subparsers.add_parser(
         "prepare-dialogue-audition",
@@ -425,6 +434,7 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
                     "role": host["id"],
                     "display_name": host["display_name"],
                     "voice_name": host["voice_name"],
+                    "accent": host["accent"],
                 }
                 for host in episode_cast["hosts"]
             ],
@@ -523,6 +533,21 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             execute=args.execute,
             max_credits=args.max_credits,
             limit=args.limit,
+        )
+    if args.command == "prepare-voice-audition":
+        audition_path = Path(args.audition).resolve()
+        audition = json.loads(audition_path.read_text(encoding="utf-8"))
+        output = _path_or_default(
+            args.output,
+            config.work_dir
+            / "tts"
+            / f"{audition['audition_id']}-jobs.jsonl",
+        )
+        return prepare_voice_candidate_audition_jobs(
+            config,
+            audition_path,
+            Path(args.candidates).resolve(),
+            output,
         )
     if args.command == "prepare-dialogue-audition":
         audition_path = Path(args.audition).resolve()
