@@ -102,8 +102,10 @@ configured rate, and remain ignored under
 
 A Creative+ follow-up preserves the same eight turns while strengthening
 timing, emotional contrast, and nonverbal delivery. It runs 115.41 seconds and
-used 1,884 credits. Creative+ is selected for the pilot; the next speech step
-is adapting the full 128-turn render to contextual dialogue chunks.
+used 1,884 credits. Creative+ is selected for the pilot. The full script has
+now been rendered in 17 movement-aware contextual dialogue chunks. The
+timestamped endpoint mapped every one of the 128 turns; the clean pass runs
+30:44.72 and used 14,921 provider-reported credits.
 
 The approved pilot cast remains frozen regardless of that choice. A separate
 nine-voice, same-script accent audition has been generated at 192 kbps for
@@ -136,15 +138,20 @@ description calls for a new sound.
 See [SOUND_DESIGN.md](SOUND_DESIGN.md) for the cue palette, provenance policy,
 workflow, and official provider references.
 
-## Recommended spend sequence
+## Completed production sequence
 
-1. Score the nine international English voice samples for future episodes.
-2. Review the eight new 30-second continuous sound beds.
-3. Approve the source-excerpt policy.
-4. Generate the Creative+ themed sub-episode segment by segment with the frozen
-   pilot cast.
-5. Render the voices-only track, non-human-only track, and combined review mix.
-6. Run loudness, clipping, transcript, source-map, and listening QA.
+1. The 17 Creative+ dialogue chunks were generated and cached with provider
+   timing.
+2. The voices-only, non-human-only, and combined review tracks were rendered at
+   48 kHz stereo and 192 kbps.
+3. All three tracks are synchronized at 30:44.72.
+4. Markdown, WebVTT, and SRT transcripts were generated from the 128 timed
+   turns, with sound labels and a story-source map.
+5. Automated duration, timestamp coverage, silence, level, and peak checks
+   passed.
+
+Listening review, source-excerpt policy approval, and sensitivity/translation
+review remain human publication gates.
 
 ## Pricing sources
 

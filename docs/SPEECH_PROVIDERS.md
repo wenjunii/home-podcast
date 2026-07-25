@@ -66,8 +66,10 @@ only in stability. Natural runs 118.05 seconds and favors consistency. Creative
 runs 115.15 seconds and permits broader emotion with a higher artifact risk.
 A Creative+ follow-up runs 115.41 seconds with stronger direction and moderate
 style exaggeration. Creative+ is selected for the pilot. The full 128-turn
-script should use contextual dialogue chunks that preserve this performance
-profile.
+script was rendered in 17 movement-aware contextual dialogue chunks through
+the timestamped endpoint. The clean pass runs 30:44.72 and ElevenLabs reported
+14,921 credits. Provider timing covers all 128 inputs, so transcript and
+sound-design anchors do not require a second alignment service.
 
 ## Accent-aware rotation
 
@@ -130,6 +132,7 @@ commercial rights, latency, and measured cost.
 
 - [ElevenLabs models](https://elevenlabs.io/docs/overview/models)
 - [ElevenLabs text-to-dialogue API](https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert/)
+- [ElevenLabs dialogue with timestamps](https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert-with-timestamps)
 - [ElevenLabs API pricing](https://elevenlabs.io/pricing/api)
 - [ElevenLabs Voice Library](https://elevenlabs.io/docs/eleven-creative/voices/voice-library)
 - [ElevenLabs shared voice search](https://elevenlabs.io/docs/api-reference/voices/voice-library/get-shared)

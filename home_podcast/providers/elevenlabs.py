@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import json
 import os
 import re
@@ -37,6 +38,17 @@ class ElevenLabsDialogueResponse:
     content_type: str
     request_id: str
     character_cost: str
+
+
+@dataclass(frozen=True)
+class ElevenLabsDialogueTimestampResponse:
+    audio: bytes
+    content_type: str
+    request_id: str
+    character_cost: str
+    voice_segments: list[dict[str, Any]]
+    alignment: dict[str, Any] | None
+    normalized_alignment: dict[str, Any] | None
 
 
 class ElevenLabsDialogueClient:
@@ -154,6 +166,123 @@ class ElevenLabsDialogueClient:
                     else min(2 ** (attempt - 1), 8)
                 )
         raise RuntimeError(f"ElevenLabs dialogue generation failed: {last_error}")
+
+    def generate_with_timestamps(
+        self,
+        inputs: list[dict[str, str]],
+        *,
+        settings: dict[str, Any] | None = None,
+        seed: int | None = None,
+    ) -> ElevenLabsDialogueTimestampResponse:
+        api_key = os.environ.get(self.api_key_env)
+        if not api_key:
+            raise RuntimeError(
+                f"Missing {self.api_key_env}; provide it as an environment variable"
+            )
+        _validate_dialogue_inputs(inputs)
+        if self.model != "eleven_v3":
+            raise ValueError("Text to Dialogue requires the eleven_v3 model")
+        if seed is not None and not 0 <= seed <= 4_294_967_295:
+            raise ValueError("seed must be from 0 to 4294967295")
+
+        body: dict[str, Any] = {
+            "inputs": inputs,
+            "model_id": self.model,
+        }
+        if self.language_code:
+            body["language_code"] = self.language_code
+        if settings:
+            body["settings"] = settings
+        if seed is not None:
+            body["seed"] = seed
+
+        endpoint = self.endpoint
+        if not endpoint.endswith("/with-timestamps"):
+            endpoint += "/with-timestamps"
+        query = urllib.parse.urlencode({"output_format": self.output_format})
+        request = urllib.request.Request(
+            f"{endpoint}?{query}",
+            data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
+            method="POST",
+            headers={
+                "xi-api-key": api_key,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": "home-podcast/0.1",
+            },
+        )
+        last_error: Exception | None = None
+        for attempt in range(1, self.max_attempts + 1):
+            try:
+                with urllib.request.urlopen(
+                    request,
+                    timeout=self.timeout_seconds,
+                ) as response:
+                    payload = json.loads(response.read().decode("utf-8"))
+                    if not isinstance(payload, dict):
+                        raise RuntimeError(
+                            "ElevenLabs returned an invalid timestamped dialogue response"
+                        )
+                    audio_base64 = payload.get("audio_base64")
+                    voice_segments = payload.get("voice_segments")
+                    if not isinstance(audio_base64, str) or not audio_base64:
+                        raise RuntimeError(
+                            "ElevenLabs returned no timestamped dialogue audio"
+                        )
+                    if not isinstance(voice_segments, list) or not voice_segments:
+                        raise RuntimeError(
+                            "ElevenLabs returned no dialogue voice segments"
+                        )
+                    try:
+                        audio = base64.b64decode(audio_base64, validate=True)
+                    except (ValueError, TypeError) as error:
+                        raise RuntimeError(
+                            "ElevenLabs returned invalid base64 dialogue audio"
+                        ) from error
+                    if not audio:
+                        raise RuntimeError(
+                            "ElevenLabs returned empty timestamped dialogue audio"
+                        )
+                    headers = response.headers
+                    return ElevenLabsDialogueTimestampResponse(
+                        audio=audio,
+                        content_type=_audio_content_type(self.output_format),
+                        request_id=str(
+                            headers.get("request-id")
+                            or headers.get("x-request-id")
+                            or ""
+                        ),
+                        character_cost=str(headers.get("character-cost", "")),
+                        voice_segments=voice_segments,
+                        alignment=_optional_object(payload.get("alignment")),
+                        normalized_alignment=_optional_object(
+                            payload.get("normalized_alignment")
+                        ),
+                    )
+            except urllib.error.HTTPError as error:
+                last_error = RuntimeError(
+                    f"ElevenLabs HTTP {error.code}: {_safe_error_body(error)}"
+                )
+                if error.code not in RETRYABLE_STATUS_CODES:
+                    break
+                retry_seconds = _retry_after_seconds(error.headers)
+            except (
+                urllib.error.URLError,
+                TimeoutError,
+                RuntimeError,
+                json.JSONDecodeError,
+            ) as error:
+                last_error = error
+                retry_seconds = None
+            if attempt < self.max_attempts:
+                time.sleep(
+                    retry_seconds
+                    if retry_seconds is not None
+                    else min(2 ** (attempt - 1), 8)
+                )
+        raise RuntimeError(
+            f"ElevenLabs timestamped dialogue generation failed: {last_error}"
+        )
 
 
 class ElevenLabsSpeechClient:
@@ -441,6 +570,24 @@ def _validate_dialogue_inputs(inputs: list[dict[str, str]]) -> None:
         )
     if len(voices) > 10:
         raise ValueError("Dialogue inputs cannot use more than ten unique voices")
+
+
+def _audio_content_type(output_format: str) -> str:
+    if output_format.startswith("mp3_"):
+        return "audio/mpeg"
+    if output_format.startswith("wav_"):
+        return "audio/wav"
+    if output_format.startswith("pcm_"):
+        return "audio/pcm"
+    if output_format.startswith("opus_"):
+        return "audio/opus"
+    if output_format.startswith("ulaw_"):
+        return "audio/basic"
+    return "application/octet-stream"
+
+
+def _optional_object(value: Any) -> dict[str, Any] | None:
+    return value if isinstance(value, dict) else None
 
 
 def _retry_after_seconds(headers: Message | None) -> float | None:

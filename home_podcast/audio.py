@@ -109,7 +109,165 @@ def render_episode_audio(
             str(voice_assembly_path),
         ]
     )
+    return _render_assembled_episode(
+        episode_id,
+        voice_assembly_path,
+        timeline_segments,
+        cursor_ms,
+        render_dir,
+        output_dir,
+        sound_design_path=sound_design_path,
+        sfx_jobs_path=sfx_jobs_path,
+    )
 
+
+def render_dialogue_episode_audio(
+    jobs_path: Path,
+    work_dir: Path,
+    output_dir: Path,
+    *,
+    sound_design_path: Path | None = None,
+    sfx_jobs_path: Path | None = None,
+) -> dict[str, Any]:
+    jobs = _read_jobs(jobs_path)
+    if not jobs:
+        raise ValueError("Dialogue jobs file is empty")
+    ffmpeg = shutil.which("ffmpeg")
+    ffprobe = shutil.which("ffprobe")
+    if not ffmpeg or not ffprobe:
+        raise RuntimeError("ffmpeg and ffprobe must be installed and available on PATH")
+    missing_audio = [
+        job["output_audio"]
+        for job in jobs
+        if not Path(job["output_audio"]).is_file()
+    ]
+    if missing_audio:
+        raise FileNotFoundError(
+            f"{len(missing_audio)} dialogue chunks are missing; "
+            f"first missing chunk: {missing_audio[0]}"
+        )
+    missing_timestamps = [
+        job["timestamp_data"]
+        for job in jobs
+        if not Path(job["timestamp_data"]).is_file()
+    ]
+    if missing_timestamps:
+        raise FileNotFoundError(
+            f"{len(missing_timestamps)} dialogue timestamp files are missing; "
+            f"first missing file: {missing_timestamps[0]}"
+        )
+
+    episode_id = jobs[0]["episode_id"]
+    if any(job.get("episode_id") != episode_id for job in jobs):
+        raise ValueError("All dialogue jobs must belong to the same episode")
+    render_dir = (work_dir / "render" / episode_id).resolve()
+    normalized_dir = render_dir / "dialogue-normalized"
+    normalized_dir.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    concat_parts: list[Path] = []
+    timeline_segments: list[dict[str, Any]] = []
+    cursor_ms = 0
+    seen_segment_ids: set[str] = set()
+    for chunk_number, job in enumerate(jobs, start=1):
+        normalized = normalized_dir / f"{chunk_number:03d}-{job['cache_key']}.wav"
+        if not normalized.exists():
+            _run(
+                [
+                    ffmpeg,
+                    "-y",
+                    "-loglevel",
+                    "error",
+                    "-i",
+                    job["output_audio"],
+                    "-ar",
+                    "48000",
+                    "-ac",
+                    "2",
+                    "-c:a",
+                    "pcm_s16le",
+                    str(normalized),
+                ]
+            )
+        chunk_duration_ms = _duration_ms(ffprobe, normalized)
+        timing = json.loads(Path(job["timestamp_data"]).read_text(encoding="utf-8"))
+        ranges = _dialogue_input_ranges(timing, len(job["inputs"]))
+        for input_index, item in enumerate(job["inputs"]):
+            segment_id = item["segment_id"]
+            if segment_id in seen_segment_ids:
+                raise ValueError(f"Duplicate dialogue segment_id {segment_id!r}")
+            seen_segment_ids.add(segment_id)
+            start_seconds, end_seconds = ranges[input_index]
+            start_offset_ms = round(start_seconds * 1000)
+            end_offset_ms = round(end_seconds * 1000)
+            if end_offset_ms > chunk_duration_ms + 100:
+                raise ValueError(
+                    f"Dialogue timestamp for {segment_id!r} exceeds its chunk duration"
+                )
+            timeline_segments.append(
+                {
+                    "segment_id": segment_id,
+                    "speaker": item["speaker"],
+                    "display_name": item.get("display_name", item["speaker"]),
+                    "accent": item.get("accent"),
+                    "text": item["text"],
+                    "source_story_ids": item.get("source_story_ids", []),
+                    "start_ms": cursor_ms + start_offset_ms,
+                    "end_ms": cursor_ms + min(end_offset_ms, chunk_duration_ms),
+                    "dialogue_chunk_id": job["chunk_id"],
+                }
+            )
+        concat_parts.append(normalized)
+        cursor_ms += chunk_duration_ms
+
+    concat_file = render_dir / "dialogue-concat.txt"
+    concat_file.write_text(
+        "".join(f"file '{_ffmpeg_path(path)}'\n" for path in concat_parts),
+        encoding="utf-8",
+    )
+    voice_assembly_path = render_dir / "dialogue-voice-assembly.wav"
+    _run(
+        [
+            ffmpeg,
+            "-y",
+            "-loglevel",
+            "error",
+            "-f",
+            "concat",
+            "-safe",
+            "0",
+            "-i",
+            str(concat_file),
+            "-c:a",
+            "pcm_s16le",
+            str(voice_assembly_path),
+        ]
+    )
+    return _render_assembled_episode(
+        episode_id,
+        voice_assembly_path,
+        timeline_segments,
+        cursor_ms,
+        render_dir,
+        output_dir,
+        sound_design_path=sound_design_path,
+        sfx_jobs_path=sfx_jobs_path,
+    )
+
+
+def _render_assembled_episode(
+    episode_id: str,
+    voice_assembly_path: Path,
+    timeline_segments: list[dict[str, Any]],
+    duration_ms: int,
+    render_dir: Path,
+    output_dir: Path,
+    *,
+    sound_design_path: Path | None,
+    sfx_jobs_path: Path | None,
+) -> dict[str, Any]:
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        raise RuntimeError("ffmpeg must be installed and available on PATH")
     sound_cues: list[dict[str, Any]] = []
     soundscape_coverage: dict[str, Any] | None = None
     prepared_cues: list[Path] = []
@@ -125,14 +283,15 @@ def render_episode_audio(
             sound_design_path,
             timeline_segments,
             sfx_jobs_path,
+            episode_duration_ms=duration_ms,
         )
         sound_cues = soundscape_coverage["cues"]
-        overrun = [cue for cue in sound_cues if cue["end_ms"] > cursor_ms]
+        overrun = [cue for cue in sound_cues if cue["end_ms"] > duration_ms]
         if overrun:
             cue = overrun[0]
             raise ValueError(
                 f"Sound cue {cue['cue_id']!r} ends after the voice timeline "
-                f"({cue['end_ms']} ms > {cursor_ms} ms)"
+                f"({cue['end_ms']} ms > {duration_ms} ms)"
             )
         prepared_cues = [
             _prepare_sound_cue(ffmpeg, cue, render_dir / "sound-cues")
@@ -168,7 +327,7 @@ def render_episode_audio(
             sound_cues,
             prepared_cues,
             soundscape_master_path,
-            cursor_ms,
+            duration_ms,
         )
         _encode_mp3(ffmpeg, soundscape_master_path, soundscape_mp3_path)
         _mix_voice_and_sound_cues(
@@ -177,7 +336,7 @@ def render_episode_audio(
             sound_cues,
             prepared_cues,
             master_path,
-            cursor_ms,
+            duration_ms,
         )
     else:
         shutil.copyfile(voices_master_path, master_path)
@@ -206,7 +365,7 @@ def render_episode_audio(
     timeline = {
         "contract_version": 1,
         "episode_id": episode_id,
-        "duration_ms": cursor_ms,
+        "duration_ms": duration_ms,
         "master_audio": str(master_path),
         "distribution_audio": str(mp3_path),
         "tracks": tracks,
@@ -227,6 +386,43 @@ def render_episode_audio(
         json.dumps(timeline, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     return timeline
+
+
+def _dialogue_input_ranges(
+    timestamp_data: dict[str, Any],
+    input_count: int,
+) -> dict[int, tuple[float, float]]:
+    segments = timestamp_data.get("voice_segments")
+    if not isinstance(segments, list) or not segments:
+        raise ValueError("Dialogue timestamp data has no voice segments")
+    grouped: dict[int, list[tuple[float, float]]] = {}
+    previous_start = -1.0
+    for position, segment in enumerate(segments, start=1):
+        if not isinstance(segment, dict):
+            raise ValueError(f"Voice segment {position} must be an object")
+        input_index = segment.get("dialogue_input_index")
+        start = segment.get("start_time_seconds")
+        end = segment.get("end_time_seconds")
+        if not isinstance(input_index, int) or not 0 <= input_index < input_count:
+            raise ValueError(f"Voice segment {position} has invalid input index")
+        if not isinstance(start, (int, float)) or not isinstance(end, (int, float)):
+            raise ValueError(f"Voice segment {position} needs numeric timestamps")
+        if start < 0 or end <= start:
+            raise ValueError(f"Voice segment {position} has an invalid range")
+        if start < previous_start:
+            raise ValueError("Dialogue voice segments must be ordered")
+        previous_start = float(start)
+        grouped.setdefault(input_index, []).append((float(start), float(end)))
+    missing = sorted(set(range(input_count)) - set(grouped))
+    if missing:
+        raise ValueError(f"Dialogue timestamps omit input indexes: {missing}")
+    return {
+        input_index: (
+            min(item[0] for item in ranges),
+            max(item[1] for item in ranges),
+        )
+        for input_index, ranges in grouped.items()
+    }
 
 
 def _normalize_audio(
@@ -296,6 +492,7 @@ def _prepare_sound_cue(
             "fade_in_ms": cue["fade_in_ms"],
             "fade_out_ms": cue["fade_out_ms"],
             "loop": cue["loop"],
+            "level_mode": "integrated_loudness_target_v1",
         },
         sort_keys=True,
         separators=(",", ":"),
@@ -309,7 +506,7 @@ def _prepare_sound_cue(
     duration_seconds = cue["duration_ms"] / 1000
     filters = [
         "asetpts=PTS-STARTPTS",
-        f"volume={cue['gain_db']}dB",
+        f"loudnorm=I={cue['gain_db']}:TP=-2:LRA=11",
         f"apad=pad_dur={duration_seconds:.3f}",
         f"atrim=0:{duration_seconds:.3f}",
     ]

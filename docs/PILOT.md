@@ -75,12 +75,15 @@ Confirmed:
 - speech subscription: ElevenLabs Creator, with 192 kbps production output
 - on-air host-generation disclosure: omitted
 - AI budget preference: premium
+- completed speech render: 128 turns, 17 cached Creative+ chunks, 30:44.72
+- completed speech cost: 14,921 provider-reported credits
+- completed outputs: voices-only, soundscape-only, combined review mix, Markdown, WebVTT, and SRT
 
-Still confirm before final audio generation:
+Still confirm before publication:
 
 - public series title (the current title is a working title)
-- final listening approval of the 13-cue continuous soundscape map
-- final approval of ElevenLabs-generated effect candidates and any licensed replacements
+- final listening approval of the rendered voices and 13-cue soundscape
+- any licensed replacements for generated effect candidates
 - publication/licensing policy for source excerpts
 - sensitivity and translation review standard
 

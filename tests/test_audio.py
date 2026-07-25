@@ -9,7 +9,7 @@ import unittest
 import wave
 from pathlib import Path
 
-from home_podcast.audio import render_episode_audio
+from home_podcast.audio import render_dialogue_episode_audio, render_episode_audio
 
 
 @unittest.skipUnless(
@@ -45,7 +45,7 @@ class AudioRenderTests(unittest.TestCase):
             voice = root / "voice.wav"
             effect = root / "effect.wav"
             _write_tone(voice, 440)
-            _write_tone(effect, 220)
+            _write_tone(effect, 220, amplitude=50)
             jobs_path = _write_jobs(root, voice)
             sound_design_path = root / "sound-design.json"
             sound_design_path.write_text(
@@ -98,7 +98,7 @@ class AudioRenderTests(unittest.TestCase):
             voice = root / "voice.wav"
             effect = root / "effect.wav"
             _write_tone(voice, 440)
-            _write_tone(effect, 220)
+            _write_tone(effect, 220, amplitude=50)
             jobs_path = _write_jobs(root, voice)
             sound_design_path = root / "sound-design.json"
             base = _licensed_cue("base", effect, True, 0)
@@ -143,6 +143,93 @@ class AudioRenderTests(unittest.TestCase):
             self.assertTrue(timeline["soundscape_coverage"]["continuous"])
             self.assertEqual(timeline["sound_cues"][0]["duration_ms"], 1000)
             self.assertEqual(timeline["sound_cues"][1]["duration_ms"], 1000)
+            self.assertGreater(
+                _max_sample(
+                    Path(
+                        timeline["tracks"]["soundscape_only"]["master_audio"]
+                    )
+                ),
+                500,
+            )
+
+    def test_renders_contextual_dialogue_from_provider_timestamps(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            dialogue = root / "dialogue.wav"
+            _write_tone(dialogue, 440)
+            timing = root / "dialogue.timestamps.json"
+            timing.write_text(
+                json.dumps(
+                    {
+                        "voice_segments": [
+                            {
+                                "dialogue_input_index": 0,
+                                "start_time_seconds": 0.1,
+                                "end_time_seconds": 0.4,
+                            },
+                            {
+                                "dialogue_input_index": 1,
+                                "start_time_seconds": 0.5,
+                                "end_time_seconds": 0.9,
+                            },
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            jobs_path = root / "dialogue-jobs.jsonl"
+            jobs_path.write_text(
+                json.dumps(
+                    {
+                        "episode_id": "test-dialogue-episode",
+                        "chunk_id": "chunk-001",
+                        "cache_key": "dialogue",
+                        "output_audio": str(dialogue),
+                        "timestamp_data": str(timing),
+                        "inputs": [
+                            {
+                                "segment_id": "m1-s001",
+                                "speaker": "curious_guide",
+                                "display_name": "Maya",
+                                "accent": "American",
+                                "text": "A recovered home?",
+                                "source_story_ids": ["story-1"],
+                            },
+                            {
+                                "segment_id": "m1-s002",
+                                "speaker": "archive_nerd",
+                                "display_name": "Theo",
+                                "accent": "British",
+                                "text": "Let's look closer.",
+                                "source_story_ids": ["story-1"],
+                            },
+                        ],
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            timeline = render_dialogue_episode_audio(
+                jobs_path,
+                root / "work",
+                root / "output",
+            )
+
+            self.assertEqual(timeline["duration_ms"], 1000)
+            self.assertEqual(timeline["segments"][0]["start_ms"], 100)
+            self.assertEqual(timeline["segments"][0]["end_ms"], 400)
+            self.assertEqual(timeline["segments"][1]["start_ms"], 500)
+            self.assertEqual(timeline["segments"][1]["end_ms"], 900)
+            self.assertEqual(
+                timeline["segments"][1]["dialogue_chunk_id"],
+                "chunk-001",
+            )
+            self.assertTrue(
+                Path(
+                    timeline["tracks"]["voices_only"]["distribution_audio"]
+                ).is_file()
+            )
 
 
 def _licensed_cue(cue_id: str, path: Path, duck: bool, offset_ms: int) -> dict:
@@ -196,11 +283,13 @@ def _write_jobs(root: Path, voice: Path) -> Path:
     return jobs_path
 
 
-def _write_tone(path: Path, frequency: int) -> None:
+def _write_tone(path: Path, frequency: int, *, amplitude: int = 5000) -> None:
     frame_rate = 48000
     frames = bytearray()
     for frame in range(frame_rate):
-        sample = round(5000 * math.sin(2 * math.pi * frequency * frame / frame_rate))
+        sample = round(
+            amplitude * math.sin(2 * math.pi * frequency * frame / frame_rate)
+        )
         packed = struct.pack("<h", sample)
         frames.extend(packed)
         frames.extend(packed)
@@ -209,6 +298,13 @@ def _write_tone(path: Path, frequency: int) -> None:
         output.setsampwidth(2)
         output.setframerate(frame_rate)
         output.writeframes(frames)
+
+
+def _max_sample(path: Path) -> int:
+    with wave.open(str(path), "rb") as audio:
+        frames = audio.readframes(audio.getnframes())
+    samples = struct.unpack(f"<{len(frames) // 2}h", frames)
+    return max(abs(sample) for sample in samples)
 
 
 if __name__ == "__main__":

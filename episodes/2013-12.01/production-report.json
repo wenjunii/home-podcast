@@ -1,0 +1,50 @@
+{
+  "contract_version": 1,
+  "episode_id": "2013-12.01",
+  "status": "rendered_pending_listening_review",
+  "rendered_on": "2026-07-25",
+  "speech": {
+    "provider": "elevenlabs",
+    "model": "eleven_v3",
+    "performance_variant": "creative-plus",
+    "contextual_chunks": 17,
+    "scripted_turns": 128,
+    "timestamped_turns": 128,
+    "rendered_characters": 27125,
+    "conservative_credit_ceiling": 27125,
+    "successful_response_credits": 14921
+  },
+  "program": {
+    "duration_ms": 1844720,
+    "duration_clock": "00:30:44.720",
+    "sample_rate_hz": 48000,
+    "channels": 2,
+    "distribution_bitrate_kbps": 192,
+    "tracks": {
+      "voices_only": "audio/2013-12.01-voices-only.mp3",
+      "soundscape_only": "audio/2013-12.01-soundscape-only.mp3",
+      "combined_review": "audio/2013-12.01.mp3"
+    }
+  },
+  "soundscape": {
+    "cues": 13,
+    "continuous": true,
+    "suppressed_section_cues": 0,
+    "presentation": "illustrative_sound_design"
+  },
+  "transcripts": {
+    "markdown": "transcripts/2013-12.01-transcript.md",
+    "webvtt": "transcripts/2013-12.01.vtt",
+    "srt": "transcripts/2013-12.01.srt"
+  },
+  "automated_qa": {
+    "all_turns_have_provider_timestamps": true,
+    "all_tracks_have_equal_duration": true,
+    "silences_over_two_seconds_at_minus_45_db": 0,
+    "voices_only_peak_db": -1.8,
+    "soundscape_only_peak_db": -2.0,
+    "combined_review_peak_db": -1.8,
+    "credentials_present_in_artifacts": false
+  },
+  "remaining_gate": "Human listening, source-excerpt policy, and sensitivity/translation review."
+}

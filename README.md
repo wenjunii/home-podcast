@@ -372,6 +372,35 @@ python -m home_podcast prepare-dialogue-audition `
 It runs 115.41 seconds and used 1,884 credits. Creative+ is the selected pilot
 performance style.
 
+Prepare the complete episode as movement-aware contextual chunks. The
+timestamped dialogue endpoint returns one timing range per scripted turn, so
+the final transcript and sound-cue anchors remain exact without a second
+transcription call:
+
+```powershell
+python -m home_podcast prepare-dialogue-episode `
+  --script .\episodes\2013-12.01\script.json `
+  --cast .\episodes\2013-12.01\cast.json `
+  --performance .\episodes\2013-12.01\creative-plus-audition.json `
+  --variant creative-plus
+
+# Dry run: 17 calls, 27,125-character conservative ceiling
+python -m home_podcast generate-dialogue-episode `
+  --jobs .\work\tts\2013-12.01-dialogue-episode-jobs.jsonl
+
+$env:ELEVENLABS_API_KEY = "..."
+python -m home_podcast generate-dialogue-episode `
+  --jobs .\work\tts\2013-12.01-dialogue-episode-jobs.jsonl `
+  --execute `
+  --max-credits 27125
+Remove-Item Env:ELEVENLABS_API_KEY
+```
+
+Generation is resumable by chunk. Audio and timestamp data are cached
+separately before normalization, and neither contains the API key. The pilot
+completed all 17 chunks and 128 turns in 30:44.72. ElevenLabs reported 14,921
+credits for the clean pass, below the conservative 27,125-credit ceiling.
+
 The current speech-provider shortlist and pilot audition recommendation are in
 [docs/SPEECH_PROVIDERS.md](docs/SPEECH_PROVIDERS.md).
 The selected one-theme pilot and its TTS cost model are in
@@ -404,19 +433,19 @@ Paid generation is opt-in and requires both `--execute` and an explicit
 `--max-credits` ceiling. Provider keys are read only from environment
 variables and must never be committed.
 
-Once every speech and generated-effect clip exists:
+Once every dialogue chunk and generated-effect clip exists:
 
 ```powershell
-python -m home_podcast render-audio `
-  --jobs .\work\tts\2013-12.01-jobs.jsonl `
+python -m home_podcast render-dialogue-audio `
+  --jobs .\work\tts\2013-12.01-dialogue-episode-jobs.jsonl `
   --sound-design .\episodes\2013-12.01\sound-design.json `
   --sfx-jobs .\work\sfx\2013-12.01-jobs.jsonl
 ```
 
-The renderer uses FFmpeg to normalize clips to 48 kHz stereo, insert scripted
-pauses, extend each thematic bed to the next eligible handoff, suppress
-too-short handoffs, place and fade structural cues, and create synchronized
-192 kbps deliverables:
+The renderer uses FFmpeg to preserve each contextual dialogue chunk, apply the
+provider's per-turn timestamps, normalize to 48 kHz stereo, extend each
+thematic bed to the next eligible handoff, suppress too-short handoffs, place
+and fade structural cues, and create synchronized 192 kbps deliverables:
 
 - `<episode>-voices-only.mp3`
 - `<episode>-soundscape-only.mp3`

@@ -108,8 +108,8 @@ def validate_sound_design(
             errors.append(f"{label}.duration_ms must be an integer from 100 to 300000")
             duration = 0
         gain = cue.get("gain_db")
-        if not isinstance(gain, (int, float)) or not -60 <= gain <= 0:
-            errors.append(f"{label}.gain_db must be a number from -60 to 0")
+        if not isinstance(gain, (int, float)) or not -60 <= gain <= -5:
+            errors.append(f"{label}.gain_db must be a number from -60 to -5")
         valid_fades: list[int] = []
         for fade_name in ("fade_in_ms", "fade_out_ms"):
             fade = cue.get(fade_name, 0)
@@ -311,6 +311,8 @@ def resolve_soundscape(
     sound_design_path: Path,
     timeline_segments: list[dict[str, Any]],
     sfx_jobs_path: Path | None = None,
+    *,
+    episode_duration_ms: int | None = None,
 ) -> dict[str, Any]:
     sound_design = load_json(sound_design_path)
     segment_by_id = {
@@ -318,7 +320,7 @@ def resolve_soundscape(
         for segment in timeline_segments
         if isinstance(segment, dict) and "segment_id" in segment
     }
-    episode_duration_ms = max(
+    timeline_duration_ms = max(
         (
             int(segment.get("end_ms", 0))
             for segment in timeline_segments
@@ -326,6 +328,12 @@ def resolve_soundscape(
         ),
         default=0,
     )
+    if episode_duration_ms is None:
+        episode_duration_ms = timeline_duration_ms
+    elif episode_duration_ms < timeline_duration_ms:
+        raise ValueError(
+            "episode_duration_ms cannot end before the final timeline segment"
+        )
     generated_assets = _read_generated_assets(sfx_jobs_path)
     resolved: list[dict[str, Any]] = []
     for cue in sound_design.get("cues", []):
