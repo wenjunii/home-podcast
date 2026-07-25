@@ -203,11 +203,26 @@ python -m home_podcast prepare-script `
 The script model receives this packet plus `prompts/script_writer.md`. Its
 output must conform to `contracts/script.schema.json`.
 
+Generate the episode from its locked evidence and editorial outline:
+
+```powershell
+$env:CAPRIOLE_API_KEY = "..."
+python -m home_podcast generate-script `
+  --evidence .\work\scripts\2013-12.01-evidence.json `
+  --outline .\episodes\2013-12.01\outline.json
+Remove-Item Env:CAPRIOLE_API_KEY
+```
+
+The generator uses Capriole's OpenAI-compatible streaming endpoint and caches
+each outline section separately. A validated script is written to
+`episodes/2013-12.01/script.json`; an invalid candidate remains under `work/`
+with a validation report and does not replace the episode script.
+
 Validate story coverage, speakers, citations, and exact quotations:
 
 ```powershell
 python -m home_podcast validate-script `
-  --script .\work\scripts\2013-12.01-script.json `
+  --script .\episodes\2013-12.01\script.json `
   --evidence .\work\scripts\2013-12.01-evidence.json
 ```
 
@@ -220,7 +235,7 @@ speech job per speaking turn:
 
 ```powershell
 python -m home_podcast prepare-tts `
-  --script .\work\scripts\2013-12.01-script.json `
+  --script .\episodes\2013-12.01\script.json `
   --provider PROVIDER_NAME `
   --model MODEL_NAME
 ```

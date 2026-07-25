@@ -16,6 +16,7 @@ from .planning import create_month_proposal, lock_episode_manifest, prepare_scri
 from .planning import snapshot_crawl_month
 from .provider_runner import analyze_story_jobs
 from .script import prepare_tts_jobs, validate_script
+from .script_runner import generate_episode_script
 from .transcripts import render_transcripts
 
 
@@ -82,7 +83,10 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Combine every eligible cohort story into one proposed episode",
     )
-    plan.add_argument("--title", help="Title used with --single-episode")
+    plan.add_argument(
+        "--title",
+        help="Override the title when the proposal contains exactly one episode",
+    )
     plan.add_argument("--output", help="Proposal JSON path")
 
     lock = subparsers.add_parser(
@@ -105,6 +109,20 @@ def build_parser() -> argparse.ArgumentParser:
     )
     validate.add_argument("--script", required=True)
     validate.add_argument("--evidence", required=True)
+
+    generate_script = subparsers.add_parser(
+        "generate-script",
+        help="Generate and source-validate a complete episode script",
+    )
+    generate_script.add_argument("--evidence", required=True)
+    generate_script.add_argument(
+        "--outline",
+        help="Episode movement outline; defaults to episodes/<episode>/outline.json",
+    )
+    generate_script.add_argument(
+        "--output",
+        help="Validated script JSON path; defaults to the episode directory",
+    )
 
     tts = subparsers.add_parser(
         "prepare-tts", help="Create cached, segment-level TTS jobs from a valid script"
@@ -137,6 +155,8 @@ def main(argv: list[str] | None = None) -> int:
         result = _dispatch(config, args)
         _print_json(result)
         if args.command == "validate-script" and not result["valid"]:
+            return 2
+        if args.command == "generate-script" and not result["valid"]:
             return 2
         return 0
     except (FileNotFoundError, ValueError, RuntimeError) as error:
@@ -245,6 +265,19 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             Path(args.evidence).resolve(),
             config.show_bible_path,
         )
+    if args.command == "generate-script":
+        evidence_path = Path(args.evidence).resolve()
+        packet = json.loads(evidence_path.read_text(encoding="utf-8"))
+        episode_id = packet["episode"]["episode_id"]
+        output = _path_or_default(
+            args.output,
+            config.episodes_dir / episode_id / "script.json",
+        )
+        outline = _path_or_default(
+            args.outline,
+            config.episodes_dir / episode_id / "outline.json",
+        )
+        return generate_episode_script(config, evidence_path, outline, output)
     if args.command == "prepare-tts":
         script = json.loads(Path(args.script).read_text(encoding="utf-8"))
         output = _path_or_default(

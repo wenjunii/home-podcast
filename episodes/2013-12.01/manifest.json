@@ -1,0 +1,506 @@
+{
+  "contract_version": 1,
+  "manifest_status": "locked",
+  "locked_at": "2026-07-25T14:34:09+00:00",
+  "proposal_sha256": "9cdf8b91796894095e51af97a6bdaaddd481c77c78a76f1001b4808069095bcd",
+  "episode": {
+    "episode_id": "2013-12.01",
+    "archive_volume": "2013-12",
+    "sequence": 1,
+    "title": "The Homes We Leave Behind",
+    "theme_slug": "exile-return-nostalgia",
+    "theme_name": "Exile, Return, and Nostalgia",
+    "theme_description": "Longing for a place, returning home, homesickness, and homes transformed by memory.",
+    "archaeology_question": "Can an old capture preserve a version of home that no longer exists?",
+    "status": "proposed",
+    "story_count": 27
+  },
+  "stories": [
+    {
+      "story_id": "story-0eadd80cefbcbd94e33a66f1",
+      "content_hash": "362b6c21d9ea05d180a1adfa59f7f17305ed152e8f0b277bab0b8085424fee65",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.wmur.com/news/national/Journeying-home-to-a-landscape-of-trauma/-/9857926/17704300/-/format/rsss_2.0/view/print/-/3fqqrkz/-/index.html",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "anchor",
+      "anchor_score": 0.82,
+      "theme_fit": 0.9,
+      "summary": "A first-person account by Christal Presley of driving from Atlanta back to her hometown of Honaker, Virginia, in the Appalachian Mountains for a book signing. She describes growing up with a father who returned from Vietnam with PTSD, the family secret they kept, her own trauma, and her long-delayed intention to tell her truth to the community that knew her as a child. The captured text ends mid-scene as she arrives at her parents' house and clashes with her father over a song he wrote.",
+      "secondary_themes": [
+        "family-inheritance",
+        "physical-home",
+        "identity-belonging"
+      ]
+    },
+    {
+      "story_id": "story-ec32dd5b7c69997097358090",
+      "content_hash": "0c597362eb2a496234a9924aa373e01a5ab1ea48276b5dffd15f1a0935db4206",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:29Z",
+      "source_url": "http://heavens-gates.com/homeplace/",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.72,
+      "theme_fit": 0.95,
+      "summary": "A first-person speaker returns to a now-crumbling childhood home and narrates the scene of physical decay—abandoned truck, broken windows, fallen doors, rotting woodpile, encroaching vines—while layering in memories of a child playing near the barn, hunting for hen's nests, riding a bicycle down the hill, and being called in for supper by her grandmother. The poem is signed 'Melva' and dated October 2009; a caption identifies a 1944 photograph of the grandparents' homeplace in Smith Hollow near Abingdon, Virginia. The source page was crawled in December 2013.",
+      "secondary_themes": [
+        "physical-home",
+        "family-inheritance",
+        "lost-places",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-4ed05cb194b517ab41b3f7e6",
+      "content_hash": "8931c1b2023885a1d469abc3ad3b77f23963436e7e52c72e3acacff87d5108b4",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:29Z",
+      "source_url": "http://www.archive.org/stream/cu31924028815525/cu31924028815525_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.72,
+      "theme_fit": 0.9,
+      "summary": "A speaker addresses an audience about returning to the town of Holland, where his ancestors settled about 200 years ago and where a family farm passed through four generations until his father's death in 1864. He describes himself as the family's \"black sheep\" led into a wandering life, recounts being brought to Holland as a boy and coming to love the town, leaving as a teenager, enlisting in the 1st Michigan sharpshooters during the civil war, and feeling dreadfully homesick before rising to command a company. He closes reflecting on revisiting the familiar landscape, old homes, and the cemetery where earlier generations are buried.",
+      "secondary_themes": [
+        "family-inheritance",
+        "physical-home",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-9608b65eb8ddfa6ae62b0e39",
+      "content_hash": "7b688062b2e283d5f9806bacf9f592c3f5a48c45707dba59a71bc24123117c93",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.archive.org/stream/lettersofwilliam00wheeiala/lettersofwilliam00wheeiala_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.71,
+      "theme_fit": 0.92,
+      "summary": "A letter headed 'CAMBRIDGE, March 8, 1859' and addressed to 'H. N. C.' describes the writer's departure from New Haven and arrival at new lodgings in Cambridge. He reflects on the particular grief of this move: unlike an earlier trip to Europe, which carried the novelty of the unknown, this transition simply ends his membership in the family home and ensures he will return there only as a visitor. He finds partial consolation in identifying with the student world, yet anticipates homesickness on quiet evenings when he will long for something home-like to talk to. The letter also sketches the new environment—mud-covered streets, india-rubber boots as a civic uniform, and landladies unaccustomed to lodgers—and announces a plan to devote eight hours a day to law. It closes mid-sentence with a mention of reading Plato's 'Phaedo' with a companion identified only as 'Y.' The text is an OCR extract from a digitized published compilation whose page header reads '232 LETTERS OF WILLIAM WHEELER.', captured by a web crawler in December 2013.",
+      "secondary_themes": [
+        "migration-displacement",
+        "family-inheritance",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-7ac236ec06ced47546d91a19",
+      "content_hash": "7b80ce0ed90434d27f656f78bddf38c03b0b3c93d22c721406a9cb68c57305ea",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:23Z",
+      "source_url": "http://majorraskalnikov.blogspot.com/2010/02/time-never-here-nor-there.html",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.7,
+      "theme_fit": 0.92,
+      "summary": "A blogger writing under the display name 'Saudade' reflects with intense longing on time spent in Cape Verde as a volunteer. Writing in February 2010, the author describes their departure as one of the saddest days of their life and says they think about Cape Verde daily. The post weaves Cape Verdean Creole into English prose, names specific towns across multiple islands, and closes with an address to friends still there followed by two aphoristic lines about memory. The blog archive visible in the crawled page shows only this single post from 2010.",
+      "secondary_themes": [
+        "identity-belonging",
+        "language-culture",
+        "lost-places",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-bc88fb883cd14b8f55e78065",
+      "content_hash": "ae667fcf29a712fd690701afe7923dfeeccc06339ac2cc89f33e0f79bcd7d46c",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.archive.org/stream/beethovensletter001beet/beethovensletter001beet_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.68,
+      "theme_fit": 0.72,
+      "summary": "A personal letter, signed in the text as belonging to Beethoven and printed alongside a header naming Stephan von Breuning, in which the writer explains he cannot marry or be happy in his current circumstances, describes an affliction (deafness) that has kept him from travelling the world, and expresses longing for the scenery of his fatherland and hope for a happier future. He asks after a friend, Steffen, worrying about his isolation and health, offers to send music and his portrait, and closes with warm regards to named family and friends. The source appears to be a digitized text of published letters rather than a first-person web post.",
+      "secondary_themes": [
+        "chosen-community",
+        "identity-belonging"
+      ]
+    },
+    {
+      "story_id": "story-657fb3417e6c0c0cd4539e4d",
+      "content_hash": "09ade8a714d246f6305fab98a67128c57c5c637961a262dacfe52061a883178e",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:27Z",
+      "source_url": "http://brandedinthe80s.com/tag/lacoste-gator",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.65,
+      "theme_fit": 0.88,
+      "summary": "A blogger running 'Branded in the 80s' reflects on nostalgia as a near-physical force — how sensory triggers like an Atari joystick or an Otter Pop can transport a person instantly back to childhood. The central discovery is what the writer names 'false nostalgia': encountering an old People magazine advertisement for Lacoste polo shirts, they recognized they had long carried nostalgic feelings for wearing those alligator-patch shirts even though they never owned the brand-name version. The piece connects this to growing up in Florida amid pervasive gator imagery, which made the Lacoste logo feel culturally familiar regardless of actual ownership, and to a broader regional sense of identity. The crawled text ends abruptly with a bare '<' character, indicating the WET extractor truncated content — likely an embedded image — that would have closed the post.",
+      "secondary_themes": [
+        "objects-food-rituals",
+        "memory-archive",
+        "identity-belonging",
+        "online-home"
+      ]
+    },
+    {
+      "story_id": "story-0df1f0c21c6c8791e42dba65",
+      "content_hash": "7a2b4d8f7ca6c20ec01fb92c0d98c34b98dd6f49f9c38193d4514f6848757dfc",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:26Z",
+      "source_url": "http://www.thebody.com/content/63844/homesick.html?comments=on",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.62,
+      "theme_fit": 0.9,
+      "summary": "A first-person post titled \"Homesick\" in which the writer, grieving the death of their father, longs to return to southern California to be near their mother and old friends. The father's house in Wildomar is now jointly owned by the family but none can afford the mortgage or live nearby. The writer describes surviving day to day, working, and centering life on their young son Myles while wanting to move into the father's house to feel closer to him.",
+      "secondary_themes": [
+        "family-inheritance",
+        "physical-home",
+        "lost-places"
+      ]
+    },
+    {
+      "story_id": "story-1e3a5bda38becad9ce688edc",
+      "content_hash": "12ca4d9e5cdc676e5d6cd4b6bb52d8d7e98a9e1f4e82a0c89563d53aad359b05",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:19Z",
+      "source_url": "http://brandedinthe80s.com/tag/false-nostalgia",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.6,
+      "theme_fit": 0.9,
+      "summary": "A blog post from a retro-culture site reflects on how old toy and food packaging can trigger vivid childhood memories, comparing the sensation to a time machine or even a drug. The author describes specific sensory flashbacks: gripping an Atari joystick, sucking an Otter Pop while sitting on a hot green transformer box, talking skateboarding with a friend. The piece then pivots to \"false nostalgia,\" recognizing that a People magazine ad stirred longing for Lacoste alligator-patch polo shirts, tying that feeling to growing up in Florida and a childhood belief that Florida was the center of cool.",
+      "secondary_themes": [
+        "objects-food-rituals",
+        "memory-archive",
+        "online-home"
+      ]
+    },
+    {
+      "story_id": "story-b97029685f681ec4175a39e4",
+      "content_hash": "1b0a4856bf7ef8f4e11340e09cf6284145a05a2882f58062cdefc3133b176136",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.archive.org/stream/lettersofwilliam00wheeiala/lettersofwilliam00wheeiala_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.6,
+      "theme_fit": 0.9,
+      "summary": "A traveler writing what reads as a personal letter describes acute homesickness while abroad, longing for the voices, songs, and faces of home and feeling like a \"solitary exile\" in Europe. The writer contrasts the sacred comforts of home with the \"restless, unruled life\" observed among fellow travelers, including a Sunday scene of guests gambling over champagne. The text is an OCR extraction from an Internet Archive scan of a printed book titled in the running headers as \"LETTERS OF WILLIAM WHEELER.\"",
+      "secondary_themes": [
+        "migration-displacement",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-d11d07357380985cd742c37e",
+      "content_hash": "8f5b22025621786783b5153bf060d9c572376a2d130afef3458cc37205a94daf",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:26Z",
+      "source_url": "http://www.archive.org/stream/cu31924028812811/cu31924028812811_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.55,
+      "theme_fit": 0.9,
+      "summary": "A letter addressed to Rev. W. R. Cochrane regrets the writer's inability to attend the centennial anniversary of the town of Antrim. The writer calls the town the only place on earth he could name home for thirty-eight years, and recalls how the tender recollections of childhood were transported there when the family became \"adopted children\" of the town. The text describes the ancestral homestead at Clinton as the repository of painful and joyous memories, the site of transition into life's mission, and the place where the writer entered the gospel ministry and received a license to preach from the church at South Antrim. He recounts closing the eyes of father, mother, three sisters, a brother and others whose dust lies in the town's cemeteries, and the birth there of his only son. He reflects on the passage of time, the flowing stream of life, and how memories of the past link to the present as the gathering approaches.",
+      "secondary_themes": [
+        "physical-home",
+        "family-inheritance",
+        "identity-belonging"
+      ]
+    },
+    {
+      "story_id": "story-e58ed78f41114cade2acc8c5",
+      "content_hash": "fab11cea677da4a517e4dc00fb5a033e174eebbddd1d60e58ac96f03cd7e9ebf",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:28Z",
+      "source_url": "http://www.lorinix.net/my8x10life/?m=201105",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.55,
+      "theme_fit": 0.9,
+      "summary": "Two May 2011 posts from a WordPress blog titled \"My 8×10 Life,\" written by Kathleen. In the first, she describes growing up in the rural Midwest, her reluctant migration eastward to Brooklyn, and the comfort she felt driving back through Midwestern landscapes, alongside her lingering ambivalence about city life. The second post documents the early stages of building a diorama with Lori, detailing decisions about scale, lighting, and how much floor, ceiling, and sky a scene needs.",
+      "secondary_themes": [
+        "migration-displacement",
+        "physical-home",
+        "online-home"
+      ]
+    },
+    {
+      "story_id": "story-ea05fee5897c7db8f73cc06a",
+      "content_hash": "4017d3e601ef05b887bf8eeba768d645e9864d4d7bc3c1c3c1477e0682790db4",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.archive.org/stream/memoirsofcrownpr00wilhuoft/memoirsofcrownpr00wilhuoft_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.55,
+      "theme_fit": 0.9,
+      "summary": "A first-person memoir passage describes the writer marking a thirty-seventh birthday in May 1919 while living in seclusion, apparently in exile. Letters and gifts arrive from a German homeland and from an island and the Dutch mainland, and the writer notes small presents crowding the narrow rooms of a parsonage. With the consent of the Dutch Government, the writer leaves the island to spend a day with a mother on an estate, walking in a garden and pouring out burdens. The text centers on belonging maintained across distance and displacement.",
+      "secondary_themes": [
+        "identity-belonging",
+        "family-inheritance",
+        "physical-home"
+      ]
+    },
+    {
+      "story_id": "story-25945a71670ab26747eae7ff",
+      "content_hash": "f87a6f64575ca8c4d7677f1f7b74bc3045419d835a5922763b1ca5f82a2a83ad",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:29Z",
+      "source_url": "http://www.archive.org/stream/lifeofgeorgepeab00hanauoft/lifeofgeorgepeab00hanauoft_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.55,
+      "theme_fit": 0.85,
+      "summary": "An excerpt from a printed biography reproduces a speech in which the speaker reflects on returning to his native land after twenty years abroad. He describes wishing to see the land of his birth, surviving family members, and old friends, and to witness changes across the country. He compares himself to Rip Van Winkle, amazed at the transformations that have occurred in his absence, and declines most dinner invitations except one to his native town of Danvers, Massachusetts.",
+      "secondary_themes": [
+        "family-inheritance",
+        "identity-belonging"
+      ]
+    },
+    {
+      "story_id": "story-74513b87ad36dc153aa9fad9",
+      "content_hash": "c1eb17d40355322431f367709b22c610a37bd9e53407ba5f1ca73c532c894147",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:19Z",
+      "source_url": "http://www.archive.org/stream/historyofhancock00richrich/historyofhancock00richrich_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.55,
+      "theme_fit": 0.72,
+      "summary": "An address printed in a county history, attributed to Rev. William Nichols of New Palestine, delivered at an old settlers' meeting. He recalls being born under territorial government before Indiana became a state, names his birthplace in the Whitewater valley near Metamora, and describes his life as a minister across several counties. He shares a childhood memory of hiding in a hollow stump out of fear when a party of Indians came to his father's house to trade, and reflects on pioneer hardship, building a republic from wilderness, and learning to read and write in a log schoolhouse.",
+      "secondary_themes": [
+        "family-inheritance",
+        "memory-archive",
+        "physical-home"
+      ]
+    },
+    {
+      "story_id": "story-ebfd9618c8f744211076515b",
+      "content_hash": "43638ea6ca3b4948b61de508ef4c343f1d1d109ad1595093b1476a424db764f8",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.rootsweb.ancestry.com/~mnrrvn/Memories-Rustad-Random.html",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.52,
+      "theme_fit": 0.78,
+      "summary": "In a personal essay dated 11 December 2001, a writer identified as Prof. Michael Rustad recalls growing up in the flat, black-loam landscape of the Red River Valley in northwestern Minnesota. He describes his childhood longing to escape the flatness, his sense that being a 'flat lander' was somehow inferior to living near mountains or the sea, and his gradual shift toward appreciation of the land, its people, and its history. He credits a sixth-grade teacher, Dale Finney Miller, with sparking his love of Minnesota history through lessons on Scandinavian mythology and local lore including the Alexandria runestone. The extracted text ends mid-sentence, indicating an incomplete capture.",
+      "secondary_themes": [
+        "physical-home",
+        "memory-archive",
+        "identity-belonging"
+      ]
+    },
+    {
+      "story_id": "story-33794ca00b8257365b2cd670",
+      "content_hash": "eb0bbe6243399a64ef7845f9bfad77fb94d337b45a471184b424356ceab40fed",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:15Z",
+      "source_url": "http://www.archive.org/stream/worksofrobertlvol21stev/worksofrobertlvol21stev_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.52,
+      "theme_fit": 0.68,
+      "summary": "This essay fragment meditates on the psychological power of roads as symbols of longing and anticipation. The central concept is Sehnsucht — glossed in the text as 'the passion for what is ever beyond' — which the author argues is visually embodied by the sight of a road stretching to the horizon. A lengthy quotation attributed to Goethe's Werther dramatizes the paradox that the longed-for distance, once reached, collapses back into ordinariness: 'when there is changed to here, all is afterwards as it was before.' The fragment closes with the claim that roads 'minister' to this restless spirit by feeding the imagination glimpses of what lies ahead, letting the mind outrun the body toward a destination not yet reached.",
+      "secondary_themes": [
+        "migration-displacement",
+        "lost-places",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-8164ced3b394d9c7d72cb322",
+      "content_hash": "b612787a22878a5918faa24ac0620277e881df25ce60763a79b51ce94313aa54",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:19Z",
+      "source_url": "http://www.ottumwacourier.com/opinion/x326085549/Memories/print",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.51,
+      "theme_fit": 0.91,
+      "summary": "A personal-essay column published in the Ottumwa Courier recounts a narrator's return visit to their childhood hometown of Mt. Union in Henry County. Accompanied by an adult daughter and an infant grandson named Max on his first road trip, the narrator moves between a rural cemetery and the surrounding farmland of Canaan Township, leaving flowers at the graves of named family members. The piece meditates on the gap between a town that still physically exists and the people and particular life it once held. The crawled text ends mid-sentence, indicating the record is truncated.",
+      "secondary_themes": [
+        "family-inheritance",
+        "lost-places",
+        "memory-archive",
+        "physical-home"
+      ]
+    },
+    {
+      "story_id": "story-2327326c1fcdf3a10f70bdca",
+      "content_hash": "71e5812ba847ea1b6ba2e872027b91c983a7a798f61f3c9cbf5c15f1cc70cf9a",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.onetrailingspouse.com/5-things-i-miss-about-the-u-s/",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.45,
+      "theme_fit": 0.85,
+      "summary": "A blogger named Emily, writing on \"One Trailing Spouse,\" lists five things she looks forward to after five months living in Kenya as she prepares to return to the U.S. She describes wanting to see friends and family in Atlanta, the freedom of driving, feeling safe enough to walk after dark, reuniting with her belongings after packing a single suitcase, and catching up on Netflix and Hulu. A commenter, Marina, adds what she misses while living in England. The piece frames repatriation and homesickness through everyday conveniences and relationships.",
+      "secondary_themes": [
+        "migration-displacement",
+        "objects-food-rituals",
+        "chosen-community"
+      ]
+    },
+    {
+      "story_id": "story-191f2a6d4501d545e19858cd",
+      "content_hash": "474dfc81cba5be7ca28dc7fce472fa81781b3381f8ae19d2f3430c8c5a7c1801",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:27Z",
+      "source_url": "http://blog.chron.com/leonhale/2013/05/old-memories-return-on-hometown-visit/?cmpid=hpbtfsb",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "featured",
+      "anchor_score": 0.43,
+      "theme_fit": 0.88,
+      "summary": "A Houston Chronicle columnist returns to his small hometown and walks the courthouse square, cataloguing the specific places where he worked and spent money as a young person: a drugstore where he earned 17½ cents an hour as a soda skeet, a café where a dime bought a bowl of chili augmented with crackers and ketchup, a Piggly Wiggly where grocery sackers also carried bags for customers sometimes two or three blocks, and a bank where he once tried to cash a small personal check. The text ends mid-sentence at the bank anecdote. Each stop on the walk anchors a concrete economic and sensory memory from an earlier chapter of his life, with the courthouse lawn itself triggering a childhood recollection of touch-football games.",
+      "secondary_themes": [
+        "memory-archive",
+        "objects-food-rituals",
+        "physical-home"
+      ]
+    },
+    {
+      "story_id": "story-51a1bc8af9ca9a8857b06f68",
+      "content_hash": "b5f52cc2e04ada2935e3648eb8586cdf1c30d4cec3f8bb49dcff2f13814fafe3",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.archive.org/stream/beethovensletter001beet/beethovensletter001beet_djvu.txt",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.41,
+      "theme_fit": 0.82,
+      "summary": "A fragment from what the source URL identifies as a digitized collection of letters, the text voices longing for an unnamed correspondent since leaving an unspecified 'fatherland,' expresses relief at the return of an old friend identified in editorial brackets as Stephan von Breuning, reflects on the inadequacy of certain acquaintances for true friendship, and closes with a raw lament that hearing loss forces social withdrawal from the very people the writer most wishes to reach. The text begins and ends mid-sentence, and the chapter heading 'APPEAL TO FRIENDSHIP. 19' visible at the close marks it as a paginated excerpt from a printed book rather than a standalone document.",
+      "secondary_themes": [
+        "chosen-community",
+        "identity-belonging",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-5cf48617f5335d0e3579c911",
+      "content_hash": "a0cc3e0233ff49e7a3b8d89906acfe9eadfb639a12f7cdc74de2e3a744ba3f82",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:21Z",
+      "source_url": "http://brandedinthe80s.com/6329/halloween-smells-awesome",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.4,
+      "theme_fit": 0.62,
+      "summary": "A blogger who writes about 80s branding, toys, and pop culture reflects on feeling torn between nostalgia and discomfort with the constant re-launch of the franchises they grew up with. They describe Halloween as the one exception where they stray from nostalgia toward contemporary pop culture, calling it refreshing and comforting after a rough year. The piece then recounts noticing mall chain stores rolling out Halloween displays in August and visiting Yankee Candle with the writer's spouse to see the Boney Bunch candle holders. The entry cuts off mid-sentence during that store visit.",
+      "secondary_themes": [
+        "online-home",
+        "objects-food-rituals",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-7125f780a8df384e1a7cc5ea",
+      "content_hash": "edfda12d1299c6b043fdb78b5465fa73600b7bb26d98781ad1494299d1eb732d",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:20Z",
+      "source_url": "http://www.andovertownsman.com/opinion/x1133193333/Letter-Plan-for-future-but-dont-forget-past-Andover/print",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.37,
+      "theme_fit": 0.84,
+      "summary": "A letter to the editor of the Andover Townsman, published November 1, 2012, in which the author describes returning to Andover, Massachusetts after living away for decades. He contrasts his memory of the town — once nicknamed 'Mill, Hill and Till' — with what he found upon return: expanded industry, denser development, a changed downtown, and a degraded Shawsheen River. He criticizes the destruction of historic dams, the conduct of a Town Meeting for a youth center, the erosion of civic memory around buildings such as the former Punchard High School, and what he sees as the loss of the town's history and traditional values among newer residents. The letter closes with a call to plan for the future without forgetting the past.",
+      "secondary_themes": [
+        "lost-places",
+        "identity-belonging",
+        "memory-archive",
+        "physical-home"
+      ]
+    },
+    {
+      "story_id": "story-3b61e67ea1fdabc77b154676",
+      "content_hash": "9820f9ac6c204d2471fb2e11832d62ea4d4b800ee0e9afc76e77531b3feef182",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.poetrysoup.com/poems_poets/poem_detail.aspx?ID=345261",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.3,
+      "theme_fit": 0.55,
+      "summary": "A poem titled \"Do you remember\" attributed to Andrew Nashat, hosted on PoetrySoup. The speaker addresses a beloved person (repeatedly called \"my dear\"), recalling nights of talking, staring, and long walks on the beach, then describing emotional distance growing between them. The piece moves from shared memory to loss and longing for return, framing belonging as something built between two people rather than in a place.",
+      "secondary_themes": [
+        "chosen-community",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-fa70a536d9be15a3a1c079d4",
+      "content_hash": "798b8e3b60bcb60b131bed16e830d7f2257e4fea213def947cf6b48e6c520505",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://slutever.com/missing-stan/",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "fragment",
+      "anchor_score": 0.28,
+      "theme_fit": 0.74,
+      "summary": "Writing on Christmas Eve 2009, the narrator reflects on a persistent sense of incompleteness that surfaces whenever they return to their hometown and family. Despite genuine affection for relatives, London has become a locus of identity; being away from it produces a felt absence the narrator cannot fully articulate. An email from Stan—a London-based intern who evolved into a friend and occasional intimate—briefly relieves that sadness. The post references two earlier installments about Stan that are not present in this capture, and the text is cut off mid-sentence, leaving the full anecdote unreachable.",
+      "secondary_themes": [
+        "chosen-community",
+        "online-home"
+      ]
+    },
+    {
+      "story_id": "story-25f49668a3daff7a300d7c88",
+      "content_hash": "7de6b1c4e4b22904450308ecbbebbf75b5ba680636bce7b234ad6745058f6266",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:17Z",
+      "source_url": "http://pinerock.com/company.html",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "supporting",
+      "anchor_score": 0.27,
+      "theme_fit": 0.65,
+      "summary": "A company founder recalls PineRock Park, a childhood park in Connecticut where baseball, live music, and giant swings gave him a feeling of growth, freedom, and open possibility. That remembered place became the emotional blueprint for a company he named after it. The page, captured in December 2013, presents this origin story as the company's founding vision — a deliberate act of memorial naming that attempts to make a lost childhood place live again inside an organizational identity.",
+      "secondary_themes": [
+        "lost-places",
+        "identity-belonging",
+        "memory-archive"
+      ]
+    },
+    {
+      "story_id": "story-4cabb58067e9770676b8af02",
+      "content_hash": "e133593d1b853dbc888f78569945d553172bc5290a8bc9906b179c25a2451144",
+      "language": "en",
+      "crawl_timestamp": "2013-12-04T13:17:31Z",
+      "source_url": "http://www.lyricsmode.com/lyrics/x/xanthe_littlemore/hurry_up_with_the_robots/",
+      "primary_theme": "exile-return-nostalgia",
+      "primary_theme_name": "Exile, Return, and Nostalgia",
+      "usage_type": "fragment",
+      "anchor_score": 0.13,
+      "theme_fit": 0.52,
+      "summary": "A lyrics-aggregator page captured in December 2013 presents short preview fragments from at least three songs attributed to Xanthe Littlemore. The most home-relevant passage appears under the label 'Don't Say Goodbye,' in which a speaker describes a childhood town whose wild growth has been cleared away and expresses reluctance to return because the changes cause grief. A second fragment, also labeled 'Don't Say Goodbye,' voices a wish for solitude rooted in fear of abandonment. Other fragments address information overload ('Death By Information') and a parable about a barefoot traveler ('Do Unto Others'). The page also contains login prompts, album listings, and other site boilerplate. Whether the URL slug 'hurry_up_with_the_robots' ever corresponded to any of the visible lyric text, and how much surrounding context was omitted by the site's preview gating, cannot be determined from this capture alone.",
+      "secondary_themes": [
+        "lost-places",
+        "physical-home"
+      ]
+    }
+  ],
+  "immutability": "Do not rewrite after publication. Late discoveries belong in a supplement or later cross-month episode."
+}

@@ -6,7 +6,7 @@ import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, BinaryIO
 
 
 class ProviderTrafficBlockedError(RuntimeError):
@@ -30,12 +30,14 @@ class CaprioleChatClient:
         api_key_env: str = "CAPRIOLE_API_KEY",
         timeout_seconds: int = 180,
         max_attempts: int = 4,
+        protocol: str = "native_chat",
     ) -> None:
         self.endpoint = endpoint
         self.model = model
         self.api_key_env = api_key_env
         self.timeout_seconds = timeout_seconds
         self.max_attempts = max_attempts
+        self.protocol = protocol
 
     @classmethod
     def from_config(cls, provider: dict[str, Any]) -> "CaprioleChatClient":
@@ -46,6 +48,8 @@ class CaprioleChatClient:
             model=str(provider["model"]),
             api_key_env=str(provider.get("api_key_env", "CAPRIOLE_API_KEY")),
             timeout_seconds=int(provider.get("timeout_seconds", 180)),
+            max_attempts=int(provider.get("max_attempts", 4)),
+            protocol=str(provider.get("protocol", "native_chat")),
         )
 
     def complete(self, input_text: str) -> CaprioleResponse:
@@ -54,10 +58,18 @@ class CaprioleChatClient:
             raise RuntimeError(
                 f"Missing {self.api_key_env}; provide it as an environment variable"
             )
-        payload = json.dumps(
-            {"model": self.model, "input": input_text},
-            ensure_ascii=False,
-        ).encode("utf-8")
+        if self.protocol == "native_chat":
+            body = {"model": self.model, "input": input_text}
+        elif self.protocol == "openai_chat_completions_stream":
+            body = {
+                "model": self.model,
+                "messages": [{"role": "user", "content": input_text}],
+                "stream": True,
+                "stream_options": {"include_usage": True},
+            }
+        else:
+            raise ValueError(f"Unsupported Capriole protocol: {self.protocol}")
+        payload = json.dumps(body, ensure_ascii=False).encode("utf-8")
         request = urllib.request.Request(
             self.endpoint,
             data=payload,
@@ -74,19 +86,17 @@ class CaprioleChatClient:
                 with urllib.request.urlopen(
                     request, timeout=self.timeout_seconds
                 ) as response:
-                    body = json.loads(response.read().decode("utf-8"))
-                result = body.get("result", {})
+                    if self.protocol == "openai_chat_completions_stream":
+                        return _consume_openai_sse(response, self.model)
+                    response_body = json.loads(response.read().decode("utf-8"))
+                result = response_body.get("result", {})
                 text = result.get("text")
                 if not isinstance(text, str) or not text.strip():
                     raise RuntimeError("Capriole response did not contain result.text")
-                usage = {
-                    key: int(value)
-                    for key, value in body.get("usage", {}).items()
-                    if isinstance(value, (int, float))
-                }
+                usage = _numeric_usage(response_body.get("usage", {}))
                 return CaprioleResponse(
-                    request_id=str(body.get("id", "")),
-                    model=str(body.get("model", self.model)),
+                    request_id=str(response_body.get("id", "")),
+                    model=str(response_body.get("model", self.model)),
                     text=text,
                     usage=usage,
                 )
@@ -123,3 +133,54 @@ def _safe_error_body(error: urllib.error.HTTPError) -> str:
             "traffic or rate protection"
         )
     return compact[:500]
+
+
+def _consume_openai_sse(
+    response: BinaryIO,
+    fallback_model: str,
+) -> CaprioleResponse:
+    text_parts: list[str] = []
+    request_id = ""
+    model = fallback_model
+    usage: dict[str, int] = {}
+    for raw_line in response:
+        line = raw_line.decode("utf-8", errors="replace").strip()
+        if not line or line.startswith(":") or not line.startswith("data:"):
+            continue
+        data = line[5:].strip()
+        if data == "[DONE]":
+            break
+        event = json.loads(data)
+        if "error" in event:
+            raise RuntimeError(
+                f"Capriole stream error: {str(event['error'])[:500]}"
+            )
+        request_id = str(event.get("id", request_id))
+        model = str(event.get("model", model))
+        event_usage = _numeric_usage(event.get("usage", {}))
+        if event_usage:
+            usage = event_usage
+        for choice in event.get("choices", []):
+            delta = choice.get("delta", {})
+            content = delta.get("content")
+            if isinstance(content, str):
+                text_parts.append(content)
+    text = "".join(text_parts)
+    if not text.strip():
+        raise RuntimeError("Capriole stream did not contain response text")
+    return CaprioleResponse(
+        request_id=request_id,
+        model=model,
+        text=text,
+        usage=usage,
+    )
+
+
+def _numeric_usage(value: Any) -> dict[str, int]:
+    if not isinstance(value, dict):
+        return {}
+    return {
+        key: int(item)
+        for key, item in value.items()
+        if isinstance(item, (int, float))
+    }

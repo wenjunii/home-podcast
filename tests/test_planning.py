@@ -389,6 +389,18 @@ class PlanningTests(unittest.TestCase):
                 "memory-archive",
             )
 
+            themed = create_month_proposal(
+                config,
+                "2013-05",
+                root / "themed.json",
+                single_episode_title="The Homes We Leave Behind",
+            )
+            self.assertEqual(len(themed["installments"]), 1)
+            self.assertEqual(
+                themed["installments"][0]["title"],
+                "The Homes We Leave Behind",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

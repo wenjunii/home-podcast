@@ -21,7 +21,7 @@ audience.
 
 ## Proposed episode
 
-### 2013-12.01 — The Homes We Leave Behind (working title)
+### 2013-12.01 — The Homes We Leave Behind
 
 One approximately 30-minute sub-episode with three internal movements:
 
@@ -31,6 +31,10 @@ One approximately 30-minute sub-episode with three internal movements:
 
 Every selected story is assigned exactly once. Their depth varies so the
 conversation does not sound like a list.
+
+The locked manifest and six-section production outline are in
+`episodes/2013-12.01/`. The smaller sections are generation checkpoints within
+the three audience-facing movements, not additional sub-episodes.
 
 ## Runtime and text assumptions
 

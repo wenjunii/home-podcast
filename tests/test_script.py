@@ -27,7 +27,9 @@ class ScriptValidationTests(unittest.TestCase):
                 ]
             }
             script = {
+                "contract_version": 1,
                 "episode_id": "2013-12.01",
+                "title": "A Home",
                 "segments": [
                     {
                         "segment_id": "001",

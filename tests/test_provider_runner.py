@@ -9,6 +9,7 @@ from home_podcast.provider_runner import (
     _sanitize_memorable_passages,
 )
 from home_podcast.providers.capriole import _safe_error_body
+from home_podcast.providers.capriole import _consume_openai_sse
 
 
 class ProviderRunnerTests(unittest.TestCase):
@@ -65,6 +66,21 @@ class ProviderRunnerTests(unittest.TestCase):
             "upstream CDN blocked the request; this may be transient "
             "traffic or rate protection",
         )
+
+    def test_consumes_openai_compatible_sse(self) -> None:
+        response = io.BytesIO(
+            b'data: {"id":"req-1","model":"fable","choices":'
+            b'[{"delta":{"content":"Hello "}}]}\n\n'
+            b'data: {"id":"req-1","model":"fable","choices":'
+            b'[{"delta":{"content":"home."}}]}\n\n'
+            b'data: {"id":"req-1","model":"fable","choices":[],'
+            b'"usage":{"input_tokens":10,"output_tokens":2}}\n\n'
+            b"data: [DONE]\n\n"
+        )
+        result = _consume_openai_sse(response, "fallback")
+        self.assertEqual(result.text, "Hello home.")
+        self.assertEqual(result.model, "fable")
+        self.assertEqual(result.usage["input_tokens"], 10)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,146 @@
+{
+  "contract_version": 1,
+  "episode_id": "2013-12.01",
+  "title": "The Homes We Leave Behind",
+  "structure": "One episode with three internal movements",
+  "movements": [
+    {
+      "movement_id": "leaving",
+      "sequence": 1,
+      "title": "The Distance Starts Here",
+      "purpose": "Begin with departure, homesickness, exile, and the ordinary things that become emotionally enormous when home is far away.",
+      "target_words": 1400,
+      "sections": [
+        {
+          "section_id": "leaving-home",
+          "sequence": 1,
+          "purpose": "Open on the moment a familiar home becomes a place one can only visit, then widen into longing for country, landscape, family, and a life interrupted.",
+          "target_words": 700,
+          "story_ids": [
+            "story-9608b65eb8ddfa6ae62b0e39",
+            "story-7ac236ec06ced47546d91a19",
+            "story-bc88fb883cd14b8f55e78065",
+            "story-0df1f0c21c6c8791e42dba65"
+          ]
+        },
+        {
+          "section_id": "what-distance-magnifies",
+          "sequence": 2,
+          "purpose": "Contrast dramatic exile with the mundane freedoms, landscapes, objects, and relationships that distance makes newly precious.",
+          "target_words": 700,
+          "story_ids": [
+            "story-b97029685f681ec4175a39e4",
+            "story-e58ed78f41114cade2acc8c5",
+            "story-ea05fee5897c7db8f73cc06a",
+            "story-33794ca00b8257365b2cd670",
+            "story-2327326c1fcdf3a10f70bdca"
+          ]
+        }
+      ],
+      "story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39",
+        "story-7ac236ec06ced47546d91a19",
+        "story-bc88fb883cd14b8f55e78065",
+        "story-0df1f0c21c6c8791e42dba65",
+        "story-b97029685f681ec4175a39e4",
+        "story-e58ed78f41114cade2acc8c5",
+        "story-ea05fee5897c7db8f73cc06a",
+        "story-33794ca00b8257365b2cd670",
+        "story-2327326c1fcdf3a10f70bdca"
+      ],
+      "ending_handoff": "Distance turns the remembered home into a destination, but arrival does not guarantee recognition."
+    },
+    {
+      "movement_id": "returning",
+      "sequence": 2,
+      "title": "You Can Go Back—But to What?",
+      "purpose": "Center the anchor story and compare returns to houses, towns, landscapes, graves, family, and civic places transformed by time.",
+      "target_words": 1500,
+      "sections": [
+        {
+          "section_id": "the-charged-return",
+          "sequence": 1,
+          "purpose": "Center the Appalachian anchor story, then echo it through a decaying house, an ancestral landscape, and a native land transformed over twenty years.",
+          "target_words": 750,
+          "story_ids": [
+            "story-0eadd80cefbcbd94e33a66f1",
+            "story-ec32dd5b7c69997097358090",
+            "story-4ed05cb194b517ab41b3f7e6",
+            "story-25945a71670ab26747eae7ff"
+          ]
+        },
+        {
+          "section_id": "the-town-and-the-memory",
+          "sequence": 2,
+          "purpose": "Walk through cemeteries, courthouse squares, civic change, divided urban identity, and a gated lyric fragment to ask who owns a remembered place.",
+          "target_words": 750,
+          "story_ids": [
+            "story-8164ced3b394d9c7d72cb322",
+            "story-191f2a6d4501d545e19858cd",
+            "story-7125f780a8df384e1a7cc5ea",
+            "story-fa70a536d9be15a3a1c079d4",
+            "story-4cabb58067e9770676b8af02"
+          ]
+        }
+      ],
+      "story_ids": [
+        "story-0eadd80cefbcbd94e33a66f1",
+        "story-ec32dd5b7c69997097358090",
+        "story-4ed05cb194b517ab41b3f7e6",
+        "story-25945a71670ab26747eae7ff",
+        "story-8164ced3b394d9c7d72cb322",
+        "story-191f2a6d4501d545e19858cd",
+        "story-7125f780a8df384e1a7cc5ea",
+        "story-fa70a536d9be15a3a1c079d4",
+        "story-4cabb58067e9770676b8af02"
+      ],
+      "ending_handoff": "When the place no longer matches the memory, people find other containers for belonging."
+    },
+    {
+      "movement_id": "preserving",
+      "sequence": 3,
+      "title": "What the Web Remembered",
+      "purpose": "Explore sensory nostalgia, inherited local memory, friendship, art, naming, and the strange partial record left by old web captures.",
+      "target_words": 1400,
+      "sections": [
+        {
+          "section_id": "memorys-material",
+          "sequence": 1,
+          "purpose": "Move from sensory and false nostalgia into inherited town history, pioneer memory, and a landscape that became lovable only after leaving it.",
+          "target_words": 700,
+          "story_ids": [
+            "story-657fb3417e6c0c0cd4539e4d",
+            "story-1e3a5bda38becad9ce688edc",
+            "story-d11d07357380985cd742c37e",
+            "story-74513b87ad36dc153aa9fad9",
+            "story-ebfd9618c8f744211076515b"
+          ]
+        },
+        {
+          "section_id": "containers-for-belonging",
+          "sequence": 2,
+          "purpose": "Close through friendship, seasonal ritual, an intimate poem, and a company named for a childhood park—containers that keep belonging present while the archive remains partial.",
+          "target_words": 700,
+          "story_ids": [
+            "story-51a1bc8af9ca9a8857b06f68",
+            "story-5cf48617f5335d0e3579c911",
+            "story-3b61e67ea1fdabc77b154676",
+            "story-25f49668a3daff7a300d7c88"
+          ]
+        }
+      ],
+      "story_ids": [
+        "story-657fb3417e6c0c0cd4539e4d",
+        "story-1e3a5bda38becad9ce688edc",
+        "story-d11d07357380985cd742c37e",
+        "story-74513b87ad36dc153aa9fad9",
+        "story-ebfd9618c8f744211076515b",
+        "story-51a1bc8af9ca9a8857b06f68",
+        "story-5cf48617f5335d0e3579c911",
+        "story-3b61e67ea1fdabc77b154676",
+        "story-25f49668a3daff7a300d7c88"
+      ],
+      "ending_handoff": "Close on the idea that an archive can preserve evidence of longing without restoring the home, person, page, or context that produced it."
+    }
+  ]
+}

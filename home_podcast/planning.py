@@ -190,6 +190,8 @@ def create_month_proposal(
                         "stories": chunk,
                     }
                 )
+        if single_episode_title and len(installments) == 1:
+            installments[0]["title"] = single_episode_title
 
     proposal = {
         "contract_version": 1,
@@ -382,7 +384,20 @@ def prepare_script_packet(
     connection = connect(config.catalog_path)
     placeholders = ",".join("?" for _ in story_ids)
     rows = connection.execute(
-        f"SELECT * FROM stories WHERE id IN ({placeholders})", story_ids
+        f"""
+        SELECT stories.*,
+               (
+                   SELECT c.card_json
+                     FROM story_cards AS c
+                    WHERE c.story_id = stories.id
+                      AND c.content_hash = stories.content_hash
+                    ORDER BY c.created_at DESC
+                    LIMIT 1
+               ) AS card_json
+          FROM stories
+         WHERE stories.id IN ({placeholders})
+        """,
+        story_ids,
     ).fetchall()
     connection.close()
     row_by_id = {row["id"]: row for row in rows}
@@ -401,6 +416,9 @@ def prepare_script_packet(
                 "accepted_filter_text": row["accepted_text"],
                 "story_text": row["story_text"],
                 "quality_flags": json.loads(row["quality_flags_json"]),
+                "story_card": (
+                    json.loads(row["card_json"]) if row["card_json"] else None
+                ),
             }
         )
     packet = {
