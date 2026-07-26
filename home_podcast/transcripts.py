@@ -9,6 +9,9 @@ def render_transcripts(
     timeline_path: Path,
     speaker_config_path: Path,
     output_dir: Path,
+    *,
+    include_sound_cues: bool = True,
+    filename_suffix: str = "",
 ) -> dict[str, Path]:
     timeline = json.loads(timeline_path.read_text(encoding="utf-8"))
     speaker_config = json.loads(speaker_config_path.read_text(encoding="utf-8"))
@@ -18,16 +21,20 @@ def render_transcripts(
     }
     episode_id = timeline["episode_id"]
     output_dir.mkdir(parents=True, exist_ok=True)
-    markdown_path = output_dir / f"{episode_id}-transcript.md"
-    vtt_path = output_dir / f"{episode_id}.vtt"
-    srt_path = output_dir / f"{episode_id}.srt"
+    markdown_path = output_dir / f"{episode_id}{filename_suffix}-transcript.md"
+    vtt_path = output_dir / f"{episode_id}{filename_suffix}.vtt"
+    srt_path = output_dir / f"{episode_id}{filename_suffix}.srt"
 
     markdown_lines = [
         f"# Transcript: {episode_id}",
         "",
     ]
     sound_design = timeline.get("sound_design")
-    if isinstance(sound_design, dict) and sound_design.get("disclosure"):
+    if (
+        include_sound_cues
+        and isinstance(sound_design, dict)
+        and sound_design.get("disclosure")
+    ):
         markdown_lines.extend(
             [
                 f"_Sound design note: {sound_design['disclosure']}_",
@@ -50,24 +57,25 @@ def render_transcripts(
         )
         for story_id in segment.get("source_story_ids", []):
             story_index.setdefault(story_id, []).append(segment["segment_id"])
-    for cue in timeline.get("sound_cues", []):
-        label = str(cue.get("transcript_label", "")).strip()
-        if label:
-            caption_end_ms = int(cue["end_ms"])
-            caption_duration_ms = cue.get("caption_duration_ms")
-            if isinstance(caption_duration_ms, int):
-                caption_end_ms = min(
-                    caption_end_ms,
-                    int(cue["start_ms"]) + caption_duration_ms,
+    if include_sound_cues:
+        for cue in timeline.get("sound_cues", []):
+            label = str(cue.get("transcript_label", "")).strip()
+            if label:
+                caption_end_ms = int(cue["end_ms"])
+                caption_duration_ms = cue.get("caption_duration_ms")
+                if isinstance(caption_duration_ms, int):
+                    caption_end_ms = min(
+                        caption_end_ms,
+                        int(cue["start_ms"]) + caption_duration_ms,
+                    )
+                caption_items.append(
+                    {
+                        "type": "sound",
+                        "start_ms": int(cue["start_ms"]),
+                        "end_ms": caption_end_ms,
+                        "text": f"[{label}]",
+                    }
                 )
-            caption_items.append(
-                {
-                    "type": "sound",
-                    "start_ms": int(cue["start_ms"]),
-                    "end_ms": caption_end_ms,
-                    "text": f"[{label}]",
-                }
-            )
 
     caption_items.sort(
         key=lambda item: (

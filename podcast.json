@@ -29,6 +29,16 @@
     "protocol": "anthropic_messages_stream",
     "max_tokens": 4096
   },
+  "visual_provider": {
+    "type": "capriole",
+    "endpoint": "https://api.caprioletech.com/v1/messages",
+    "model": "anthropic/claude-opus-4-6",
+    "api_key_env": "CAPRIOLE_API_KEY",
+    "timeout_seconds": 600,
+    "max_attempts": 1,
+    "protocol": "anthropic_messages_stream",
+    "max_tokens": 2048
+  },
   "speech_provider": {
     "type": "elevenlabs_tts",
     "endpoint": "https://api.elevenlabs.io/v1/text-to-speech",

@@ -1,50 +1,76 @@
 {
   "contract_version": 1,
   "episode_id": "2013-12.01",
-  "status": "rendered_pending_listening_review",
-  "rendered_on": "2026-07-25",
+  "status": "interactive_plus_voices_rendered_pending_listening_review",
+  "rendered_on": "2026-07-26",
   "speech": {
     "provider": "elevenlabs",
     "model": "eleven_v3",
-    "performance_variant": "creative-plus",
-    "contextual_chunks": 17,
-    "scripted_turns": 128,
-    "timestamped_turns": 128,
-    "rendered_characters": 27125,
-    "conservative_credit_ceiling": 27125,
-    "successful_response_credits": 14921
+    "performance_variant": "interactive-plus",
+    "contextual_chunks": 18,
+    "scripted_turns": 271,
+    "timestamped_turns": 271,
+    "rendered_characters": 28744,
+    "conservative_credit_ceiling": 28744,
+    "successful_response_credits": 15810
   },
   "program": {
-    "duration_ms": 1844720,
-    "duration_clock": "00:30:44.720",
+    "duration_ms": 1944160,
+    "duration_clock": "00:32:24.160",
     "sample_rate_hz": 48000,
     "channels": 2,
     "distribution_bitrate_kbps": 192,
     "tracks": {
       "voices_only": "audio/2013-12.01-voices-only.mp3",
-      "soundscape_only": "audio/2013-12.01-soundscape-only.mp3",
-      "combined_review": "audio/2013-12.01.mp3"
+      "combined_review_without_soundscape": "audio/2013-12.01.mp3"
     }
   },
   "soundscape": {
-    "cues": 13,
-    "continuous": true,
-    "suppressed_section_cues": 0,
+    "status": "deferred_for_later_revision",
+    "active_track": null,
+    "previous_render": "work/backups/2013-12.01-pre-interactive-plus/stale-active-soundscape",
     "presentation": "illustrative_sound_design"
   },
   "transcripts": {
     "markdown": "transcripts/2013-12.01-transcript.md",
     "webvtt": "transcripts/2013-12.01.vtt",
-    "srt": "transcripts/2013-12.01.srt"
+    "srt": "transcripts/2013-12.01.srt",
+    "voices_only_markdown": "transcripts/2013-12.01-voices-only-transcript.md",
+    "voices_only_webvtt": "transcripts/2013-12.01-voices-only.vtt",
+    "voices_only_srt": "transcripts/2013-12.01-voices-only.srt"
+  },
+  "visuals": {
+    "status": "generated_pending_editorial_review",
+    "scene_plan": "visuals/2013-12.01-visual-scenes.json",
+    "speech_captions": 271,
+    "visual_scenes": 90,
+    "unique_prompts": 90,
+    "previous_validated_prompts_repositioned": 67,
+    "new_complementary_prompts": 23,
+    "minimum_scene_ms": 15048,
+    "maximum_scene_ms": 40161,
+    "average_scene_ms": 21602,
+    "crossfade_ms": 5000,
+    "sdxl_content_token_minimum": 68,
+    "sdxl_content_token_maximum": 75,
+    "scenes_with_verified_location_evidence": 86,
+    "location_claims": 167,
+    "scenes_with_verified_identity_evidence": 45,
+    "identity_claims": 65,
+    "network_calls": 0
   },
   "automated_qa": {
     "all_turns_have_provider_timestamps": true,
-    "all_tracks_have_equal_duration": true,
+    "unique_timeline_segments": 271,
+    "source_stories_covered": 27,
+    "caption_cues": 271,
+    "timeline_matches_final_turn": true,
     "silences_over_two_seconds_at_minus_45_db": 0,
+    "voices_only_mean_db": -19.7,
     "voices_only_peak_db": -1.8,
-    "soundscape_only_peak_db": -2.0,
-    "combined_review_peak_db": -1.8,
-    "credentials_present_in_artifacts": false
+    "credentials_present_in_repository_artifacts": false,
+    "script_validation_passed": true,
+    "automated_tests_passed": 82
   },
-  "remaining_gate": "Human listening, source-excerpt policy, and sensitivity/translation review."
+  "remaining_gate": "Human listening review of the full Interactive+ voices track, human editorial review of the 90 visual prompts, and later soundscape redesign."
 }

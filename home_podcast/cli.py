@@ -30,6 +30,15 @@ from .sfx_runner import generate_sound_effect_jobs
 from .sound_design import prepare_sfx_jobs, validate_sound_design
 from .transcripts import render_transcripts
 from .tts_runner import generate_tts_jobs
+from .visual_prompt_runner import (
+    generate_visual_prompt_jobs,
+    import_visual_prompt_results,
+)
+from .visuals import (
+    expand_visual_scenes,
+    prepare_visual_scenes,
+    validate_visual_plan,
+)
 from .voice_audition import prepare_voice_candidate_audition_jobs
 
 
@@ -356,6 +365,115 @@ def build_parser() -> argparse.ArgumentParser:
         "--cast",
         help="Frozen episode cast; defaults to episodes/<episode>/cast.json",
     )
+    transcript.add_argument(
+        "--speech-only",
+        action="store_true",
+        help="Exclude soundscape cues and write *-voices-only transcript files",
+    )
+
+    visuals = subparsers.add_parser(
+        "prepare-visuals",
+        help="Create long, story-centered visual scenes from a speech timeline",
+    )
+    visuals.add_argument("--timeline", required=True)
+    visuals.add_argument("--output", help="Versioned visual scene JSON")
+    visuals.add_argument(
+        "--jobs",
+        help="Grounded visual-prompt JSONL jobs; defaults under work/visuals",
+    )
+    visuals.add_argument(
+        "--min-scene-seconds",
+        type=float,
+        default=15.0,
+        help="Merge shorter passages instead of generating a disposable image",
+    )
+    visuals.add_argument(
+        "--crossfade-seconds",
+        type=float,
+        default=5.0,
+    )
+
+    expand_visuals = subparsers.add_parser(
+        "expand-visuals",
+        help="Split long generated scenes and create only complementary prompt jobs",
+    )
+    expand_visuals.add_argument("--source-visuals", required=True)
+    expand_visuals.add_argument("--timeline", required=True)
+    expand_visuals.add_argument("--output", required=True)
+    expand_visuals.add_argument("--jobs", required=True)
+    expand_visuals.add_argument(
+        "--min-scene-seconds",
+        type=float,
+        default=15.0,
+    )
+    expand_visuals.add_argument(
+        "--max-scene-seconds",
+        type=float,
+        default=35.0,
+    )
+    expand_visuals.add_argument(
+        "--crossfade-seconds",
+        type=float,
+        default=5.0,
+    )
+
+    validate_visuals = subparsers.add_parser(
+        "validate-visuals",
+        help="Validate scene coverage, prompt chunks, and grounding review state",
+    )
+    validate_visuals.add_argument("--visuals", required=True)
+
+    generate_visuals = subparsers.add_parser(
+        "generate-visual-prompts",
+        help="Dry-run or execute resumable grounded SDXL prompt generation",
+    )
+    generate_visuals.add_argument("--jobs", required=True)
+    generate_visuals.add_argument("--visuals", required=True)
+    generate_visuals.add_argument(
+        "--output",
+        help="Updated visual scene plan; defaults to replacing --visuals atomically",
+    )
+    generate_visuals.add_argument(
+        "--model",
+        help="Optional visual-provider model override",
+    )
+    generate_visuals.add_argument(
+        "--tokenizer-model",
+        help=(
+            "Local SDXL model/snapshot path or cached Hugging Face model ID; "
+            "defaults to the visual plan model"
+        ),
+    )
+    generate_visuals.add_argument("--limit", type=int)
+    generate_visuals.add_argument(
+        "--execute",
+        action="store_true",
+        help="Make paid provider calls; otherwise report cache and pending work",
+    )
+    generate_visuals.add_argument(
+        "--max-calls",
+        type=int,
+        help="Required hard ceiling on new paid calls when --execute is used",
+    )
+    generate_visuals.add_argument(
+        "--retry-invalid",
+        action="store_true",
+        help="Replace previously cached but invalid raw model responses",
+    )
+
+    import_visuals = subparsers.add_parser(
+        "import-visual-prompts",
+        help="Validate and apply locally authored visual prompts without network calls",
+    )
+    import_visuals.add_argument("--input", required=True)
+    import_visuals.add_argument("--jobs", required=True)
+    import_visuals.add_argument("--visuals", required=True)
+    import_visuals.add_argument("--output")
+    import_visuals.add_argument(
+        "--model-label",
+        default="codex-interactive",
+    )
+    import_visuals.add_argument("--tokenizer-model")
     return parser
 
 
@@ -381,6 +499,8 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         if args.command == "validate-sound-design" and not result["valid"]:
             return 2
+        if args.command == "validate-visuals" and not result["valid"]:
+            return 2
         if (
             args.command
             in {
@@ -388,6 +508,7 @@ def main(argv: list[str] | None = None) -> int:
                 "generate-dialogue-episode",
                 "generate-sfx",
                 "generate-tts",
+                "generate-visual-prompts",
             }
             and result["execution_requested"]
             and result["failed"]
@@ -744,8 +865,81 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             args.output_dir,
             config.episodes_dir / timeline["episode_id"] / "transcripts",
         )
-        paths = render_transcripts(timeline_path, speaker_config_path, output_dir)
+        paths = render_transcripts(
+            timeline_path,
+            speaker_config_path,
+            output_dir,
+            include_sound_cues=not args.speech_only,
+            filename_suffix="-voices-only" if args.speech_only else "",
+        )
         return {key: str(value) for key, value in paths.items()}
+    if args.command == "prepare-visuals":
+        timeline_path = Path(args.timeline).resolve()
+        timeline = json.loads(timeline_path.read_text(encoding="utf-8"))
+        episode_id = str(timeline["episode_id"])
+        output = _path_or_default(
+            args.output,
+            config.episodes_dir
+            / episode_id
+            / "visuals"
+            / f"{episode_id}-visual-scenes.json",
+        )
+        jobs = _path_or_default(
+            args.jobs,
+            config.work_dir / "visuals" / f"{episode_id}-prompt-jobs.jsonl",
+        )
+        return prepare_visual_scenes(
+            timeline_path,
+            config.catalog_path,
+            output,
+            jobs,
+            min_scene_ms=max(1_000, int(args.min_scene_seconds * 1000)),
+            crossfade_ms=max(0, int(args.crossfade_seconds * 1000)),
+        )
+    if args.command == "expand-visuals":
+        return expand_visual_scenes(
+            Path(args.source_visuals).resolve(),
+            Path(args.timeline).resolve(),
+            config.catalog_path,
+            Path(args.output).resolve(),
+            Path(args.jobs).resolve(),
+            min_scene_ms=max(1_000, int(args.min_scene_seconds * 1000)),
+            max_scene_ms=max(1_000, int(args.max_scene_seconds * 1000)),
+            crossfade_ms=max(0, int(args.crossfade_seconds * 1000)),
+        )
+    if args.command == "validate-visuals":
+        return validate_visual_plan(Path(args.visuals).resolve())
+    if args.command == "generate-visual-prompts":
+        visuals_path = Path(args.visuals).resolve()
+        output_path = (
+            Path(args.output).expanduser().resolve() if args.output else None
+        )
+        return generate_visual_prompt_jobs(
+            config,
+            Path(args.jobs).resolve(),
+            visuals_path,
+            output_path=output_path,
+            execute=args.execute,
+            max_calls=args.max_calls,
+            limit=args.limit,
+            retry_invalid=args.retry_invalid,
+            model=args.model,
+            tokenizer_model=args.tokenizer_model,
+        )
+    if args.command == "import-visual-prompts":
+        visuals_path = Path(args.visuals).resolve()
+        output_path = (
+            Path(args.output).expanduser().resolve() if args.output else None
+        )
+        return import_visual_prompt_results(
+            config,
+            Path(args.input).resolve(),
+            Path(args.jobs).resolve(),
+            visuals_path,
+            output_path=output_path,
+            model_label=args.model_label,
+            tokenizer_model=args.tokenizer_model,
+        )
     raise ValueError(f"Unsupported command: {args.command}")
 
 
