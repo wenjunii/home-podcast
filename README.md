@@ -31,8 +31,20 @@ stories_*.md
 ```
 
 Deterministic code owns parsing, WARC dates, IDs, history, manifests, caching,
-audio assembly, and transcripts. AI providers are used only for semantic story
-cards, scriptwriting/editorial passes, and voice performance.
+audio assembly, and transcripts. Codex is the default workspace for semantic
+story cards, scriptwriting/editorial passes, and visual prompts. Configured
+text-generation providers remain opt-in automation fallbacks. ElevenLabs
+handles requested voice and sound performance.
+
+## Codex-native workflow
+
+For normal interactive production, no text-generation API key is required.
+Ask Codex to analyze new stories, build an episode script, or generate visual
+prompts. Repository-level instructions in [`AGENTS.md`](AGENTS.md) make the
+workflow incremental and require the existing importers and validators.
+
+The short user-facing guide, supported tasks, and provider boundaries are in
+[`docs/CODEX_WORKFLOW.md`](docs/CODEX_WORKFLOW.md).
 
 ## Quick start
 
@@ -77,8 +89,9 @@ python -m home_podcast status --month 2013-12
 
 ## Story analysis
 
-The configured analysis and script model is Capriole Fable 5. Supply its
-credential only through the process environment:
+The default Codex-native path uses `export-analysis` and `import-cards` as
+described in `AGENTS.md`. The configured external automation fallback is
+Capriole Fable 5. Supply its credential only through the process environment:
 
 ```powershell
 $secureKey = Read-Host "Capriole API key" -AsSecureString
@@ -460,11 +473,118 @@ Generate deliverable transcripts:
 ```powershell
 python -m home_podcast transcript `
   --timeline .\episodes\2013-12.01\audio\2013-12.01-timeline.json
+
+python -m home_podcast transcript `
+  --timeline .\episodes\2013-12.01\audio\2013-12.01-timeline.json `
+  --speech-only
 ```
 
 Outputs include speaker-labeled Markdown, WebVTT, and SRT with accessible
 non-speech labels, the sound-design disclosure, and a story-to-script source
-map.
+map. The `--speech-only` variant omits sound cues and writes distinct
+`voices-only` transcript, VTT, and SRT files for the visual pipeline.
+
+## Real-time visual sequencer
+
+Build long visual scenes from the speech timeline, preserving exact caption
+timings and attaching the matching story evidence:
+
+```powershell
+python -m home_podcast prepare-visuals `
+  --timeline .\episodes\2013-12.01\audio\2013-12.01-timeline.json `
+  --min-scene-seconds 15 `
+  --crossfade-seconds 5
+
+python -m home_podcast validate-visuals `
+  --visuals .\episodes\2013-12.01\visuals\2013-12.01-visual-scenes.json
+```
+
+The current pilot plan contains 90 long scenes across 30:44.72. It began with
+36 scenes and was expanded at speech boundaries so each image remains useful
+without racing ahead of its spoken passage. Short story runs are merged into a
+neighboring scene rather than flashing a new image. Every scene stores
+captions, story IDs, location evidence, identity evidence, a stable seed, and
+crossfade timing. The prompt jobs under `work/visuals/` carry the full evidence
+text for an offline LLM pass; identity or location must never be inferred when
+the source does not support it.
+
+Run the evidence-grounded prompt pass offline from TouchDesigner:
+
+```powershell
+# Safe dry run: validates all jobs and the locally cached SDXL tokenizers.
+python -m home_podcast generate-visual-prompts `
+  --jobs .\work\visuals\2013-12.01-prompt-jobs.jsonl `
+  --visuals .\episodes\2013-12.01\visuals\2013-12.01-visual-scenes.json
+
+# Paid, resumable generation. The explicit ceiling prevents surprise calls.
+$env:CAPRIOLE_API_KEY = Read-Host "Capriole API key"
+python -m home_podcast generate-visual-prompts `
+  --jobs .\work\visuals\2013-12.01-prompt-jobs.jsonl `
+  --visuals .\episodes\2013-12.01\visuals\2013-12.01-visual-scenes.json `
+  --execute `
+  --max-calls 36
+Remove-Item Env:CAPRIOLE_API_KEY
+```
+
+The runner uses Claude Opus 4.6 through the configured Capriole endpoint. It
+caches every raw response before parsing, resumes completed scenes, and
+validates prompt length with both tokenizers from the locally cached SDXL
+Turbo model. A prompt must contain exactly one 68–75 content-token narrative
+chunk. Claimed identities and locations must cite verbatim text from the
+corresponding story. Generated scenes remain marked for editorial review.
+Use `--retry-invalid` only when you intentionally want to pay to replace a
+cached invalid response.
+
+For the default no-network Codex path, write one result object per job to a
+JSONL file and import it through the same evidence and SDXL-token gates:
+
+```powershell
+python -m home_podcast import-visual-prompts `
+  --input .\work\codex\visuals\2013-12.01-results.jsonl `
+  --jobs .\work\visuals\2013-12.01-prompt-jobs-dense-v2.jsonl `
+  --visuals .\episodes\2013-12.01\visuals\2013-12.01-visual-scenes.json `
+  --model-label codex-interactive
+```
+
+To make an already generated visual plan denser without regenerating accepted
+prompts, expand long scenes at speech boundaries:
+
+```powershell
+python -m home_podcast expand-visuals `
+  --source-visuals .\episodes\2013-12.01\visuals\2013-12.01-visual-scenes-36-scene-backup.json `
+  --timeline .\episodes\2013-12.01\audio\2013-12.01-timeline.json `
+  --output .\episodes\2013-12.01\visuals\2013-12.01-visual-scenes.json `
+  --jobs .\work\visuals\2013-12.01-prompt-jobs-dense-v2.jsonl `
+  --min-scene-seconds 15 `
+  --max-scene-seconds 35
+```
+
+The expansion retains one validated prompt per original scene, assigns it to
+the best-matching child passage, and emits jobs only for complementary images.
+Each new job includes the retained composition it must avoid. The maximum is a
+target rather than a hard cut: the pipeline keeps a scene slightly longer when
+the only alternative would create a sub-15-second image.
+
+`touchdesigner/podcast_sequencer.py` is a provider-neutral, stateless playback
+core. `/project1/podcast_visualizer` in the current local working revision,
+`podcast.7.toe`, follows the TouchDesigner 2025.32820 timeline and exposes:
+
+- `prompt_out` for one prompt or two smoothstep-weighted crossfade prompts;
+- `caption_out` for the current spoken caption;
+- `status_out` for playhead and scene diagnostics;
+- `show_control` for live play, audio, restart, reload, and crossfade timing;
+- `voices_only_audio` locked to the same timeline.
+
+The local `podcast.7.toe` contains the supplied primary and backup
+StreamDiffusionTD components. The controller maps `prompt_out` into both
+operators' weighted prompt and seed blocks and uses spherical interpolation
+for scene crossfades. `Crossfade Seconds` defaults to 8 seconds, accepts values
+up to 30 seconds, updates live, and is capped at half the current scene
+duration. Reinstalling the show-control component preserves its current play,
+audio, and crossfade values. Only one model server should run at a time.
+See [touchdesigner/README.md](touchdesigner/README.md) for the adapter boundary.
+The local `.toe` and `.tox` files, including `podcast.7.toe`, are ignored by
+Git and must not be published.
 
 ## Project layout
 

@@ -1,0 +1,213 @@
+{
+  "contract_version": 2,
+  "episode_id": "2013-12.01-interactive-plus-dialogue-audition",
+  "cast_episode_id": "2013-12.01",
+  "title": "Interactive Plus Conversation Test",
+  "purpose": "A source-grounded test of short turns, direct follow-ups, interruptions, hesitation, audible laughter, and audible sighing using the approved pilot cast and the existing Creative+ voice settings.",
+  "status": "prepared_pending_generation",
+  "variants": [
+    {
+      "id": "interactive-plus",
+      "description": "Creative+ voice settings with conversation written and tagged as an exchanged performance rather than adjacent narration.",
+      "settings": {
+        "stability": 0,
+        "similarity_boost": 0.75,
+        "style": 0.35,
+        "use_speaker_boost": true,
+        "speed": 1
+      }
+    }
+  ],
+  "segments": [
+    {
+      "segment_id": "ip-s001",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "\"I have merely been transplanted from one scene of student-life to another.\" That's a young man writing from Cambridge in 1859.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "quietly, letting the quote settle"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s002",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Transplanted. That's such a brave word for, \"I already miss home.\"",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "warmly, recognizing the self-deception",
+        "audio_tags": [
+          "laughs"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s003",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "And we have that sentence because the letter became a book, the book became a scan, and the scan became crawler food.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "quickly, delighted by the chain of survival"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s004",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Crawler food?",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "audio_tags": [
+          "interrupting",
+          "laughs"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s005",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "That's the technical term. Pen to pixel in one hundred and fifty-four years.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "deadpan, then quietly amazed"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s006",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "And after all that survival, what survives emotionally is so simple: he knows home is about to become somewhere he visits.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "softening",
+        "audio_tags": [
+          "sighs"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s007",
+      "speaker": "curious_guide",
+      "kind": "quote",
+      "text": "the idea of going away for good and all, and always hereafter being at home only as a visitor.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "measured, leaving space around the last word"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 350
+    },
+    {
+      "segment_id": "ip-s008",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "That phrase gets worse the longer you sit with it.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39"
+      ],
+      "delivery": {
+        "tone": "under his breath",
+        "audio_tags": [
+          "exhales"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s009",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "It does. And then, a century and a half later, a blogger chooses the name Saudade—a word for longing that never quite resolves.",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "audio_tags": [
+          "hesitates"
+        ]
+      },
+      "pronunciation": {
+        "Saudade": "sow-DAH-deh"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s010",
+      "speaker": "curious_guide",
+      "kind": "host_dialogue",
+      "text": "Wait. They named the blog after the feeling?",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "audio_tags": [
+          "cuts in",
+          "curious"
+        ]
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s011",
+      "speaker": "connector",
+      "kind": "host_dialogue",
+      "text": "Exactly. They had left Cape Verde, and years later they still thought about it every day.",
+      "source_story_ids": [
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "tone": "gently"
+      },
+      "pronunciation": {
+        "Cape Verde": "KAYP VURD"
+      },
+      "pause_after_ms": 0
+    },
+    {
+      "segment_id": "ip-s012",
+      "speaker": "archive_nerd",
+      "kind": "host_dialogue",
+      "text": "So one writer calls leaving a transplant. Another names the whole archive after the ache.",
+      "source_story_ids": [
+        "story-9608b65eb8ddfa6ae62b0e39",
+        "story-7ac236ec06ced47546d91a19"
+      ],
+      "delivery": {
+        "tone": "quietly connecting the two"
+      },
+      "pronunciation": {},
+      "pause_after_ms": 0
+    }
+  ]
+}
