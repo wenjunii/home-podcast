@@ -29,7 +29,7 @@ Open the current local working revision, `podcast.18.toe`, with TouchDesigner
 a Textport, run the installer only when creating a fresh connector:
 
 ```python
-exec(open(r"C:\Users\wenju\.gemini\antigravity\scratch\home-podcast\touchdesigner\install_podcast_connector.py", encoding="utf-8").read())
+exec(open(r"C:\path\to\home-podcast\touchdesigner\install_podcast_connector.py", encoding="utf-8").read())
 ```
 
 The installer creates `/project1/podcast_visualizer` with:
@@ -56,8 +56,19 @@ To add or refresh only the show controls in an existing project without
 touching StreamDiffusionTD, run:
 
 ```python
-exec(open(r"C:\Users\wenju\.gemini\antigravity\scratch\home-podcast\touchdesigner\install_show_control.py", encoding="utf-8").read())
+exec(open(r"C:\path\to\home-podcast\touchdesigner\install_show_control.py", encoding="utf-8").read())
 ```
+
+After moving `podcast.18.toe` to another computer, save it in the cloned
+repository root and run the safe rebinder once:
+
+```python
+exec(open(r"C:\path\to\home-podcast\touchdesigner\rebind_project_paths.py", encoding="utf-8").read())
+```
+
+The rebinder updates the scene, audio, sequencer, controller, and callback
+paths without deleting, recreating, or starting either paid StreamDiffusionTD
+component. Save the `.toe` after checking playback.
 
 The `Crossfade Seconds` parameter updates immediately while playing, paused,
 or seeking. It defaults to 8 seconds and accepts values up to 30 seconds; the

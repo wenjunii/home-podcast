@@ -141,13 +141,64 @@ def export_analysis_packets(
     return len(rows)
 
 
+def export_story_cards(
+    config: ProjectConfig,
+    output_path: Path,
+    *,
+    month: str | None = None,
+) -> int:
+    """Export current, non-duplicate story cards as portable JSONL."""
+    conditions = [
+        "s.is_present = 1",
+        "s.duplicate_of IS NULL",
+        "c.content_hash = s.content_hash",
+    ]
+    params: list[object] = []
+    if month:
+        conditions.append("s.crawl_month = ?")
+        params.append(month)
+    connection = connect(config.catalog_path)
+    rows = connection.execute(
+        f"""
+        SELECT c.story_id, c.content_hash, c.analyzer, c.analyzer_version,
+               c.card_json
+          FROM story_cards AS c
+          JOIN stories AS s ON s.id = c.story_id
+         WHERE {' AND '.join(conditions)}
+         ORDER BY s.crawl_timestamp, s.language, c.story_id,
+                  c.analyzer, c.analyzer_version
+        """,
+        params,
+    ).fetchall()
+    connection.close()
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8", newline="\n") as handle:
+        for row in rows:
+            card = {
+                "contract_version": 1,
+                "story_id": row["story_id"],
+                "content_hash": row["content_hash"],
+                "analyzer": row["analyzer"],
+                "analyzer_version": row["analyzer_version"],
+                "analysis": json.loads(row["card_json"]),
+            }
+            handle.write(json.dumps(card, ensure_ascii=False) + "\n")
+    return len(rows)
+
+
 def import_story_cards(
     config: ProjectConfig,
     input_path: Path,
     *,
-    analyzer: str,
-    analyzer_version: str,
+    analyzer: str | None = None,
+    analyzer_version: str | None = None,
 ) -> tuple[int, int]:
+    if (analyzer is None) != (analyzer_version is None):
+        raise ValueError(
+            "Provide both analyzer and analyzer_version, or neither when the "
+            "JSONL embeds them"
+        )
     allowed_themes = {theme["slug"] for theme in config.load_themes()["themes"]}
     cards = list(_read_jsonl(input_path))
     connection = connect(config.catalog_path)
@@ -159,8 +210,10 @@ def import_story_cards(
                 connection,
                 card,
                 allowed_themes=allowed_themes,
-                analyzer=analyzer,
-                analyzer_version=analyzer_version,
+                analyzer=analyzer
+                or _required_string(card, "analyzer", line_number),
+                analyzer_version=analyzer_version
+                or _required_string(card, "analyzer_version", line_number),
                 line_number=line_number,
             ):
                 skipped += 1

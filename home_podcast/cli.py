@@ -6,7 +6,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from .analysis import export_analysis_packets, import_story_cards
+from .analysis import (
+    export_analysis_packets,
+    export_story_cards,
+    import_story_cards,
+)
 from .audio import render_dialogue_episode_audio, render_episode_audio
 from .casting import create_episode_cast
 from .catalog import catalog_status
@@ -65,12 +69,24 @@ def build_parser() -> argparse.ArgumentParser:
     export.add_argument("--limit", type=int)
     export.add_argument("--include-existing", action="store_true")
 
+    export_cards = subparsers.add_parser(
+        "export-cards", help="Export current story cards as portable JSONL"
+    )
+    export_cards.add_argument("--month", help="Restrict to crawl month YYYY-MM")
+    export_cards.add_argument("--output", help="Output JSONL path")
+
     import_cards = subparsers.add_parser(
         "import-cards", help="Import model-produced story cards from JSONL"
     )
     import_cards.add_argument("input", help="Story-card JSONL path")
-    import_cards.add_argument("--analyzer", required=True)
-    import_cards.add_argument("--analyzer-version", required=True)
+    import_cards.add_argument(
+        "--analyzer",
+        help="Override embedded analyzer metadata (requires --analyzer-version)",
+    )
+    import_cards.add_argument(
+        "--analyzer-version",
+        help="Override embedded analyzer metadata (requires --analyzer)",
+    )
 
     snapshot = subparsers.add_parser(
         "snapshot-volume", help="Freeze the current stories in a crawl-month cohort"
@@ -542,6 +558,14 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             include_existing=args.include_existing,
             limit=args.limit,
         )
+        return {"exported": count, "output": str(output)}
+    if args.command == "export-cards":
+        suffix = args.month or "current"
+        output = _path_or_default(
+            args.output,
+            config.project_root / "data" / "story_cards" / f"{suffix}-cards.jsonl",
+        )
+        count = export_story_cards(config, output, month=args.month)
         return {"exported": count, "output": str(output)}
     if args.command == "import-cards":
         imported, skipped = import_story_cards(

@@ -1,0 +1,98 @@
+"""Run inside TouchDesigner after moving the repository or a local .toe file.
+
+This updates only the existing Recovered Homes connector's portable file paths
+and tracked callback source. It does not destroy, recreate, or start either
+paid StreamDiffusionTD component.
+"""
+
+from pathlib import Path
+
+
+def rebind_project_paths():
+    project_root = Path(project.folder).resolve()
+    connector = op("/project1/podcast_visualizer")
+    if connector is None:
+        raise RuntimeError(
+            "Missing /project1/podcast_visualizer; run the connector installer "
+            "in a fresh project first."
+        )
+
+    paths = {
+        "scene": (
+            project_root
+            / "episodes"
+            / "2013-12.01"
+            / "visuals"
+            / "2013-12.01-visual-scenes.json"
+        ),
+        "audio": (
+            project_root
+            / "episodes"
+            / "2013-12.01"
+            / "audio"
+            / "2013-12.01-voices-only.mp3"
+        ),
+        "sequencer": project_root / "touchdesigner" / "podcast_sequencer.py",
+        "controller": project_root / "touchdesigner" / "podcast_td_controller.py",
+        "execute_callbacks": (
+            project_root / "touchdesigner" / "execute_callbacks.py"
+        ),
+        "parameter_callbacks": (
+            project_root / "touchdesigner" / "parameter_callbacks.py"
+        ),
+        "show_control_callbacks": (
+            project_root / "touchdesigner" / "show_control_callbacks.py"
+        ),
+    }
+    missing = [str(path) for path in paths.values() if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(
+            "Save the .toe in the cloned repository root before rebinding. "
+            "Missing tracked files: " + ", ".join(missing)
+        )
+
+    connector.par.Scenejson = str(paths["scene"])
+    connector.par.Audiofile = str(paths["audio"])
+    connector.par.Sequencermodule = str(paths["sequencer"])
+    connector.par.Controllermodule = str(paths["controller"])
+
+    audio = connector.op("voices_only_audio")
+    execute_callbacks = connector.op("execute_callbacks")
+    parameter_callbacks = connector.op("parameter_callbacks")
+    show_callbacks = connector.op("show_control/control_callbacks")
+    required_ops = {
+        "voices_only_audio": audio,
+        "execute_callbacks": execute_callbacks,
+        "parameter_callbacks": parameter_callbacks,
+        "show_control/control_callbacks": show_callbacks,
+    }
+    missing_ops = [name for name, operator in required_ops.items() if operator is None]
+    if missing_ops:
+        raise RuntimeError(
+            "Existing connector is incomplete; missing operators: "
+            + ", ".join(missing_ops)
+        )
+
+    audio.par.file = str(paths["audio"])
+    execute_callbacks.text = paths["execute_callbacks"].read_text(encoding="utf-8")
+    parameter_callbacks.text = paths["parameter_callbacks"].read_text(
+        encoding="utf-8"
+    )
+    show_callbacks.text = paths["show_control_callbacks"].read_text(
+        encoding="utf-8"
+    )
+
+    controller = execute_callbacks.module.get_controller()
+    controller.reload()
+    connector.current = True
+    return {
+        "project_root": str(project_root),
+        "scene_json": str(paths["scene"]),
+        "audio_file": str(paths["audio"]),
+        "streamdiffusion_paths_unchanged": str(
+            connector.par.Streamdiffusionpath.eval()
+        ),
+    }
+
+
+rebound_project_paths = rebind_project_paths()
