@@ -4,9 +4,9 @@ Recovered Homes is an incremental production pipeline for a popular,
 rotating-cast podcast about home, belonging, digital history, and digital
 archaeology.
 
-The source corpus lives in the sibling extractor project. This project reads
-only `stories_*.md` files and deliberately ignores `matches` exports and the
-compressed JSONL export.
+The canonical source snapshot is tracked in `data/exports`. It contains only
+`stories_*.md` files copied from the sibling extractor project and deliberately
+excludes `matches` exports and the compressed JSONL export.
 
 The system is designed around three promises:
 
@@ -60,10 +60,12 @@ python -m home_podcast status
 The configured source directory is:
 
 ```text
-../cc-home-extractor/data/exports
+data/exports
 ```
 
-Change `exports_dir` in `podcast.json` if the extractor moves.
+This makes a GitHub clone self-contained. To move the project to another
+computer, including rebuilding the local catalog and restoring cached story
+analysis, follow [`docs/PORTABLE_SETUP.md`](docs/PORTABLE_SETUP.md).
 
 Running `ingest` repeatedly is safe. Unchanged stories retain their catalog
 records and cached analysis. Changed stories create a new version. Stories no
@@ -184,6 +186,19 @@ python -m home_podcast import-cards .\cards.jsonl `
 
 Cards whose story content changed after analysis are skipped. They will
 automatically reappear in the next export.
+
+Current cards can be preserved without the rebuildable SQLite catalog:
+
+```powershell
+python -m home_podcast export-cards `
+  --output .\data\story_cards\current-cards.jsonl
+
+python -m home_podcast import-cards `
+  .\data\story_cards\current-cards.jsonl
+```
+
+The portable JSONL embeds its analyzer provenance. Import still validates every
+story ID, content hash, controlled theme, and verbatim source passage.
 
 ## Theme and installment planning
 
