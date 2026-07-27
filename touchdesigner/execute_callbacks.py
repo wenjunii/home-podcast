@@ -4,6 +4,40 @@ import sys
 _CONTROLLER = None
 
 
+def _synchronize_show_control():
+    """Make saved show-control values authoritative after a project load."""
+    owner = parent()
+    control = owner.op("show_control")
+    if control is None:
+        return
+
+    play_parameter = getattr(control.par, "Play", None)
+    if play_parameter is not None:
+        desired_play = bool(play_parameter.eval())
+        timeline_play = op("/local/time").par.play
+        if bool(timeline_play.eval()) != desired_play:
+            timeline_play.val = desired_play
+        # TouchDesigner may briefly cook frames while a .toe loads even when
+        # /local/time already reports Play as off. Keep a saved paused show at
+        # the episode start until the user explicitly enables Show Control.
+        if not desired_play:
+            project_root = op("/project1")
+            if project_root is not None:
+                project_root.time.frame = 1
+
+    audio_parameter = getattr(control.par, "Audioenabled", None)
+    if audio_parameter is not None:
+        desired_audio = bool(audio_parameter.eval())
+        if bool(owner.par.Audioenabled.eval()) != desired_audio:
+            owner.par.Audioenabled.val = desired_audio
+        audio_out = owner.op("audio_out")
+        if (
+            audio_out is not None
+            and bool(audio_out.par.active.eval()) != desired_audio
+        ):
+            audio_out.par.active.val = desired_audio
+
+
 def get_controller():
     global _CONTROLLER
     owner = parent()
@@ -21,6 +55,7 @@ def get_controller():
 
 
 def onFrameStart(frame):
+    _synchronize_show_control()
     controller = get_controller()
     if bool(parent().par.Enabled.eval()):
         controller.update(float(parent().par.Playheadsec.eval()))
@@ -28,12 +63,18 @@ def onFrameStart(frame):
 
 
 def onStart():
-    get_controller()
+    _synchronize_show_control()
+    controller = get_controller()
+    if bool(parent().par.Enabled.eval()):
+        controller.update(float(parent().par.Playheadsec.eval()))
     return
 
 
 def onCreate():
-    get_controller()
+    _synchronize_show_control()
+    controller = get_controller()
+    if bool(parent().par.Enabled.eval()):
+        controller.update(float(parent().par.Playheadsec.eval()))
     return
 
 

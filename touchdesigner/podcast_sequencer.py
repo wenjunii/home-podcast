@@ -70,22 +70,31 @@ class PodcastSequencer:
         scene_end = int(scene["end_ms"])
         scene_duration = max(1, scene_end - scene_start)
         progress = max(0.0, min(1.0, (time_ms - scene_start) / scene_duration))
-        effective_crossfade_ms = self._effective_crossfade_ms(
-            scene_index,
-            scene_duration,
-            crossfade_ms,
-        )
-        elapsed = time_ms - scene_start
-        crossfade_progress = (
-            1.0
-            if effective_crossfade_ms <= 0
-            else max(0.0, min(1.0, elapsed / effective_crossfade_ms))
-        )
-        layers = self._prompt_layers(
+        loop_transition = self._loop_transition(
             scene_index,
             time_ms,
-            effective_crossfade_ms,
+            crossfade_ms,
         )
+        if loop_transition is not None:
+            effective_crossfade_ms, crossfade_progress = loop_transition
+            layers = self._loop_prompt_layers(crossfade_progress)
+        else:
+            effective_crossfade_ms = self._effective_crossfade_ms(
+                scene_index,
+                scene_duration,
+                crossfade_ms,
+            )
+            elapsed = time_ms - scene_start
+            crossfade_progress = (
+                1.0
+                if effective_crossfade_ms <= 0
+                else max(0.0, min(1.0, elapsed / effective_crossfade_ms))
+            )
+            layers = self._prompt_layers(
+                scene_index,
+                time_ms,
+                effective_crossfade_ms,
+            )
         caption = self._caption_at(time_ms)
         return SequencerFrame(
             playhead_ms=time_ms,
@@ -109,15 +118,78 @@ class PodcastSequencer:
         if scene_index == 0:
             return 0
         scene = self.scenes[scene_index]
-        requested = (
-            int(scene.get("crossfade_in_ms", 0))
-            if override_ms is None
-            else max(0, int(override_ms))
+        requested = self._requested_crossfade_ms(
+            override_ms,
+            fallback=int(scene.get("crossfade_in_ms", 0)),
         )
         # Keep at least half of every visual scene at full strength. This also
         # prevents an overlong live-control value from crossing two boundaries
         # and introducing a discontinuity at the following scene.
         return min(requested, max(0, scene_duration_ms // 2))
+
+    def _loop_transition(
+        self,
+        scene_index: int,
+        time_ms: int,
+        override_ms: int | float | None,
+    ) -> tuple[int, float] | None:
+        if len(self.scenes) < 2:
+            return None
+        fallback = int(self.plan.get("loop_crossfade_ms", 0))
+        if fallback <= 0:
+            fallback = next(
+                (
+                    int(scene.get("crossfade_in_ms", 0))
+                    for scene in self.scenes[1:]
+                    if int(scene.get("crossfade_in_ms", 0)) > 0
+                ),
+                0,
+            )
+        requested = self._requested_crossfade_ms(
+            override_ms,
+            fallback=fallback,
+        )
+        if requested <= 0:
+            return None
+
+        first_duration = int(self.scenes[0]["end_ms"]) - int(
+            self.scenes[0]["start_ms"]
+        )
+        last_duration = int(self.scenes[-1]["end_ms"]) - int(
+            self.scenes[-1]["start_ms"]
+        )
+        fade_ms = min(
+            requested,
+            max(0, first_duration),
+            max(0, last_duration),
+        )
+        if fade_ms <= 0:
+            return None
+
+        before_boundary = fade_ms // 2
+        after_boundary = fade_ms - before_boundary
+        if (
+            scene_index == len(self.scenes) - 1
+            and time_ms >= self.duration_ms - before_boundary
+        ):
+            loop_progress = (
+                time_ms - (self.duration_ms - before_boundary)
+            ) / fade_ms
+            return fade_ms, max(0.0, min(1.0, loop_progress))
+        if scene_index == 0 and time_ms < after_boundary:
+            loop_progress = (before_boundary + time_ms) / fade_ms
+            return fade_ms, max(0.0, min(1.0, loop_progress))
+        return None
+
+    @staticmethod
+    def _requested_crossfade_ms(
+        override_ms: int | float | None,
+        *,
+        fallback: int,
+    ) -> int:
+        if override_ms is None:
+            return max(0, int(fallback))
+        return max(0, int(override_ms))
 
     def _prompt_layers(
         self,
@@ -133,6 +205,16 @@ class PodcastSequencer:
         previous = self.scenes[scene_index - 1]
         return self._scene_layers(previous, 1.0 - amount) + self._scene_layers(
             scene, amount
+        )
+
+    def _loop_prompt_layers(self, progress: float) -> list[PromptLayer]:
+        amount = _smoothstep(progress)
+        return self._scene_layers(
+            self.scenes[-1],
+            1.0 - amount,
+        ) + self._scene_layers(
+            self.scenes[0],
+            amount,
         )
 
     @staticmethod

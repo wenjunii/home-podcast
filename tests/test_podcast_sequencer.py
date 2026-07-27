@@ -74,6 +74,40 @@ class PodcastSequencerTests(unittest.TestCase):
         self.assertEqual(len(frame.prompt_layers), 1)
         self.assertEqual(frame.prompt_layers[0].scene_id, "v2")
 
+    def test_loop_crossfade_is_continuous_across_end_and_start(self) -> None:
+        end_frame = self.sequencer.at(30_000, crossfade_ms=8_000)
+        start_frame = self.sequencer.at(0, crossfade_ms=8_000)
+
+        for frame in (end_frame, start_frame):
+            self.assertEqual(frame.crossfade_ms, 8_000)
+            self.assertAlmostEqual(frame.crossfade_progress, 0.5)
+            self.assertEqual(
+                [layer.scene_id for layer in frame.prompt_layers],
+                ["v2", "v1"],
+            )
+            self.assertAlmostEqual(frame.prompt_layers[0].weight, 0.5)
+            self.assertAlmostEqual(frame.prompt_layers[1].weight, 0.5)
+
+    def test_loop_crossfade_spans_both_sides_of_boundary(self) -> None:
+        end_frame = self.sequencer.at(29_000, crossfade_ms=8_000)
+        start_frame = self.sequencer.at(1_000, crossfade_ms=8_000)
+
+        self.assertAlmostEqual(end_frame.crossfade_progress, 0.375)
+        self.assertAlmostEqual(start_frame.crossfade_progress, 0.625)
+        self.assertAlmostEqual(
+            end_frame.prompt_layers[1].weight,
+            1.0 - start_frame.prompt_layers[1].weight,
+        )
+
+    def test_zero_live_crossfade_disables_loop_transition(self) -> None:
+        start_frame = self.sequencer.at(0, crossfade_ms=0)
+        end_frame = self.sequencer.at(30_000, crossfade_ms=0)
+
+        self.assertEqual(len(start_frame.prompt_layers), 1)
+        self.assertEqual(start_frame.prompt_layers[0].scene_id, "v1")
+        self.assertEqual(len(end_frame.prompt_layers), 1)
+        self.assertEqual(end_frame.prompt_layers[0].scene_id, "v2")
+
     @staticmethod
     def _scene(
         scene_id: str,

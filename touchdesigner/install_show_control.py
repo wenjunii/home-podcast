@@ -44,13 +44,25 @@ def install():
             "baseCOMP": baseCOMP,
             "tableDAT": tableDAT,
             "parameterexecuteDAT": parameterexecuteDAT,
+            "levelTOP": levelTOP,
+            "hsvadjustTOP": hsvadjustTOP,
+            "switchTOP": switchTOP,
+            "nullTOP": nullTOP,
             "op": op,
         },
     )
 
     callbacks = connector.op("execute_callbacks")
+    callbacks.par.framestart = True
+    callbacks.par.start = True
+    callbacks.par.create = True
+    audio_out = connector.op("audio_out")
+    if audio_out is not None:
+        audio_out.par.active.expr = "parent().par.Audioenabled"
+        audio_out.par.active.mode = ParMode.EXPRESSION
     callbacks.module._CONTROLLER = None
     controller = callbacks.module.get_controller()
+    callbacks.module._synchronize_show_control()
     controller.update(float(connector.par.Playheadsec.eval()))
     control.current = True
     return control

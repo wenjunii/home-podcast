@@ -96,11 +96,14 @@ def install():
     audio_out.nodeY = -160
     audio_out.inputConnectors[0].connect(audio)
     audio_out.par.active.expr = "parent().par.Audioenabled"
+    audio_out.par.active.mode = ParMode.EXPRESSION
 
     callbacks = connector.create(executeDAT, "execute_callbacks")
     callbacks.nodeX = 440
     callbacks.nodeY = -160
     callbacks.par.framestart = True
+    callbacks.par.start = True
+    callbacks.par.create = True
     callbacks.text = (
         project_root / "touchdesigner" / "execute_callbacks.py"
     ).read_text(
@@ -138,6 +141,10 @@ def install():
             "baseCOMP": baseCOMP,
             "tableDAT": tableDAT,
             "parameterexecuteDAT": parameterexecuteDAT,
+            "levelTOP": levelTOP,
+            "hsvadjustTOP": hsvadjustTOP,
+            "switchTOP": switchTOP,
+            "nullTOP": nullTOP,
             "op": op,
         },
     )

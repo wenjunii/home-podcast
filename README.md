@@ -567,23 +567,35 @@ the only alternative would create a sub-15-second image.
 
 `touchdesigner/podcast_sequencer.py` is a provider-neutral, stateless playback
 core. `/project1/podcast_visualizer` in the current local working revision,
-`podcast.7.toe`, follows the TouchDesigner 2025.32820 timeline and exposes:
+`podcast.18.toe`, follows the TouchDesigner 2025.32820 timeline and exposes:
 
 - `prompt_out` for one prompt or two smoothstep-weighted crossfade prompts;
 - `caption_out` for the current spoken caption;
 - `status_out` for playhead and scene diagnostics;
-- `show_control` for live play, audio, restart, reload, and crossfade timing;
+- `show_control` for live play, audio, seed, crossfade, and color controls;
+- `color_out_1` and `color_out_2` for adjusted primary and backup images;
 - `voices_only_audio` locked to the same timeline.
 
-The local `podcast.7.toe` contains the supplied primary and backup
+The local `podcast.18.toe` contains the supplied primary and backup
 StreamDiffusionTD components. The controller maps `prompt_out` into both
 operators' weighted prompt and seed blocks and uses spherical interpolation
 for scene crossfades. `Crossfade Seconds` defaults to 8 seconds, accepts values
 up to 30 seconds, updates live, and is capped at half the current scene
-duration. Reinstalling the show-control component preserves its current play,
-audio, and crossfade values. Only one model server should run at a time.
-See [touchdesigner/README.md](touchdesigner/README.md) for the adapter boundary.
-The local `.toe` and `.tox` files, including `podcast.7.toe`, are ignored by
+duration. The final half of each loop blends toward scene one and the opening
+half completes the same transition, so the visual loop has no hard boundary.
+`Random Seeds Each Loop` switches between repeatable seed values and a fresh,
+internally consistent seed bank for every loop. The Color tab adjusts
+brightness, contrast, gamma, black level, opacity, hue, saturation, and value
+through post-generation Level and HSV TOPs. Reinstalling the show-control
+component preserves its current playback, seed, crossfade, and color values.
+Only one model server should run at a time.
+The audio control is bound to the Audio Device Out Active parameter, and saved
+paused projects reopen at frame 1 with audio disabled. See
+[touchdesigner/README.md](touchdesigner/README.md) for the adapter boundary.
+Brightness `1.0` is neutral in the Level TOP; `0.0` is black and values above
+`1.0` brighten the image.
+
+The local `.toe` and `.tox` files, including `podcast.18.toe`, are ignored by
 Git and must not be published.
 
 ## Project layout
