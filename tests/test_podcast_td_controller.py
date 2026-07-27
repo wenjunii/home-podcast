@@ -65,6 +65,16 @@ class FakeTarget:
         )
 
 
+class FakeColorNode:
+    def __init__(self, **parameters) -> None:
+        self.par = SimpleNamespace(
+            **{
+                name: FakePar(value)
+                for name, value in parameters.items()
+            }
+        )
+
+
 class FakeSequence:
     def __init__(self, factory) -> None:
         self.factory = factory
@@ -85,15 +95,26 @@ class FakeSequence:
 
 
 class FakeOwner:
-    def __init__(self, target, backup=None, crossfade_seconds=None) -> None:
+    def __init__(
+        self,
+        target,
+        backup=None,
+        crossfade_seconds=None,
+        random_seeds=False,
+    ) -> None:
         self.targets = {
             "StreamDiffusionTD": target,
             "StreamDiffusionTD1": backup,
         }
-        if crossfade_seconds is not None:
+        if crossfade_seconds is not None or random_seeds:
             self.targets["show_control"] = SimpleNamespace(
                 par=SimpleNamespace(
-                    Crossfadesec=FakePar(crossfade_seconds),
+                    Crossfadesec=FakePar(
+                        0.0
+                        if crossfade_seconds is None
+                        else crossfade_seconds
+                    ),
+                    Randomseeds=FakePar(random_seeds),
                 )
             )
         self.par = SimpleNamespace(
@@ -242,6 +263,213 @@ class PodcastTdControllerTests(unittest.TestCase):
                 0.6,
             )
             self.assertEqual(target.par.Setinterpolation.val, "slerp")
+
+    def test_random_seed_bank_changes_by_loop_but_is_stable_within_loop(
+        self,
+    ) -> None:
+        controller = PodcastVisualController.__new__(PodcastVisualController)
+        controller.owner_comp = FakeOwner(
+            None,
+            crossfade_seconds=8,
+            random_seeds=True,
+        )
+        controller.sequencer = SimpleNamespace(
+            duration_ms=30_000,
+            scenes=[
+                {"scene_id": "first"},
+                {"scene_id": "last"},
+            ],
+        )
+        controller.seed_salt = 1234
+        controller.seed_generation = 7
+        frame = SimpleNamespace(
+            scene_index=1,
+            prompt_layers=[
+                SimpleNamespace(
+                    scene_id="last",
+                    role="narrative",
+                    text="last prompt",
+                    weight=0.5,
+                    seed=22,
+                ),
+                SimpleNamespace(
+                    scene_id="first",
+                    role="narrative",
+                    text="first prompt",
+                    weight=0.5,
+                    seed=11,
+                ),
+            ],
+        )
+
+        first_pass = controller._controlled_prompt_layers(frame)
+        second_pass = controller._controlled_prompt_layers(frame)
+        controller.seed_generation += 1
+        next_loop = controller._controlled_prompt_layers(frame)
+
+        self.assertEqual(
+            [layer.seed for layer in first_pass],
+            [layer.seed for layer in second_pass],
+        )
+        self.assertNotEqual(
+            [layer.seed for layer in first_pass],
+            [layer.seed for layer in next_loop],
+        )
+        self.assertNotEqual(first_pass[0].seed, 22)
+        self.assertNotEqual(first_pass[1].seed, 11)
+
+    def test_random_seeds_remain_continuous_across_loop_crossfade(
+        self,
+    ) -> None:
+        controller = PodcastVisualController.__new__(PodcastVisualController)
+        controller.owner_comp = FakeOwner(
+            None,
+            crossfade_seconds=8,
+            random_seeds=True,
+        )
+        controller.sequencer = SimpleNamespace(
+            duration_ms=30_000,
+            scenes=[
+                {"scene_id": "first"},
+                {"scene_id": "last"},
+            ],
+        )
+        controller.seed_salt = 9876
+        controller.seed_generation = 3
+        layers = [
+            SimpleNamespace(
+                scene_id="last",
+                role="narrative",
+                text="last prompt",
+                weight=0.5,
+                seed=22,
+            ),
+            SimpleNamespace(
+                scene_id="first",
+                role="narrative",
+                text="first prompt",
+                weight=0.5,
+                seed=11,
+            ),
+        ]
+        end_frame = SimpleNamespace(scene_index=1, prompt_layers=layers)
+        end_seeds = [
+            layer.seed
+            for layer in controller._controlled_prompt_layers(end_frame)
+        ]
+
+        controller.seed_generation = 4
+        start_frame = SimpleNamespace(scene_index=0, prompt_layers=layers)
+        start_seeds = [
+            layer.seed
+            for layer in controller._controlled_prompt_layers(start_frame)
+        ]
+
+        self.assertEqual(end_seeds, start_seeds)
+
+    def test_detected_loop_advances_random_seed_bank(self) -> None:
+        controller = PodcastVisualController.__new__(PodcastVisualController)
+        controller.owner_comp = FakeOwner(
+            None,
+            crossfade_seconds=8,
+            random_seeds=True,
+        )
+        controller.sequencer = SimpleNamespace(duration_ms=30_000)
+        controller.last_playhead_ms = 29_900
+        controller.last_streamdiffusion_signature = ("stale",)
+        controller.seed_generation = 2
+
+        controller._advance_loop_seed_if_needed(100)
+
+        self.assertEqual(controller.seed_generation, 3)
+        self.assertIsNone(controller.last_streamdiffusion_signature)
+
+    def test_color_controls_drive_level_hsv_and_bypass_switch(self) -> None:
+        owner = FakeOwner(None, crossfade_seconds=8)
+        owner.targets["show_control"].par = SimpleNamespace(
+            Colorenabled=FakePar(True),
+            Brightness=FakePar(0.15),
+            Contrast=FakePar(1.2),
+            Gamma=FakePar(0.9),
+            Blacklevel=FakePar(0.03),
+            Opacity=FakePar(0.8),
+            Hue=FakePar(-30),
+            Saturation=FakePar(1.4),
+            Value=FakePar(1.1),
+        )
+        level = FakeColorNode(
+            brightness1=1.0,
+            contrast=1.0,
+            gamma1=1.0,
+            blacklevel=0.0,
+            opacity=1.0,
+        )
+        hsv = FakeColorNode(
+            hueoffset=0.0,
+            saturationmult=1.0,
+            valuemult=1.0,
+        )
+        switch = FakeColorNode(index=0)
+        owner.targets.update(
+            {
+                "color_level_1": level,
+                "color_hsv_1": hsv,
+                "color_switch_1": switch,
+            }
+        )
+        controller = PodcastVisualController.__new__(PodcastVisualController)
+        controller.owner_comp = owner
+        controller.last_color_signature = None
+
+        self.assertEqual(controller._write_color_controls(), "connected")
+        self.assertEqual(level.par.brightness1.val, 0.15)
+        self.assertEqual(level.par.contrast.val, 1.2)
+        self.assertEqual(level.par.gamma1.val, 0.9)
+        self.assertEqual(level.par.blacklevel.val, 0.03)
+        self.assertEqual(level.par.opacity.val, 0.8)
+        self.assertEqual(hsv.par.hueoffset.val, 330.0)
+        self.assertEqual(hsv.par.saturationmult.val, 1.4)
+        self.assertEqual(hsv.par.valuemult.val, 1.1)
+        self.assertEqual(switch.par.index.val, 1)
+
+    def test_missing_brightness_control_uses_level_top_neutral(self) -> None:
+        owner = FakeOwner(None, crossfade_seconds=8)
+        owner.targets["show_control"].par = SimpleNamespace(
+            Colorenabled=FakePar(True),
+        )
+        level = FakeColorNode(
+            brightness1=0.0,
+            contrast=0.0,
+            gamma1=0.0,
+            blacklevel=1.0,
+            opacity=0.0,
+        )
+        hsv = FakeColorNode(
+            hueoffset=45.0,
+            saturationmult=0.0,
+            valuemult=0.0,
+        )
+        switch = FakeColorNode(index=0)
+        owner.targets.update(
+            {
+                "color_level_1": level,
+                "color_hsv_1": hsv,
+                "color_switch_1": switch,
+            }
+        )
+        controller = PodcastVisualController.__new__(PodcastVisualController)
+        controller.owner_comp = owner
+        controller.last_color_signature = None
+
+        self.assertEqual(controller._write_color_controls(), "connected")
+        self.assertEqual(level.par.brightness1.val, 1.0)
+        self.assertEqual(level.par.contrast.val, 1.0)
+        self.assertEqual(level.par.gamma1.val, 1.0)
+        self.assertEqual(level.par.blacklevel.val, 0.0)
+        self.assertEqual(level.par.opacity.val, 1.0)
+        self.assertEqual(hsv.par.hueoffset.val, 0.0)
+        self.assertEqual(hsv.par.saturationmult.val, 1.0)
+        self.assertEqual(hsv.par.valuemult.val, 1.0)
 
 
 if __name__ == "__main__":
