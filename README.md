@@ -674,8 +674,8 @@ component preserves its current playback, seed, crossfade, and color values.
 Only one model server should run at a time.
 `Audio Source` offers only `Human Voices Only` and `Soundscape Only`; the
 combined review mix is deliberately excluded. `Audio Enabled` gates the
-selected stem at the Audio Device Out, and saved paused projects reopen at
-frame 1 with audio disabled. See
+selected stem at the Audio Device Out. Saved paused projects reopen at frame
+1 while preserving the saved `Audio Enabled` and source-selection values. See
 [touchdesigner/README.md](touchdesigner/README.md) for the adapter boundary.
 Brightness `1.0` is neutral in the Level TOP; `0.0` is black and values above
 `1.0` brighten the image.
@@ -683,7 +683,17 @@ Brightness `1.0` is neutral in the Level TOP; `0.0` is black and values above
 The local `.toe` and `.tox` files, including `podcast.5090.toe`, are ignored by
 Git and must not be published. The `podcast.3080*.toe` files are read-only
 references during 5090 work. Use
-`touchdesigner/update_5090_project.py` for guarded 5090-only refreshes.
+`touchdesigner/update_5090_project.py` for guarded 5090-only refreshes. Then
+run `touchdesigner/audit_5090_controls.py` and
+`touchdesigner/audit_5090_live_events.py`; together they exercise all 18
+controls through deterministic callback checks and the live frame-separated
+Parameter Execute path. `touchdesigner/audit_5090_visuals.py` rejects saved
+stale backend telemetry and requires a live RTX 5090 backend plus non-black
+generator and Spout output. It forces one non-destructive local output cook so
+the check also works while the show is paused. Start and stop one
+StreamDiffusionTD server at a time for that optional visual check. Keep only
+one TouchDesigner project on each OSC port pair; close a competing project or
+use temporary unsaved ports for diagnostics.
 
 ## Project layout
 

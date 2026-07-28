@@ -42,6 +42,57 @@ repository paths, recreates the two 5090 Spout senders, and leaves the paid
 StreamDiffusionTD components and model servers untouched. Inspect the result,
 then save a new numbered 5090 revision.
 
+## Audit the 5090 project
+
+Run both guarded control audits after an update:
+
+```python
+exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_5090_controls.py", encoding="utf-8").read())
+exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_5090_live_events.py", encoding="utf-8").read())
+```
+
+The first audit checks every control style and range, callback registration,
+audio and image routing, both Spout outputs, both color branches, and the
+effect of all 18 sliders, switches, menus, and buttons. It suspends the
+Parameter Execute DAT during its transaction, invokes the same callback module
+deterministically, and restores the original state.
+
+The second audit changes the same controls on separate TouchDesigner
+application frames. That separation verifies the live Parameter Execute event
+path rather than reading downstream nodes before their deferred callbacks
+cook. Wait for `AUDIT_5090_LIVE_EVENTS`, not only the initial
+`AUDIT_5090_LIVE_EVENTS_SCHEDULED` line. Both scripts refuse 3080 filenames,
+do not save the `.toe`, and do not start model servers.
+
+For an optional generated-image check, start exactly one configured
+StreamDiffusionTD server, wait for its model initialization to finish, and
+run:
+
+```python
+exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_5090_visuals.py", encoding="utf-8").read())
+```
+
+The visual audit requires `Serveractive`, `Streamactive`, a live RTX 5090
+backend connection, a current output-memory name, non-black `color_out_*`
+pixels, non-black `null*` Spout-source pixels, and no operator errors. It
+forces one local output cook so a paused show can prove the generated
+shared-memory frame reaches both output chains; this does not change or save
+project parameters. Embedded StreamDiffusionTD status tables persist in the
+`.toe`, so legacy GPU names, frame counts, connection labels, or errors are
+reported but are not accepted as proof of a current session. The timestamp in
+the output-memory name is the server-session start time, not a heartbeat, and
+therefore remains valid for a long-running show.
+
+Pulse `Stop Stream` on that component after the check and confirm its server
+process has exited before starting the other component. Never run both model
+servers together.
+
+Only one open TouchDesigner project may listen on a given OSC receive port.
+The shipped primary component uses 8574/8583. Close another project using
+those ports before testing, or temporarily assign an unused receive/transmit
+pair to the active 5090 component and its generated server config. Do not save
+temporary diagnostic port overrides into the `.toe`.
+
 Run the full installer only when creating a fresh connector:
 
 ```python

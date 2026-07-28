@@ -100,7 +100,29 @@ the 5090 file into the cloned repository root, run
 guarded updater refuses non-5090 filenames, refreshes both audio-stem paths and
 Show Control, restores the two 5090 Spout senders, and leaves the paid
 components untouched. Inspect the result and save a new numbered 5090
-revision. Run only one StreamDiffusionTD model server at a time.
+revision.
+
+Before saving, run `touchdesigner/audit_5090_controls.py` and
+`touchdesigner/audit_5090_live_events.py` from the Textport. They refuse 3080
+filenames, exercise all 18 Show Control parameters, verify the callback and
+output network, and restore the original show state without saving.
+
+For a generated-image check, start only one StreamDiffusionTD server, wait for
+model initialization, and run `touchdesigner/audit_5090_visuals.py`. The
+visual audit requires an active RTX 5090 local backend, a current output-memory
+name, and non-black color and Spout-source pixels. It forces one non-destructive
+local TOP cook so a paused project can prove the complete output path.
+Backend tables persist in the `.toe` and may display legacy connection labels
+or errors from the machine that last saved it; the output-name timestamp is
+the server-session start time, not a heartbeat. Stop that server and confirm
+its process has exited before starting the other component. Never run both
+servers at once.
+
+Do not keep two TouchDesigner projects listening on the same OSC receive port.
+The primary component ships with 8574/8583. Close the other project or use a
+temporary unique port pair for the active 5090 component and generated server
+config, then restore the shipped values without saving the diagnostic
+override.
 
 ## Credentials
 
