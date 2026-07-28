@@ -647,7 +647,8 @@ the only alternative would create a sub-15-second image.
 
 `touchdesigner/podcast_sequencer.py` is a provider-neutral, stateless playback
 core. `/project1/podcast_visualizer` in the current local working revision,
-`podcast.20.toe`, follows the TouchDesigner 2025.32820 timeline and exposes:
+`podcast.5090.toe` (currently `podcast.5090.24.toe`), follows the
+TouchDesigner 2025.32820 timeline and exposes:
 
 - `prompt_out` for one prompt or two smoothstep-weighted crossfade prompts;
 - `caption_out` for the current spoken caption;
@@ -656,8 +657,9 @@ core. `/project1/podcast_visualizer` in the current local working revision,
 - `color_out_1` and `color_out_2` for adjusted primary and backup images;
 - `voices_only_audio` and `soundscape_audio`, both locked to the same timeline;
 - `audiosource_switch`, which sends exactly one selected stem to `audio_out`.
+- `syphonspoutout1` and `syphonspoutout2`, the two 5090 Spout image senders.
 
-The local `podcast.20.toe` contains the supplied primary and backup
+The local `podcast.5090.toe` contains the supplied primary and backup
 StreamDiffusionTD components. The controller maps `prompt_out` into both
 operators' weighted prompt and seed blocks and uses spherical interpolation
 for scene crossfades. `Crossfade Seconds` defaults to 8 seconds, accepts values
@@ -678,8 +680,10 @@ frame 1 with audio disabled. See
 Brightness `1.0` is neutral in the Level TOP; `0.0` is black and values above
 `1.0` brighten the image.
 
-The local `.toe` and `.tox` files, including `podcast.20.toe`, are ignored by
-Git and must not be published.
+The local `.toe` and `.tox` files, including `podcast.5090.toe`, are ignored by
+Git and must not be published. The `podcast.3080*.toe` files are read-only
+references during 5090 work. Use
+`touchdesigner/update_5090_project.py` for guarded 5090-only refreshes.
 
 ## Project layout
 

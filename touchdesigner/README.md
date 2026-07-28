@@ -24,9 +24,25 @@ rewriting an unchanged prompt.
 
 ## Install
 
-Open the current local working revision, `podcast.20.toe`, with TouchDesigner
-2025.32820. The `.toe` remains local and is not part of the Git repository. In
-a Textport, run the installer only when creating a fresh connector:
+The active production project is the 5090 copy, `podcast.5090.toe`; its
+current numbered save is `podcast.5090.24.toe`. Open it with TouchDesigner
+2025.32820. The `.toe` remains local and is not part of the Git repository.
+The `podcast.3080*.toe` files are reference inputs only and must not be opened,
+updated, or saved as part of 5090 work.
+
+For routine 5090 updates, run the guarded updater from a Textport:
+
+```python
+exec(open(r"C:\path\to\home-podcast\touchdesigner\update_5090_project.py", encoding="utf-8").read())
+```
+
+It refuses to run unless the open filename is `podcast.5090.toe` or a numbered
+5090 revision. It refreshes the tracked Show Control and callbacks, rebinds
+repository paths, recreates the two 5090 Spout senders, and leaves the paid
+StreamDiffusionTD components and model servers untouched. Inspect the result,
+then save a new numbered 5090 revision.
+
+Run the full installer only when creating a fresh connector:
 
 ```python
 exec(open(r"C:\path\to\home-podcast\touchdesigner\install_podcast_connector.py", encoding="utf-8").read())
@@ -38,6 +54,8 @@ The installer creates `/project1/podcast_visualizer` with:
 - `audiosource_switch`: an exclusive switch feeding the audio device output;
 - `show_control`: live playback, audio-source, random-seed, crossfade, and
   color controls;
+- `syphonspoutout1` and `syphonspoutout2`: the 5090 Spout senders, installed
+  from `null1` and `null2` when those output nulls exist;
 - `color_out_1` and `color_out_2`: adjusted primary and backup image outputs;
 - `prompt_out`: provider-neutral prompt slots and blend weights;
 - `caption_out`: current speech-only caption;
@@ -61,8 +79,9 @@ touching StreamDiffusionTD, run:
 exec(open(r"C:\path\to\home-podcast\touchdesigner\install_show_control.py", encoding="utf-8").read())
 ```
 
-After moving `podcast.20.toe` to another computer, save it in the cloned
-repository root and run the safe rebinder once:
+After moving `podcast.5090.toe` to another computer, save it in the cloned
+repository root and run the guarded updater above. For a path-only repair,
+run the safe rebinder once:
 
 ```python
 exec(open(r"C:\path\to\home-podcast\touchdesigner\rebind_project_paths.py", encoding="utf-8").read())

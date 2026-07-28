@@ -63,15 +63,28 @@ class FakeConnector:
 
 
 class FakeNode:
-    def __init__(self, parent, name, *, inputs=1) -> None:
+    def __init__(
+        self,
+        parent,
+        name,
+        *,
+        inputs=1,
+        operator_type="null",
+    ) -> None:
         self.parent = parent
         self.name = name
         self.path = f"/project1/podcast_visualizer/{name}"
+        self.type = operator_type
         self.comment = ""
         self.valid = True
         self.nodeX = 0
         self.nodeY = 0
         self.nodeWidth = 100
+        self.par = SimpleNamespace(
+            active=False,
+            sendername="",
+            outputresolution="",
+        )
         self.inputConnectors = [
             FakeConnector(self, index, is_input=True)
             for index in range(inputs)
@@ -94,8 +107,13 @@ class FakeContainer:
             Streamdiffusionpath=FakePar("StreamDiffusionTD")
         )
 
-    def add(self, name, *, inputs=1):
-        node = FakeNode(self, name, inputs=inputs)
+    def add(self, name, *, inputs=1, operator_type="null"):
+        node = FakeNode(
+            self,
+            name,
+            inputs=inputs,
+            operator_type=operator_type,
+        )
         self.nodes[name] = node
         return node
 
@@ -104,7 +122,14 @@ class FakeContainer:
 
     def create(self, operator_type, name):
         inputs = 2 if operator_type == "switchTOP" else 1
-        return self.add(name, inputs=inputs)
+        node_type = {
+            "syphonspoutoutTOP": "syphonspoutout",
+        }.get(operator_type, operator_type.removesuffix("TOP"))
+        return self.add(
+            name,
+            inputs=inputs,
+            operator_type=node_type,
+        )
 
 
 class ShowControlComponentTests(unittest.TestCase):
@@ -195,6 +220,64 @@ class ShowControlComponentTests(unittest.TestCase):
             MODULE._normalize_audio_source("combined"),
             "voices",
         )
+
+    def test_installs_5090_spout_outputs_from_existing_nulls(self) -> None:
+        null1 = self.container.add("null1")
+        null2 = self.container.add("null2")
+        operator_types = {
+            "syphonspoutoutTOP": "syphonspoutoutTOP",
+        }
+
+        outputs = MODULE._install_spout_outputs(
+            self.container,
+            operator_types,
+        )
+
+        self.assertEqual(
+            [output.name for output in outputs],
+            ["syphonspoutout1", "syphonspoutout2"],
+        )
+        first, second = outputs
+        self.assertEqual(first.par.sendername, "TDSyphonSpoutOut")
+        self.assertEqual(second.par.sendername, "TDSyphonSpoutOut2")
+        self.assertTrue(first.par.active)
+        self.assertTrue(second.par.active)
+        self.assertEqual(
+            first.inputConnectors[0].connections[0].owner,
+            null1,
+        )
+        self.assertEqual(
+            second.inputConnectors[0].connections[0].owner,
+            null2,
+        )
+
+    def test_reinstall_keeps_one_5090_spout_output_per_source(self) -> None:
+        self.container.add("null1")
+        self.container.add("null2")
+        operator_types = {
+            "syphonspoutoutTOP": "syphonspoutoutTOP",
+        }
+
+        MODULE._install_spout_outputs(self.container, operator_types)
+        outputs = MODULE._install_spout_outputs(
+            self.container,
+            operator_types,
+        )
+
+        self.assertEqual(
+            [output.name for output in outputs],
+            ["syphonspoutout1", "syphonspoutout2"],
+        )
+        self.assertEqual(
+            sorted(
+                name
+                for name in self.container.nodes
+                if name.startswith("syphonspoutout")
+            ),
+            ["syphonspoutout1", "syphonspoutout2"],
+        )
+        for output in outputs:
+            self.assertEqual(len(output.inputConnectors[0].connections), 1)
 
 
 if __name__ == "__main__":

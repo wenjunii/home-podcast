@@ -51,6 +51,7 @@ def install():
             "audiofileinCHOP": audiofileinCHOP,
             "switchCHOP": switchCHOP,
             "audiodeviceoutCHOP": audiodeviceoutCHOP,
+            "syphonspoutoutTOP": syphonspoutoutTOP,
             "op": op,
         },
     )
