@@ -96,7 +96,6 @@ def install():
     audio_out.nodeY = -160
     audio_out.inputConnectors[0].connect(audio)
     audio_out.par.active.expr = "parent().par.Audioenabled"
-    audio_out.par.active.mode = ParMode.EXPRESSION
 
     callbacks = connector.create(executeDAT, "execute_callbacks")
     callbacks.nodeX = 440
@@ -145,6 +144,9 @@ def install():
             "hsvadjustTOP": hsvadjustTOP,
             "switchTOP": switchTOP,
             "nullTOP": nullTOP,
+            "audiofileinCHOP": audiofileinCHOP,
+            "switchCHOP": switchCHOP,
+            "audiodeviceoutCHOP": audiodeviceoutCHOP,
             "op": op,
         },
     )

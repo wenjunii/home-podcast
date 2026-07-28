@@ -5,7 +5,7 @@ Target version: TouchDesigner 2025.32820.
 This connector separates editorial timing from the paid generation operator:
 
 ```text
-voices-only audio / timeline
+selected voices-only or soundscape-only audio / timeline
   -> podcast_visualizer
   -> prompt_out Table DAT
   -> StreamDiffusionTD prompt + seed multiparms
@@ -24,7 +24,7 @@ rewriting an unchanged prompt.
 
 ## Install
 
-Open the current local working revision, `podcast.18.toe`, with TouchDesigner
+Open the current local working revision, `podcast.20.toe`, with TouchDesigner
 2025.32820. The `.toe` remains local and is not part of the Git repository. In
 a Textport, run the installer only when creating a fresh connector:
 
@@ -34,8 +34,10 @@ exec(open(r"C:\path\to\home-podcast\touchdesigner\install_podcast_connector.py",
 
 The installer creates `/project1/podcast_visualizer` with:
 
-- `voices_only_audio`: local pilot audio source, disabled by default;
-- `show_control`: live playback, random-seed, crossfade, and color controls;
+- `voices_only_audio` and `soundscape_audio`: synchronized pilot audio stems;
+- `audiosource_switch`: an exclusive switch feeding the audio device output;
+- `show_control`: live playback, audio-source, random-seed, crossfade, and
+  color controls;
 - `color_out_1` and `color_out_2`: adjusted primary and backup image outputs;
 - `prompt_out`: provider-neutral prompt slots and blend weights;
 - `caption_out`: current speech-only caption;
@@ -59,7 +61,7 @@ touching StreamDiffusionTD, run:
 exec(open(r"C:\path\to\home-podcast\touchdesigner\install_show_control.py", encoding="utf-8").read())
 ```
 
-After moving `podcast.18.toe` to another computer, save it in the cloned
+After moving `podcast.20.toe` to another computer, save it in the cloned
 repository root and run the safe rebinder once:
 
 ```python
@@ -76,9 +78,9 @@ normalized slider range ends at 15, so values from 15 through 30 can be typed
 directly. The sequencer caps an extreme value at half the current scene
 duration so every scene still reaches full strength and the next transition
 remains continuous. Rerunning the show-control installer preserves the current
-play, audio, seed mode, crossfade, and color values. `status_out` reports the
-effective `crossfade_ms`, current `crossfade_progress`, seed generation, and
-color-pipeline state.
+play, audio-source selection, audio enabled state, seed mode, crossfade, and
+color values. `status_out` reports the effective `crossfade_ms`, current
+`crossfade_progress`, seed generation, and color-pipeline state.
 
 The same crossfade also spans the loop boundary. Its first half occurs at the
 end of the final scene and its second half occurs at the beginning of scene
@@ -108,14 +110,16 @@ are `color_out_1` and `color_out_2`; rerunning the installer preserves their
 downstream routing and all current show-control values.
 
 The TouchDesigner timeline is the pilot clock. The installer expands its range
-to the complete episode, sets Audio File In to `Locked to Timeline`, and makes
-`Playheadsec` follow network time. Playing, pausing, and seeking therefore
-recompute the visual scene and audio position directly. Enable `Audio Enabled`
-only when the voices track should be sent to the default audio device. Project
-load and timeline-start callbacks resynchronize the timeline and audio device
-with the saved Show Control values, so a saved Off state remains off after
-reopening the `.toe`. If TouchDesigner advances briefly during project load,
-the paused startup guard returns the pilot to frame 1.
+to the complete episode, sets both Audio File In CHOPs to `Locked to Timeline`,
+and makes `Playheadsec` follow network time. Playing, pausing, and seeking
+therefore recompute the visual scene and both audio positions directly.
+`Audio Source` selects either `Human Voices Only` or `Soundscape Only`; there
+is no combined-track option. Enable `Audio Enabled` only when the selected
+track should be sent to the default audio device. Project-load and
+timeline-start callbacks resynchronize the timeline, exclusive source switch,
+and audio device with the saved Show Control values, so a saved Off state
+remains off after reopening the `.toe`. If TouchDesigner advances briefly
+during project load, the paused startup guard returns the pilot to frame 1.
 
 The local `.toe` and any `.tox` components are ignored by Git because they may
 contain the paid StreamDiffusionTD component.

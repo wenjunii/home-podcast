@@ -48,6 +48,9 @@ def install():
             "hsvadjustTOP": hsvadjustTOP,
             "switchTOP": switchTOP,
             "nullTOP": nullTOP,
+            "audiofileinCHOP": audiofileinCHOP,
+            "switchCHOP": switchCHOP,
+            "audiodeviceoutCHOP": audiodeviceoutCHOP,
             "op": op,
         },
     )
@@ -59,7 +62,6 @@ def install():
     audio_out = connector.op("audio_out")
     if audio_out is not None:
         audio_out.par.active.expr = "parent().par.Audioenabled"
-        audio_out.par.active.mode = ParMode.EXPRESSION
     callbacks.module._CONTROLLER = None
     controller = callbacks.module.get_controller()
     callbacks.module._synchronize_show_control()

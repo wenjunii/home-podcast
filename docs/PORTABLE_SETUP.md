@@ -6,12 +6,12 @@ continue editorial and visual-sequencer work:
 - the canonical `data/exports/stories_*.md` inputs;
 - the portable current story-card snapshot;
 - locked episode manifests, scripts, transcripts, captions, and visual scenes;
-- the final voices-only pilot MP3 and its timing timeline;
+- the final voices-only and soundscape-only pilot MP3s and timing timeline;
+- the 91 hashed raw SFX responses needed for zero-cost cache restoration;
 - Python production code, tests, TouchDesigner installers, and controller code.
 
-Rebuildable SQLite state, provider caches, intermediate WAV files, generated
-sound-effect experiments, credentials, and TouchDesigner `.toe`/`.tox` files
-are deliberately excluded.
+Rebuildable SQLite state, intermediate WAV files, obsolete sound experiments,
+credentials, and TouchDesigner `.toe`/`.tox` files are deliberately excluded.
 
 ## Restore the deterministic project state
 
@@ -64,22 +64,38 @@ The repository includes:
 
 ```text
 episodes/2013-12.01/audio/2013-12.01-voices-only.mp3
+episodes/2013-12.01/audio/2013-12.01-soundscape-only.mp3
 episodes/2013-12.01/audio/2013-12.01-timeline.json
+episodes/2013-12.01/audio/sfx-responses/
 episodes/2013-12.01/transcripts/
 episodes/2013-12.01/visuals/2013-12.01-visual-scenes.json
 touchdesigner/
 ```
 
-The current local TouchDesigner working file is `podcast.18.toe`, targeting
+Both Show Control stems are ready immediately after cloning. To restore the
+editable scene-level SFX cache without an ElevenLabs credential or paid call:
+
+```powershell
+python .\scripts\sync_pilot_sfx_cache.py validate
+python .\scripts\sync_pilot_sfx_cache.py restore
+python -m home_podcast generate-sfx `
+  --jobs .\work\sfx\2013-12.01-scene-jobs.jsonl
+```
+
+The final dry run must report 91 cached jobs and zero pending calls. The
+portable response manifest is bound to the current cue prompts, model,
+durations, and SHA-256 file hashes; a mismatch fails closed.
+
+The current local TouchDesigner working file is `podcast.20.toe`, targeting
 TouchDesigner 2025.32820. It is intentionally not on GitHub because it contains
 the paid StreamDiffusionTD component. Transfer that one file separately through
 private storage, or create a fresh `.toe`, install StreamDiffusionTD under your
 license, and follow `touchdesigner/README.md` to install the tracked connector.
-When transferring `podcast.18.toe`, save it in the cloned repository root and
+When transferring `podcast.20.toe`, save it in the cloned repository root and
 run `touchdesigner/rebind_project_paths.py` once from the TouchDesigner
-Textport. This updates all old-computer file paths without touching the paid
-components. Save the rebound `.toe`, and run only one StreamDiffusionTD model
-server at a time.
+Textport. This updates both audio-stem paths plus all other old-computer file
+paths without touching the paid components. Save the rebound `.toe`, and run
+only one StreamDiffusionTD model server at a time.
 
 ## Credentials
 

@@ -11,7 +11,11 @@ from .analysis import (
     export_story_cards,
     import_story_cards,
 )
-from .audio import render_dialogue_episode_audio, render_episode_audio
+from .audio import (
+    render_dialogue_episode_audio,
+    render_episode_audio,
+    render_soundscape_audio,
+)
 from .casting import create_episode_cast
 from .catalog import catalog_status
 from .config import ProjectConfig
@@ -30,6 +34,7 @@ from .polisher import polish_episode_conversation
 from .provider_runner import analyze_story_jobs
 from .script import prepare_tts_jobs, validate_script
 from .script_runner import generate_episode_script
+from .scene_soundscape import validate_scene_soundscape
 from .sfx_runner import generate_sound_effect_jobs
 from .sound_design import prepare_sfx_jobs, validate_sound_design
 from .transcripts import render_transcripts
@@ -315,6 +320,14 @@ def build_parser() -> argparse.ArgumentParser:
     validate_sound.add_argument("--sound-design", required=True)
     validate_sound.add_argument("--script", required=True)
 
+    validate_scene_sound = subparsers.add_parser(
+        "validate-scene-soundscape",
+        help="Validate one continuous non-speech cue per visual scene",
+    )
+    validate_scene_sound.add_argument("--sound-design", required=True)
+    validate_scene_sound.add_argument("--visuals", required=True)
+    validate_scene_sound.add_argument("--timeline", required=True)
+
     sfx = subparsers.add_parser(
         "prepare-sfx",
         help="Create cached, provider-neutral jobs for generated sound cues",
@@ -370,6 +383,25 @@ def build_parser() -> argparse.ArgumentParser:
     dialogue_audio.add_argument(
         "--sfx-jobs",
         help="Completed generated-SFX jobs referenced by the sound-design cue sheet",
+    )
+
+    soundscape_audio = subparsers.add_parser(
+        "render-soundscape",
+        help="Render sound design against an existing reviewed audio timeline",
+    )
+    soundscape_audio.add_argument("--timeline", required=True)
+    soundscape_audio.add_argument("--sound-design", required=True)
+    soundscape_audio.add_argument(
+        "--sfx-jobs",
+        help="Completed generated-SFX jobs referenced by the sound-design cue sheet",
+    )
+    soundscape_audio.add_argument(
+        "--voices-audio",
+        help="Optional reviewed voices-only track for a combined preview",
+    )
+    soundscape_audio.add_argument(
+        "--output-dir",
+        help="Episode audio output directory",
     )
 
     transcript = subparsers.add_parser(
@@ -514,6 +546,8 @@ def main(argv: list[str] | None = None) -> int:
         ):
             return 2
         if args.command == "validate-sound-design" and not result["valid"]:
+            return 2
+        if args.command == "validate-scene-soundscape" and not result["valid"]:
             return 2
         if args.command == "validate-visuals" and not result["valid"]:
             return 2
@@ -810,6 +844,12 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             Path(args.sound_design).resolve(),
             Path(args.script).resolve(),
         )
+    if args.command == "validate-scene-soundscape":
+        return validate_scene_soundscape(
+            Path(args.sound_design).resolve(),
+            Path(args.visuals).resolve(),
+            Path(args.timeline).resolve(),
+        )
     if args.command == "prepare-sfx":
         sound_design_path = Path(args.sound_design).resolve()
         sound_design = json.loads(sound_design_path.read_text(encoding="utf-8"))
@@ -873,6 +913,25 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             ),
             sfx_jobs_path=(
                 Path(args.sfx_jobs).resolve() if args.sfx_jobs else None
+            ),
+        )
+    if args.command == "render-soundscape":
+        timeline_path = Path(args.timeline).resolve()
+        timeline = json.loads(timeline_path.read_text(encoding="utf-8"))
+        output_dir = _path_or_default(
+            args.output_dir,
+            config.episodes_dir / timeline["episode_id"] / "audio",
+        )
+        return render_soundscape_audio(
+            timeline_path,
+            Path(args.sound_design).resolve(),
+            config.work_dir,
+            output_dir,
+            sfx_jobs_path=(
+                Path(args.sfx_jobs).resolve() if args.sfx_jobs else None
+            ),
+            voices_audio_path=(
+                Path(args.voices_audio).resolve() if args.voices_audio else None
             ),
         )
     if args.command == "transcript":

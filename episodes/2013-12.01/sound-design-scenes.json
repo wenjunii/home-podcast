@@ -1,0 +1,3119 @@
+{
+  "contract_version": 1,
+  "episode_id": "2013-12.01",
+  "sound_design_disclosure": "All non-speech sounds are synthetic illustrative sound design. None are recordings of the people, places, objects, or events represented in the archived stories or generated visual prompts.",
+  "editorial_principles": [
+    "Every visual scene receives one relevant non-speech sound layer.",
+    "A nearly subliminal base bed covers the complete episode and every fade.",
+    "Generated sound may evoke evidence but never masquerade as evidence.",
+    "No generated cue contains speech, singing, narration, or intelligible words.",
+    "Scene sounds begin at their visual boundary and never anticipate narration.",
+    "Long cues loop; source generation is capped at the provider's 30-second limit."
+  ],
+  "continuous_background": {
+    "enabled": true,
+    "base_cue_id": "continuous-archive-air",
+    "minimum_specific_span_ms": 1000,
+    "short_span_policy": "inherit_previous"
+  },
+  "scene_sound_policy": {
+    "source_visuals": "2013-12.01-visual-scenes.json",
+    "source_visuals_sha256": "da8375ad8e27abd13400de65b7af00e0e4d39d977e5c1d22958f48d30475e9d3",
+    "visual_scene_count": 90,
+    "scene_cue_count": 90,
+    "timing_source": "2013-12.01-timeline.json",
+    "coverage": "one section cue per visual scene plus continuous base",
+    "transition": "fade scene cue down to continuous base at each boundary"
+  },
+  "cues": [
+    {
+      "cue_id": "continuous-archive-air",
+      "kind": "ambience",
+      "coverage_role": "base",
+      "anchor": {
+        "segment_id": "m1-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 300000,
+      "gain_db": -44,
+      "mix_gain_db": 8.0,
+      "fade_in_ms": 5000,
+      "fade_out_ms": 7000,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a nearly subliminal archival room tone continues throughout",
+      "caption_duration_ms": 5000,
+      "editorial_note": "A full-episode synthetic safety bed fills every transition and prevents dead air without claiming a real room or archive.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic continuous ambience; not an archival recording."
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Thirty-second seamless loop of nearly silent neutral archival air: soft room tone, faint paper-fiber hush and extremely sparse warm digital grain, stable and unobtrusive, no identifiable place, no voices, no melody, no pulse, no dramatic events, designed to sit underneath an entire documentary podcast",
+        "generation_duration_ms": 30000
+      }
+    },
+    {
+      "cue_id": "scene-visual-001",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-001",
+      "anchor": {
+        "segment_id": "m1-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 22886,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "muddy winter footsteps and a wooden lodging threshold",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-001",
+        "visual_prompt_hash": "cd277cafb6ba38d4c48fabd14e56175e5223edaf47cbb24b177ba17db6985828"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a muddy Cambridge lane during thaw, light winter air, rubber boots crossing a low wooden threshold, a small carpetbag settling and folded letter paper. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 22886,
+        "visual_scene_id": "visual-001",
+        "visual_prompt_hash": "cd277cafb6ba38d4c48fabd14e56175e5223edaf47cbb24b177ba17db6985828"
+      }
+    },
+    {
+      "cue_id": "scene-visual-002",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-002",
+      "anchor": {
+        "segment_id": "m1-s003-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18479,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "letter paper and a quiet dormitory room",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-002",
+        "visual_prompt_hash": "8ae20fac9933d1e226793a66db42f8f459df2f0adf1a6b7893002e0efa1a9c81"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: close paper fibers and one careful letter fold on a worn desk, faint dormitory room air, wet rubber boots settling near a cold window. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 18479,
+        "visual_scene_id": "visual-002",
+        "visual_prompt_hash": "8ae20fac9933d1e226793a66db42f8f459df2f0adf1a6b7893002e0efa1a9c81"
+      }
+    },
+    {
+      "cue_id": "scene-visual-003",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-003",
+      "anchor": {
+        "segment_id": "m1-s011",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17286,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "an open doorway, house key, and quiet hall",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-003",
+        "visual_prompt_hash": "fd14edfdbdd177907544d85466c64b96f1d0306f99f56d00298cb7b4ca16a7fd"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an empty family-house hallway, open door moving slightly in winter air, a metal house key and overnight bag set gently beyond the threshold. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17286,
+        "visual_scene_id": "visual-003",
+        "visual_prompt_hash": "fd14edfdbdd177907544d85466c64b96f1d0306f99f56d00298cb7b4ca16a7fd"
+      }
+    },
+    {
+      "cue_id": "scene-visual-004",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-004",
+      "anchor": {
+        "segment_id": "m1-s008",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 23441,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "paper passing through a quiet scanner",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-004",
+        "visual_prompt_hash": "946b504baed70167ce136db33aac466910a8cc4298f8ffde1a8820800c287a80"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: flatbed scanner carriage gliding under an old printed letter, delicate page fibers, low computer fan and sparse hard-drive ticks in a quiet workroom. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 23441,
+        "visual_scene_id": "visual-004",
+        "visual_prompt_hash": "946b504baed70167ce136db33aac466910a8cc4298f8ffde1a8820800c287a80"
+      }
+    },
+    {
+      "cue_id": "scene-visual-005",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-005",
+      "anchor": {
+        "segment_id": "m1-s008-r1",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18240,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "rain on glass and soft paper movement",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-005",
+        "visual_prompt_hash": "c75e967680287f0b4db425a5cdc47a3158ab687a8c3781711e8a81cc735a6fcf"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: fine rain against a window at dusk, faint interior air, envelopes and journal pages shifting beside a small house key. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 18240,
+        "visual_scene_id": "visual-005",
+        "visual_prompt_hash": "c75e967680287f0b4db425a5cdc47a3158ab687a8c3781711e8a81cc735a6fcf"
+      }
+    },
+    {
+      "cue_id": "scene-visual-006",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-006",
+      "anchor": {
+        "segment_id": "m1-s013",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 27187,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "Atlantic surf, island wind, and loose pages",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-006",
+        "visual_prompt_hash": "8ac359ddd9022c29dfbfda800de1adba05c3d088134df1fb0bd0f511db2f2a7b"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: Atlantic shoreline wind over dark volcanic ground in Cape Verde, broad gentle surf, loose notebook pages and suitcase fabric moving in the breeze. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 27187,
+        "visual_scene_id": "visual-006",
+        "visual_prompt_hash": "8ac359ddd9022c29dfbfda800de1adba05c3d088134df1fb0bd0f511db2f2a7b"
+      }
+    },
+    {
+      "cue_id": "scene-visual-007",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-007",
+      "anchor": {
+        "segment_id": "m1-s015",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20960,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a quiet laptop, notes, and nighttime room tone",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-007",
+        "visual_prompt_hash": "b5880f1c72f992471f190d03cce70af72ce4265285fb548de8ca24a372c5c4f5"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an aging laptop and low cooling fan on a wooden desk at night, tiny keyboard movements, paper notes and ceramic mug resonance in intimate stillness. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20960,
+        "visual_scene_id": "visual-007",
+        "visual_prompt_hash": "b5880f1c72f992471f190d03cce70af72ce4265285fb548de8ca24a372c5c4f5"
+      }
+    },
+    {
+      "cue_id": "scene-visual-008",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-008",
+      "anchor": {
+        "segment_id": "m1-s017",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17600,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "paired archive-window flutters and an old screen hum",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-008",
+        "visual_prompt_hash": "c36117ea3d81f9b317255318b77fc8b58f6cbc553e4a52024be4212bb0836f98"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: two overlapping archive windows suggested by paired soft digital flutters, an old screen hum, sparse disk activity and paper notes under a desk lamp. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17600,
+        "visual_scene_id": "visual-008",
+        "visual_prompt_hash": "c36117ea3d81f9b317255318b77fc8b58f6cbc553e4a52024be4212bb0836f98"
+      }
+    },
+    {
+      "cue_id": "scene-visual-009",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-009",
+      "anchor": {
+        "segment_id": "m1-s017-c",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18002,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a quiet archived blog page and handwritten notes",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-009",
+        "visual_prompt_hash": "4f5e81245b6557a9dcb2bf7130a32c571a4367dbc34504a6bd6e9127f4800788"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a solitary archived blog page at night, restrained computer fan, a blinking cursor suggested by one sparse electronic grain, handwritten notes moving. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 18002,
+        "visual_scene_id": "visual-009",
+        "visual_prompt_hash": "4f5e81245b6557a9dcb2bf7130a32c571a4367dbc34504a6bd6e9127f4800788"
+      }
+    },
+    {
+      "cue_id": "scene-visual-010",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-010",
+      "anchor": {
+        "segment_id": "m1-s019",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 26240,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "scanner mechanics, old paper, and a travel trunk",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-010",
+        "visual_prompt_hash": "f6ee75155bde8b8388de580b12a0c9d3cd716b7823d769e7908523ef2061b2fb"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: scanner light moving across an open printed letter, low mechanism glide, travel-trunk leather settling and a folded paper map in a shadowed room. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 26240,
+        "visual_scene_id": "visual-010",
+        "visual_prompt_hash": "f6ee75155bde8b8388de580b12a0c9d3cd716b7823d769e7908523ef2061b2fb"
+      }
+    },
+    {
+      "cue_id": "scene-visual-011",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-011",
+      "anchor": {
+        "segment_id": "m1-s020-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20559,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "countryside air through an open door beside a travel trunk",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-011",
+        "visual_prompt_hash": "4d17de27e6248e40fe003ac98dced796a46d91582774642bc9f75bd11f6dfe83"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an unused leather trunk and polished walking boots in a quiet old room, open door admitting distant countryside wind and a letter edge lifting. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20559,
+        "visual_scene_id": "visual-011",
+        "visual_prompt_hash": "4d17de27e6248e40fe003ac98dced796a46d91582774642bc9f75bd11f6dfe83"
+      }
+    },
+    {
+      "cue_id": "scene-visual-012",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-012",
+      "anchor": {
+        "segment_id": "m1-s023",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 25041,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "open-window countryside air and an unfinished letter",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-012",
+        "visual_prompt_hash": "a4a5384431e15ccb6da7fd173086427e871b64cfa4d0a91b178d8e2b7a20eb03"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: warm countryside breeze entering a tall early nineteenth-century window, distant rolling-hill air, a letter page curling once on the worn sill and the stillness of an unfinished room. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 25041,
+        "visual_scene_id": "visual-012",
+        "visual_prompt_hash": "a4a5384431e15ccb6da7fd173086427e871b64cfa4d0a91b178d8e2b7a20eb03"
+      }
+    },
+    {
+      "cue_id": "scene-visual-013",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-013",
+      "anchor": {
+        "segment_id": "m1-s024",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 22080,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "dry house air, settling floorboards, and keys",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-013",
+        "visual_prompt_hash": "948211b3dfa6d633ff0cd62ff11290aeecdb8bab29e3dc0a26a5c4cbc6969a58"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an empty Wildomar house in dry late-afternoon California air, faint window breeze, floorboard settling, suspended dust and a small set of keys. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 22080,
+        "visual_scene_id": "visual-013",
+        "visual_prompt_hash": "948211b3dfa6d633ff0cd62ff11290aeecdb8bab29e3dc0a26a5c4cbc6969a58"
+      }
+    },
+    {
+      "cue_id": "scene-visual-014",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-014",
+      "anchor": {
+        "segment_id": "m1-s026",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 26719,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a quiet laptop fragment fading into unfinished stillness",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-014",
+        "visual_prompt_hash": "4e5c3b9728551b6d9910a2b689a485adb32613275eb92152c134dd874ecf0952"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a laptop glowing in a dark room, low fan and sparse data texture ending abruptly, then returning to still room air and unfinished paper. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 26719,
+        "visual_scene_id": "visual-014",
+        "visual_prompt_hash": "4e5c3b9728551b6d9910a2b689a485adb32613275eb92152c134dd874ecf0952"
+      }
+    },
+    {
+      "cue_id": "scene-visual-015",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-015",
+      "anchor": {
+        "segment_id": "m1-s028",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18640,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "four layers of paper, book, journal, and computer",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-015",
+        "visual_prompt_hash": "93d72b849048e88f71e15cb5c54d34891a3728367e93164cf4348f54d05aacd7"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: layered old letter paper, scanned book fibers, a grief journal page and low laptop mechanisms arranged as one restrained archival worktable texture. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 18640,
+        "visual_scene_id": "visual-015",
+        "visual_prompt_hash": "93d72b849048e88f71e15cb5c54d34891a3728367e93164cf4348f54d05aacd7"
+      }
+    },
+    {
+      "cue_id": "scene-visual-016",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-016",
+      "anchor": {
+        "segment_id": "m2-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20560,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "rain, quill on paper, and a quiet hotel room",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-016",
+        "visual_prompt_hash": "f21f89dcc255e23ee2652d6a4d6e7e21dd6a5142820e1c6ff056ac1c556e76ac"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: rain on a mid-nineteenth-century hotel window, close quill movement across paper, a wooden writing desk and low lamp-room air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20560,
+        "visual_scene_id": "visual-016",
+        "visual_prompt_hash": "f21f89dcc255e23ee2652d6a4d6e7e21dd6a5142820e1c6ff056ac1c556e76ac"
+      }
+    },
+    {
+      "cue_id": "scene-visual-017",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-017",
+      "anchor": {
+        "segment_id": "m2-s004",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 27999,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "faint glass and dice-box sounds in an empty dining room",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-017",
+        "visual_prompt_hash": "83c01b0c0e4ae12de3e8cd1c9e74ea4e199616037f796386ec82c19ebc6d34d4"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: the hushed aftermath of a grand hotel dinner, faint glass resonance, an ivory dice box touching linen and broad cool room air around an empty table. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 27999,
+        "visual_scene_id": "visual-017",
+        "visual_prompt_hash": "83c01b0c0e4ae12de3e8cd1c9e74ea4e199616037f796386ec82c19ebc6d34d4"
+      }
+    },
+    {
+      "cue_id": "scene-visual-018",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-018",
+      "anchor": {
+        "segment_id": "m2-s007",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 23920,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "suitcase cloth, notebook pages, and apartment air",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-018",
+        "visual_prompt_hash": "8856ec1a48195cdc2ec669ceb335bb3759c60bd5f0ffdbde1fa3f9c3fbfb3480"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a Kenyan apartment in afternoon air, suitcase cloth and zipper, notebook pages and five small pencil marks, with distant exterior breeze. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 23920,
+        "visual_scene_id": "visual-018",
+        "visual_prompt_hash": "8856ec1a48195cdc2ec669ceb335bb3759c60bd5f0ffdbde1fa3f9c3fbfb3480"
+      }
+    },
+    {
+      "cue_id": "scene-visual-019",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-019",
+      "anchor": {
+        "segment_id": "m2-s007-r1",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20188,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "corduroy, muffin tin, keys, and laptop textures",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-019",
+        "visual_prompt_hash": "39135c6a74867a7a0216d794e83f1dd7ffc65b9e3c3b5feb1ed1e8174a1389ed"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: corduroy fabric, a silver muffin tin, car keys and a laptop resting on a linen table, playful small object textures with no rhythmic pattern. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20188,
+        "visual_scene_id": "visual-019",
+        "visual_prompt_hash": "39135c6a74867a7a0216d794e83f1dd7ffc65b9e3c3b5feb1ed1e8174a1389ed"
+      }
+    },
+    {
+      "cue_id": "scene-visual-020",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-020",
+      "anchor": {
+        "segment_id": "m2-s009-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 22773,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "English rain, damp cloth, and kitchen-window air",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-020",
+        "visual_prompt_hash": "2654b925163cacfaf4a7382f69c3c6e886c722110536d4cab8b328c79e88b96d"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: steady English rain on a narrow window, damp cloth, car keys, a kitchen board and muted grey afternoon room tone. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 22773,
+        "visual_scene_id": "visual-020",
+        "visual_prompt_hash": "2654b925163cacfaf4a7382f69c3c6e886c722110536d4cab8b328c79e88b96d"
+      }
+    },
+    {
+      "cue_id": "scene-visual-021",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-021",
+      "anchor": {
+        "segment_id": "m2-s012",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 28400,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "Midwestern grass wind and a distant road",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-021",
+        "visual_prompt_hash": "6551e07cefc390979cc5216694acc97539ad49d736ec678c7669c2dbcdfd217e"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: warm wind moving through tall Midwestern grass beside a country road, distant tire hush and an immense open-sky ambience. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 28400,
+        "visual_scene_id": "visual-021",
+        "visual_prompt_hash": "6551e07cefc390979cc5216694acc97539ad49d736ec678c7669c2dbcdfd217e"
+      }
+    },
+    {
+      "cue_id": "scene-visual-022",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-022",
+      "anchor": {
+        "segment_id": "m2-s013-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 27600,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a muted Brooklyn apartment and distant city wash",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-022",
+        "visual_prompt_hash": "1743bf45918b94183b4f7842452ac5350a13fe578e4f4db310a76683a7f82305"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: muted Brooklyn rooftop and apartment ambience, distant traffic wash without horns, radiator breath, condensation and houseplant leaves at a window. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 27600,
+        "visual_scene_id": "visual-022",
+        "visual_prompt_hash": "1743bf45918b94183b4f7842452ac5350a13fe578e4f4db310a76683a7f82305"
+      }
+    },
+    {
+      "cue_id": "scene-visual-023",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-023",
+      "anchor": {
+        "segment_id": "m2-s016",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 23361,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "island wind, flowers, letters, and a lace curtain",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-023",
+        "visual_prompt_hash": "61e67d4ea2f6503a98eb5b641b7f7a94104fe4306f69e9dc2690a76125800af6"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: spring island wind moving a lace curtain, abundant cut flowers, loose letters and soft parsonage floorboards near a distant shore. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 23361,
+        "visual_scene_id": "visual-023",
+        "visual_prompt_hash": "61e67d4ea2f6503a98eb5b641b7f7a94104fe4306f69e9dc2690a76125800af6"
+      }
+    },
+    {
+      "cue_id": "scene-visual-024",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-024",
+      "anchor": {
+        "segment_id": "m2-s017",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17040,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "letters and flower petals crossing a paper map",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-024",
+        "visual_prompt_hash": "69a5358f8c408d2173788fd5758656d408744f70554a63a3f99bbf2efe0dc4a1"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: sealed letters and dry flower petals sliding lightly over an unlabelled paper map, quiet window air and distant rough sea. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17040,
+        "visual_scene_id": "visual-024",
+        "visual_prompt_hash": "69a5358f8c408d2173788fd5758656d408744f70554a63a3f99bbf2efe0dc4a1"
+      }
+    },
+    {
+      "cue_id": "scene-visual-025",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-025",
+      "anchor": {
+        "segment_id": "m2-s018",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 15679,
+      "gain_db": -27.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "torn paper, flowers, and an empty island room",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-025",
+        "visual_prompt_hash": "6cec2c97bd3190add0f5b9fee084d41c0fc50193cf0d944330bd31e8323f9124"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a torn OCR printout among handwritten letters and flowers, empty chair wood, lace curtain movement and a careful pause where the page ends. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 15679,
+        "visual_scene_id": "visual-025",
+        "visual_prompt_hash": "6cec2c97bd3190add0f5b9fee084d41c0fc50193cf0d944330bd31e8323f9124"
+      }
+    },
+    {
+      "cue_id": "scene-visual-026",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-026",
+      "anchor": {
+        "segment_id": "m2-s019",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 25120,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "open-country wind along a distant road",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-026",
+        "visual_prompt_hash": "4dfd8e74254c550719a9121468aed60a42569844c74608d9e6494e0dfda53485"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: open rolling country under soft overcast light, long wind through roadside grass and a distant walking rhythm absorbed into the landscape. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 25120,
+        "visual_scene_id": "visual-026",
+        "visual_prompt_hash": "4dfd8e74254c550719a9121468aed60a42569844c74608d9e6494e0dfda53485"
+      }
+    },
+    {
+      "cue_id": "scene-visual-027",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-027",
+      "anchor": {
+        "segment_id": "m2-s021",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 22911,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "hilltop wind, grass, and a leather satchel",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-027",
+        "visual_prompt_hash": "d1ab1793609d08ee9453f90b921ae191ed99807004174b51a4846218f6006897"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: hilltop twilight wind around a worn leather satchel and folded letter, grass moving above a quiet valley with wide desolate air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 22911,
+        "visual_scene_id": "visual-027",
+        "visual_prompt_hash": "d1ab1793609d08ee9453f90b921ae191ed99807004174b51a4846218f6006897"
+      }
+    },
+    {
+      "cue_id": "scene-visual-028",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-028",
+      "anchor": {
+        "segment_id": "m2-s022",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19409,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "dusk wind across a dirt road and wildflowers",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-028",
+        "visual_prompt_hash": "424fcc14b5d949cafad1d8015666f17e660811ee4133bf9bcf38ade8bb20ef20"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: soft dusk wind across a white dirt road, scattered wildflowers and long grass beneath a vast amber-violet sky. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19409,
+        "visual_scene_id": "visual-028",
+        "visual_prompt_hash": "424fcc14b5d949cafad1d8015666f17e660811ee4133bf9bcf38ade8bb20ef20"
+      }
+    },
+    {
+      "cue_id": "scene-visual-029",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-029",
+      "anchor": {
+        "segment_id": "m3-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 23200,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "highway hush, road-atlas paper, and a laptop",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-029",
+        "visual_prompt_hash": "0b13d69e2ae6918898a7f0f79f7d2dcf94b464af3be24f7439b9663edbe77aab"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: steady highway interior wash, old road-atlas paper, restrained laptop fan and late-autumn air while a route bends toward Appalachia. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 23200,
+        "visual_scene_id": "visual-029",
+        "visual_prompt_hash": "0b13d69e2ae6918898a7f0f79f7d2dcf94b464af3be24f7439b9663edbe77aab"
+      }
+    },
+    {
+      "cue_id": "scene-visual-030",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-030",
+      "anchor": {
+        "segment_id": "m3-s002-c",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19201,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "road and mountain air on an Appalachian return",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-030",
+        "visual_prompt_hash": "7dcebf93b8304b8b36a77e2fe40134ca060e57499e57147ae03f4ba483be12a8"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: car tires on a long road from Atlanta toward Appalachian ridges, subdued cabin air, late-autumn crosswind and distant mountain weather. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19201,
+        "visual_scene_id": "visual-030",
+        "visual_prompt_hash": "7dcebf93b8304b8b36a77e2fe40134ca060e57499e57147ae03f4ba483be12a8"
+      }
+    },
+    {
+      "cue_id": "scene-visual-031",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-031",
+      "anchor": {
+        "segment_id": "m3-s004",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 24800,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a winding Honaker road through mist and bare branches",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-031",
+        "visual_prompt_hash": "e9155ff5e5220881b671b036915be4d7a18f7a52672dd8cd6158a0f2a0470fb1"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: tires following a tighter winding approach to Honaker Virginia, bare branches brushing in mist, guarded cabin air and restrained steering-wheel leather. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 24800,
+        "visual_scene_id": "visual-031",
+        "visual_prompt_hash": "e9155ff5e5220881b671b036915be4d7a18f7a52672dd8cd6158a0f2a0470fb1"
+      }
+    },
+    {
+      "cue_id": "scene-visual-032",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-032",
+      "anchor": {
+        "segment_id": "m3-s005-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 25760,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "late-November road air enclosed by Appalachian mountains",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-032",
+        "visual_prompt_hash": "3ce6626bd057fc2bcd02cd7e7bb15aea4c1b1d1be9a689e5de8abca47580f917"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a single car moving between steep Appalachian slopes, low tire wash, bare hardwoods and late-November wind held close by the mountains. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 25760,
+        "visual_scene_id": "visual-032",
+        "visual_prompt_hash": "3ce6626bd057fc2bcd02cd7e7bb15aea4c1b1d1be9a689e5de8abca47580f917"
+      }
+    },
+    {
+      "cue_id": "scene-visual-033",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-033",
+      "anchor": {
+        "segment_id": "m3-s007-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19199,
+      "gain_db": -34.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a quiet kitchen, cooling cup, and abruptly ending page",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-033",
+        "visual_prompt_hash": "34ed875662a68d14c1a25f8c9ec0ba37bc6b0ca7458be2ca3faafb56a1de26af"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a printed web article on a quiet kitchen table, paper ending sharply, a cup cooling, closed interior door and still house air after confrontation. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19199,
+        "visual_scene_id": "visual-033",
+        "visual_prompt_hash": "34ed875662a68d14c1a25f8c9ec0ba37bc6b0ca7458be2ca3faafb56a1de26af"
+      }
+    },
+    {
+      "cue_id": "scene-visual-034",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-034",
+      "anchor": {
+        "segment_id": "m3-s010",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 15120,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "woodland air moving through Smith Hollow",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-034",
+        "visual_prompt_hash": "60b8f6671029fbf4fdd3670834020259dae3f2562cd163ee09275952cbca0f03"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: soft wind and distant woodland air passing through Smith Hollow near Abingdon, a narrow road and one weathered homeplace in late-afternoon haze. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 15120,
+        "visual_scene_id": "visual-034",
+        "visual_prompt_hash": "60b8f6671029fbf4fdd3670834020259dae3f2562cd163ee09275952cbca0f03"
+      }
+    },
+    {
+      "cue_id": "scene-visual-035",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-035",
+      "anchor": {
+        "segment_id": "m3-s010-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19520,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "wind, vines, and settling wood in a ruined homeplace",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-035",
+        "visual_prompt_hash": "541c79d9e0b149c0e4079a6f0bc3bd60cf02c3a9e82be84a64d0ecf9eca2e762"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: wind entering a ruined clapboard house through broken windows, kudzu leaves, rotting wood, a loose fence and one restrained structural creak. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19520,
+        "visual_scene_id": "visual-035",
+        "visual_prompt_hash": "541c79d9e0b149c0e4079a6f0bc3bd60cf02c3a9e82be84a64d0ecf9eca2e762"
+      }
+    },
+    {
+      "cue_id": "scene-visual-036",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-036",
+      "anchor": {
+        "segment_id": "m3-s011-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19443,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "bicycle metal, porch boards, basket reeds, and vines",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-036",
+        "visual_prompt_hash": "32c73887bedbbb5b712af433e11acb7cce44d32ce05e036ef631d92696258d85"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a bicycle wheel giving one faint metal tick beside warped porch boards, woven basket reeds, vines at a cracked window and warm empty-house air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19443,
+        "visual_scene_id": "visual-036",
+        "visual_prompt_hash": "32c73887bedbbb5b712af433e11acb7cce44d32ce05e036ef631d92696258d85"
+      }
+    },
+    {
+      "cue_id": "scene-visual-037",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-037",
+      "anchor": {
+        "segment_id": "m3-s014-c",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 22480,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "an old CRT, computer fan, and early-web data grains",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-037",
+        "visual_prompt_hash": "4a5b1616d968a2e8f7025795ac3a0c07e2f4d527d22c7abafb7bac902b88e915"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: low CRT buzz and early-web computer fan in a dark room, a dusty desk and tiny pixel-like data grains with the feeling of a silent embedded player. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 22480,
+        "visual_scene_id": "visual-037",
+        "visual_prompt_hash": "4a5b1616d968a2e8f7025795ac3a0c07e2f4d527d22c7abafb7bac902b88e915"
+      }
+    },
+    {
+      "cue_id": "scene-visual-038",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-038",
+      "anchor": {
+        "segment_id": "m3-s016",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 27120,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "autumn footsteps on a dirt road toward a farmhouse",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-038",
+        "visual_prompt_hash": "cc1671dd1a0a7c2efae3c4f52aff38fdf4b47265728d3ed6db1c3fa80f305023"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: boots on a rutted dirt road approaching a weathered Massachusetts farmhouse, autumn leaves, bare oak wind and distant fallow-field air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 27120,
+        "visual_scene_id": "visual-038",
+        "visual_prompt_hash": "cc1671dd1a0a7c2efae3c4f52aff38fdf4b47265728d3ed6db1c3fa80f305023"
+      }
+    },
+    {
+      "cue_id": "scene-visual-039",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-039",
+      "anchor": {
+        "segment_id": "m3-s018",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 26477,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "dry leaves and wind along an old New England lane",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-039",
+        "visual_prompt_hash": "30f8641c278e2f732049bd1183a0833da0fe29fc050d4688f8aa4f205ead3f23"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: quiet nineteenth-century New England lane, dry elm leaves, distant wooden building resonance and long late-afternoon wind around a returning walker. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 26477,
+        "visual_scene_id": "visual-039",
+        "visual_prompt_hash": "30f8641c278e2f732049bd1183a0833da0fe29fc050d4688f8aa4f205ead3f23"
+      }
+    },
+    {
+      "cue_id": "scene-visual-040",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-040",
+      "anchor": {
+        "segment_id": "m4-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 40161,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "Iowa field wind beside a quiet Texas courthouse square",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-040",
+        "visual_prompt_hash": "b606daaecf8aa7bbc39cc04caf48331fc1c6fefff6cfab144e0e0b41d20bda9b"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: two restrained hometown ambiences held apart: open Iowa field wind and the empty masonry hush of a Texas courthouse square, joined by neutral air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 30000,
+        "visual_scene_id": "visual-040",
+        "visual_prompt_hash": "b606daaecf8aa7bbc39cc04caf48331fc1c6fefff6cfab144e0e0b41d20bda9b"
+      }
+    },
+    {
+      "cue_id": "scene-visual-041",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-041",
+      "anchor": {
+        "segment_id": "m4-s003",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18879,
+      "gain_db": -34.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "spring cemetery wind and soft flower wrapping",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-041",
+        "visual_prompt_hash": "3b93819b105963f3b74d28948e20384a08460704bba45ff7d6b91bdc5f06a176"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: gentle spring wind in a rural Iowa cemetery, flower paper and clothing fabric moving softly beneath a broad sky, with no spectacle. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 18879,
+        "visual_scene_id": "visual-041",
+        "visual_prompt_hash": "3b93819b105963f3b74d28948e20384a08460704bba45ff7d6b91bdc5f06a176"
+      }
+    },
+    {
+      "cue_id": "scene-visual-042",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-042",
+      "anchor": {
+        "segment_id": "m4-s007",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 16240,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "late-May lane, field grass, and flowers in a quiet car",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-042",
+        "visual_prompt_hash": "4dec1a7314e09f2516821ee6abe7d7093195af67cc8b4efd3c92ef75a434d57b"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: late-May wind along an empty Mt. Union lane, mature shade trees, flat field grass and fresh flowers resting quietly inside a parked car. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 16240,
+        "visual_scene_id": "visual-042",
+        "visual_prompt_hash": "4dec1a7314e09f2516821ee6abe7d7093195af67cc8b4efd3c92ef75a434d57b"
+      }
+    },
+    {
+      "cue_id": "scene-visual-043",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-043",
+      "anchor": {
+        "segment_id": "m4-s008",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 21601,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "newsprint rustling to an abrupt torn edge",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-043",
+        "visual_prompt_hash": "80797e8b5d09d26412ec7fd5a83058d98e36c40aaaa9325073e3283fdd15c350"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: close newsprint fibers and a creased newspaper page on weathered wood, one small rustle reaching a torn edge and stopping into warm room air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 21601,
+        "visual_scene_id": "visual-043",
+        "visual_prompt_hash": "80797e8b5d09d26412ec7fd5a83058d98e36c40aaaa9325073e3283fdd15c350"
+      }
+    },
+    {
+      "cue_id": "scene-visual-044",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-044",
+      "anchor": {
+        "segment_id": "m4-s009",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 26400,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "footsteps and awnings around a quiet courthouse square",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-044",
+        "visual_prompt_hash": "bd2c8383474f75fea2766e73bf45ed2c9633c1ed5ee8d0f6f26e2de246607c98"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an empty small-town courthouse square in golden light, restrained footsteps, awning fabric, one distant storefront door and broad brick-street ambience. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 26400,
+        "visual_scene_id": "visual-044",
+        "visual_prompt_hash": "bd2c8383474f75fea2766e73bf45ed2c9633c1ed5ee8d0f6f26e2de246607c98"
+      }
+    },
+    {
+      "cue_id": "scene-visual-045",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-045",
+      "anchor": {
+        "segment_id": "m4-s010-r2",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 25039,
+      "gain_db": -28.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "coins, paper packets, and glass at an old soda counter",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-045",
+        "visual_prompt_hash": "28a22ecb0c8a993df78acbd924a52d2953b6dd9bd32db7c9012058c1ec82d10a"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a scratched soda-fountain counter with small coin clinks, napkin paper, saltine packets, ketchup glass and a low room resonance. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 25039,
+        "visual_scene_id": "visual-045",
+        "visual_prompt_hash": "28a22ecb0c8a993df78acbd924a52d2953b6dd9bd32db7c9012058c1ec82d10a"
+      }
+    },
+    {
+      "cue_id": "scene-visual-046",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-046",
+      "anchor": {
+        "segment_id": "m4-s012-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19600,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "grocery paper, milk glass, and a wooden ice box",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-046",
+        "visual_prompt_hash": "0f140c3597657486355866e7f90a4114ed2a861b6b5027124436b8b9528c92fc"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a brown grocery bag, glass milk bottle and wooden ice-box door in a small Texas home, with porch air and intimate household object resonance. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19600,
+        "visual_scene_id": "visual-046",
+        "visual_prompt_hash": "0f140c3597657486355866e7f90a4114ed2a861b6b5027124436b8b9528c92fc"
+      }
+    },
+    {
+      "cue_id": "scene-visual-047",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-047",
+      "anchor": {
+        "segment_id": "m4-s014",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 21120,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "November doorstep wind, a folded letter, and town map",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-047",
+        "visual_prompt_hash": "4f99c8893a8dae26cd3c4c3f6c53c9889cccd03cc00cac8e1ba1e613aed6609d"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a folded letter on an Andover doorstep, overcast November wind, dry leaves, coat fabric and a town map opening before an argument. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 21120,
+        "visual_scene_id": "visual-047",
+        "visual_prompt_hash": "4f99c8893a8dae26cd3c4c3f6c53c9889cccd03cc00cac8e1ba1e613aed6609d"
+      }
+    },
+    {
+      "cue_id": "scene-visual-048",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-048",
+      "anchor": {
+        "segment_id": "m4-s015-c",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20720,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "dry leaves and stone-building resonance",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-048",
+        "visual_prompt_hash": "ae7f70fdcbef9ba556e7149e202a8341c6bf71f03d0d26eefa004e2ca529b9a3"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: dry autumn leaves scraping across the stone threshold of a repurposed New England civic building, cold exterior air and muted interior masonry hush. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20720,
+        "visual_scene_id": "visual-048",
+        "visual_prompt_hash": "ae7f70fdcbef9ba556e7149e202a8341c6bf71f03d0d26eefa004e2ca529b9a3"
+      }
+    },
+    {
+      "cue_id": "scene-visual-049",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-049",
+      "anchor": {
+        "segment_id": "m4-s016-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 24081,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "river water, mill timber, brick, and overcast wind",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-049",
+        "visual_prompt_hash": "00b5c2ee75a51ebbbc81a4649ae53264fb4270351b1851047e0b04dbf76ce187"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: the diminished Shawsheen River moving past broken brick and weathered mill timber, overcast wind and two quiet footpaths. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 24081,
+        "visual_scene_id": "visual-049",
+        "visual_prompt_hash": "00b5c2ee75a51ebbbc81a4649ae53264fb4270351b1851047e0b04dbf76ce187"
+      }
+    },
+    {
+      "cue_id": "scene-visual-050",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-050",
+      "anchor": {
+        "segment_id": "m4-s018",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 25199,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "stubble-field wind and a creaking signpost",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-050",
+        "visual_prompt_hash": "c34a4ae613ee27feb60632dbc42ff99503dee01ade4010028fee0e3c2df3ae80"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: wind through flat stubble fields at a forked dirt road, a weathered signpost creaking once beneath an overcast Midwestern sky. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 25199,
+        "visual_scene_id": "visual-050",
+        "visual_prompt_hash": "c34a4ae613ee27feb60632dbc42ff99503dee01ade4010028fee0e3c2df3ae80"
+      }
+    },
+    {
+      "cue_id": "scene-visual-051",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-051",
+      "anchor": {
+        "segment_id": "m4-s019",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 37680,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "Christmas Eve rain and a quiet childhood bedroom",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-051",
+        "visual_prompt_hash": "6b10cf3c1c3456ac614b36a7116c0a4e55d770070dc403cfde403cd53d297d17"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: Christmas Eve rain on a childhood-bedroom window, quiet house heating, shelf objects and distant winter room tone around an occupied bed. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 30000,
+        "visual_scene_id": "visual-051",
+        "visual_prompt_hash": "6b10cf3c1c3456ac614b36a7116c0a4e55d770070dc403cfde403cd53d297d17"
+      }
+    },
+    {
+      "cue_id": "scene-visual-052",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-052",
+      "anchor": {
+        "segment_id": "m4-s022",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19120,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "an aging monitor and fragmented lyric-page data",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-052",
+        "visual_prompt_hash": "347c6c900e0b2bae5c7c69fdb8b078d1de04be8913f1f5464eb4f090cef495ff"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an aging LCD monitor and lyrics-aggregator page, low fan, dusty keyboard, fragmented loading texture and mismatched data fading before any song. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19120,
+        "visual_scene_id": "visual-052",
+        "visual_prompt_hash": "347c6c900e0b2bae5c7c69fdb8b078d1de04be8913f1f5464eb4f090cef495ff"
+      }
+    },
+    {
+      "cue_id": "scene-visual-053",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-053",
+      "anchor": {
+        "segment_id": "m4-s023",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17521,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "frosted glass, hidden paper, and broken digital texture",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-053",
+        "visual_prompt_hash": "28554d9be2af10c73a5ba82ac17a79f6af1963a67303cffbed706c7c260d0086"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: condensation on frosted glass, faint paper movement behind it, soft cold air and a sparse broken-encoding flutter that never becomes readable. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17521,
+        "visual_scene_id": "visual-053",
+        "visual_prompt_hash": "28554d9be2af10c73a5ba82ac17a79f6af1963a67303cffbed706c7c260d0086"
+      }
+    },
+    {
+      "cue_id": "scene-visual-054",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-054",
+      "anchor": {
+        "segment_id": "m4-s024",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20319,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "wind, dust, and loose debris across scraped ground",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-054",
+        "visual_prompt_hash": "3a21a00c906925075284ee2d1551dfa881b2aefd4f1d626e96a99724c7955087"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: wind over newly scraped ground, exposed soil, uprooted stumps, loose dry debris and dust where hedgerows and wild trees once stood. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20319,
+        "visual_scene_id": "visual-054",
+        "visual_prompt_hash": "3a21a00c906925075284ee2d1551dfa881b2aefd4f1d626e96a99724c7955087"
+      }
+    },
+    {
+      "cue_id": "scene-visual-055",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-055",
+      "anchor": {
+        "segment_id": "m4-s027",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17521,
+      "gain_db": -33.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a digital waveform stopping beside silent headphones",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-055",
+        "visual_prompt_hash": "93e9bdac40fe7120585be5c86cd4a86172533a358826506d287c36fc6da9c419"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: unpowered headphones beside a laptop, low fan and a faint waveform-like texture that breaks off, leaving clean quiet room air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17521,
+        "visual_scene_id": "visual-055",
+        "visual_prompt_hash": "93e9bdac40fe7120585be5c86cd4a86172533a358826506d287c36fc6da9c419"
+      }
+    },
+    {
+      "cue_id": "scene-visual-056",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-056",
+      "anchor": {
+        "segment_id": "m4-s028",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19599,
+      "gain_db": -25.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "flowers, photograph, newspaper, key, and map on a table",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-056",
+        "visual_prompt_hash": "7e8d6bf927d477a2a78cc738c982f5e63ca3a1808802e999c54b5596f3d3c69c"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: cemetery flower paper, a courthouse photograph, folded newspaper, travel key and unlabelled map shifting lightly on one wooden table. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19599,
+        "visual_scene_id": "visual-056",
+        "visual_prompt_hash": "7e8d6bf927d477a2a78cc738c982f5e63ca3a1808802e999c54b5596f3d3c69c"
+      }
+    },
+    {
+      "cue_id": "scene-visual-057",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-057",
+      "anchor": {
+        "segment_id": "m4-s028-c",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17520,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "candle jar, toy box, house key, and cloth",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-057",
+        "visual_prompt_hash": "a256d2910374914e212456992a01d5e240be52076547d059b825939393d34bf3"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an unlabelled candle jar, faded toy box, worn house key and patterned cloth in warm still room air, each object producing a sparse tactile texture. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17520,
+        "visual_scene_id": "visual-057",
+        "visual_prompt_hash": "a256d2910374914e212456992a01d5e240be52076547d059b825939393d34bf3"
+      }
+    },
+    {
+      "cue_id": "scene-visual-058",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-058",
+      "anchor": {
+        "segment_id": "m5-s002",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 27840,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "toy cardboard, small plastic objects, and a laptop",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-058",
+        "visual_prompt_hash": "4d810d515f228e025dd72d58b8c38cfd0cf8c74391276e25c8066f868196e873"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: faded toy packaging, thin cardboard, small plastic objects and orange shag carpet beside a softly running laptop in suburban afternoon air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 27840,
+        "visual_scene_id": "visual-058",
+        "visual_prompt_hash": "4d810d515f228e025dd72d58b8c38cfd0cf8c74391276e25c8066f868196e873"
+      }
+    },
+    {
+      "cue_id": "scene-visual-059",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-059",
+      "anchor": {
+        "segment_id": "m5-s005",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20400,
+      "gain_db": -28.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "melting ice, hot metal hum, and distant skateboard wheels",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-059",
+        "visual_prompt_hash": "8d9966bf0999cd129180a577ee7c2f90092e94e9d386e9108a5890553093e155"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a melting ice pop on a sun-heated green transformer box, tiny drips, metal heat hum, dry suburban air and distant skateboard wheels. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20400,
+        "visual_scene_id": "visual-059",
+        "visual_prompt_hash": "8d9966bf0999cd129180a577ee7c2f90092e94e9d386e9108a5890553093e155"
+      }
+    },
+    {
+      "cue_id": "scene-visual-060",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-060",
+      "anchor": {
+        "segment_id": "m5-s006",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 21760,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "magazine pages, jalousie windows, and humid Florida air",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-060",
+        "visual_prompt_hash": "b01e2616d7d2599db7faa43effe3ed1d845e095e64d6aa36a65efdded4800e25"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: sun-warmed magazine pages handled on a Florida kitchen table, humid afternoon insects beyond jalousie windows and soft louver movement in the breeze. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 21760,
+        "visual_scene_id": "visual-060",
+        "visual_prompt_hash": "b01e2616d7d2599db7faa43effe3ed1d845e095e64d6aa36a65efdded4800e25"
+      }
+    },
+    {
+      "cue_id": "scene-visual-061",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-061",
+      "anchor": {
+        "segment_id": "m5-s007-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 16799,
+      "gain_db": -26.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "folded fabric, melting ice, and a humid Florida kitchen",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-061",
+        "visual_prompt_hash": "27fd9713bd658a42bacd0531fb3c962e5516183307d9750bcafde922e0abbd40"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: folded polo fabric, faded childhood paper, a glass of melting ice and jalousie-window shadows in a warm humid Florida kitchen. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 16799,
+        "visual_scene_id": "visual-061",
+        "visual_prompt_hash": "27fd9713bd658a42bacd0531fb3c962e5516183307d9750bcafde922e0abbd40"
+      }
+    },
+    {
+      "cue_id": "scene-visual-062",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-062",
+      "anchor": {
+        "segment_id": "m5-s010",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 15048,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "paired archive layouts scrolling on an aging laptop",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-062",
+        "visual_prompt_hash": "057ddc8e467845a95e9a9a0f39cd76777355be9d58d6af959159bd47873b0841"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: two archive layouts on an aging laptop, paired scroll movements, mismatched digital margins, low fan and methodical soft interface flutters. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 15048,
+        "visual_scene_id": "visual-062",
+        "visual_prompt_hash": "057ddc8e467845a95e9a9a0f39cd76777355be9d58d6af959159bd47873b0841"
+      }
+    },
+    {
+      "cue_id": "scene-visual-063",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-063",
+      "anchor": {
+        "segment_id": "m5-s010-c",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17840,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a broken image, hard-drive ticks, and truncated data",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-063",
+        "visual_prompt_hash": "800680263294acf1f71f38ac1b60f76aa9db14d719b7f80b64bbe46e71386ce5"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: old laptop screen hum, one broken-image data flutter, sparse hard-drive ticks and a truncated page collapsing into a few quiet digital grains. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17840,
+        "visual_scene_id": "visual-063",
+        "visual_prompt_hash": "800680263294acf1f71f38ac1b60f76aa9db14d719b7f80b64bbe46e71386ce5"
+      }
+    },
+    {
+      "cue_id": "scene-visual-064",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-064",
+      "anchor": {
+        "segment_id": "m5-s012",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18393,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "old letter paper and wind from wooded hills",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-064",
+        "visual_prompt_hash": "51fff580008fc5601e529aae08f2b45408deeb4ae910cb24b34ef093567b42b1"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: old letter paper on an oak table near a farmhouse window, wooded-hill wind, soft overcast air and one dry page edge shifting against the wood. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 18393,
+        "visual_scene_id": "visual-064",
+        "visual_prompt_hash": "51fff580008fc5601e529aae08f2b45408deeb4ae910cb24b34ef093567b42b1"
+      }
+    },
+    {
+      "cue_id": "scene-visual-065",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-065",
+      "anchor": {
+        "segment_id": "m5-s013",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 15759,
+      "gain_db": -33.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "church doorway air, old bench wood, and distant trees",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-065",
+        "visual_prompt_hash": "af67af40a3280bb11a9fcfe6b57b1d876b19e233c8f45a6ba6b50cef12922625"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: air moving through a small nineteenth-century church doorway, old bench wood, coat fabric and distant cemetery trees at blue-grey evening. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 15759,
+        "visual_scene_id": "visual-065",
+        "visual_prompt_hash": "af67af40a3280bb11a9fcfe6b57b1d876b19e233c8f45a6ba6b50cef12922625"
+      }
+    },
+    {
+      "cue_id": "scene-visual-066",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-066",
+      "anchor": {
+        "segment_id": "m5-s015",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 21362,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "hearth, open-door wind, and old homestead floorboards",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-066",
+        "visual_prompt_hash": "98ce68c5c6f80c25fc27789c34315ddca0ed9b433a23ed4ea366289c4184a556"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a weathered homestead at dusk, low hearth crackle, open-door wind, worn floorboards and distant hilltop cemetery air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 21362,
+        "visual_scene_id": "visual-066",
+        "visual_prompt_hash": "98ce68c5c6f80c25fc27789c34315ddca0ed9b433a23ed4ea366289c4184a556"
+      }
+    },
+    {
+      "cue_id": "scene-visual-067",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-067",
+      "anchor": {
+        "segment_id": "m5-s017",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 25600,
+      "gain_db": -24.0,
+      "mix_gain_db": 6.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "audible old-monitor hum, disk ticks, and an OCR interruption",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-067",
+        "visual_prompt_hash": "4ddbd89b6892581cdd9b203d9b5bcfc3eb01a1e29fd3d8f10e6cdd98c676411c"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a clearly audible old-monitor electrical hum, steady cooling-fan airflow, crisp mechanical disk ticks and one brief dry scanner-page flutter suggesting a stray OCR header, all over a present archival-room air bed. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 25600,
+        "visual_scene_id": "visual-067",
+        "visual_prompt_hash": "4ddbd89b6892581cdd9b203d9b5bcfc3eb01a1e29fd3d8f10e6cdd98c676411c"
+      }
+    },
+    {
+      "cue_id": "scene-visual-068",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-068",
+      "anchor": {
+        "segment_id": "m5-s019",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 22560,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "county-history pages, oak lectern, and forest-clearing air",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-068",
+        "visual_prompt_hash": "604f809be87e7f1aef8bbe01aeb8c471245379f1385621c5c31a07e34053ff43"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: yellowed county-history pages on a rough oak lectern, soft forest clearing air, page edges and wooden benches without any crowd sound. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 22560,
+        "visual_scene_id": "visual-068",
+        "visual_prompt_hash": "604f809be87e7f1aef8bbe01aeb8c471245379f1385621c5c31a07e34053ff43"
+      }
+    },
+    {
+      "cue_id": "scene-visual-069",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-069",
+      "anchor": {
+        "segment_id": "m5-s021",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20639,
+      "gain_db": -34.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "wind, leaves, a hollow stump, and empty trade table",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-069",
+        "visual_prompt_hash": "07acf5449bb4f3685f2f63f53e9beb99e6a3389a752bbc62c4a3a5b7cd3b650a"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: neutral wind through an empty nineteenth-century farm clearing, leaves around a hollow stump, distant farmhouse wood and an unused trade table. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20639,
+        "visual_scene_id": "visual-069",
+        "visual_prompt_hash": "07acf5449bb4f3685f2f63f53e9beb99e6a3389a752bbc62c4a3a5b7cd3b650a"
+      }
+    },
+    {
+      "cue_id": "scene-visual-070",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-070",
+      "anchor": {
+        "segment_id": "m5-s021-d",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 23120,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "settling log schoolhouse timber and an oiled-paper window",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-070",
+        "visual_prompt_hash": "770499d123db987383d2624832d924d302f2c8dea4d6edc7d74d2cb3c2910257"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an empty frontier log schoolhouse, timber settling, oiled-paper window moving in Indiana daylight and soft outdoor air through the doorway. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 23120,
+        "visual_scene_id": "visual-070",
+        "visual_prompt_hash": "770499d123db987383d2624832d924d302f2c8dea4d6edc7d74d2cb3c2910257"
+      }
+    },
+    {
+      "cue_id": "scene-visual-071",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-071",
+      "anchor": {
+        "segment_id": "m5-s023",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17439,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "prairie wind, wheat, soil, and a schoolbook",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-071",
+        "visual_prompt_hash": "19334fe89e5bec00748c5c8a7b2408ca21477f1e7a2ad53be765f228dd65b2bc"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: broad Red River Valley prairie wind across black-loam furrows and glowing wheat, a weathered schoolbook opening lightly on a fencepost. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17439,
+        "visual_scene_id": "visual-071",
+        "visual_prompt_hash": "19334fe89e5bec00748c5c8a7b2408ca21477f1e7a2ad53be765f228dd65b2bc"
+      }
+    },
+    {
+      "cue_id": "scene-visual-072",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-072",
+      "anchor": {
+        "segment_id": "m5-s024",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 16640,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "prairie wind around a school desk, book, and stone",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-072",
+        "visual_prompt_hash": "746a5d8feb83f3f797941f857e0dc02a6a130be19a45db2228df2431b7774665"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: prairie wind around a weathered school desk, mythology-book pages and a smooth local stone beneath an enormous open sky. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 16640,
+        "visual_scene_id": "visual-072",
+        "visual_prompt_hash": "746a5d8feb83f3f797941f857e0dc02a6a130be19a45db2228df2431b7774665"
+      }
+    },
+    {
+      "cue_id": "scene-visual-073",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-073",
+      "anchor": {
+        "segment_id": "m5-s027-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17761,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "an early computer, hand-coded page, prairie air, and soil",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-073",
+        "visual_prompt_hash": "da6c789eae58a6c31c0d115033146483c01c6a3c0b77ab1f24e6a334e857fceb"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an early-2000s beige computer with gentle fan and hard-drive activity, hand-coded webpage data, prairie-window air and loose black soil on a desk. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17761,
+        "visual_scene_id": "visual-073",
+        "visual_prompt_hash": "da6c789eae58a6c31c0d115033146483c01c6a3c0b77ab1f24e6a334e857fceb"
+      }
+    },
+    {
+      "cue_id": "scene-visual-074",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-074",
+      "anchor": {
+        "segment_id": "m5-s028-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 16399,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a CRT hum and hand-coded page ending abruptly",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-074",
+        "visual_prompt_hash": "7742e700057d363151c3f0732b7bf4d043996a3323d3112c253a46c71858f017"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: low CRT hum and dusty computer fan, a cursor-like electronic grain and a hand-coded page that cuts off into a clean digital dropout. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 16399,
+        "visual_scene_id": "visual-074",
+        "visual_prompt_hash": "7742e700057d363151c3f0732b7bf4d043996a3323d3112c253a46c71858f017"
+      }
+    },
+    {
+      "cue_id": "scene-visual-075",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-075",
+      "anchor": {
+        "segment_id": "m5-s031",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 25681,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "archive paper, faded fabric, and quiet missing-image space",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-075",
+        "visual_prompt_hash": "160ae0dc40855d0aab2668bd925384c808e3fe95a44bb31c1ea2ab35ceb204ea"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: weathered archive paper, faded polo fabric and fine dust on a dark reading table, with one page edge and a quiet absence where an image should be. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 25681,
+        "visual_scene_id": "visual-075",
+        "visual_prompt_hash": "160ae0dc40855d0aab2668bd925384c808e3fe95a44bb31c1ea2ab35ceb204ea"
+      }
+    },
+    {
+      "cue_id": "scene-visual-076",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-076",
+      "anchor": {
+        "segment_id": "m6-s001",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19279,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "office computer, quiet room tone, and distant park air",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-076",
+        "visual_prompt_hash": "4c23550c3c267e16ad62b4197c7bd78f7bd3f522dccb1e7508e91c9249cc73f0"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a company about-page on a quiet office computer, steady low fan, warm office room tone and distant park air entering through a partly open window while a baseball rests silently on the wooden desk. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19279,
+        "visual_scene_id": "visual-076",
+        "visual_prompt_hash": "4c23550c3c267e16ad62b4197c7bd78f7bd3f522dccb1e7508e91c9249cc73f0"
+      }
+    },
+    {
+      "cue_id": "scene-visual-077",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-077",
+      "anchor": {
+        "segment_id": "m6-s002-b",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 21440,
+      "gain_db": -28.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "pine wind and a giant swing beside an empty ball field",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-077",
+        "visual_prompt_hash": "5e77f1d9b8bc2687ea2e56b2e57b11bffb2808978ff61cf55b7ff99bce3dcf9d"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: pine wind through an empty Connecticut park, giant swing rope and weathered chain moving gently beside a silent grass baseball diamond. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 21440,
+        "visual_scene_id": "visual-077",
+        "visual_prompt_hash": "5e77f1d9b8bc2687ea2e56b2e57b11bffb2808978ff61cf55b7ff99bce3dcf9d"
+      }
+    },
+    {
+      "cue_id": "scene-visual-078",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-078",
+      "anchor": {
+        "segment_id": "m6-s003",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 23601,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "baseball leather, swing chain, design paper, and park reflections",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-078",
+        "visual_prompt_hash": "5d02856f9cff6816938bf86545531f8ddb3249eac99126198dd1eb6675e08397"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a scuffed leather baseball, short weathered swing chain and blank design paper on a clean worktable, with reflected park trees in afternoon air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 23601,
+        "visual_scene_id": "visual-078",
+        "visual_prompt_hash": "5d02856f9cff6816938bf86545531f8ddb3249eac99126198dd1eb6675e08397"
+      }
+    },
+    {
+      "cue_id": "scene-visual-079",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-079",
+      "anchor": {
+        "segment_id": "m6-s006",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 27279,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "toy cardboard, plastic, laptop fan, and warm room air",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-079",
+        "visual_prompt_hash": "17a59272146cfbff11481361b554cb685d9c714db1b5388979d938afe355a0f2"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: faded toy-package cardboard and plastic beside a softly running laptop, warm tungsten room air and a delicate dry curl of incense atmosphere. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 27279,
+        "visual_scene_id": "visual-079",
+        "visual_prompt_hash": "17a59272146cfbff11481361b554cb685d9c714db1b5388979d938afe355a0f2"
+      }
+    },
+    {
+      "cue_id": "scene-visual-080",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-080",
+      "anchor": {
+        "segment_id": "m6-s008",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 16801,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "magnifying glass, toy packaging, plastic, and monitor hum",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-080",
+        "visual_prompt_hash": "dbb609c0e0bbe7e8eed7f3acbcab6ba66b1a197b0c629af5b8e1381eaf5c42d5"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a magnifying glass moving above faded toy packaging and one small plastic figure, paper notes, wooden desk and gentle monitor hum. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 16801,
+        "visual_scene_id": "visual-080",
+        "visual_prompt_hash": "dbb609c0e0bbe7e8eed7f3acbcab6ba66b1a197b0c629af5b8e1381eaf5c42d5"
+      }
+    },
+    {
+      "cue_id": "scene-visual-081",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-081",
+      "anchor": {
+        "segment_id": "m6-s010",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 25039,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "mall air, ceramic candle holders, and seasonal display rustle",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-081",
+        "visual_prompt_hash": "ecfc4033692201b0eaa3b5348d428d7bb6018f67dae51ae81d16849fe4e4d3d4"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: quiet mall ventilation and warm retail-room air around shelves of ceramic Halloween candle holders, one delicate ceramic clink and soft display rustle. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 25039,
+        "visual_scene_id": "visual-081",
+        "visual_prompt_hash": "ecfc4033692201b0eaa3b5348d428d7bb6018f67dae51ae81d16849fe4e4d3d4"
+      }
+    },
+    {
+      "cue_id": "scene-visual-082",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-082",
+      "anchor": {
+        "segment_id": "m6-s013",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18241,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a laptop, repeating poem texture, and quiet cursor pulse",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-082",
+        "visual_prompt_hash": "7c01ea5a381debfb2596e7e8da17787d0600cc4c435475880e30deb254b5b2b6"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a laptop illuminating repeated poem lines, low fan, one cursor-like data grain and cyclical paper-soft digital texture in a dim room. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 18241,
+        "visual_scene_id": "visual-082",
+        "visual_prompt_hash": "7c01ea5a381debfb2596e7e8da17787d0600cc4c435475880e30deb254b5b2b6"
+      }
+    },
+    {
+      "cue_id": "scene-visual-083",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-083",
+      "anchor": {
+        "segment_id": "m6-s014",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 15840,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "empty chairs, keepsake box, photograph, and settling floorboards",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-083",
+        "visual_prompt_hash": "00d6a4b83463c4c88814660a3c16ff004d4e68c34943066cfdf3b0a780ac699b"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: two empty chairs beside a keepsake box, old paper and a face-down photograph, soft floorboard settling and warm late-afternoon window air. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 15840,
+        "visual_scene_id": "visual-083",
+        "visual_prompt_hash": "00d6a4b83463c4c88814660a3c16ff004d4e68c34943066cfdf3b0a780ac699b"
+      }
+    },
+    {
+      "cue_id": "scene-visual-084",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-084",
+      "anchor": {
+        "segment_id": "m6-s014-r1",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 17679,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "frosted glass, fine ice, cold air, and distant waves",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-084",
+        "visual_prompt_hash": "fdef84842b143a28f0c6a4d1c32357312012c3379536561082b7192d956626d2"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: frost thickening across a glass door, fine ice crackle, cold air and distant beach-dusk waves held between two warm edges. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 17679,
+        "visual_scene_id": "visual-084",
+        "visual_prompt_hash": "fdef84842b143a28f0c6a4d1c32357312012c3379536561082b7192d956626d2"
+      }
+    },
+    {
+      "cue_id": "scene-visual-085",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-085",
+      "anchor": {
+        "segment_id": "m6-s016",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 20240,
+      "gain_db": -30.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "a printed book moving under a flatbed scanner",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-085",
+        "visual_prompt_hash": "2d0f649b364d8d52a7548cfb31907e71cb46e395546fe212b496fe59df8a278f"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: an aged printed book beneath a flatbed scanner, gentle carriage motor, page fibers, glass resonance and a thin scan-line texture. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 20240,
+        "visual_scene_id": "visual-085",
+        "visual_prompt_hash": "2d0f649b364d8d52a7548cfb31907e71cb46e395546fe212b496fe59df8a278f"
+      }
+    },
+    {
+      "cue_id": "scene-visual-086",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-086",
+      "anchor": {
+        "segment_id": "m6-s017",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 22160,
+      "gain_db": -32.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "parlour rain, old window wood, and an unsealed letter",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-086",
+        "visual_prompt_hash": "dff66780c1047d077c6fbc9a38af515686aa0e917827b4fd4662e81040afaa50"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: rain on wavy parlour glass, old wooden window frame, inward room air and an unsealed folded letter resting on a side table. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 22160,
+        "visual_scene_id": "visual-086",
+        "visual_prompt_hash": "dff66780c1047d077c6fbc9a38af515686aa0e917827b4fd4662e81040afaa50"
+      }
+    },
+    {
+      "cue_id": "scene-visual-087",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-087",
+      "anchor": {
+        "segment_id": "m6-s020",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 26641,
+      "gain_db": -29.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "quill, printed page, scanner, and OCR layers",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-087",
+        "visual_prompt_hash": "b59534b5d4bc362fe5b236866b03a8f979185636f1c4ca543a6285ff1a7e6ffb"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: quill scratching softly across cream paper, then page printing, scanner carriage and sparse OCR data grains layered in a slow material transformation. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 26641,
+        "visual_scene_id": "visual-087",
+        "visual_prompt_hash": "b59534b5d4bc362fe5b236866b03a8f979185636f1c4ca543a6285ff1a7e6ffb"
+      }
+    },
+    {
+      "cue_id": "scene-visual-088",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-088",
+      "anchor": {
+        "segment_id": "m6-s022",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 19440,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "letters, poem, webpage, window air, and dust",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-088",
+        "visual_prompt_hash": "0e6a50eca489a580b5ea3c8b6f417d02843652084f8be56b88c408412714fb94"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: overlapping handwritten letters, poem paper and half-printed webpage on a weathered table, window air and floating dust in late-afternoon stillness. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 19440,
+        "visual_scene_id": "visual-088",
+        "visual_prompt_hash": "0e6a50eca489a580b5ea3c8b6f417d02843652084f8be56b88c408412714fb94"
+      }
+    },
+    {
+      "cue_id": "scene-visual-089",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-089",
+      "anchor": {
+        "segment_id": "m6-s022-c",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 18160,
+      "gain_db": -25.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "museum-case air around a key, candle, paper, baseball, and letter",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-089",
+        "visual_prompt_hash": "9a4b1618457743ab2a093384b4cc2711d3f85c87b5326557d42525ad07950a07"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: quiet museum-case air around a worn key, candle stub, paper, baseball and unfinished letter, subtle glass resonance and widely spaced object textures. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 18160,
+        "visual_scene_id": "visual-089",
+        "visual_prompt_hash": "9a4b1618457743ab2a093384b4cc2711d3f85c87b5326557d42525ad07950a07"
+      }
+    },
+    {
+      "cue_id": "scene-visual-090",
+      "kind": "ambience",
+      "coverage_role": "section",
+      "visual_scene_id": "visual-090",
+      "anchor": {
+        "segment_id": "m6-s024",
+        "point": "start",
+        "offset_ms": 0
+      },
+      "duration_ms": 22320,
+      "gain_db": -31.0,
+      "mix_gain_db": 0.0,
+      "fade_in_ms": 2500,
+      "fade_out_ms": 2500,
+      "loop": true,
+      "duck_under_dialogue": true,
+      "transcript_label": "dawn entering an archive room with paper and digital dust",
+      "caption_duration_ms": 5000,
+      "editorial_note": "Derived from the matching visual prompt and transcript. The sound is illustrative, not a historical or location recording.",
+      "provenance": {
+        "presentation": "illustrative_sound_design",
+        "disclosure": "Synthetic scene ambience derived from the visual plan; not an archival or location recording.",
+        "visual_scene_id": "visual-090",
+        "visual_prompt_hash": "08079c34576325577c923f1ef916fe8ebf8a01d5914557853687643dc3bfde82"
+      },
+      "source": {
+        "type": "generated",
+        "prompt": "Seamless illustrative documentary ambience: a dark archive room gradually receiving dawn air, suspended paper fragments, small ritual objects, faint scanner mechanics and sparse warm digital dust. No voices, no speech, no singing, no music, no recognizable brand or operating-system sounds, no dramatic impacts; restrained natural dynamics and a stable texture designed to loop cleanly.",
+        "generation_duration_ms": 22320,
+        "visual_scene_id": "visual-090",
+        "visual_prompt_hash": "08079c34576325577c923f1ef916fe8ebf8a01d5914557853687643dc3bfde82"
+      }
+    }
+  ]
+}

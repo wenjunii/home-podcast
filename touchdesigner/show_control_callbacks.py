@@ -12,6 +12,7 @@ COLOR_PARAMETERS = {
     "Saturation",
     "Value",
 }
+AUDIO_SOURCE_NAMES = ("voices", "soundscape")
 
 
 def _connector():
@@ -41,11 +42,39 @@ def _set_audio_enabled(enabled):
         audio_out.par.active.val = enabled
 
 
+def _audio_source_index(value):
+    if hasattr(value, "eval"):
+        value = value.eval()
+    if isinstance(value, (int, float)):
+        return 1 if int(value) == 1 else 0
+    normalized = str(value or "").strip().casefold().replace(" ", "")
+    return (
+        1
+        if normalized
+        in {"1", "soundscape", "soundscapeonly", "nonhuman", "nonhumanonly"}
+        else 0
+    )
+
+
+def _set_audio_source(value):
+    connector = _connector()
+    index = _audio_source_index(value)
+    source_name = AUDIO_SOURCE_NAMES[index]
+    source_parameter = getattr(connector.par, "Audiosource", None)
+    if source_parameter is not None:
+        source_parameter.val = source_name
+    source_switch = connector.op("audiosource_switch")
+    if source_switch is not None:
+        source_switch.par.index.val = index
+
+
 def onValueChange(par, prev):
     if par.name == "Play":
         op("/local/time").par.play = bool(par.eval())
     elif par.name == "Audioenabled":
         _set_audio_enabled(par.eval())
+    elif par.name == "Audiosource":
+        _set_audio_source(par.eval())
     elif par.name == "Randomseeds":
         _controller().randomize_seeds()
         _refresh()

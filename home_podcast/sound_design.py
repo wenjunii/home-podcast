@@ -110,6 +110,14 @@ def validate_sound_design(
         gain = cue.get("gain_db")
         if not isinstance(gain, (int, float)) or not -60 <= gain <= -5:
             errors.append(f"{label}.gain_db must be a number from -60 to -5")
+        mix_gain = cue.get("mix_gain_db", 0)
+        if (
+            not isinstance(mix_gain, (int, float))
+            or not -24 <= mix_gain <= 24
+        ):
+            errors.append(
+                f"{label}.mix_gain_db must be a number from -24 to 24"
+            )
         valid_fades: list[int] = []
         for fade_name in ("fade_in_ms", "fade_out_ms"):
             fade = cue.get(fade_name, 0)
@@ -381,6 +389,7 @@ def resolve_soundscape(
                 "end_ms": start_ms + duration_ms,
                 "duration_ms": duration_ms,
                 "gain_db": cue["gain_db"],
+                "mix_gain_db": float(cue.get("mix_gain_db", 0)),
                 "fade_in_ms": cue.get("fade_in_ms", 0),
                 "fade_out_ms": cue.get("fade_out_ms", 0),
                 "loop": cue["loop"],

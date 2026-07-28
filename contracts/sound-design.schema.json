@@ -69,6 +69,12 @@
             "maximum": -5,
             "description": "Integrated loudness target in LUFS for the prepared cue."
           },
+          "mix_gain_db": {
+            "type": "number",
+            "minimum": -24,
+            "maximum": 24,
+            "description": "Optional post-normalization trim for sparse cues."
+          },
           "fade_in_ms": {
             "type": "integer",
             "minimum": 0,

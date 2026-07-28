@@ -115,16 +115,16 @@ English. These candidates do not enter rotation until listening review.
 
 ## Pilot sound design
 
-The episode now has a 13-cue continuous soundscape map: one nearly subliminal
-full-episode base bed, seven long thematic beds, and five structural or spot
-cues. Every cue is explicitly illustrative; none is presented as a recording
-from the archived stories.
+The episode now has a 91-cue continuous soundscape map: one nearly subliminal
+full-episode base bed and one relevant synthetic ambience for every visual
+scene. Every cue is explicitly illustrative; none is presented as a recording
+from the archived stories. The scene cues follow the exact 90-scene visual
+timeline while the base bed remains underneath every fade.
 
-The eight background sources were generated as 30-second seamless loops, the
-maximum supported duration. Their conservative API ceiling was 2,640 credits;
-the five fixed cues reuse the prior cache. The final renderer extends each
-thematic bed to the next eligible handoff. A handoff shorter than 15 seconds is
-discarded and the preceding bed continues.
+All 91 generated responses are complete and cached. The public handoff includes
+their original compressed response audio and integrity manifest, allowing a
+new workstation to reconstruct the editable WAV cache locally without another
+provider call.
 
 The pilot will deliver two synchronized primary tracks:
 
@@ -144,7 +144,7 @@ workflow, and official provider references.
    timing.
 2. The voices-only, non-human-only, and combined review tracks were rendered at
    48 kHz stereo and 192 kbps.
-3. All three tracks are synchronized at 30:44.72.
+3. All three tracks are synchronized at 32:24.160.
 4. Markdown, WebVTT, and SRT transcripts were generated from the 128 timed
    turns, with sound labels and a story-source map.
 5. Automated duration, timestamp coverage, silence, level, and peak checks

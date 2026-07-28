@@ -17,6 +17,7 @@ episodes/**/audio/*-timeline.json
 
 # Canonical pilot handoff artifacts stay portable across workstations.
 !episodes/2013-12.01/audio/2013-12.01-voices-only.mp3
+!episodes/2013-12.01/audio/2013-12.01-soundscape-only.mp3
 !episodes/2013-12.01/audio/2013-12.01-timeline.json
 
 # TouchDesigner project/components remain local. podcast.toe may later contain

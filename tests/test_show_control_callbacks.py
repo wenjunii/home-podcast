@@ -72,6 +72,34 @@ class ShowControlCallbackTests(unittest.TestCase):
         self.assertTrue(connector.par.Audioenabled.eval())
         self.assertTrue(audio_out.par.active.eval())
 
+    def test_audio_source_selection_is_exclusive(self):
+        module = load_module(
+            "show_control_callbacks_audio_source_test",
+            "touchdesigner/show_control_callbacks.py",
+        )
+        source_switch = SimpleNamespace(
+            par=FakePars(index=FakePar("index", 0))
+        )
+        connector = SimpleNamespace(
+            par=FakePars(
+                Audiosource=FakePar("Audiosource", "voices"),
+            )
+        )
+        connector.op = lambda name: (
+            source_switch if name == "audiosource_switch" else None
+        )
+        control = SimpleNamespace()
+        control.parent = lambda: connector
+        module.parent = lambda: control
+
+        module.onValueChange(
+            FakePar("Audiosource", "soundscape"),
+            "voices",
+        )
+
+        self.assertEqual(connector.par.Audiosource.eval(), "soundscape")
+        self.assertEqual(source_switch.par.index.eval(), 1)
+
     def test_play_toggle_updates_touchdesigner_timeline(self):
         module = load_module(
             "show_control_callbacks_play_test",
@@ -147,6 +175,7 @@ class ExecuteCallbackTests(unittest.TestCase):
             par=FakePars(
                 Play=FakePar("Play", False),
                 Audioenabled=FakePar("Audioenabled", False),
+                Audiosource=FakePar("Audiosource", "soundscape"),
             )
         )
         audio_out = SimpleNamespace(
@@ -155,11 +184,16 @@ class ExecuteCallbackTests(unittest.TestCase):
         connector = SimpleNamespace(
             par=FakePars(
                 Audioenabled=FakePar("Audioenabled", True),
+                Audiosource=FakePar("Audiosource", "voices"),
             )
+        )
+        source_switch = SimpleNamespace(
+            par=FakePars(index=FakePar("index", 0))
         )
         connector.op = lambda name: {
             "show_control": show_control,
             "audio_out": audio_out,
+            "audiosource_switch": source_switch,
         }.get(name)
         timeline = SimpleNamespace(
             par=FakePars(play=FakePar("play", True))
@@ -178,6 +212,8 @@ class ExecuteCallbackTests(unittest.TestCase):
         self.assertEqual(project_root.time.frame, 1)
         self.assertFalse(connector.par.Audioenabled.eval())
         self.assertFalse(audio_out.par.active.eval())
+        self.assertEqual(connector.par.Audiosource.eval(), "soundscape")
+        self.assertEqual(source_switch.par.index.eval(), 1)
 
 
 if __name__ == "__main__":
