@@ -6,9 +6,12 @@ import re
 
 SHOW_CONTROL_MARKER = "Recovered Homes show control"
 COLOR_PIPELINE_MARKER = "Recovered Homes color pipeline"
+AUDIO_PIPELINE_MARKER = "Recovered Homes audio source pipeline"
 DEFAULT_CROSSFADE_SECONDS = 8.0
 MAX_CROSSFADE_SECONDS = 30.0
 NORMALIZED_CROSSFADE_SECONDS = 15.0
+AUDIO_SOURCE_NAMES = ("voices", "soundscape")
+AUDIO_SOURCE_LABELS = ("Human Voices Only", "Soundscape Only")
 COLOR_DEFAULTS = {
     "Colorenabled": True,
     # TouchDesigner's Level TOP uses 1.0 as neutral brightness. A value of
@@ -37,6 +40,9 @@ def install_show_control(
     operator_lookup = operator_types["op"]
     play_value = bool(operator_lookup("/local/time").par.play.eval())
     audio_value = bool(connector.par.Audioenabled.eval())
+    audio_source_value = _normalize_audio_source(
+        getattr(connector.par, "Audiosource", None)
+    )
     crossfade_value = float(default_fade)
     random_seeds_value = False
     color_values = dict(COLOR_DEFAULTS)
@@ -49,12 +55,15 @@ def install_show_control(
             )
         play_par = getattr(existing.par, "Play", None)
         audio_par = getattr(existing.par, "Audioenabled", None)
+        audio_source_par = getattr(existing.par, "Audiosource", None)
         crossfade_par = getattr(existing.par, "Crossfadesec", None)
         random_seeds_par = getattr(existing.par, "Randomseeds", None)
         if play_par is not None:
             play_value = bool(play_par.eval())
         if audio_par is not None:
             audio_value = bool(audio_par.eval())
+        if audio_source_par is not None:
+            audio_source_value = _normalize_audio_source(audio_source_par)
         if crossfade_par is not None:
             crossfade_value = float(crossfade_par.eval())
         if random_seeds_par is not None:
@@ -80,6 +89,12 @@ def install_show_control(
             color_values["Brightness"] = COLOR_DEFAULTS["Brightness"]
         existing.destroy()
 
+    _install_audio_source_pipeline(
+        connector,
+        project_root,
+        operator_types,
+        audio_source=audio_source_value,
+    )
     crossfade_value = min(
         MAX_CROSSFADE_SECONDS,
         max(0.0, crossfade_value),
@@ -100,6 +115,12 @@ def install_show_control(
     page = control.appendCustomPage("Show Control")
     page.appendToggle("Play", label="Play")
     page.appendToggle("Audioenabled", label="Audio Enabled")
+    audio_source = page.appendMenu(
+        "Audiosource",
+        label="Audio Source",
+    )[0]
+    audio_source.menuNames = list(AUDIO_SOURCE_NAMES)
+    audio_source.menuLabels = list(AUDIO_SOURCE_LABELS)
     page.appendToggle(
         "Randomseeds",
         label="Random Seeds Each Loop",
@@ -152,6 +173,7 @@ def install_show_control(
 
     control.par.Play = play_value
     control.par.Audioenabled = audio_value
+    control.par.Audiosource = audio_source_value
     control.par.Randomseeds = random_seeds_value
     control.par.Crossfadesec = crossfade_value
     for name, value in color_values.items():
@@ -162,7 +184,15 @@ def install_show_control(
     help_table.nodeY = 0
     help_table.appendRow(["control", "description"])
     help_table.appendRow(["Play", "Play or pause the TouchDesigner timeline"])
-    help_table.appendRow(["Audio Enabled", "Send voices-only audio to the device"])
+    help_table.appendRow(
+        ["Audio Enabled", "Send the selected audio source to the device"]
+    )
+    help_table.appendRow(
+        [
+            "Audio Source",
+            "Choose Human Voices Only or Soundscape Only; no combined mix",
+        ]
+    )
     help_table.appendRow(
         [
             "Random Seeds Each Loop",
@@ -195,7 +225,8 @@ def install_show_control(
     callbacks.nodeY = 0
     callbacks.par.op = control.path
     callbacks.par.pars = (
-        "Play Audioenabled Randomseeds Crossfadesec Newseeds Restart Reload "
+        "Play Audioenabled Audiosource Randomseeds Crossfadesec "
+        "Newseeds Restart Reload "
         "Colorenabled Brightness Contrast Gamma Blacklevel Opacity Hue "
         "Saturation Value Resetcolor"
     )
@@ -207,6 +238,143 @@ def install_show_control(
     ).read_text(encoding="utf-8")
     _install_color_pipelines(connector, operator_types)
     return control
+
+
+def _normalize_audio_source(value):
+    if hasattr(value, "eval"):
+        value = value.eval()
+    if isinstance(value, (int, float)):
+        return AUDIO_SOURCE_NAMES[1 if int(value) == 1 else 0]
+    normalized = str(value or "").strip().casefold().replace(" ", "")
+    if normalized in {
+        "1",
+        "soundscape",
+        "soundscapeonly",
+        "nonhuman",
+        "nonhumanonly",
+    }:
+        return "soundscape"
+    return "voices"
+
+
+def _audio_source_index(value):
+    return 1 if _normalize_audio_source(value) == "soundscape" else 0
+
+
+def _install_audio_source_pipeline(
+    connector,
+    project_root,
+    operator_types,
+    *,
+    audio_source="voices",
+):
+    required_types = (
+        "audiofileinCHOP",
+        "switchCHOP",
+        "audiodeviceoutCHOP",
+    )
+    if any(name not in operator_types for name in required_types):
+        return None
+
+    podcast_page = next(
+        (
+            page
+            for page in getattr(connector, "customPages", ())
+            if page.name == "Podcast"
+        ),
+        None,
+    )
+    if podcast_page is None:
+        podcast_page = connector.appendCustomPage("Podcast")
+    connector_source = getattr(connector.par, "Audiosource", None)
+    if connector_source is None:
+        source_par = podcast_page.appendMenu(
+            "Audiosource",
+            label="Audio Source",
+        )[0]
+    else:
+        source_par = connector_source
+    source_par.menuNames = list(AUDIO_SOURCE_NAMES)
+    source_par.menuLabels = list(AUDIO_SOURCE_LABELS)
+    if getattr(connector.par, "Soundscapeaudiofile", None) is None:
+        podcast_page.appendFile(
+            "Soundscapeaudiofile",
+            label="Soundscape-only Audio",
+        )
+
+    audio_source = _normalize_audio_source(audio_source)
+    audio_dir = (
+        project_root
+        / "episodes"
+        / "2013-12.01"
+        / "audio"
+    )
+    voices_path = audio_dir / "2013-12.01-voices-only.mp3"
+    soundscape_path = audio_dir / "2013-12.01-soundscape-only.mp3"
+    connector.par.Audiosource = audio_source
+    connector.par.Soundscapeaudiofile = str(soundscape_path)
+
+    voices = connector.op("voices_only_audio")
+    if voices is None:
+        voices = connector.create(
+            operator_types["audiofileinCHOP"],
+            "voices_only_audio",
+        )
+    soundscape = connector.op("soundscape_audio")
+    if soundscape is None:
+        soundscape = connector.create(
+            operator_types["audiofileinCHOP"],
+            "soundscape_audio",
+        )
+    source_switch = connector.op("audiosource_switch")
+    if source_switch is None:
+        source_switch = connector.create(
+            operator_types["switchCHOP"],
+            "audiosource_switch",
+        )
+    elif AUDIO_PIPELINE_MARKER not in str(source_switch.comment):
+        raise RuntimeError(
+            f"{source_switch.path} is not a Recovered Homes audio switch."
+        )
+    audio_out = connector.op("audio_out")
+    if audio_out is None:
+        audio_out = connector.create(
+            operator_types["audiodeviceoutCHOP"],
+            "audio_out",
+        )
+
+    voices.comment = AUDIO_PIPELINE_MARKER
+    soundscape.comment = AUDIO_PIPELINE_MARKER
+    source_switch.comment = AUDIO_PIPELINE_MARKER
+    voices.nodeX = 0
+    voices.nodeY = -160
+    soundscape.nodeX = 0
+    soundscape.nodeY = -280
+    source_switch.nodeX = 220
+    source_switch.nodeY = -220
+    audio_out.nodeX = 440
+    audio_out.nodeY = -220
+
+    voices.par.file = str(
+        connector.par.Audiofile.eval()
+        if str(connector.par.Audiofile.eval()).strip()
+        else voices_path
+    )
+    soundscape.par.file = str(soundscape_path)
+    for audio in (voices, soundscape):
+        audio.par.playmode = "locked"
+        audio.par.play = True
+        audio.par.repeat = False
+
+    for input_connector in source_switch.inputConnectors[:2]:
+        input_connector.disconnect()
+    audio_out.inputConnectors[0].disconnect()
+    voices.outputConnectors[0].connect(source_switch.inputConnectors[0])
+    soundscape.outputConnectors[0].connect(source_switch.inputConnectors[1])
+    source_switch.outputConnectors[0].connect(audio_out.inputConnectors[0])
+    source_switch.par.index.val = _audio_source_index(audio_source)
+    audio_out.par.active.expr = "parent().par.Audioenabled"
+    return source_switch
 
 
 def _configure_float(parameter, minimum, maximum, *, norm_max=None):

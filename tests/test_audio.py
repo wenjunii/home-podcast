@@ -9,7 +9,12 @@ import unittest
 import wave
 from pathlib import Path
 
-from home_podcast.audio import render_dialogue_episode_audio, render_episode_audio
+from home_podcast.audio import (
+    _sound_bus,
+    render_dialogue_episode_audio,
+    render_episode_audio,
+    render_soundscape_audio,
+)
 
 
 @unittest.skipUnless(
@@ -17,6 +22,21 @@ from home_podcast.audio import render_dialogue_episode_audio, render_episode_aud
     "ffmpeg and ffprobe are required for the audio integration test",
 )
 class AudioRenderTests(unittest.TestCase):
+    def test_sound_bus_does_not_attenuate_active_cues_by_future_inputs(self) -> None:
+        filters: list[str] = []
+
+        label = _sound_bus(filters, ["[first]", "[future]"], "scene_bus")
+
+        self.assertEqual(label, "[scene_bus]")
+        self.assertEqual(
+            filters,
+            [
+                "[first][future]"
+                "amix=inputs=2:dropout_transition=0,"
+                "volume=2[scene_bus]"
+            ],
+        )
+
     def test_preserves_speech_only_render_path(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -230,6 +250,68 @@ class AudioRenderTests(unittest.TestCase):
                     timeline["tracks"]["voices_only"]["distribution_audio"]
                 ).is_file()
             )
+
+    def test_renders_soundscape_against_reviewed_timeline(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            voice = root / "voice.wav"
+            effect = root / "effect.wav"
+            _write_tone(voice, 440)
+            _write_tone(effect, 220, amplitude=50)
+            timeline_path = root / "timeline.json"
+            timeline_path.write_text(
+                json.dumps(
+                    {
+                        "episode_id": "test-episode",
+                        "duration_ms": 1000,
+                        "segments": [
+                            {
+                                "segment_id": "s1",
+                                "start_ms": 0,
+                                "end_ms": 1000,
+                                "text": "Reviewed speech.",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            sound_design_path = root / "sound-design.json"
+            sound_design_path.write_text(
+                json.dumps(
+                    {
+                        "contract_version": 1,
+                        "episode_id": "test-episode",
+                        "sound_design_disclosure": "Illustrative sounds.",
+                        "editorial_principles": [],
+                        "cues": [
+                            _licensed_cue("scene", effect, True, 0),
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            result = render_soundscape_audio(
+                timeline_path,
+                sound_design_path,
+                root / "work",
+                root / "output",
+                voices_audio_path=voice,
+            )
+
+            self.assertEqual(result["duration_ms"], 1000)
+            self.assertTrue(
+                Path(
+                    result["tracks"]["soundscape_only"]["distribution_audio"]
+                ).is_file()
+            )
+            self.assertTrue(
+                Path(
+                    result["tracks"]["combined_preview"]["distribution_audio"]
+                ).is_file()
+            )
+            self.assertFalse((root / "output" / "test-episode-timeline.json").exists())
 
 
 def _licensed_cue(cue_id: str, path: Path, duck: bool, offset_ms: int) -> dict:

@@ -4,6 +4,20 @@ import sys
 _CONTROLLER = None
 
 
+def _audio_source_index(value):
+    if hasattr(value, "eval"):
+        value = value.eval()
+    if isinstance(value, (int, float)):
+        return 1 if int(value) == 1 else 0
+    normalized = str(value or "").strip().casefold().replace(" ", "")
+    return (
+        1
+        if normalized
+        in {"1", "soundscape", "soundscapeonly", "nonhuman", "nonhumanonly"}
+        else 0
+    )
+
+
 def _synchronize_show_control():
     """Make saved show-control values authoritative after a project load."""
     owner = parent()
@@ -36,6 +50,21 @@ def _synchronize_show_control():
             and bool(audio_out.par.active.eval()) != desired_audio
         ):
             audio_out.par.active.val = desired_audio
+
+    source_parameter = getattr(control.par, "Audiosource", None)
+    if source_parameter is not None:
+        source_index = _audio_source_index(source_parameter)
+        connector_source = getattr(owner.par, "Audiosource", None)
+        if connector_source is not None:
+            connector_source.val = (
+                "soundscape" if source_index == 1 else "voices"
+            )
+        source_switch = owner.op("audiosource_switch")
+        if (
+            source_switch is not None
+            and int(source_switch.par.index.eval()) != source_index
+        ):
+            source_switch.par.index.val = source_index
 
 
 def get_controller():

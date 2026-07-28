@@ -82,7 +82,7 @@ Confirmed:
 Still confirm before publication:
 
 - public series title (the current title is a working title)
-- final listening approval of the rendered voices and 13-cue soundscape
+- final listening approval of the rendered voices and 91-cue scene soundscape
 - any licensed replacements for generated effect candidates
 - publication/licensing policy for source excerpts
 - sensitivity and translation review standard

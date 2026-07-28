@@ -178,6 +178,24 @@ class ShowControlComponentTests(unittest.TestCase):
         self.assertTrue(MODULE._has_range(parameter, -1.0, 1.0))
         self.assertFalse(MODULE._has_range(parameter, 0.0, 2.0))
 
+    def test_audio_source_normalization_excludes_combined_track(self) -> None:
+        self.assertEqual(
+            MODULE.AUDIO_SOURCE_NAMES,
+            ("voices", "soundscape"),
+        )
+        self.assertEqual(
+            MODULE._normalize_audio_source("Human Voices Only"),
+            "voices",
+        )
+        self.assertEqual(
+            MODULE._normalize_audio_source("Soundscape Only"),
+            "soundscape",
+        )
+        self.assertEqual(
+            MODULE._normalize_audio_source("combined"),
+            "voices",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -254,6 +254,136 @@ def render_dialogue_episode_audio(
     )
 
 
+def render_soundscape_audio(
+    timeline_path: Path,
+    sound_design_path: Path,
+    work_dir: Path,
+    output_dir: Path,
+    *,
+    sfx_jobs_path: Path | None = None,
+    voices_audio_path: Path | None = None,
+) -> dict[str, Any]:
+    """Render sound design against an existing reviewed episode timeline.
+
+    This path deliberately does not rebuild speech. It is used when the
+    reviewed timeline contains finer editorial segments than the provider's
+    original dialogue jobs, as visual and scene-sound plans often do.
+    """
+    timeline = json.loads(timeline_path.read_text(encoding="utf-8"))
+    episode_id = timeline.get("episode_id")
+    duration_ms = timeline.get("duration_ms")
+    timeline_segments = timeline.get("segments")
+    if not isinstance(episode_id, str) or not episode_id:
+        raise ValueError("Timeline episode_id must be a non-empty string")
+    if not isinstance(duration_ms, int) or duration_ms <= 0:
+        raise ValueError("Timeline duration_ms must be a positive integer")
+    if not isinstance(timeline_segments, list) or not timeline_segments:
+        raise ValueError("Timeline segments must be a non-empty array")
+
+    ffmpeg = shutil.which("ffmpeg")
+    ffprobe = shutil.which("ffprobe")
+    if not ffmpeg or not ffprobe:
+        raise RuntimeError("ffmpeg and ffprobe must be installed and available on PATH")
+
+    sound_design = json.loads(sound_design_path.read_text(encoding="utf-8"))
+    if sound_design.get("episode_id") != episode_id:
+        raise ValueError(
+            f"Sound design belongs to {sound_design.get('episode_id')!r}, "
+            f"not {episode_id!r}"
+        )
+    soundscape_coverage = resolve_soundscape(
+        sound_design_path,
+        timeline_segments,
+        sfx_jobs_path,
+        episode_duration_ms=duration_ms,
+    )
+    sound_cues = soundscape_coverage["cues"]
+    if not sound_cues:
+        raise ValueError("Sound design resolves to no audible cues")
+    overrun = [cue for cue in sound_cues if cue["end_ms"] > duration_ms]
+    if overrun:
+        cue = overrun[0]
+        raise ValueError(
+            f"Sound cue {cue['cue_id']!r} ends after the reviewed timeline "
+            f"({cue['end_ms']} ms > {duration_ms} ms)"
+        )
+
+    render_dir = (work_dir / "render" / episode_id).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    prepared_cues = [
+        _prepare_sound_cue(ffmpeg, cue, render_dir / "sound-cues")
+        for cue in sound_cues
+    ]
+    soundscape_master_path = (
+        output_dir / f"{episode_id}-soundscape-only-master.wav"
+    ).resolve()
+    soundscape_mp3_path = (
+        output_dir / f"{episode_id}-soundscape-only.mp3"
+    ).resolve()
+    _mix_sound_cues(
+        ffmpeg,
+        sound_cues,
+        prepared_cues,
+        soundscape_master_path,
+        duration_ms,
+    )
+    _encode_mp3(ffmpeg, soundscape_master_path, soundscape_mp3_path)
+
+    tracks: dict[str, Any] = {
+        "soundscape_only": {
+            "master_audio": str(soundscape_master_path),
+            "distribution_audio": str(soundscape_mp3_path),
+            "contains": "non_human_sound_only",
+            "continuous": bool(soundscape_coverage.get("continuous")),
+        }
+    }
+    if voices_audio_path is not None:
+        voices_audio_path = voices_audio_path.expanduser().resolve()
+        if not voices_audio_path.is_file():
+            raise FileNotFoundError(
+                f"Reviewed voices-only audio does not exist: {voices_audio_path}"
+            )
+        voice_duration_ms = _duration_ms(ffprobe, voices_audio_path)
+        if abs(voice_duration_ms - duration_ms) > 100:
+            raise ValueError(
+                "Reviewed voices-only audio duration does not match the timeline "
+                f"({voice_duration_ms} ms != {duration_ms} ms)"
+            )
+        combined_master_path = (
+            output_dir / f"{episode_id}-master.wav"
+        ).resolve()
+        combined_mp3_path = (output_dir / f"{episode_id}.mp3").resolve()
+        _mix_voice_and_sound_cues(
+            ffmpeg,
+            voices_audio_path,
+            sound_cues,
+            prepared_cues,
+            combined_master_path,
+            duration_ms,
+        )
+        _encode_mp3(ffmpeg, combined_master_path, combined_mp3_path)
+        tracks["combined_preview"] = {
+            "master_audio": str(combined_master_path),
+            "distribution_audio": str(combined_mp3_path),
+            "contains": "voices_and_soundscape",
+            "voices_source": str(voices_audio_path),
+        }
+
+    return {
+        "contract_version": 1,
+        "episode_id": episode_id,
+        "duration_ms": duration_ms,
+        "timing_source": str(timeline_path.resolve()),
+        "sound_design": {
+            "cue_sheet": str(sound_design_path.resolve()),
+            "disclosure": sound_design["sound_design_disclosure"],
+        },
+        "sound_cues": sound_cues,
+        "soundscape_coverage": soundscape_coverage,
+        "tracks": tracks,
+    }
+
+
 def _render_assembled_episode(
     episode_id: str,
     voice_assembly_path: Path,
@@ -553,6 +683,7 @@ def _mix_voice_and_sound_cues(
     for cue_path in cue_paths:
         command.extend(["-i", str(cue_path)])
 
+    duration_seconds = duration_ms / 1000
     filters: list[str] = []
     has_ducked_cues = any(cue["duck_under_dialogue"] for cue in cues)
     voice_format = (
@@ -567,8 +698,12 @@ def _mix_voice_and_sound_cues(
     for index, cue in enumerate(cues, start=1):
         delayed_label = f"cue{index}"
         delay = cue["start_ms"]
+        mix_gain_db = float(cue.get("mix_gain_db", 0))
         filters.append(
-            f"[{index}:a]{voice_format},adelay={delay}|{delay}[{delayed_label}]"
+            f"[{index}:a]{voice_format},volume={mix_gain_db:g}dB,"
+            f"adelay={delay}|{delay},"
+            f"apad=whole_dur={duration_seconds:.3f},"
+            f"atrim=0:{duration_seconds:.3f}[{delayed_label}]"
         )
         if cue["duck_under_dialogue"]:
             ducked_labels.append(f"[{delayed_label}]")
@@ -586,7 +721,6 @@ def _mix_voice_and_sound_cues(
     if unducked_labels:
         final_inputs.append(_sound_bus(filters, unducked_labels, "plainbus"))
 
-    duration_seconds = duration_ms / 1000
     filters.append(
         "".join(final_inputs)
         + f"amix=inputs={len(final_inputs)}:duration=first,"
@@ -629,15 +763,19 @@ def _mix_sound_cues(
     )
     filters: list[str] = []
     labels: list[str] = []
+    duration_seconds = duration_ms / 1000
     for index, cue in enumerate(cues):
         label = f"sound{index}"
         delay = cue["start_ms"]
+        mix_gain_db = float(cue.get("mix_gain_db", 0))
         filters.append(
-            f"[{index}:a]{audio_format},adelay={delay}|{delay}[{label}]"
+            f"[{index}:a]{audio_format},volume={mix_gain_db:g}dB,"
+            f"adelay={delay}|{delay},"
+            f"apad=whole_dur={duration_seconds:.3f},"
+            f"atrim=0:{duration_seconds:.3f}[{label}]"
         )
         labels.append(f"[{label}]")
     sound_bus = _sound_bus(filters, labels, "soundscape")
-    duration_seconds = duration_ms / 1000
     filters.append(
         f"{sound_bus}apad=pad_dur={duration_seconds:.3f},"
         f"atrim=0:{duration_seconds:.3f},"
@@ -666,7 +804,10 @@ def _sound_bus(filters: list[str], labels: list[str], output_label: str) -> str:
         return labels[0]
     filters.append(
         "".join(labels)
-        + f"amix=inputs={len(labels)}:dropout_transition=0[{output_label}]"
+        + (
+            f"amix=inputs={len(labels)}:dropout_transition=0,"
+            f"volume={len(labels)}[{output_label}]"
+        )
     )
     return f"[{output_label}]"
 

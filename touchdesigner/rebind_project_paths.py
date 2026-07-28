@@ -25,12 +25,19 @@ def rebind_project_paths():
             / "visuals"
             / "2013-12.01-visual-scenes.json"
         ),
-        "audio": (
+        "voices_audio": (
             project_root
             / "episodes"
             / "2013-12.01"
             / "audio"
             / "2013-12.01-voices-only.mp3"
+        ),
+        "soundscape_audio": (
+            project_root
+            / "episodes"
+            / "2013-12.01"
+            / "audio"
+            / "2013-12.01-soundscape-only.mp3"
         ),
         "sequencer": project_root / "touchdesigner" / "podcast_sequencer.py",
         "controller": project_root / "touchdesigner" / "podcast_td_controller.py",
@@ -52,16 +59,25 @@ def rebind_project_paths():
         )
 
     connector.par.Scenejson = str(paths["scene"])
-    connector.par.Audiofile = str(paths["audio"])
+    connector.par.Audiofile = str(paths["voices_audio"])
+    soundscape_parameter = getattr(
+        connector.par,
+        "Soundscapeaudiofile",
+        None,
+    )
+    if soundscape_parameter is not None:
+        soundscape_parameter.val = str(paths["soundscape_audio"])
     connector.par.Sequencermodule = str(paths["sequencer"])
     connector.par.Controllermodule = str(paths["controller"])
 
     audio = connector.op("voices_only_audio")
+    soundscape_audio = connector.op("soundscape_audio")
     execute_callbacks = connector.op("execute_callbacks")
     parameter_callbacks = connector.op("parameter_callbacks")
     show_callbacks = connector.op("show_control/control_callbacks")
     required_ops = {
         "voices_only_audio": audio,
+        "soundscape_audio": soundscape_audio,
         "execute_callbacks": execute_callbacks,
         "parameter_callbacks": parameter_callbacks,
         "show_control/control_callbacks": show_callbacks,
@@ -73,7 +89,8 @@ def rebind_project_paths():
             + ", ".join(missing_ops)
         )
 
-    audio.par.file = str(paths["audio"])
+    audio.par.file = str(paths["voices_audio"])
+    soundscape_audio.par.file = str(paths["soundscape_audio"])
     execute_callbacks.text = paths["execute_callbacks"].read_text(encoding="utf-8")
     parameter_callbacks.text = paths["parameter_callbacks"].read_text(
         encoding="utf-8"
@@ -88,7 +105,8 @@ def rebind_project_paths():
     return {
         "project_root": str(project_root),
         "scene_json": str(paths["scene"]),
-        "audio_file": str(paths["audio"]),
+        "voices_audio_file": str(paths["voices_audio"]),
+        "soundscape_audio_file": str(paths["soundscape_audio"]),
         "streamdiffusion_paths_unchanged": str(
             connector.par.Streamdiffusionpath.eval()
         ),

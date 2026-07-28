@@ -434,54 +434,119 @@ The current speech-provider shortlist and pilot audition recommendation are in
 The selected one-theme pilot and its TTS cost model are in
 [docs/PILOT_EPISODE.md](docs/PILOT_EPISODE.md).
 
-Non-voice audio is an independent layer. The pilot contains one nearly
-subliminal full-episode base bed, seven long thematic beds, and five structural
-or spot cues. They are illustrative sounds, not simulated historical
-recordings. Validate them and prepare provider-neutral generation jobs:
+Non-voice audio is an independent layer. The current scene-driven pilot plan
+contains one nearly subliminal full-episode base bed and one relevant synthetic
+sound layer for each of the 90 visual prompts. All cues are illustrative sound
+design, not simulated historical or location recordings. Rebuild and validate
+the plan:
 
 ```powershell
+python .\scripts\build_pilot_scene_soundscape.py
+
 python -m home_podcast validate-sound-design `
-  --sound-design .\episodes\2013-12.01\sound-design.json `
+  --sound-design .\episodes\2013-12.01\sound-design-scenes.json `
   --script .\episodes\2013-12.01\script.json
 
+python -m home_podcast validate-scene-soundscape `
+  --sound-design .\episodes\2013-12.01\sound-design-scenes.json `
+  --visuals .\episodes\2013-12.01\visuals\2013-12.01-visual-scenes.json `
+  --timeline .\episodes\2013-12.01\audio\2013-12.01-timeline.json
+
 python -m home_podcast prepare-sfx `
-  --sound-design .\episodes\2013-12.01\sound-design.json `
+  --sound-design .\episodes\2013-12.01\sound-design-scenes.json `
   --script .\episodes\2013-12.01\script.json `
+  --output .\work\sfx\2013-12.01-scene-jobs.jsonl `
   --provider elevenlabs `
   --model eleven_text_to_sound_v2
 
 # Dry run: no credential and no provider call
 python -m home_podcast generate-sfx `
-  --jobs .\work\sfx\2013-12.01-jobs.jsonl
+  --jobs .\work\sfx\2013-12.01-scene-jobs.jsonl
 ```
 
 The cue contract, provider research, provenance policy, and mixing behavior are
 documented in [docs/SOUND_DESIGN.md](docs/SOUND_DESIGN.md).
 Paid generation is opt-in and requires both `--execute` and an explicit
 `--max-credits` ceiling. Provider keys are read only from environment
-variables and must never be committed.
+variables and must never be committed. The completed pilot now has all 91
+generated cues cached and the current dry run reports zero pending calls. If a
+future cue changes, run the dry run again and use its exact new
+`estimated_credits` value as the ceiling.
 
-Once every dialogue chunk and generated-effect clip exists:
+On Windows, save the key once with a masked prompt and run the resumable
+production wrapper:
 
 ```powershell
-python -m home_podcast render-dialogue-audio `
-  --jobs .\work\tts\2013-12.01-dialogue-episode-jobs.jsonl `
-  --sound-design .\episodes\2013-12.01\sound-design.json `
-  --sfx-jobs .\work\sfx\2013-12.01-jobs.jsonl
+powershell -ExecutionPolicy Bypass `
+  -File .\scripts\save_elevenlabs_key.ps1
+
+powershell -ExecutionPolicy Bypass `
+  -File .\scripts\run_scene_sfx_generation.ps1 `
+  -MaxCredits <exact estimated_credits from the dry run>
 ```
 
-The renderer uses FFmpeg to preserve each contextual dialogue chunk, apply the
-provider's per-turn timestamps, normalize to 48 kHz stereo, extend each
-thematic bed to the next eligible handoff, suppress too-short handoffs, place
-and fade structural cues, and create synchronized 192 kbps deliverables:
+The encrypted DPAPI blob lives under the current user's local application-data
+folder, outside the repository. It can be decrypted only by that Windows user
+on that PC and is not part of the cross-PC handoff.
+
+The public handoff includes the 91 original compressed provider responses—not
+credentials, request IDs, or account metadata—so a new computer can restore
+the exact resumable WAV cache without another paid call:
+
+```powershell
+python .\scripts\sync_pilot_sfx_cache.py validate
+python .\scripts\sync_pilot_sfx_cache.py restore
+```
+
+The restore verifies every response against the current cue cache key and
+SHA-256 digest, then uses local FFmpeg conversion. It refuses to proceed if any
+current cue is absent, so it cannot silently fall through to paid generation.
+After generating or replacing a cue on the production computer, refresh the
+handoff before committing:
+
+```powershell
+python .\scripts\sync_pilot_sfx_cache.py export
+python .\scripts\sync_pilot_sfx_cache.py validate
+```
+
+Once every generated-effect clip exists, render against the reviewed pilot
+timeline and its already-approved voices-only master:
+
+```powershell
+python -m home_podcast render-soundscape `
+  --timeline .\episodes\2013-12.01\audio\2013-12.01-timeline.json `
+  --sound-design .\episodes\2013-12.01\sound-design-scenes.json `
+  --sfx-jobs .\work\sfx\2013-12.01-scene-jobs.jsonl `
+  --voices-audio .\episodes\2013-12.01\audio\2013-12.01-voices-only-master.wav
+```
+
+The renderer uses FFmpeg to preserve the reviewed speech master and timeline,
+normalize sound assets to 48 kHz stereo, extend every scene bed to its exact
+visual boundary, fade it down to the continuous safety bed at each handoff, and
+create synchronized 192 kbps deliverables:
 
 - `<episode>-voices-only.mp3`
 - `<episode>-soundscape-only.mp3`
 - `<episode>.mp3` as a combined review mix
 
+All delayed cue inputs are padded to the reviewed timeline before summing. The
+mixer restores unity gain after legacy FFmpeg `amix` normalization, so future
+silent cues cannot attenuate early scenes. `mix_gain_db` provides a bounded
+post-normalization trim for unusually sparse assets, and the continuous base
+retains an audible safety floor beneath them.
+
 The non-human stem is continuous because a quiet base loop covers any interval
 without a retained thematic bed. Omitting the two sound-design arguments still
 produces the voices-only render.
+
+The repository tracks the synchronized distribution stems needed by
+TouchDesigner:
+
+- `episodes/2013-12.01/audio/2013-12.01-voices-only.mp3`
+- `episodes/2013-12.01/audio/2013-12.01-soundscape-only.mp3`
+
+Large intermediate WAV masters and the combined review MP3 remain local and
+rebuildable.
 
 Generate deliverable transcripts:
 
@@ -514,7 +579,7 @@ python -m home_podcast validate-visuals `
   --visuals .\episodes\2013-12.01\visuals\2013-12.01-visual-scenes.json
 ```
 
-The current pilot plan contains 90 long scenes across 30:44.72. It began with
+The current pilot plan contains 90 long scenes across 32:24.160. It began with
 36 scenes and was expanded at speech boundaries so each image remains useful
 without racing ahead of its spoken passage. Short story runs are merged into a
 neighboring scene rather than flashing a new image. Every scene stores
@@ -582,16 +647,17 @@ the only alternative would create a sub-15-second image.
 
 `touchdesigner/podcast_sequencer.py` is a provider-neutral, stateless playback
 core. `/project1/podcast_visualizer` in the current local working revision,
-`podcast.18.toe`, follows the TouchDesigner 2025.32820 timeline and exposes:
+`podcast.20.toe`, follows the TouchDesigner 2025.32820 timeline and exposes:
 
 - `prompt_out` for one prompt or two smoothstep-weighted crossfade prompts;
 - `caption_out` for the current spoken caption;
 - `status_out` for playhead and scene diagnostics;
-- `show_control` for live play, audio, seed, crossfade, and color controls;
+- `show_control` for live play, audio-source, seed, crossfade, and color controls;
 - `color_out_1` and `color_out_2` for adjusted primary and backup images;
-- `voices_only_audio` locked to the same timeline.
+- `voices_only_audio` and `soundscape_audio`, both locked to the same timeline;
+- `audiosource_switch`, which sends exactly one selected stem to `audio_out`.
 
-The local `podcast.18.toe` contains the supplied primary and backup
+The local `podcast.20.toe` contains the supplied primary and backup
 StreamDiffusionTD components. The controller maps `prompt_out` into both
 operators' weighted prompt and seed blocks and uses spherical interpolation
 for scene crossfades. `Crossfade Seconds` defaults to 8 seconds, accepts values
@@ -604,13 +670,15 @@ brightness, contrast, gamma, black level, opacity, hue, saturation, and value
 through post-generation Level and HSV TOPs. Reinstalling the show-control
 component preserves its current playback, seed, crossfade, and color values.
 Only one model server should run at a time.
-The audio control is bound to the Audio Device Out Active parameter, and saved
-paused projects reopen at frame 1 with audio disabled. See
+`Audio Source` offers only `Human Voices Only` and `Soundscape Only`; the
+combined review mix is deliberately excluded. `Audio Enabled` gates the
+selected stem at the Audio Device Out, and saved paused projects reopen at
+frame 1 with audio disabled. See
 [touchdesigner/README.md](touchdesigner/README.md) for the adapter boundary.
 Brightness `1.0` is neutral in the Level TOP; `0.0` is black and values above
 `1.0` brighten the image.
 
-The local `.toe` and `.tox` files, including `podcast.18.toe`, are ignored by
+The local `.toe` and `.tox` files, including `podcast.20.toe`, are ignored by
 Git and must not be published.
 
 ## Project layout
