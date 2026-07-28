@@ -7,11 +7,28 @@ import re
 SHOW_CONTROL_MARKER = "Recovered Homes show control"
 COLOR_PIPELINE_MARKER = "Recovered Homes color pipeline"
 AUDIO_PIPELINE_MARKER = "Recovered Homes audio source pipeline"
+SPOUT_OUTPUT_MARKER = "Recovered Homes 5090 Spout output"
 DEFAULT_CROSSFADE_SECONDS = 8.0
 MAX_CROSSFADE_SECONDS = 30.0
 NORMALIZED_CROSSFADE_SECONDS = 15.0
 AUDIO_SOURCE_NAMES = ("voices", "soundscape")
 AUDIO_SOURCE_LABELS = ("Human Voices Only", "Soundscape Only")
+SPOUT_OUTPUT_SPECS = (
+    (
+        "syphonspoutout1",
+        "null1",
+        "TDSyphonSpoutOut",
+        1175,
+        400,
+    ),
+    (
+        "syphonspoutout2",
+        "null2",
+        "TDSyphonSpoutOut2",
+        1625,
+        -275,
+    ),
+)
 COLOR_DEFAULTS = {
     "Colorenabled": True,
     # TouchDesigner's Level TOP uses 1.0 as neutral brightness. A value of
@@ -237,6 +254,7 @@ def install_show_control(
         project_root / "touchdesigner" / "show_control_callbacks.py"
     ).read_text(encoding="utf-8")
     _install_color_pipelines(connector, operator_types)
+    _install_spout_outputs(connector, operator_types)
     return control
 
 
@@ -384,6 +402,38 @@ def _configure_float(parameter, minimum, maximum, *, norm_max=None):
     parameter.clampMax = True
     parameter.normMin = minimum
     parameter.normMax = maximum if norm_max is None else norm_max
+
+
+def _install_spout_outputs(connector, operator_types):
+    """Recreate the two 5090 Spout senders when their output nulls exist."""
+
+    operator_type = operator_types.get("syphonspoutoutTOP")
+    if operator_type is None:
+        return []
+
+    outputs = []
+    for name, source_name, sender_name, node_x, node_y in SPOUT_OUTPUT_SPECS:
+        source = connector.op(source_name)
+        if source is None:
+            continue
+        output = connector.op(name)
+        if output is None:
+            output = connector.create(operator_type, name)
+        elif output.type != "syphonspoutout":
+            raise RuntimeError(
+                f"{output.path} exists but is not a Syphon Spout Out TOP."
+            )
+
+        output.comment = SPOUT_OUTPUT_MARKER
+        output.nodeX = node_x
+        output.nodeY = node_y
+        output.par.active = True
+        output.par.sendername = sender_name
+        output.par.outputresolution = "useinput"
+        output.inputConnectors[0].disconnect()
+        source.outputConnectors[0].connect(output.inputConnectors[0])
+        outputs.append(output)
+    return outputs
 
 
 def _has_range(parameter, minimum, maximum):

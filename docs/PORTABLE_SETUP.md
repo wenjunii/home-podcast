@@ -86,16 +86,21 @@ The final dry run must report 91 cached jobs and zero pending calls. The
 portable response manifest is bound to the current cue prompts, model,
 durations, and SHA-256 file hashes; a mismatch fails closed.
 
-The current local TouchDesigner working file is `podcast.20.toe`, targeting
-TouchDesigner 2025.32820. It is intentionally not on GitHub because it contains
-the paid StreamDiffusionTD component. Transfer that one file separately through
-private storage, or create a fresh `.toe`, install StreamDiffusionTD under your
-license, and follow `touchdesigner/README.md` to install the tracked connector.
-When transferring `podcast.20.toe`, save it in the cloned repository root and
-run `touchdesigner/rebind_project_paths.py` once from the TouchDesigner
-Textport. This updates both audio-stem paths plus all other old-computer file
-paths without touching the paid components. Save the rebound `.toe`, and run
-only one StreamDiffusionTD model server at a time.
+The active local TouchDesigner working file is `podcast.5090.toe` (currently
+saved as `podcast.5090.24.toe`), targeting TouchDesigner 2025.32820. It is
+intentionally not on GitHub because it contains the paid StreamDiffusionTD
+component. The `podcast.3080*.toe` files are reference inputs only during 5090
+work and must not be updated or saved.
+
+Transfer the 5090 file separately through private storage, or create a fresh
+`.toe`, install StreamDiffusionTD under your license, and follow
+`touchdesigner/README.md` to install the tracked connector. After transferring
+the 5090 file into the cloned repository root, run
+`touchdesigner/update_5090_project.py` from the TouchDesigner Textport. The
+guarded updater refuses non-5090 filenames, refreshes both audio-stem paths and
+Show Control, restores the two 5090 Spout senders, and leaves the paid
+components untouched. Inspect the result and save a new numbered 5090
+revision. Run only one StreamDiffusionTD model server at a time.
 
 ## Credentials
 
