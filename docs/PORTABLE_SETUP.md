@@ -31,6 +31,9 @@ and verbatim quotations. Neither command makes a network or paid-provider
 request.
 
 The current portable snapshot contains 91 analyzed December 2013 story cards.
+The canonical Markdown snapshot contains 1,652 unique stories across five
+capture months and ten languages. A clean restore reports 1,652 present and
+eligible stories, 91 current cards, and zero exact duplicates.
 After analyzing new stories, refresh it with:
 
 ```powershell
@@ -43,20 +46,24 @@ Do not commit `data/catalog.sqlite3`; it is only a rebuildable local index.
 
 ## Update the source export snapshot
 
-If the extractor is cloned beside this repository, copy only its story exports:
+If the extractor is cloned beside this repository, use the guarded synchronizer
+instead of copying a wildcard directly:
 
 ```powershell
-Copy-Item `
-  ..\cc-home-extractor\data\exports\stories_*.md `
-  .\data\exports\ `
-  -Force
-
+python .\scripts\sync_story_exports.py
+python .\scripts\sync_story_exports.py --apply
 python -m home_podcast ingest
 python -m home_podcast status
+python -m home_podcast export-cards `
+  --output .\data\story_cards\current-cards.jsonl
 ```
 
-Never copy `matches*` files or the compressed JSONL export into this project.
-Common Crawl timestamps are capture times, not publication dates.
+The first command is a no-write report. The second copies only parsed
+`stories_*.md` files and verifies the destination byte-for-byte. It never
+copies `matches*` files or the compressed JSONL export. A stale destination
+story file stops the operation unless `--prune` was explicitly supplied after
+reviewing the dry run. Common Crawl timestamps are capture times, not
+publication dates.
 
 ## Restore the pilot and TouchDesigner setup
 

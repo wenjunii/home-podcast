@@ -62,8 +62,9 @@ Confirmed:
 - pilot crawl month: December 2013
 - analyzed production pool: 91 English-language stories
 - frozen pilot cohort: 27 stories in Exile, Return, and Nostalgia
-- complete December corpus: 421 stories
-- deferred after the pilot: 64 analyzed stories and 330 unanalyzed stories
+- frozen December corpus at pilot lock: 421 stories
+- current December source snapshot: 444 stories, including 23 late discoveries
+- deferred after the pilot: 64 analyzed stories and 353 unanalyzed stories
 - pilot release: one approximately 30-minute themed sub-episode
 - coverage policy: use all 27 selected stories, at different depths
 - host format: three natural, friend-like hosts with a frozen rotating cast

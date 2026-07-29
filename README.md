@@ -8,6 +8,13 @@ The canonical source snapshot is tracked in `data/exports`. It contains only
 `stories_*.md` files copied from the sibling extractor project and deliberately
 excludes `matches` exports and the compressed JSONL export.
 
+The current tracked snapshot contains 1,652 unique stories in ten languages:
+677 captured in May 2013, 444 in December 2013, 281 in March 2014, 180 in
+April 2014, and 70 in July 2014. Capture time is provenance from the WARC
+filename, not a claim about writing or publication time. Ninety-one stories
+currently have portable analysis cards; the remaining 1,561 stay available for
+incremental Codex analysis.
+
 The system is designed around three promises:
 
 1. New or changed stories are processed incrementally.
@@ -70,6 +77,23 @@ analysis, follow [`docs/PORTABLE_SETUP.md`](docs/PORTABLE_SETUP.md).
 Running `ingest` repeatedly is safe. Unchanged stories retain their catalog
 records and cached analysis. Changed stories create a new version. Stories no
 longer present in an export are marked missing rather than deleted.
+
+To refresh from a sibling `cc-home-extractor` checkout, inspect the exact
+stories-only change first and then apply it:
+
+```powershell
+python .\scripts\sync_story_exports.py
+python .\scripts\sync_story_exports.py --apply
+python -m home_podcast ingest
+python -m home_podcast status
+python -m home_podcast export-cards `
+  --output .\data\story_cards\current-cards.jsonl
+```
+
+The synchronizer parses and verifies the complete source snapshot before
+copying. It accepts only `stories_*.md`, reports story/content changes, never
+copies `matches*` or compressed exports, and requires an explicit `--prune`
+when a destination story file would be removed.
 
 ## Crawl-month archive volumes
 
@@ -136,8 +160,11 @@ python -m home_podcast analyze `
 
 For the current pilot, all 27 selected records already have story cards, so no
 additional analysis request is required. The other 64 analyzed stories remain
-in `cohorts/2013-12-analyzed-pool.json`; the complete 421-story corpus remains
-in `cohorts/2013-12-full-corpus.json`.
+in `cohorts/2013-12-analyzed-pool.json`. The immutable
+`cohorts/2013-12-full-corpus.json` records the 421-story corpus available when
+the pilot was locked. The current exports contain 444 December stories; the 23
+late discoveries belong in a supplement or later episode rather than changing
+the published pilot manifest.
 
 The analyzer caches each completed model response separately and imports it
 immediately. Rerunning the command skips completed work and retries only
