@@ -9,6 +9,7 @@ description = "Incremental, source-grounded production pipeline for a rotating m
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{name = "Home Podcast"}]
+license = {file = "LICENSE"}
 dependencies = []
 
 [project.scripts]

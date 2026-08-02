@@ -738,3 +738,7 @@ work/         Rebuildable provider jobs and intermediate files
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for state and immutability
 rules and [docs/PILOT.md](docs/PILOT.md) for decisions needed before the first
 voice-generation run.
+
+## License
+
+This project is available under the [MIT License](LICENSE).
