@@ -118,7 +118,10 @@ class FakeOwner:
                 )
             )
         self.par = SimpleNamespace(
-            Streamdiffusionpath=FakePar("StreamDiffusionTD")
+            Streamdiffusionpath=FakePar("StreamDiffusionTD"),
+            Scenejson=FakePar(str(Path(__file__).resolve())),
+            Humanfigurejson=FakePar(str(MODULE_PATH.resolve())),
+            Visualpath=FakePar("original"),
         )
 
     def op(self, path):
@@ -126,6 +129,21 @@ class FakeOwner:
 
 
 class PodcastTdControllerTests(unittest.TestCase):
+    def test_selects_original_or_human_figure_scene_path(self) -> None:
+        owner = FakeOwner(None)
+        controller = PodcastVisualController.__new__(PodcastVisualController)
+        controller.owner_comp = owner
+
+        self.assertEqual(
+            controller._selected_scene_path(),
+            str(Path(__file__).resolve()),
+        )
+        owner.par.Visualpath.val = "human_figures"
+        self.assertEqual(
+            controller._selected_scene_path(),
+            str(MODULE_PATH.resolve()),
+        )
+
     def test_reads_live_crossfade_from_show_control(self) -> None:
         controller = PodcastVisualController.__new__(PodcastVisualController)
         controller.owner_comp = FakeOwner(None, crossfade_seconds=8.25)

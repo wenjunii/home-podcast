@@ -100,6 +100,38 @@ class ShowControlCallbackTests(unittest.TestCase):
         self.assertEqual(connector.par.Audiosource.eval(), "soundscape")
         self.assertEqual(source_switch.par.index.eval(), 1)
 
+    def test_visual_path_switch_reloads_without_changing_audio(self):
+        module = load_module(
+            "show_control_callbacks_visual_path_test",
+            "touchdesigner/show_control_callbacks.py",
+        )
+        reloads = []
+        controller = SimpleNamespace(reload=lambda: reloads.append(True))
+        execute_callbacks = SimpleNamespace(
+            module=SimpleNamespace(get_controller=lambda: controller)
+        )
+        connector = SimpleNamespace(
+            par=FakePars(
+                Visualpath=FakePar("Visualpath", "original"),
+                Audiosource=FakePar("Audiosource", "soundscape"),
+            ),
+            op=lambda name: (
+                execute_callbacks if name == "execute_callbacks" else None
+            ),
+        )
+        control = SimpleNamespace()
+        control.parent = lambda: connector
+        module.parent = lambda: control
+
+        module.onValueChange(
+            FakePar("Visualpath", "human_figures"),
+            "original",
+        )
+
+        self.assertEqual(connector.par.Visualpath.eval(), "human_figures")
+        self.assertEqual(connector.par.Audiosource.eval(), "soundscape")
+        self.assertEqual(len(reloads), 1)
+
     def test_play_toggle_updates_touchdesigner_timeline(self):
         module = load_module(
             "show_control_callbacks_play_test",
@@ -176,6 +208,7 @@ class ExecuteCallbackTests(unittest.TestCase):
                 Play=FakePar("Play", False),
                 Audioenabled=FakePar("Audioenabled", False),
                 Audiosource=FakePar("Audiosource", "soundscape"),
+                Visualpath=FakePar("Visualpath", "human_figures"),
             )
         )
         audio_out = SimpleNamespace(
@@ -185,6 +218,7 @@ class ExecuteCallbackTests(unittest.TestCase):
             par=FakePars(
                 Audioenabled=FakePar("Audioenabled", True),
                 Audiosource=FakePar("Audiosource", "voices"),
+                Visualpath=FakePar("Visualpath", "original"),
             )
         )
         source_switch = SimpleNamespace(
@@ -214,6 +248,7 @@ class ExecuteCallbackTests(unittest.TestCase):
         self.assertFalse(audio_out.par.active.eval())
         self.assertEqual(connector.par.Audiosource.eval(), "soundscape")
         self.assertEqual(source_switch.par.index.eval(), 1)
+        self.assertEqual(connector.par.Visualpath.eval(), "human_figures")
 
 
 if __name__ == "__main__":

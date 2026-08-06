@@ -25,6 +25,13 @@ def rebind_project_paths():
             / "visuals"
             / "2013-12.01-visual-scenes.json"
         ),
+        "human_scene": (
+            project_root
+            / "episodes"
+            / "2013-12.01"
+            / "visuals"
+            / "2013-12.01-visual-scenes-human-figures.json"
+        ),
         "voices_audio": (
             project_root
             / "episodes"
@@ -59,6 +66,13 @@ def rebind_project_paths():
         )
 
     connector.par.Scenejson = str(paths["scene"])
+    human_scene_parameter = getattr(connector.par, "Humanfigurejson", None)
+    if human_scene_parameter is None:
+        raise RuntimeError(
+            "Missing Humanfigurejson parameter; run install_show_control.py "
+            "before rebinding project paths."
+        )
+    human_scene_parameter.val = str(paths["human_scene"])
     connector.par.Audiofile = str(paths["voices_audio"])
     soundscape_parameter = getattr(
         connector.par,
@@ -105,6 +119,8 @@ def rebind_project_paths():
     return {
         "project_root": str(project_root),
         "scene_json": str(paths["scene"]),
+        "human_figure_scene_json": str(paths["human_scene"]),
+        "visual_path": str(connector.par.Visualpath.eval()),
         "voices_audio_file": str(paths["voices_audio"]),
         "soundscape_audio_file": str(paths["soundscape_audio"]),
         "streamdiffusion_paths_unchanged": str(

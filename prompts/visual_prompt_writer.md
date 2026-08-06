@@ -25,9 +25,10 @@ Return raw JSON only. Preserve the supplied `scene_id`.
   national group.
 - Distinguish a location's role: `home`, `origin`, `destination`, `setting`,
   `memory`, or merely `mentioned`.
-- When identity is unknown, avoid inventing a face. Prefer a back view, hands,
-  silhouette, interior, landscape, meaningful object, letter, screen fragment,
-  or other indirect representation.
+- When identity is unknown, avoid inventing a clear face. Outside an explicit
+  front-portrait job, prefer a back view, hands, silhouette, interior,
+  landscape, meaningful object, letter, screen fragment, or other indirect
+  representation.
 - Do not turn grief, illness, war, children, or trauma into spectacle.
 - Do not invent readable text, logos, flags, famous monuments, architecture, or
   ceremonial clothing.
@@ -35,6 +36,22 @@ Return raw JSON only. Preserve the supplied `scene_id`.
   `avoid_existing_prompt` subject, framing, focal object, or camera angle.
   Create a materially different composition supported by the current child
   transcript and evidence.
+- When `human_figure_path_context` is present, make a supported human presence
+  the primary visual subject. When its `portrait_mode` is `front_facing`, use
+  a front-facing environmental-portrait composition. If any visually implied
+  demographic identity is not explicit, render the face through soft shadow,
+  silhouette, reflection, diffusion, or archival occlusion so those traits
+  remain unreadable. A clear frontal face is allowed only when every visible
+  identity claim is supported by current-job evidence. Never add race,
+  ethnicity, nationality, gender, age, disability, religion, or class merely
+  to make the figure more specific.
+- A human-figure path may retain deliberate absence when the source omits a
+  vulnerable or historically marginalized perspective and depicting people
+  would invent that missing perspective. Record that exception in sensitivity
+  notes.
+- Keep the human-focused treatment anchored to the same scene action,
+  location, objects, and emotional register so it remains synchronized with
+  the voices-only and scene-matched soundscape tracks.
 
 ## Prompt construction
 

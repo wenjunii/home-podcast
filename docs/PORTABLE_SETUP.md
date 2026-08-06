@@ -76,6 +76,7 @@ episodes/2013-12.01/audio/2013-12.01-timeline.json
 episodes/2013-12.01/audio/sfx-responses/
 episodes/2013-12.01/transcripts/
 episodes/2013-12.01/visuals/2013-12.01-visual-scenes.json
+episodes/2013-12.01/visuals/2013-12.01-visual-scenes-human-figures.json
 touchdesigner/
 ```
 
@@ -93,30 +94,30 @@ The final dry run must report 91 cached jobs and zero pending calls. The
 portable response manifest is bound to the current cue prompts, model,
 durations, and SHA-256 file hashes; a mismatch fails closed.
 
-The active local TouchDesigner working file is `podcast.5090.toe` (currently
-saved as `podcast.5090.24.toe`), targeting TouchDesigner 2025.32820. It is
+The active local TouchDesigner working file is the RTX 3080 `podcast.toe` or a
+numbered `podcast.<revision>.toe`, targeting TouchDesigner 2025.32820. It is
 intentionally not on GitHub because it contains the paid StreamDiffusionTD
-component. The `podcast.3080*.toe` files are reference inputs only during 5090
-work and must not be updated or saved.
+component.
 
-Transfer the 5090 file separately through private storage, or create a fresh
+Transfer the 3080 file separately through private storage, or create a fresh
 `.toe`, install StreamDiffusionTD under your license, and follow
 `touchdesigner/README.md` to install the tracked connector. After transferring
-the 5090 file into the cloned repository root, run
-`touchdesigner/update_5090_project.py` from the TouchDesigner Textport. The
-guarded updater refuses non-5090 filenames, refreshes both audio-stem paths and
-Show Control, restores the two 5090 Spout senders, and leaves the paid
-components untouched. Inspect the result and save a new numbered 5090
+the 3080 file into the cloned repository root, run
+`touchdesigner/update_3080_project.py` from the TouchDesigner Textport. The
+guarded updater refuses unrelated filenames, refreshes both audio-stem paths
+and both visual-prompt paths, restores the two Spout senders, and leaves the
+paid components untouched. Inspect the result and save a new numbered 3080
 revision.
 
-Before saving, run `touchdesigner/audit_5090_controls.py` and
-`touchdesigner/audit_5090_live_events.py` from the Textport. They refuse 3080
-filenames, exercise all 18 Show Control parameters, verify the callback and
-output network, and restore the original show state without saving.
+Before saving, run `touchdesigner/audit_3080_controls.py` and
+`touchdesigner/audit_3080_live_events.py` from the Textport. They reject
+unrelated filenames, exercise all 19 Show Control parameters, including the
+independent original-versus-human-figure visual-path menu, verify the callback
+and output network, and restore the original show state without saving.
 
 For a generated-image check, start only one StreamDiffusionTD server, wait for
-model initialization, and run `touchdesigner/audit_5090_visuals.py`. The
-visual audit requires an active RTX 5090 local backend, a current output-memory
+model initialization, and run `touchdesigner/audit_3080_visuals.py`. The
+visual audit requires an active RTX 3080 local backend, a current output-memory
 name, and non-black color and Spout-source pixels. It forces one non-destructive
 local TOP cook so a paused project can prove the complete output path.
 Backend tables persist in the `.toe` and may display legacy connection labels
@@ -127,7 +128,7 @@ servers at once.
 
 Do not keep two TouchDesigner projects listening on the same OSC receive port.
 The primary component ships with 8574/8583. Close the other project or use a
-temporary unique port pair for the active 5090 component and generated server
+temporary unique port pair for the active 3080 component and generated server
 config, then restore the shipped values without saving the diagnostic
 override.
 

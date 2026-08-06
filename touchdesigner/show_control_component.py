@@ -7,12 +7,14 @@ import re
 SHOW_CONTROL_MARKER = "Recovered Homes show control"
 COLOR_PIPELINE_MARKER = "Recovered Homes color pipeline"
 AUDIO_PIPELINE_MARKER = "Recovered Homes audio source pipeline"
-SPOUT_OUTPUT_MARKER = "Recovered Homes 5090 Spout output"
+SPOUT_OUTPUT_MARKER = "Recovered Homes Spout output"
 DEFAULT_CROSSFADE_SECONDS = 8.0
 MAX_CROSSFADE_SECONDS = 30.0
 NORMALIZED_CROSSFADE_SECONDS = 15.0
 AUDIO_SOURCE_NAMES = ("voices", "soundscape")
 AUDIO_SOURCE_LABELS = ("Human Voices Only", "Soundscape Only")
+VISUAL_PATH_NAMES = ("original", "human_figures")
+VISUAL_PATH_LABELS = ("Original Story Visuals", "Human Figures")
 SPOUT_OUTPUT_SPECS = (
     (
         "syphonspoutout1",
@@ -60,6 +62,9 @@ def install_show_control(
     audio_source_value = _normalize_audio_source(
         getattr(connector.par, "Audiosource", None)
     )
+    visual_path_value = _normalize_visual_path(
+        getattr(connector.par, "Visualpath", None)
+    )
     crossfade_value = float(default_fade)
     random_seeds_value = False
     color_values = dict(COLOR_DEFAULTS)
@@ -73,6 +78,7 @@ def install_show_control(
         play_par = getattr(existing.par, "Play", None)
         audio_par = getattr(existing.par, "Audioenabled", None)
         audio_source_par = getattr(existing.par, "Audiosource", None)
+        visual_path_par = getattr(existing.par, "Visualpath", None)
         crossfade_par = getattr(existing.par, "Crossfadesec", None)
         random_seeds_par = getattr(existing.par, "Randomseeds", None)
         if play_par is not None:
@@ -81,6 +87,8 @@ def install_show_control(
             audio_value = bool(audio_par.eval())
         if audio_source_par is not None:
             audio_source_value = _normalize_audio_source(audio_source_par)
+        if visual_path_par is not None:
+            visual_path_value = _normalize_visual_path(visual_path_par)
         if crossfade_par is not None:
             crossfade_value = float(crossfade_par.eval())
         if random_seeds_par is not None:
@@ -112,6 +120,11 @@ def install_show_control(
         operator_types,
         audio_source=audio_source_value,
     )
+    _install_visual_path_parameters(
+        connector,
+        project_root,
+        visual_path=visual_path_value,
+    )
     crossfade_value = min(
         MAX_CROSSFADE_SECONDS,
         max(0.0, crossfade_value),
@@ -138,6 +151,12 @@ def install_show_control(
     )[0]
     audio_source.menuNames = list(AUDIO_SOURCE_NAMES)
     audio_source.menuLabels = list(AUDIO_SOURCE_LABELS)
+    visual_path = page.appendMenu(
+        "Visualpath",
+        label="Visual Path",
+    )[0]
+    visual_path.menuNames = list(VISUAL_PATH_NAMES)
+    visual_path.menuLabels = list(VISUAL_PATH_LABELS)
     page.appendToggle(
         "Randomseeds",
         label="Random Seeds Each Loop",
@@ -191,6 +210,7 @@ def install_show_control(
     control.par.Play = play_value
     control.par.Audioenabled = audio_value
     control.par.Audiosource = audio_source_value
+    control.par.Visualpath = visual_path_value
     control.par.Randomseeds = random_seeds_value
     control.par.Crossfadesec = crossfade_value
     for name, value in color_values.items():
@@ -203,6 +223,12 @@ def install_show_control(
     help_table.appendRow(["Play", "Play or pause the TouchDesigner timeline"])
     help_table.appendRow(
         ["Audio Enabled", "Send the selected audio source to the device"]
+    )
+    help_table.appendRow(
+        [
+            "Visual Path",
+            "Switch between original compositions and evidence-safe human figures",
+        ]
     )
     help_table.appendRow(
         [
@@ -242,7 +268,7 @@ def install_show_control(
     callbacks.nodeY = 0
     callbacks.par.op = control.path
     callbacks.par.pars = (
-        "Play Audioenabled Audiosource Randomseeds Crossfadesec "
+        "Play Audioenabled Audiosource Visualpath Randomseeds Crossfadesec "
         "Newseeds Restart Reload "
         "Colorenabled Brightness Contrast Gamma Blacklevel Opacity Hue "
         "Saturation Value Resetcolor"
@@ -277,6 +303,72 @@ def _normalize_audio_source(value):
 
 def _audio_source_index(value):
     return 1 if _normalize_audio_source(value) == "soundscape" else 0
+
+
+def _normalize_visual_path(value):
+    if hasattr(value, "eval"):
+        value = value.eval()
+    if isinstance(value, (int, float)):
+        return VISUAL_PATH_NAMES[1 if int(value) == 1 else 0]
+    normalized = str(value or "").strip().casefold().replace(" ", "_")
+    if normalized in {
+        "1",
+        "human",
+        "human_figure",
+        "human_figures",
+        "humanfigures",
+    }:
+        return "human_figures"
+    return "original"
+
+
+def _visual_path_index(value):
+    return 1 if _normalize_visual_path(value) == "human_figures" else 0
+
+
+def _install_visual_path_parameters(
+    connector,
+    project_root,
+    *,
+    visual_path="original",
+):
+    podcast_page = next(
+        (
+            page
+            for page in getattr(connector, "customPages", ())
+            if page.name == "Podcast"
+        ),
+        None,
+    )
+    if podcast_page is None:
+        podcast_page = connector.appendCustomPage("Podcast")
+
+    visual_parameter = getattr(connector.par, "Visualpath", None)
+    if visual_parameter is None:
+        visual_parameter = podcast_page.appendMenu(
+            "Visualpath",
+            label="Visual Path",
+        )[0]
+    visual_parameter.menuNames = list(VISUAL_PATH_NAMES)
+    visual_parameter.menuLabels = list(VISUAL_PATH_LABELS)
+
+    human_json_parameter = getattr(connector.par, "Humanfigurejson", None)
+    if human_json_parameter is None:
+        human_json_parameter = podcast_page.appendFile(
+            "Humanfigurejson",
+            label="Human Figures Scene JSON",
+        )[0]
+
+    human_scene_path = (
+        project_root
+        / "episodes"
+        / "2013-12.01"
+        / "visuals"
+        / "2013-12.01-visual-scenes-human-figures.json"
+    )
+    connector.par.Visualpath = _normalize_visual_path(visual_path)
+    connector.par.Humanfigurejson = str(human_scene_path)
+    return human_json_parameter
 
 
 def _install_audio_source_pipeline(
@@ -405,7 +497,7 @@ def _configure_float(parameter, minimum, maximum, *, norm_max=None):
 
 
 def _install_spout_outputs(connector, operator_types):
-    """Recreate the two 5090 Spout senders when their output nulls exist."""
+    """Recreate the two Spout senders when their output nulls exist."""
 
     operator_type = operator_types.get("syphonspoutoutTOP")
     if operator_type is None:
