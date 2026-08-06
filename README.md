@@ -653,6 +653,22 @@ python -m home_podcast import-visual-prompts `
   --model-label codex-interactive
 ```
 
+The pilot also has an interchangeable human-figure visual path at
+`episodes/2013-12.01/visuals/2013-12.01-visual-scenes-human-figures.json`.
+It preserves all 90 original scene IDs, boundaries, captions, story IDs,
+locations, actions, and emotional cues, so both `Human Voices Only` and the
+existing scene-matched `Soundscape Only` stem remain synchronized. Eighty-eight
+scenes use a front-facing environmental-portrait composition. Because the
+current evidence does not establish every visibly implied identity attribute,
+faces remain in soft shadow, silhouette, reflection, diffusion, or archival
+occlusion rather than inventing race, ethnicity, gender, or age. Two sensitive
+scenes retain deliberate absence rather than inventing a
+historically omitted Indigenous perspective. Rebuild the no-network work
+packets with `scripts/prepare_human_figure_visual_path.py`, import them through
+`import-visual-prompts`, and check shared timing/audio compatibility with
+`scripts/validate_visual_prompt_paths.py`. Generated prompts still require
+human editorial approval.
+
 To make an already generated visual plan denser without regenerating accepted
 prompts, expand long scenes at speech boundaries:
 
@@ -674,19 +690,20 @@ the only alternative would create a sub-15-second image.
 
 `touchdesigner/podcast_sequencer.py` is a provider-neutral, stateless playback
 core. `/project1/podcast_visualizer` in the current local working revision,
-`podcast.5090.toe` (currently `podcast.5090.24.toe`), follows the
-TouchDesigner 2025.32820 timeline and exposes:
+`podcast.toe` or a numbered `podcast.<revision>.toe`, runs on the active RTX
+3080 workstation and follows the TouchDesigner 2025.32820 timeline. It exposes:
 
 - `prompt_out` for one prompt or two smoothstep-weighted crossfade prompts;
 - `caption_out` for the current spoken caption;
 - `status_out` for playhead and scene diagnostics;
-- `show_control` for live play, audio-source, seed, crossfade, and color controls;
+- `show_control` for live play, audio-source, visual-path, seed, crossfade, and
+  color controls;
 - `color_out_1` and `color_out_2` for adjusted primary and backup images;
 - `voices_only_audio` and `soundscape_audio`, both locked to the same timeline;
 - `audiosource_switch`, which sends exactly one selected stem to `audio_out`.
-- `syphonspoutout1` and `syphonspoutout2`, the two 5090 Spout image senders.
+- `syphonspoutout1` and `syphonspoutout2`, the two Spout image senders.
 
-The local `podcast.5090.toe` contains the supplied primary and backup
+The local 3080 project contains the supplied primary and backup
 StreamDiffusionTD components. The controller maps `prompt_out` into both
 operators' weighted prompt and seed blocks and uses spherical interpolation
 for scene crossfades. `Crossfade Seconds` defaults to 8 seconds, accepts values
@@ -704,18 +721,19 @@ combined review mix is deliberately excluded. `Audio Enabled` gates the
 selected stem at the Audio Device Out. Saved paused projects reopen at frame
 1 while preserving the saved `Audio Enabled` and source-selection values. See
 [touchdesigner/README.md](touchdesigner/README.md) for the adapter boundary.
+`Visual Path` independently selects `Original Story Visuals` or `Human
+Figures` at the current playhead; switching prompts never switches, restarts,
+or combines the selected audio stem.
 Brightness `1.0` is neutral in the Level TOP; `0.0` is black and values above
 `1.0` brighten the image.
 
-The local `.toe` and `.tox` files, including `podcast.5090.toe`, are ignored by
-Git and must not be published. The `podcast.3080*.toe` files are read-only
-references during 5090 work. Use
-`touchdesigner/update_5090_project.py` for guarded 5090-only refreshes. Then
-run `touchdesigner/audit_5090_controls.py` and
-`touchdesigner/audit_5090_live_events.py`; together they exercise all 18
+The local `.toe` and `.tox` files are ignored by Git and must not be published.
+Use `touchdesigner/update_3080_project.py` for guarded 3080 refreshes. Then run
+`touchdesigner/audit_3080_controls.py` and
+`touchdesigner/audit_3080_live_events.py`; together they exercise all 19
 controls through deterministic callback checks and the live frame-separated
-Parameter Execute path. `touchdesigner/audit_5090_visuals.py` rejects saved
-stale backend telemetry and requires a live RTX 5090 backend plus non-black
+Parameter Execute path. `touchdesigner/audit_3080_visuals.py` rejects saved
+stale backend telemetry and requires a live RTX 3080 backend plus non-black
 generator and Spout output. It forces one non-destructive local output cook so
 the check also works while the show is paused. Start and stop one
 StreamDiffusionTD server at a time for that optional visual check. Keep only

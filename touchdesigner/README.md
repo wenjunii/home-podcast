@@ -10,7 +10,7 @@ selected voices-only or soundscape-only audio / timeline
   -> prompt_out Table DAT
   -> StreamDiffusionTD prompt + seed multiparms
 
-visual scene JSON
+selected original or human-figure visual scene JSON
   -> podcast_visualizer
   -> caption_out + status_out Table DATs
 ```
@@ -22,57 +22,68 @@ operator's `Promptdict` and `Seeddict` sequences, enables normalized prompt
 weights, and selects `slerp` interpolation. Outside a crossfade it avoids
 rewriting an unchanged prompt.
 
+## Visual paths
+
+Show Control's `Visual Path` menu switches between `Original Story Visuals`
+and `Human Figures`. Both JSON plans contain the same 90 scene IDs, timestamps,
+captions, story links, and crossfade boundaries, so selection happens at the
+current playhead without restarting or changing audio. The human path keeps
+the same locations, actions, objects, and emotional register used to design
+the soundscape. It foregrounds a person only when supported by evidence and
+uses a front-facing environmental-portrait composition for 88 scenes. Faces
+with incomplete identity evidence remain in soft shadow, silhouette,
+reflection, diffusion, or archival occlusion; two sensitive scenes preserve
+deliberate absence instead of inventing a historically missing perspective.
+
 ## Install
 
-The active production project is the 5090 copy, `podcast.5090.toe`; its
-current numbered save is `podcast.5090.24.toe`. Open it with TouchDesigner
-2025.32820. The `.toe` remains local and is not part of the Git repository.
-The `podcast.3080*.toe` files are reference inputs only and must not be opened,
-updated, or saved as part of 5090 work.
+The active production project is the RTX 3080 copy: `podcast.toe` or a numbered
+`podcast.<revision>.toe`. Open it with TouchDesigner 2025.32820. The `.toe`
+remains local and is not part of the Git repository.
 
-For routine 5090 updates, run the guarded updater from a Textport:
+For routine 3080 updates, run the guarded updater from a Textport:
 
 ```python
-exec(open(r"C:\path\to\home-podcast\touchdesigner\update_5090_project.py", encoding="utf-8").read())
+exec(open(r"C:\path\to\home-podcast\touchdesigner\update_3080_project.py", encoding="utf-8").read())
 ```
 
-It refuses to run unless the open filename is `podcast.5090.toe` or a numbered
-5090 revision. It refreshes the tracked Show Control and callbacks, rebinds
-repository paths, recreates the two 5090 Spout senders, and leaves the paid
+It accepts `podcast.toe`, numbered `podcast.<revision>.toe` saves, and explicit
+`podcast.3080` names. It refreshes the tracked Show Control and callbacks,
+rebinds repository paths, recreates the two Spout senders, and leaves the paid
 StreamDiffusionTD components and model servers untouched. Inspect the result,
-then save a new numbered 5090 revision.
+then save a new numbered 3080 revision.
 
-## Audit the 5090 project
+## Audit the 3080 project
 
 Run both guarded control audits after an update:
 
 ```python
-exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_5090_controls.py", encoding="utf-8").read())
-exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_5090_live_events.py", encoding="utf-8").read())
+exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_3080_controls.py", encoding="utf-8").read())
+exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_3080_live_events.py", encoding="utf-8").read())
 ```
 
 The first audit checks every control style and range, callback registration,
 audio and image routing, both Spout outputs, both color branches, and the
-effect of all 18 sliders, switches, menus, and buttons. It suspends the
+effect of all 19 sliders, switches, menus, and buttons. It suspends the
 Parameter Execute DAT during its transaction, invokes the same callback module
 deterministically, and restores the original state.
 
 The second audit changes the same controls on separate TouchDesigner
 application frames. That separation verifies the live Parameter Execute event
 path rather than reading downstream nodes before their deferred callbacks
-cook. Wait for `AUDIT_5090_LIVE_EVENTS`, not only the initial
-`AUDIT_5090_LIVE_EVENTS_SCHEDULED` line. Both scripts refuse 3080 filenames,
-do not save the `.toe`, and do not start model servers.
+cook. Wait for `AUDIT_3080_LIVE_EVENTS`, not only the initial
+`AUDIT_3080_LIVE_EVENTS_SCHEDULED` line. Both scripts reject non-podcast
+filenames, do not save the `.toe`, and do not start model servers.
 
 For an optional generated-image check, start exactly one configured
 StreamDiffusionTD server, wait for its model initialization to finish, and
 run:
 
 ```python
-exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_5090_visuals.py", encoding="utf-8").read())
+exec(open(r"C:\path\to\home-podcast\touchdesigner\audit_3080_visuals.py", encoding="utf-8").read())
 ```
 
-The visual audit requires `Serveractive`, `Streamactive`, a live RTX 5090
+The visual audit requires `Serveractive`, `Streamactive`, a live RTX 3080
 backend connection, a current output-memory name, non-black `color_out_*`
 pixels, non-black `null*` Spout-source pixels, and no operator errors. It
 forces one local output cook so a paused show can prove the generated
@@ -90,7 +101,7 @@ servers together.
 Only one open TouchDesigner project may listen on a given OSC receive port.
 The shipped primary component uses 8574/8583. Close another project using
 those ports before testing, or temporarily assign an unused receive/transmit
-pair to the active 5090 component and its generated server config. Do not save
+pair to the active 3080 component and its generated server config. Do not save
 temporary diagnostic port overrides into the `.toe`.
 
 Run the full installer only when creating a fresh connector:
@@ -103,9 +114,9 @@ The installer creates `/project1/podcast_visualizer` with:
 
 - `voices_only_audio` and `soundscape_audio`: synchronized pilot audio stems;
 - `audiosource_switch`: an exclusive switch feeding the audio device output;
-- `show_control`: live playback, audio-source, random-seed, crossfade, and
-  color controls;
-- `syphonspoutout1` and `syphonspoutout2`: the 5090 Spout senders, installed
+- `show_control`: live playback, audio-source, visual-path, random-seed,
+  crossfade, and color controls;
+- `syphonspoutout1` and `syphonspoutout2`: the Spout senders, installed
   from `null1` and `null2` when those output nulls exist;
 - `color_out_1` and `color_out_2`: adjusted primary and backup image outputs;
 - `prompt_out`: provider-neutral prompt slots and blend weights;
@@ -130,7 +141,7 @@ touching StreamDiffusionTD, run:
 exec(open(r"C:\path\to\home-podcast\touchdesigner\install_show_control.py", encoding="utf-8").read())
 ```
 
-After moving `podcast.5090.toe` to another computer, save it in the cloned
+After moving the 3080 `.toe` to another computer, save it in the cloned
 repository root and run the guarded updater above. For a path-only repair,
 run the safe rebinder once:
 
@@ -138,9 +149,10 @@ run the safe rebinder once:
 exec(open(r"C:\path\to\home-podcast\touchdesigner\rebind_project_paths.py", encoding="utf-8").read())
 ```
 
-The rebinder updates the scene, audio, sequencer, controller, and callback
-paths without deleting, recreating, or starting either paid StreamDiffusionTD
-component. Save the `.toe` after checking playback.
+The rebinder updates both visual-scene paths plus the audio, sequencer,
+controller, and callback paths without deleting, recreating, or starting
+either paid StreamDiffusionTD component. Save the `.toe` after checking
+playback.
 
 The `Crossfade Seconds` parameter updates immediately while playing, paused,
 or seeking. It defaults to 8 seconds and accepts values up to 30 seconds; the

@@ -221,6 +221,21 @@ class ShowControlComponentTests(unittest.TestCase):
             "voices",
         )
 
+    def test_visual_path_normalization_has_two_exclusive_paths(self) -> None:
+        self.assertEqual(
+            MODULE.VISUAL_PATH_NAMES,
+            ("original", "human_figures"),
+        )
+        self.assertEqual(
+            MODULE._normalize_visual_path("Original Story Visuals"),
+            "original",
+        )
+        self.assertEqual(
+            MODULE._normalize_visual_path("Human Figures"),
+            "human_figures",
+        )
+        self.assertEqual(MODULE._visual_path_index("human"), 1)
+
     def test_installs_5090_spout_outputs_from_existing_nulls(self) -> None:
         null1 = self.container.add("null1")
         null2 = self.container.add("null2")

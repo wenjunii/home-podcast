@@ -1,8 +1,9 @@
 """TouchDesigner-facing controller for podcast_visualizer.
 
-The parent COMP must provide Scenejson and Playheadsec custom parameters plus
-prompt_out, caption_out, and status_out Table DAT children. StreamDiffusionTD is
-accessed through its public prompt/seed multiparms only.
+The parent COMP must provide Scenejson, Humanfigurejson, Visualpath, and
+Playheadsec custom parameters plus prompt_out, caption_out, and status_out
+Table DAT children. StreamDiffusionTD is accessed through its public
+prompt/seed multiparms only.
 """
 
 from __future__ import annotations
@@ -42,12 +43,18 @@ class PodcastVisualController:
         self.reload()
 
     def reload(self):
-        scene_path = self._resolve_path(str(self.owner_comp.par.Scenejson.eval()))
+        scene_path = self._selected_scene_path()
+        if not self._load_scene(scene_path):
+            return
+        self.update(float(self.owner_comp.par.Playheadsec.eval()))
+
+    def _load_scene(self, scene_path):
         module_path = self._resolve_path(str(self.owner_comp.par.Sequencermodule.eval()))
         if not Path(scene_path).is_file():
             self._status("error", f"Scene JSON not found: {scene_path}")
             self.sequencer = None
-            return
+            self.loaded_path = ""
+            return False
         spec = importlib.util.spec_from_file_location(
             "recovered_homes_podcast_sequencer",
             module_path,
@@ -61,9 +68,13 @@ class PodcastVisualController:
         self.last_streamdiffusion_signature = None
         self.last_color_signature = None
         self.last_playhead_ms = None
-        self.update(float(self.owner_comp.par.Playheadsec.eval()))
+        return True
 
     def update(self, playhead_seconds):
+        selected_path = self._selected_scene_path()
+        if selected_path != self.loaded_path:
+            if not self._load_scene(selected_path):
+                return
         if self.sequencer is None:
             return
         playhead_ms = max(
@@ -407,6 +418,8 @@ class PodcastVisualController:
         table.clear()
         table.appendRow(["key", "value"])
         table.appendRow(["state", "ready"])
+        table.appendRow(["visual_path", self._visual_path_name()])
+        table.appendRow(["scene_json", self.loaded_path])
         table.appendRow(["playhead_ms", frame.playhead_ms])
         table.appendRow(["scene_id", frame.scene_id])
         table.appendRow(["scene_index", frame.scene_index])
@@ -443,3 +456,30 @@ class PodcastVisualController:
         if path.is_absolute():
             return str(path)
         return str((Path(project.folder) / path).resolve())
+
+    def _visual_path_name(self):
+        parameter = getattr(self.owner_comp.par, "Visualpath", None)
+        value = parameter.eval() if parameter is not None else "original"
+        if isinstance(value, (int, float)):
+            return "human_figures" if int(value) == 1 else "original"
+        normalized = str(value or "").strip().casefold().replace(" ", "_")
+        if normalized in {
+            "1",
+            "human",
+            "human_figure",
+            "human_figures",
+            "humanfigures",
+        }:
+            return "human_figures"
+        return "original"
+
+    def _selected_scene_path(self):
+        parameter_name = (
+            "Humanfigurejson"
+            if self._visual_path_name() == "human_figures"
+            else "Scenejson"
+        )
+        parameter = getattr(self.owner_comp.par, parameter_name, None)
+        if parameter is None:
+            parameter = self.owner_comp.par.Scenejson
+        return self._resolve_path(str(parameter.eval()))

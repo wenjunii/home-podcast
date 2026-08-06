@@ -28,6 +28,10 @@ def install():
     page.appendToggle("Audioenabled", label="Audio Enabled")
     page.appendFloat("Playheadsec", label="Playhead Seconds")
     page.appendFile("Scenejson", label="Scene JSON")
+    visual_path = page.appendMenu("Visualpath", label="Visual Path")[0]
+    visual_path.menuNames = ["original", "human_figures"]
+    visual_path.menuLabels = ["Original Story Visuals", "Human Figures"]
+    page.appendFile("Humanfigurejson", label="Human Figures Scene JSON")
     page.appendFile("Audiofile", label="Voices-only Audio")
     page.appendFile("Sequencermodule", label="Sequencer Module")
     page.appendFile("Controllermodule", label="Controller Module")
@@ -58,6 +62,14 @@ def install():
     connector.par.Playheadsec = 0
     connector.par.Playheadsec.expr = "max(0, me.time.seconds)"
     connector.par.Scenejson = str(scene_json)
+    connector.par.Visualpath = "original"
+    connector.par.Humanfigurejson = str(
+        project_root
+        / "episodes"
+        / "2013-12.01"
+        / "visuals"
+        / "2013-12.01-visual-scenes-human-figures.json"
+    )
     connector.par.Audiofile = str(
         project_root
         / "episodes"

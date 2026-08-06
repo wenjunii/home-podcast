@@ -18,6 +18,23 @@ def _audio_source_index(value):
     )
 
 
+def _visual_path_name(value):
+    if hasattr(value, "eval"):
+        value = value.eval()
+    if isinstance(value, (int, float)):
+        return "human_figures" if int(value) == 1 else "original"
+    normalized = str(value or "").strip().casefold().replace(" ", "_")
+    if normalized in {
+        "1",
+        "human",
+        "human_figure",
+        "human_figures",
+        "humanfigures",
+    }:
+        return "human_figures"
+    return "original"
+
+
 def _synchronize_show_control():
     """Make saved show-control values authoritative after a project load."""
     owner = parent()
@@ -65,6 +82,13 @@ def _synchronize_show_control():
             and int(source_switch.par.index.eval()) != source_index
         ):
             source_switch.par.index.val = source_index
+
+    visual_parameter = getattr(control.par, "Visualpath", None)
+    connector_visual_parameter = getattr(owner.par, "Visualpath", None)
+    if visual_parameter is not None and connector_visual_parameter is not None:
+        desired_visual_path = _visual_path_name(visual_parameter)
+        if _visual_path_name(connector_visual_parameter) != desired_visual_path:
+            connector_visual_parameter.val = desired_visual_path
 
 
 def get_controller():

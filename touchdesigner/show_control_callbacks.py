@@ -13,6 +13,7 @@ COLOR_PARAMETERS = {
     "Value",
 }
 AUDIO_SOURCE_NAMES = ("voices", "soundscape")
+VISUAL_PATH_NAMES = ("original", "human_figures")
 
 
 def _connector():
@@ -68,6 +69,31 @@ def _set_audio_source(value):
         source_switch.par.index.val = index
 
 
+def _visual_path_index(value):
+    if hasattr(value, "eval"):
+        value = value.eval()
+    if isinstance(value, (int, float)):
+        return 1 if int(value) == 1 else 0
+    normalized = str(value or "").strip().casefold().replace(" ", "_")
+    return (
+        1
+        if normalized
+        in {"1", "human", "human_figure", "human_figures", "humanfigures"}
+        else 0
+    )
+
+
+def _set_visual_path(value):
+    connector = _connector()
+    path_name = VISUAL_PATH_NAMES[_visual_path_index(value)]
+    path_parameter = getattr(connector.par, "Visualpath", None)
+    if path_parameter is not None:
+        path_parameter.val = path_name
+    # Both plans share the exact scene boundaries, so reloading selects the
+    # matching prompt at the current playhead without touching either audio.
+    _controller().reload()
+
+
 def onValueChange(par, prev):
     if par.name == "Play":
         op("/local/time").par.play = bool(par.eval())
@@ -75,6 +101,8 @@ def onValueChange(par, prev):
         _set_audio_enabled(par.eval())
     elif par.name == "Audiosource":
         _set_audio_source(par.eval())
+    elif par.name == "Visualpath":
+        _set_visual_path(par.eval())
     elif par.name == "Randomseeds":
         _controller().randomize_seeds()
         _refresh()
