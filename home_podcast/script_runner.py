@@ -28,7 +28,7 @@ def generate_episode_script(
     prompt_text = prompt_path.read_text(encoding="utf-8")
     client = CaprioleChatClient.from_config(config.script_provider)
     recipe_hash = hashlib.sha256(
-        (prompt_text + "\nchunked-story-card-script-v2").encode("utf-8")
+        (prompt_text + "\nfull-source-section-script-v3").encode("utf-8")
     ).hexdigest()[:12]
     evidence_hash = hashlib.sha256(evidence_path.read_bytes()).hexdigest()[:16]
     cache_dir = (
@@ -123,7 +123,10 @@ def generate_episode_script(
         config.show_bible_path,
     )
     report.update(_script_metrics(script))
-    if report["estimated_minutes"] > config.target_minutes_max:
+    if (
+        config.target_minutes_max is not None
+        and report["estimated_minutes"] > config.target_minutes_max
+    ):
         report["warnings"].append(
             "Estimated runtime "
             f"{report['estimated_minutes']:.1f} minutes exceeds the configured "
@@ -227,9 +230,10 @@ def _build_section_prompt(
         "never use a joke or laugh immediately after trauma.\n"
         "- Use kind=quote only when the entire text is copied verbatim from exactly "
         "one memorable_passages entry. Prefer grounded paraphrase if uncertain.\n"
-        "- Treat each story_card summary as the boundary for factual claims. The "
-        "full source was used to create the card and remains available for later "
-        "validation, but is intentionally omitted here to fit the provider gateway.\n"
+        "- Treat story_text as the factual source for this section. The story card "
+        "is an evidence map, not a factual boundary; use its narrative beats and "
+        "key information to find important details, then verify every detail against "
+        "story_text. Never fill a source gap.\n"
         "- Return one raw JSON object with only a segments array. No Markdown fences "
         "or outside commentary.\n\n"
         "SEGMENT CONTRACT EXAMPLE\n"
@@ -251,6 +255,14 @@ def _compact_evidence_story(story: dict[str, Any]) -> dict[str, Any]:
         )
     card_fields = (
         "summary",
+        "narrative_beats",
+        "key_information",
+        "people",
+        "locations",
+        "time_markers",
+        "sensory_details",
+        "unresolved_gaps",
+        "source_completeness",
         "emotional_tone",
         "digital_archaeology_angles",
         "memorable_passages",
@@ -266,6 +278,9 @@ def _compact_evidence_story(story: dict[str, Any]) -> dict[str, Any]:
         "anchor_score": story.get("anchor_score"),
         "theme_fit": story.get("theme_fit"),
         "quality_flags": story.get("quality_flags", []),
+        "source_metadata": story.get("source_metadata", {}),
+        "accepted_filter_text": story.get("accepted_filter_text", ""),
+        "story_text": story.get("story_text", ""),
         "story_card": {key: card[key] for key in card_fields if key in card},
     }
 

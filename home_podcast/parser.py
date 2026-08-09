@@ -15,6 +15,7 @@ LANGUAGE_LINE = re.compile(r"(?m)^\*\*Language:\*\*\s*`([^`]+)`")
 CRAWL_TIMESTAMP = re.compile(r"CC-MAIN-(\d{14})")
 MATCH_NUMBER = re.compile(r"\b(\d+)\b")
 MARKDOWN_LINK = re.compile(r"^\[([^\]]+)\]\((.+)\)$")
+STABLE_STORY_ID = re.compile(r"^story-[a-f0-9]{24}$")
 
 
 def discover_story_files(exports_dir: Path) -> list[Path]:
@@ -88,8 +89,14 @@ def _parse_story_block(
     )
     if not source_url and not source_file:
         identity_basis = f"{language}\0{content_hash}"
-    story_id = f"story-{_hash_text(identity_basis)[:24]}"
-    quality_flags = tuple(_quality_flags(story_text, block))
+    generated_story_id = f"story-{_hash_text(identity_basis)[:24]}"
+    declared_story_id = _plain_metadata_value(metadata.get("Stable Story ID", ""))
+    story_id = (
+        declared_story_id
+        if STABLE_STORY_ID.fullmatch(declared_story_id)
+        else generated_story_id
+    )
+    quality_flags = tuple(_quality_flags(story_text, block, metadata))
     record_payload = {
         "accepted_text": accepted_text,
         "story_text": story_text,
@@ -172,8 +179,13 @@ def _hash_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def _quality_flags(story_text: str, raw_block: str) -> list[str]:
+def _quality_flags(
+    story_text: str,
+    raw_block: str,
+    metadata: dict[str, str] | None = None,
+) -> list[str]:
     flags: list[str] = []
+    metadata = metadata or {}
     lowered = story_text.casefold()
     if not story_text.strip():
         flags.append("missing_story_text")
@@ -183,6 +195,21 @@ def _quality_flags(story_text: str, raw_block: str) -> list[str]:
         flags.append("very_long")
     if "intervening source paragraphs omitted" in raw_block:
         flags.append("source_has_omissions")
+    if _plain_metadata_value(metadata.get("Full Source Recovery", "")).casefold() == "yes":
+        flags.append("full_source_recovered")
+    completeness = _plain_metadata_value(
+        metadata.get("Narrative Completeness", "")
+    ).casefold()
+    completeness_flags = {
+        "likely_complete": "source_likely_complete",
+        "unknown": "source_completeness_unknown",
+        "start_missing": "source_start_missing",
+        "end_missing": "source_end_missing",
+        "both_missing": "source_both_missing",
+        "gated_or_preview": "source_gated_or_preview",
+    }
+    if completeness in completeness_flags:
+        flags.append(completeness_flags[completeness])
     mojibake_markers = ("Ã©", "Ã£", "â€™", "â€œ", "â€", "Â ")
     if any(marker in story_text for marker in mojibake_markers):
         flags.append("possible_mojibake")

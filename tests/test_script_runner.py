@@ -61,9 +61,9 @@ class ScriptRunnerTests(unittest.TestCase):
             compact["evidence"][0]["story_card"]["summary"],
             "A source.",
         )
-        self.assertNotIn("story_text", compact["evidence"][0])
+        self.assertEqual(compact["evidence"][0]["story_text"], "The source once.")
         self.assertNotIn("source_markdown", compact["evidence"][0])
-        self.assertNotIn("accepted_filter_text", compact["evidence"][0])
+        self.assertEqual(compact["evidence"][0]["accepted_filter_text"], "source")
 
     def test_canonicalizes_quote_punctuation_from_memorable_passage(self) -> None:
         segments = [

@@ -113,6 +113,77 @@ Inspect one month:
 python -m home_podcast status --month 2013-12
 ```
 
+## Real December 2013 series
+
+The pilot remains frozen. The production December series has its own config,
+catalog, work directory, episode tree, and audio tree:
+
+```text
+podcast.real-december.json
+series/2013-12/collection.json
+data/full_exports/2013-12/
+episodes/real-december/
+work/real-december/
+audio/real-december/
+```
+
+The series is information-driven: it has no 30-minute cap and no fixed story
+count per installment. The initial deterministic proposal creates one populated
+installment per theme and assigns every eligible story. If a theme contains
+several natural subthemes, editorial planning may split it while preserving
+complete coverage and stable source IDs. A proposal cannot be locked while any
+current story remains unanalyzed.
+
+First recover the complete captured sources in the sibling extractor. Always
+review its no-network plan before a batch:
+
+```powershell
+Set-Location ..\cc-home-extractor
+.\scripts\stories.ps1 -Action full-plan -Month 2013-12 -All
+.\scripts\stories.ps1 -Action full-recover -Month 2013-12 -Limit 10 -Workers 3 -Apply
+.\scripts\stories.ps1 -Action full-status -Month 2013-12 -All
+.\scripts\stories.ps1 -Action full-export -Month 2013-12
+```
+
+The current dry plan covers 444 normal exported story units represented by 422
+canonical captures, with an exact maximum of 844 Common Crawl requests. Recovery
+is resumable. It never uses a generative model to finish missing text and labels
+truncated, gated, or uncertain narratives explicitly.
+
+After the extractor export exists, dry-run and apply the stories-only handoff:
+
+```powershell
+Set-Location ..\home-podcast
+python .\scripts\sync_story_exports.py `
+  --source ..\cc-home-extractor\data\full_exports\2013-12 `
+  --destination .\data\full_exports\2013-12
+python .\scripts\sync_story_exports.py `
+  --source ..\cc-home-extractor\data\full_exports\2013-12 `
+  --destination .\data\full_exports\2013-12 `
+  --apply
+python -m home_podcast --config .\podcast.real-december.json ingest
+python -m home_podcast --config .\podcast.real-december.json status --month 2013-12
+python -m home_podcast --config .\podcast.real-december.json export-analysis `
+  --month 2013-12 `
+  --output .\work\real-december\analysis\2013-12-jobs.jsonl
+```
+
+Codex then writes the new cards directly and imports them through the existing
+validator. These full-source cards are evidence dossiers: ordered narrative
+beats, usable factual details, people and explicitly supported identity details,
+physical story locations, time markers, sensory details, exact excerpts, and
+unresolved gaps. The later script packet includes the full source text for each
+section; the card helps navigate it but does not limit the available facts.
+
+Once all current sources are analyzed:
+
+```powershell
+python -m home_podcast --config .\podcast.real-december.json plan `
+  --month 2013-12 `
+  --information-driven `
+  --output .\work\real-december\planning\2013-12-proposal.json
+```
+
 ## Story analysis
 
 The default Codex-native path uses `export-analysis` and `import-cards` as

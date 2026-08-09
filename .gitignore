@@ -8,6 +8,8 @@ __pycache__/
 # Rebuildable and potentially large local artifacts
 data/catalog.sqlite3
 data/catalog.sqlite3-*
+data/catalog-real-december.sqlite3
+data/catalog-real-december.sqlite3-*
 work/
 audio/cache/
 audio/normalized/

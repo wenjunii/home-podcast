@@ -1,0 +1,29 @@
+{
+  "contract_version": 1,
+  "kind": "information_driven_archive_series",
+  "archive_volume": "2013-12",
+  "capture_time_note": "December 2013 is Common Crawl capture time, not publication time.",
+  "source_product": "common-crawl-document-v1",
+  "source_scope": {
+    "normal_exported_story_units": 444,
+    "canonical_captures_to_recover": 422,
+    "maximum_common_crawl_requests": 844,
+    "counts_are_from_the_2026-08-09_dry_plan": true
+  },
+  "production_policy": {
+    "planning_mode": "information_driven",
+    "fixed_episode_runtime_minutes": null,
+    "fixed_stories_per_installment": null,
+    "coverage": "Use every eligible story and every materially distinct information unit traceably.",
+    "theme_policy": "One initial installment per populated theme; editorial subtheme splits may be added when the evidence naturally requires them.",
+    "source_policy": "Full recovered source text is the factual authority; analysis cards are evidence maps rather than summaries that bound the script.",
+    "incomplete_source_policy": "Keep useful fragments, label gaps, and never invent a missing beginning, ending, identity, place, or event."
+  },
+  "pilot_relationship": {
+    "pilot_episode": "2013-12.01",
+    "pilot_manifest_is_immutable": true,
+    "real_series_uses_separate_config_and_output_directories": true
+  },
+  "state": "awaiting_full_source_recovery",
+  "next_gate": "Recover and export all 422 canonical captures, then ingest and analyze the 444 full-source story units."
+}

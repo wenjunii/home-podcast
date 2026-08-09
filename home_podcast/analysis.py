@@ -100,6 +100,7 @@ def export_analysis_packets(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8", newline="\n") as handle:
         for row in rows:
+            source_metadata = json.loads(row["metadata_json"])
             packet = {
                 "contract_version": 1,
                 "story_id": row["id"],
@@ -110,6 +111,18 @@ def export_analysis_packets(
                 "source_url": row["source_url"],
                 "source_file": row["source_file"],
                 "quality_flags": json.loads(row["quality_flags_json"]),
+                "source_metadata": source_metadata,
+                "source_recovery": {
+                    "full_source_recovered": (
+                        str(source_metadata.get("Full Source Recovery", ""))
+                        .strip("` ")
+                        .casefold()
+                        == "yes"
+                    ),
+                    "narrative_completeness": str(
+                        source_metadata.get("Narrative Completeness", "unknown")
+                    ).strip("` "),
+                },
                 "accepted_filter_text": row["accepted_text"],
                 "story_text": row["story_text"],
                 "allowed_themes": [
@@ -124,6 +137,28 @@ def export_analysis_packets(
                     "eligible": "boolean",
                     "exclusion_reason": "string or null",
                     "summary": f"string in {config.primary_language}",
+                    "narrative_beats": (
+                        "ordered array of {label, summary, evidence_excerpt}; retain "
+                        "every materially distinct event or turn"
+                    ),
+                    "key_information": (
+                        "array of {claim, evidence_excerpt} covering all usable facts"
+                    ),
+                    "people": (
+                        "array of {name_or_role, supported_identity_details, "
+                        "evidence_excerpt}; never infer identity"
+                    ),
+                    "locations": (
+                        "array of {place, role_in_story, evidence_excerpt}; distinguish "
+                        "story place from digital provenance"
+                    ),
+                    "time_markers": "array of {time, role_in_story, evidence_excerpt}",
+                    "sensory_details": "array of {detail, evidence_excerpt}",
+                    "unresolved_gaps": "array of explicit missing-context notes",
+                    "source_completeness": (
+                        "likely_complete, unknown, start_missing, end_missing, "
+                        "both_missing, or gated_or_preview"
+                    ),
                     "primary_theme": "one allowed theme slug",
                     "secondary_themes": "zero or more allowed theme slugs",
                     "theme_fit": "number from 0 to 1",
@@ -363,6 +398,60 @@ def _validate_analysis(
             raise ValueError(
                 f"Line {line_number}: memorable passage is not verbatim in story_text"
             )
+    grounded_fields = {
+        "narrative_beats": ("label", "summary"),
+        "key_information": ("claim",),
+        "people": ("name_or_role", "supported_identity_details"),
+        "locations": ("place", "role_in_story"),
+        "time_markers": ("time", "role_in_story"),
+        "sensory_details": ("detail",),
+    }
+    for field, descriptive_fields in grounded_fields.items():
+        if field not in analysis:
+            continue  # Backward compatibility for already-reviewed v1 cards.
+        values = analysis[field]
+        if not isinstance(values, list):
+            raise ValueError(f"Line {line_number}: {field} must be an array")
+        for item in values:
+            if not isinstance(item, dict):
+                raise ValueError(f"Line {line_number}: {field} items must be objects")
+            excerpt = item.get("evidence_excerpt")
+            if not isinstance(excerpt, str) or not excerpt.strip():
+                raise ValueError(
+                    f"Line {line_number}: {field}.evidence_excerpt must be non-empty"
+                )
+            if _normalize_text(excerpt) not in normalized_source:
+                raise ValueError(
+                    f"Line {line_number}: {field} evidence is not verbatim in story_text"
+                )
+            for name in descriptive_fields:
+                value = item.get(name)
+                if name == "supported_identity_details":
+                    if not isinstance(value, list) or any(
+                        not isinstance(detail, str) for detail in value
+                    ):
+                        raise ValueError(
+                            f"Line {line_number}: people.supported_identity_details "
+                            "must be an array of strings"
+                        )
+                elif not isinstance(value, str) or not value.strip():
+                    raise ValueError(
+                        f"Line {line_number}: {field}.{name} must be non-empty"
+                    )
+    if "unresolved_gaps" in analysis and (
+        not isinstance(analysis["unresolved_gaps"], list)
+        or any(not isinstance(value, str) for value in analysis["unresolved_gaps"])
+    ):
+        raise ValueError(f"Line {line_number}: unresolved_gaps must be strings")
+    if "source_completeness" in analysis and analysis["source_completeness"] not in {
+        "likely_complete",
+        "unknown",
+        "start_missing",
+        "end_missing",
+        "both_missing",
+        "gated_or_preview",
+    }:
+        raise ValueError(f"Line {line_number}: invalid source_completeness")
 
 
 def _normalize_text(value: str) -> str:

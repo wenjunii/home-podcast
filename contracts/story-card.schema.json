@@ -28,6 +28,80 @@
         "eligible": {"type": "boolean"},
         "exclusion_reason": {"type": ["string", "null"]},
         "summary": {"type": "string"},
+        "narrative_beats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "summary", "evidence_excerpt"],
+            "properties": {
+              "label": {"type": "string"},
+              "summary": {"type": "string"},
+              "evidence_excerpt": {"type": "string"}
+            }
+          }
+        },
+        "key_information": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["claim", "evidence_excerpt"],
+            "properties": {
+              "claim": {"type": "string"},
+              "evidence_excerpt": {"type": "string"}
+            }
+          }
+        },
+        "people": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name_or_role", "supported_identity_details", "evidence_excerpt"],
+            "properties": {
+              "name_or_role": {"type": "string"},
+              "supported_identity_details": {"type": "array", "items": {"type": "string"}},
+              "evidence_excerpt": {"type": "string"}
+            }
+          }
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["place", "role_in_story", "evidence_excerpt"],
+            "properties": {
+              "place": {"type": "string"},
+              "role_in_story": {"type": "string"},
+              "evidence_excerpt": {"type": "string"}
+            }
+          }
+        },
+        "time_markers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["time", "role_in_story", "evidence_excerpt"],
+            "properties": {
+              "time": {"type": "string"},
+              "role_in_story": {"type": "string"},
+              "evidence_excerpt": {"type": "string"}
+            }
+          }
+        },
+        "sensory_details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["detail", "evidence_excerpt"],
+            "properties": {
+              "detail": {"type": "string"},
+              "evidence_excerpt": {"type": "string"}
+            }
+          }
+        },
+        "unresolved_gaps": {"type": "array", "items": {"type": "string"}},
+        "source_completeness": {
+          "enum": ["likely_complete", "unknown", "start_missing", "end_missing", "both_missing", "gated_or_preview"]
+        },
         "primary_theme": {"type": ["string", "null"]},
         "secondary_themes": {"type": "array", "items": {"type": "string"}},
         "theme_fit": {"type": "number", "minimum": 0, "maximum": 1},
