@@ -22,7 +22,8 @@ class ProjectConfig:
     audio_dir: Path
     target_stories_per_installment: int
     target_minutes_min: int
-    target_minutes_max: int
+    target_minutes_max: int | None
+    information_driven_planning: bool
     analysis_provider: dict[str, Any] | None
     script_provider: dict[str, Any] | None
     speech_provider: dict[str, Any] | None
@@ -35,6 +36,15 @@ class ProjectConfig:
         config_path = Path(path).expanduser().resolve()
         data = json.loads(config_path.read_text(encoding="utf-8"))
         root = config_path.parent
+        if data.get("extends"):
+            base_path = Path(str(data["extends"])).expanduser()
+            if not base_path.is_absolute():
+                base_path = root / base_path
+            base_data = json.loads(base_path.resolve().read_text(encoding="utf-8"))
+            data = {
+                **base_data,
+                **{key: value for key, value in data.items() if key != "extends"},
+            }
 
         def resolve(value: str) -> Path:
             candidate = Path(value).expanduser()
@@ -59,7 +69,14 @@ class ProjectConfig:
                 1, int(data.get("target_stories_per_installment", 30))
             ),
             target_minutes_min=int(data.get("target_minutes_min", 20)),
-            target_minutes_max=int(data.get("target_minutes_max", 35)),
+            target_minutes_max=(
+                None
+                if data.get("target_minutes_max", 35) is None
+                else int(data.get("target_minutes_max", 35))
+            ),
+            information_driven_planning=bool(
+                data.get("information_driven_planning", False)
+            ),
             analysis_provider=data.get("analysis_provider"),
             script_provider=data.get("script_provider"),
             speech_provider=data.get("speech_provider"),

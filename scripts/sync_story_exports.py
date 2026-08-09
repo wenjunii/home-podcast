@@ -30,15 +30,22 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def snapshot(root: Path) -> dict[str, Any]:
+def snapshot(root: Path, *, allow_empty: bool = False) -> dict[str, Any]:
     root = root.expanduser().resolve()
     if not root.is_dir():
-        raise FileNotFoundError(f"Story export directory does not exist: {root}")
-    files = discover_story_files(root)
+        if allow_empty:
+            files = []
+        else:
+            raise FileNotFoundError(f"Story export directory does not exist: {root}")
+    else:
+        files = discover_story_files(root)
     if not files:
-        raise FileNotFoundError(f"No stories_*.md files found under: {root}")
-    records = list(parse_story_files(files))
-    if not records:
+        if not allow_empty:
+            raise FileNotFoundError(f"No stories_*.md files found under: {root}")
+        records = []
+    else:
+        records = list(parse_story_files(files))
+    if files and not records:
         raise ValueError(f"No story records could be parsed under: {root}")
 
     by_id: dict[str, list[Any]] = defaultdict(list)
@@ -124,7 +131,7 @@ def sync_story_exports(
     prune: bool = False,
 ) -> dict[str, Any]:
     source = snapshot(source_root)
-    destination = snapshot(destination_root)
+    destination = snapshot(destination_root, allow_empty=True)
     if source["root"] == destination["root"]:
         raise ValueError("Source and destination story directories must be different")
     comparison = compare_snapshots(source, destination)

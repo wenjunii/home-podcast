@@ -127,6 +127,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Combine every eligible cohort story into one proposed episode",
     )
     plan.add_argument(
+        "--information-driven",
+        action="store_true",
+        default=None,
+        help=(
+            "Keep every eligible story in its thematic installment and derive "
+            "runtime from the information instead of a fixed story/time target"
+        ),
+    )
+    plan.add_argument(
         "--title",
         help="Override the title when the proposal contains exactly one episode",
     )
@@ -646,6 +655,7 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             cohort_path=Path(args.cohort).resolve() if args.cohort else None,
             single_episode=args.single_episode,
             single_episode_title=args.title,
+            information_driven=args.information_driven,
         )
         return {
             "output": str(output),

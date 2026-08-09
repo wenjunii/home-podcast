@@ -31,6 +31,25 @@ def export_file(*blocks: str) -> str:
 
 
 class SyncStoryExportsTests(unittest.TestCase):
+    def test_can_initialize_an_empty_full_source_destination(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "source"
+            destination = root / "new-full-source-destination"
+            source.mkdir()
+            text = " ".join(["home"] * 80)
+            (source / "stories_en.md").write_text(
+                export_file(story_block(1, "20131204133352", text)),
+                encoding="utf-8",
+            )
+
+            dry_run = sync_story_exports(source, destination)
+            applied = sync_story_exports(source, destination, apply=True)
+
+            self.assertEqual(dry_run["destination_stories_before"], 0)
+            self.assertEqual(dry_run["new_files"], ["stories_en.md"])
+            self.assertEqual(applied["destination_stories_after"], 1)
+
     def test_dry_run_then_apply_copies_only_story_exports(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

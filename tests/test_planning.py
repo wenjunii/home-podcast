@@ -118,6 +118,20 @@ class PlanningTests(unittest.TestCase):
             )
             self.assertEqual(len(packet["evidence"]), 1)
 
+            information_proposal = create_month_proposal(
+                config,
+                "2013-05",
+                root / "information-proposal.json",
+                information_driven=True,
+            )
+            self.assertEqual(
+                information_proposal["policy"]["planning_mode"],
+                "information_driven",
+            )
+            self.assertIsNone(
+                information_proposal["policy"]["target_stories_per_installment"]
+            )
+
     def test_plan_can_be_restricted_to_frozen_cohort(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

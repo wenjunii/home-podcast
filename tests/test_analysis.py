@@ -73,6 +73,25 @@ class AnalysisExportTests(unittest.TestCase):
                     "eligible": True,
                     "exclusion_reason": None,
                     "summary": "A doorway anchors a memory of home.",
+                    "narrative_beats": [
+                        {
+                            "label": "doorway",
+                            "summary": "A doorway is remembered.",
+                            "evidence_excerpt": "A remembered doorway.",
+                        }
+                    ],
+                    "key_information": [
+                        {
+                            "claim": "The source remembers a doorway.",
+                            "evidence_excerpt": "A remembered doorway.",
+                        }
+                    ],
+                    "people": [],
+                    "locations": [],
+                    "time_markers": [],
+                    "sensory_details": [],
+                    "unresolved_gaps": [],
+                    "source_completeness": "unknown",
                     "primary_theme": "memory-archive",
                     "secondary_themes": [],
                     "theme_fit": 0.9,

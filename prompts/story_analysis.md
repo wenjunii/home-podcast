@@ -14,6 +14,21 @@ historical, genre, community, or cultural context.
 
 Return one JSON object that conforms to `contracts/story-card.schema.json`.
 
+Build a loss-resistant evidence dossier, not only a short summary. Preserve every
+materially distinct event or turn in `narrative_beats`; list usable factual details
+in `key_information`; and separately ground people, locations, time markers, and
+sensory details. Every `evidence_excerpt` must be one non-empty contiguous verbatim
+substring of `story_text`. Identity details belong in
+`people[].supported_identity_details` only when that same excerpt explicitly
+supports them. A place mentioned in archive metadata, a URL, or a repository name
+is digital provenance unless the story itself makes it a physical story location.
+
+Copy the supplied recovery assessment to `source_completeness`, and use
+`unresolved_gaps` to record missing beginnings, endings, access gates, omitted
+context, uncertain referents, or other limits. Do not silently repair them. The
+goal is to retain as much responsibly usable information as the source contains;
+`summary` is navigation, not the factual boundary for later scriptwriting.
+
 Use only the allowed theme slugs supplied with the job. Every memorable passage must
 be copied character-for-character from one contiguous span of `story_text`; do not
 repair punctuation, join separate spans, translate, or add quotation marks. Mark a

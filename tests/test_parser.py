@@ -66,6 +66,23 @@ class ParserTests(unittest.TestCase):
                 [path.name for path in discover_story_files(root)], ["stories_en.md"]
             )
 
+    def test_full_source_metadata_preserves_stable_id_and_completeness(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "stories_en.md"
+            full = FIXTURE.replace(
+                "- **Source URL:**",
+                "- **Stable Story ID:** `story-0123456789abcdef01234567`\n"
+                "- **Full Source Recovery:** `yes`\n"
+                "- **Narrative Completeness:** `end_missing`\n"
+                "- **Source URL:**",
+            )
+            path.write_text(full, encoding="utf-8")
+            story = parse_story_file(path)[0]
+
+            self.assertEqual(story.story_id, "story-0123456789abcdef01234567")
+            self.assertIn("full_source_recovered", story.quality_flags)
+            self.assertIn("source_end_missing", story.quality_flags)
+
 
 if __name__ == "__main__":
     unittest.main()

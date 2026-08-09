@@ -20,7 +20,10 @@ def create_month_proposal(
     *,
     single_episode: bool = False,
     single_episode_title: str | None = None,
+    information_driven: bool | None = None,
 ) -> dict[str, Any]:
+    if information_driven is None:
+        information_driven = config.information_driven_planning
     theme_config = config.load_themes()["themes"]
     theme_by_slug = {theme["slug"]: theme for theme in theme_config}
     cohort: dict[str, Any] | None = None
@@ -162,15 +165,20 @@ def create_month_proposal(
                     item["story_id"],
                 )
             )
-            part_count = math.ceil(
-                len(stories) / config.target_stories_per_installment
+            part_count = (
+                1
+                if information_driven
+                else math.ceil(len(stories) / config.target_stories_per_installment)
             )
             for part_index in range(part_count):
                 sequence += 1
-                start = part_index * config.target_stories_per_installment
-                chunk = stories[
-                    start : start + config.target_stories_per_installment
-                ]
+                if information_driven:
+                    chunk = stories
+                else:
+                    start = part_index * config.target_stories_per_installment
+                    chunk = stories[
+                        start : start + config.target_stories_per_installment
+                    ]
                 title = theme["name"]
                 if part_count > 1:
                     title += f", Part {part_index + 1}"
@@ -187,6 +195,11 @@ def create_month_proposal(
                             part_index % len(theme["archaeology_questions"])
                         ],
                         "status": "proposed",
+                        "runtime_policy": (
+                            "derived_from_information"
+                            if information_driven
+                            else "configured_target"
+                        ),
                         "story_count": len(chunk),
                         "stories": chunk,
                     }
@@ -214,7 +227,20 @@ def create_month_proposal(
         ),
         "policy": {
             "coverage": "maximum_responsible_coverage",
-            "target_stories_per_installment": config.target_stories_per_installment,
+            "planning_mode": (
+                "information_driven" if information_driven else "fixed_story_batches"
+            ),
+            "target_stories_per_installment": (
+                None if information_driven else config.target_stories_per_installment
+            ),
+            "fixed_runtime_minutes": (
+                None
+                if information_driven
+                else {
+                    "minimum": config.target_minutes_min,
+                    "maximum": config.target_minutes_max,
+                }
+            ),
             "single_episode": single_episode,
             "published_episodes_are_immutable": True,
             "late_arrivals": "supplement_or_later_cross_month_episode",
@@ -225,6 +251,8 @@ def create_month_proposal(
             "assigned_eligible_stories": sum(item["story_count"] for item in installments),
             "unanalyzed_story_ids": unanalyzed,
             "ineligible_stories": ineligible,
+            "analysis_complete": not unanalyzed,
+            "ready_to_lock": (not unanalyzed) if information_driven else True,
         },
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -416,6 +444,7 @@ def prepare_script_packet(
                 "source_markdown": row["source_markdown"],
                 "accepted_filter_text": row["accepted_text"],
                 "story_text": row["story_text"],
+                "source_metadata": json.loads(row["metadata_json"]),
                 "quality_flags": json.loads(row["quality_flags_json"]),
                 "story_card": (
                     json.loads(row["card_json"]) if row["card_json"] else None
@@ -466,6 +495,11 @@ def lock_episode_manifest(
 ) -> tuple[Path, bool]:
     proposal_bytes = proposal_path.read_bytes()
     proposal = json.loads(proposal_bytes)
+    if proposal.get("coverage", {}).get("ready_to_lock") is False:
+        raise ValueError(
+            "Cannot lock an information-driven proposal while current stories remain "
+            "unanalyzed"
+        )
     installment = next(
         (item for item in proposal["installments"] if item["episode_id"] == episode_id),
         None,

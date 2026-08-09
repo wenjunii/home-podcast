@@ -1,0 +1,12 @@
+{
+  "extends": "podcast.json",
+  "project_name": "Recovered Homes — Real December 2013 Series",
+  "exports_dir": "data/full_exports/2013-12",
+  "catalog_path": "data/catalog-real-december.sqlite3",
+  "episodes_dir": "episodes/real-december",
+  "work_dir": "work/real-december",
+  "audio_dir": "audio/real-december",
+  "information_driven_planning": true,
+  "target_minutes_min": 0,
+  "target_minutes_max": null
+}
