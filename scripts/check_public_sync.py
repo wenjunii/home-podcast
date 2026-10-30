@@ -22,7 +22,8 @@ CREDENTIAL_FIELDS = {"api_key", "apikey", "access_token", "refresh_token", "clie
 
 
 def git(root, *args, input_data=None):
-    result = subprocess.run(["git", "--literal-pathspecs", *args], cwd=root, input=input_data, capture_output=True)
+    result = subprocess.run(["git", "--literal-pathspecs", *args], cwd=root, input=input_data,
+        capture_output=True, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     if result.returncode:
         raise ValueError("Git inspection failed; details suppressed")
     return result.stdout

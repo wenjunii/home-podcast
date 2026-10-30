@@ -15,7 +15,8 @@ class PublicSyncTests(unittest.TestCase):
         self.base = self.git("rev-parse", "HEAD").decode().strip()
 
     def git(self, *args):
-        return subprocess.run(["git", *args], cwd=self.root, capture_output=True, check=True).stdout
+        return subprocess.run(["git", *args], cwd=self.root, capture_output=True, check=True,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0)).stdout
 
     def commit(self, message):
         self.git("-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-qm", message)
