@@ -1,0 +1,204 @@
+{
+  "contract_version": 1,
+  "kind": "local_synthetic_voice_roster",
+  "status": "approved_voices_available",
+  "identity_policy": {
+    "unsupported_voice_traits_are_artistic_casting": true,
+    "performed_voice_claims_to_be_source_person": false,
+    "location_implies_accent": false,
+    "language_implies_ethnicity": false,
+    "name_implies_gender": false,
+    "one_voice_per_complete_canonical_rendition": true
+  },
+  "manual_assignments": {
+    "2013-12--story-0a2a05642a140974e56b5505": "local-restrained-northern-english-androgynous",
+    "2013-12--story-2004068b6018112714c92d6e": "local-intimate-indian-androgynous",
+    "2013-12--story-9b4e7d75d334113359a9f14b": "local-observant-west-african-masculine"
+  },
+  "candidates": [
+    {
+      "voice_id": "local-warm-atlantic-feminine",
+      "display_name": "Warm Atlantic",
+      "provider": "qwen3_tts_local",
+      "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "reference_audio": "audio/storytelling-real-december/local-auditions/local-warm-atlantic-feminine/9fbb9fda0df6dc80e0e4a9054f5532c223808554c3aa7e735dbe0754016ac053.wav",
+      "reference_text": "But my grandchildren? I want them to know. As long as I can walk and talk, as long as I can get into a car and take them with me, I'm going to show them something of my past. That heritage is disappearing under the weather, the spread of towns, industry... and time. I want my grandchildren to see it while it's still there.",
+      "gender_presentation": "feminine",
+      "age_presentation": "middle-aged adult",
+      "accent_profile": "soft Irish-influenced international English",
+      "personality_tags": [
+        "warm",
+        "curious",
+        "quietly expressive"
+      ],
+      "supported_languages": [
+        "en"
+      ],
+      "audition_status": "approved",
+      "reviewed_by": "wenjunii (approved all eight reviewed auditions in chat)",
+      "reviewed_at": "2026-10-28T11:38:15.800161+00:00",
+      "identity_disclaimer": "This is an internal artistic voice audition. The voice traits are not claims about the archived writer or witness."
+    },
+    {
+      "voice_id": "local-observant-west-african-masculine",
+      "display_name": "Observant West African",
+      "provider": "qwen3_tts_local",
+      "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "reference_audio": "audio/storytelling-real-december/local-auditions/local-observant-west-african-masculine/926ec2bdbddfc9f53c2721e4e1a637cd9b84f16c7b0f3d2bb846682787b2181e.wav",
+      "reference_text": "I've finally set out on the voyage of life for myself, leaving the family ark behind in New Haven. What makes me sad is the thought that I've gone away for good, and that from now on I'll be at home only as a visitor. Mother said this departure felt worse to her than when I went to Europe. I couldn't quite agree: Europe had been entirely new and untried, while this move has only transplanted me from one scene of student life to another. Among students, I usually feel more or less at home.",
+      "gender_presentation": "masculine",
+      "age_presentation": "middle-aged adult",
+      "accent_profile": "West African English",
+      "personality_tags": [
+        "observant",
+        "grounded",
+        "gently humorous"
+      ],
+      "supported_languages": [
+        "en"
+      ],
+      "audition_status": "approved",
+      "reviewed_by": "wenjunii (approved all eight reviewed auditions in chat)",
+      "reviewed_at": "2026-10-28T11:38:15.806996+00:00",
+      "identity_disclaimer": "This is an internal artistic voice audition. The voice traits are not claims about the archived writer or witness."
+    },
+    {
+      "voice_id": "local-intimate-indian-androgynous",
+      "display_name": "Intimate Indian English",
+      "provider": "qwen3_tts_local",
+      "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "reference_audio": "audio/storytelling-real-december/local-auditions/local-intimate-indian-androgynous/823b3642ab3dd0917410cafe6930814f9a398d5c7f88daa9655392dc0a6ff40a.wav",
+      "reference_text": "Ask me to name my favorite place and I have to think about it. My first answer is probably my room—but, honestly, that feels a little boring. I grew up in the Hocking Hills, where there are so many parks to hike. Cantwell Cliffs is just down the road from my grandma's house, and my cousins and I spent a lot of our childhood there. I even took pictures, just to prove I really did leave the house.",
+      "gender_presentation": "androgynous",
+      "age_presentation": "young adult",
+      "accent_profile": "Indian English",
+      "personality_tags": [
+        "intimate",
+        "earnest",
+        "curious"
+      ],
+      "supported_languages": [
+        "en"
+      ],
+      "audition_status": "approved",
+      "reviewed_by": "wenjunii (approved all eight reviewed auditions in chat)",
+      "reviewed_at": "2026-10-28T11:38:15.812862+00:00",
+      "identity_disclaimer": "This is an internal artistic voice audition. The voice traits are not claims about the archived writer or witness."
+    },
+    {
+      "voice_id": "local-reflective-caribbean-feminine",
+      "display_name": "Reflective Caribbean",
+      "provider": "qwen3_tts_local",
+      "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "reference_audio": "audio/storytelling-real-december/local-auditions/local-reflective-caribbean-feminine/01234f0a9b3079fb146f76bacb875d74ffc28a68556f6d55d2497356342c9015.wav",
+      "reference_text": "I've never really been the person curled up on a couch with my nose in a book. As far back as I remember, I wanted to be outside getting into something. Every summer, we spent a week at my grandparents' place. My sister and I always wanted to play outdoors and explore, while my cousins were perfectly content inside, reading one book after another. I don't think books are bad—that isn't my point. I've tried books people recommended, and I always begin them; I just never seem to finish.",
+      "gender_presentation": "feminine",
+      "age_presentation": "older adult",
+      "accent_profile": "Caribbean English",
+      "personality_tags": [
+        "reflective",
+        "resilient",
+        "warm"
+      ],
+      "supported_languages": [
+        "en"
+      ],
+      "audition_status": "approved",
+      "reviewed_by": "wenjunii (approved all eight reviewed auditions in chat)",
+      "reviewed_at": "2026-10-28T11:38:15.819708+00:00",
+      "identity_disclaimer": "This is an internal artistic voice audition. The voice traits are not claims about the archived writer or witness."
+    },
+    {
+      "voice_id": "local-playful-singapore-masculine",
+      "display_name": "Playful Singapore English",
+      "provider": "qwen3_tts_local",
+      "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "reference_audio": "audio/storytelling-real-december/local-auditions/local-playful-singapore-masculine/d1aa2172eb0847c7df6a5b25d2af4b49679e4eea40b57ad4d19259f364b28f6f.wav",
+      "reference_text": "I'm a Christmas nerd. And a candlelight nerd too. I love the warmth and atmosphere that real flames bring into a room. But lately I've heard about so many tragedies caused by candles left unattended. Now, before I go to bed, I'm almost painfully careful about checking twice that every single candle is out. So I suppose I've become a sensitive, candle-checking Christmas nerd.",
+      "gender_presentation": "masculine",
+      "age_presentation": "young adult",
+      "accent_profile": "Singapore English",
+      "personality_tags": [
+        "curious",
+        "playful",
+        "quick-witted"
+      ],
+      "supported_languages": [
+        "en"
+      ],
+      "audition_status": "approved",
+      "reviewed_by": "wenjunii (approved all eight reviewed auditions in chat)",
+      "reviewed_at": "2026-10-28T11:38:15.828715+00:00",
+      "identity_disclaimer": "This is an internal artistic voice audition. The voice traits are not claims about the archived writer or witness."
+    },
+    {
+      "voice_id": "local-restrained-northern-english-androgynous",
+      "display_name": "Restrained Northern English",
+      "provider": "qwen3_tts_local",
+      "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "reference_audio": "audio/storytelling-real-december/local-auditions/local-restrained-northern-english-androgynous/de6bce6031dfcc530a2b562c3c8fe3fc003f219cf36d2ebf11dcd22bf921182f.wav",
+      "reference_text": "My paternal grandmother lived about three hours from our family, so I normally saw her only once or twice a year. But during two summers, after third and fourth grades, I spent a week at Grandma's house with a cousin my age. Our days found a rhythm: morning chores, a walk to the neighborhood park and its wading pool, lunch, then an hour's rest because my cousin was recovering from scarlet fever. I usually read through the hour. Sometimes we played Go Fish with Grandma.",
+      "gender_presentation": "androgynous",
+      "age_presentation": "older adult",
+      "accent_profile": "Northern English",
+      "personality_tags": [
+        "restrained",
+        "dryly funny",
+        "tender"
+      ],
+      "supported_languages": [
+        "en"
+      ],
+      "audition_status": "approved",
+      "reviewed_by": "wenjunii (approved all eight reviewed auditions in chat)",
+      "reviewed_at": "2026-10-28T11:38:15.835552+00:00",
+      "identity_disclaimer": "This is an internal artistic voice audition. The voice traits are not claims about the archived writer or witness."
+    },
+    {
+      "voice_id": "local-open-latin-american-feminine",
+      "display_name": "Open Latin American English",
+      "provider": "qwen3_tts_local",
+      "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "reference_audio": "audio/storytelling-real-december/local-auditions/local-open-latin-american-feminine/37656e8f7bd677fc3df149960114f05bbea4e8663bbbd7ba29920d956be6c637.wav",
+      "reference_text": "I lived in that old household surrounded by love and happiness. The piety, quiet life, and charity of my hosts reminded me of the roof that had sheltered my mother. In the evenings we sat on a long, wide terrace at the foot of the château, overlooking the lake. We talked about the events of the day and watched the moon throw its light across water and snow.",
+      "gender_presentation": "feminine",
+      "age_presentation": "young adult",
+      "accent_profile": "Spanish-influenced international English",
+      "personality_tags": [
+        "open",
+        "animated",
+        "empathetic"
+      ],
+      "supported_languages": [
+        "en"
+      ],
+      "audition_status": "approved",
+      "reviewed_by": "wenjunii (approved all eight reviewed auditions in chat)",
+      "reviewed_at": "2026-10-28T11:38:15.842550+00:00",
+      "identity_disclaimer": "This is an internal artistic voice audition. The voice traits are not claims about the archived writer or witness."
+    },
+    {
+      "voice_id": "local-calm-east-african-masculine",
+      "display_name": "Calm East African",
+      "provider": "qwen3_tts_local",
+      "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+      "reference_audio": "audio/storytelling-real-december/local-auditions/local-calm-east-african-masculine/527cd11f729cfc94eb1987c952af351df0dea2de53951aeee1f7b37fb178a1b1.wav",
+      "reference_text": "That weekend my sister and her family visited, and I loved having them there. I love spending time with my relatives. I already missed my little sister, who was leaving for Thailand, though her young son was coming to stay for a day on Wednesday. I intended to fill up on that time until the family returned in summer. I skipped that week's card sketch because I had accidentally made next week's design. Outside it rained; inside I worked beside lit tea lights and waited for whatever sun would come.",
+      "gender_presentation": "masculine",
+      "age_presentation": "older adult",
+      "accent_profile": "East African English",
+      "personality_tags": [
+        "calm",
+        "insightful",
+        "quietly expressive"
+      ],
+      "supported_languages": [
+        "en"
+      ],
+      "audition_status": "approved",
+      "reviewed_by": "wenjunii (approved all eight reviewed auditions in chat)",
+      "reviewed_at": "2026-10-28T11:38:15.849966+00:00",
+      "identity_disclaimer": "This is an internal artistic voice audition. The voice traits are not claims about the archived writer or witness."
+    }
+  ]
+}

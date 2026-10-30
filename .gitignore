@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .venv/
+.venv-*/
 
 # Rebuildable and potentially large local artifacts
 data/catalog.sqlite3
@@ -13,6 +14,7 @@ data/catalog-real-december.sqlite3-*
 work/
 audio/cache/
 audio/normalized/
+audio/storytelling-real-december/
 episodes/**/audio/*.wav
 episodes/**/audio/*.mp3
 episodes/**/audio/*-timeline.json
@@ -29,3 +31,17 @@ episodes/**/audio/*-timeline.json
 
 # Provider credentials belong in the environment, never in this project.
 .env
+.env.*
+
+# Local-first storytelling state is transferred through a PRIVATE handoff,
+# not published with code/docs. Existing public pilot artifacts stay intact.
+narrations/
+data/full_exports/
+private-handoffs/
+private-handoff-receipt.json
+private-handoff-package.json
+series/**/local-audio-handoff.json
+series/**/pre-elevenlabs-handoff.json
+series/**/storytelling-collection.json
+series/**/storytelling-editorial-decisions.json
+series/**/storytelling-production-index.json

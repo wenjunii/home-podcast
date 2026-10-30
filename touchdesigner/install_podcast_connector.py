@@ -29,8 +29,9 @@ def install():
     page.appendFloat("Playheadsec", label="Playhead Seconds")
     page.appendFile("Scenejson", label="Scene JSON")
     visual_path = page.appendMenu("Visualpath", label="Visual Path")[0]
-    visual_path.menuNames = ["original", "human_figures"]
-    visual_path.menuLabels = ["Original Story Visuals", "Human Figures"]
+    visual_path.menuNames = ["original", "human_figures", "balanced"]
+    visual_path.menuLabels = ["Original Story Visuals", "Human Figures", "Balanced Memories"]
+    page.appendFile("Balancedjson", label="Balanced Memories Scene JSON")
     page.appendFile("Humanfigurejson", label="Human Figures Scene JSON")
     page.appendFile("Audiofile", label="Voices-only Audio")
     page.appendFile("Sequencermodule", label="Sequencer Module")
@@ -128,7 +129,9 @@ def install():
     parameter_callbacks.nodeX = 660
     parameter_callbacks.nodeY = -160
     parameter_callbacks.par.op = connector.path
-    parameter_callbacks.par.pars = "Playheadsec"
+    parameter_callbacks.par.pars = (
+        "Playheadsec Currentnarrationid Canonicalvisuals Canonicalhumanvisuals"
+    )
     parameter_callbacks.par.valuechange = True
     parameter_callbacks.par.valueschanged = False
     parameter_callbacks.text = (
@@ -166,6 +169,7 @@ def install():
 
     controller = callbacks.module.get_controller()
     controller.update(float(connector.par.Playheadsec.eval()))
+    connector.op("show_control/control_callbacks").module._write_live_control()
     connector.current = True
     return connector
 

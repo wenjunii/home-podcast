@@ -72,6 +72,10 @@ def update_3080_project():
             )
 
     control = connector.op("show_control")
+    control.par.Runtimeprofile = "3080_safe"
+    control.par.Livevariations = False
+    connector.par.Runtimeprofile = "3080_safe"
+    control.op("control_callbacks").module._write_live_control()
     report = {
         "project": project_name,
         "project_variant": PROJECT_VARIANT,
@@ -80,6 +84,8 @@ def update_3080_project():
         "audio_source": str(control.par.Audiosource.eval()),
         "visual_path_menu": list(control.par.Visualpath.menuNames),
         "visual_path": str(control.par.Visualpath.eval()),
+        "runtime_profile": str(control.par.Runtimeprofile.eval()),
+        "live_variations": bool(control.par.Livevariations.eval()),
         "original_scene_json": str(connector.par.Scenejson.eval()),
         "human_figure_scene_json": str(connector.par.Humanfigurejson.eval()),
         "streamdiffusion_paths": streamdiffusion_paths,

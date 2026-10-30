@@ -1,0 +1,15 @@
+{
+  "contract_version": 1,
+  "enabled": true,
+  "target_speech_rms_dbfs": -22.0,
+  "peak_ceiling_dbfs": -1.5,
+  "correct_volume_drift": true,
+  "analysis_window_seconds": 8.0,
+  "smoothing_seconds": 1.5,
+  "maximum_gain_change_db_per_second": 1.0,
+  "maximum_boost_db": 26.0,
+  "maximum_cut_db": 12.0,
+  "speech_gate_dbfs": -65.0,
+  "level_tolerance_db": 2.0,
+  "maximum_end_to_start_difference_db": 3.0
+}

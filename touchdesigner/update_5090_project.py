@@ -72,11 +72,21 @@ def update_5090_project():
             )
 
     control = connector.op("show_control")
+    control.par.Runtimeprofile = "5090_live"
+    # Model processes remain opt-in. Selecting the capable profile does not
+    # enable generation or start Ollama/Qwen3-TTS during project maintenance.
+    control.par.Livevariations = False
+    connector.par.Runtimeprofile = "5090_live"
+    control.op("control_callbacks").module._write_live_control()
     report = {
         "project": project_name,
         "project_root": str(project_root),
         "audio_source_menu": list(control.par.Audiosource.menuNames),
         "audio_source": str(control.par.Audiosource.eval()),
+        "visual_path_menu": list(control.par.Visualpath.menuNames),
+        "visual_path": str(control.par.Visualpath.eval()),
+        "runtime_profile": str(control.par.Runtimeprofile.eval()),
+        "live_variations": bool(control.par.Livevariations.eval()),
         "streamdiffusion_paths": streamdiffusion_paths,
         "spout_outputs": [
             connector.op("syphonspoutout1").path,

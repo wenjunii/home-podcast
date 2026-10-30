@@ -13,8 +13,13 @@ MAX_CROSSFADE_SECONDS = 30.0
 NORMALIZED_CROSSFADE_SECONDS = 15.0
 AUDIO_SOURCE_NAMES = ("voices", "soundscape")
 AUDIO_SOURCE_LABELS = ("Human Voices Only", "Soundscape Only")
-VISUAL_PATH_NAMES = ("original", "human_figures")
-VISUAL_PATH_LABELS = ("Original Story Visuals", "Human Figures")
+VISUAL_PATH_NAMES = ("original", "human_figures", "balanced")
+VISUAL_PATH_LABELS = ("Original Story Visuals", "Human Figures", "Balanced Memories")
+RUNTIME_PROFILE_NAMES = ("3080_safe", "5090_live")
+RUNTIME_PROFILE_LABELS = (
+    "RTX 3080 Safe — Canonical",
+    "RTX 5090 Live — Local Variations",
+)
 SPOUT_OUTPUT_SPECS = (
     (
         "syphonspoutout1",
@@ -67,6 +72,16 @@ def install_show_control(
     )
     crossfade_value = float(default_fade)
     random_seeds_value = False
+    runtime_values = {
+        "Runtimeprofile": "3080_safe",
+        "Livevariations": False,
+        "Narrationvariation": True,
+        "Speechvariation": True,
+        "Visualvariation": True,
+        "Interpretivecasting": True,
+        "Randomvariationseeds": True,
+        "Variationseed": 201312,
+    }
     color_values = dict(COLOR_DEFAULTS)
     existing = connector.op("show_control")
     if existing is not None:
@@ -93,6 +108,22 @@ def install_show_control(
             crossfade_value = float(crossfade_par.eval())
         if random_seeds_par is not None:
             random_seeds_value = bool(random_seeds_par.eval())
+        for name, default in runtime_values.items():
+            parameter = getattr(existing.par, name, None)
+            if parameter is not None:
+                converter = (
+                    bool
+                    if isinstance(default, bool)
+                    else int
+                    if isinstance(default, int)
+                    else str
+                )
+                runtime_values[name] = converter(parameter.eval())
+        runtime_values["Runtimeprofile"] = _normalize_runtime_profile(
+            runtime_values["Runtimeprofile"]
+        )
+        if runtime_values["Runtimeprofile"] == "3080_safe":
+            runtime_values["Livevariations"] = False
         brightness_par = getattr(existing.par, "Brightness", None)
         legacy_brightness_range = _has_range(
             brightness_par,
@@ -125,6 +156,7 @@ def install_show_control(
         project_root,
         visual_path=visual_path_value,
     )
+    _install_live_runtime_parameters(connector, project_root)
     crossfade_value = min(
         MAX_CROSSFADE_SECONDS,
         max(0.0, crossfade_value),
@@ -175,6 +207,50 @@ def install_show_control(
     page.appendPulse("Restart", label="Restart")
     page.appendPulse("Reload", label="Reload Scene JSON")
 
+    runtime_page = control.appendCustomPage("Local Variations")
+    runtime_profile = runtime_page.appendMenu(
+        "Runtimeprofile",
+        label="Runtime Profile",
+    )[0]
+    runtime_profile.menuNames = list(RUNTIME_PROFILE_NAMES)
+    runtime_profile.menuLabels = list(RUNTIME_PROFILE_LABELS)
+    runtime_page.appendToggle(
+        "Livevariations",
+        label="Live Local Variations",
+    )
+    runtime_page.appendToggle(
+        "Narrationvariation",
+        label="Narration Text Variation",
+    )
+    runtime_page.appendToggle(
+        "Speechvariation",
+        label="Local Speech Variation",
+    )
+    runtime_page.appendToggle(
+        "Visualvariation",
+        label="Visual Prompt Variation",
+    )
+    runtime_page.appendToggle(
+        "Interpretivecasting",
+        label="Interpretive Casting",
+    )
+    runtime_page.appendToggle(
+        "Randomvariationseeds",
+        label="Random Variation Seeds",
+    )
+    variation_seed = runtime_page.appendInt(
+        "Variationseed",
+        label="Fixed Variation Seed",
+    )[0]
+    variation_seed.min = 0
+    variation_seed.max = 2_147_483_647
+    variation_seed.clampMin = True
+    variation_seed.clampMax = True
+    runtime_page.appendPulse(
+        "Regeneratenext",
+        label="Regenerate Next Loop",
+    )
+
     color_page = control.appendCustomPage("Color")
     color_page.appendToggle(
         "Colorenabled",
@@ -213,6 +289,8 @@ def install_show_control(
     control.par.Visualpath = visual_path_value
     control.par.Randomseeds = random_seeds_value
     control.par.Crossfadesec = crossfade_value
+    for name, value in runtime_values.items():
+        getattr(control.par, name).val = value
     for name, value in color_values.items():
         getattr(control.par, name).val = value
 
@@ -223,6 +301,18 @@ def install_show_control(
     help_table.appendRow(["Play", "Play or pause the TouchDesigner timeline"])
     help_table.appendRow(
         ["Audio Enabled", "Send the selected audio source to the device"]
+    )
+    help_table.appendRow(
+        [
+            "Live Local Variations",
+            "Off keeps canonical Codex prompts and cached ElevenLabs speech; on asks the local worker to prepare a validated future rendition",
+        ]
+    )
+    help_table.appendRow(
+        [
+            "Runtime Profile",
+            "3080 Safe never loads local language or speech models; 5090 Live permits the file-controlled local worker",
+        ]
     )
     help_table.appendRow(
         [
@@ -272,6 +362,9 @@ def install_show_control(
         "Newseeds Restart Reload "
         "Colorenabled Brightness Contrast Gamma Blacklevel Opacity Hue "
         "Saturation Value Resetcolor"
+        " Runtimeprofile Livevariations Narrationvariation Speechvariation"
+        " Visualvariation Interpretivecasting Randomvariationseeds Variationseed"
+        " Regeneratenext"
     )
     callbacks.par.valuechange = True
     callbacks.par.valueschanged = False
@@ -282,6 +375,54 @@ def install_show_control(
     _install_color_pipelines(connector, operator_types)
     _install_spout_outputs(connector, operator_types)
     return control
+
+
+def _install_live_runtime_parameters(connector, project_root):
+    podcast_page = next(
+        (
+            page
+            for page in getattr(connector, "customPages", ())
+            if page.name == "Podcast"
+        ),
+        None,
+    )
+    if podcast_page is None:
+        podcast_page = connector.appendCustomPage("Podcast")
+    profile = getattr(connector.par, "Runtimeprofile", None)
+    if profile is None:
+        profile = podcast_page.appendMenu(
+            "Runtimeprofile", label="Runtime Profile"
+        )[0]
+    profile.menuNames = list(RUNTIME_PROFILE_NAMES)
+    profile.menuLabels = list(RUNTIME_PROFILE_LABELS)
+    if getattr(connector.par, "Livecontroljson", None) is None:
+        podcast_page.appendFile("Livecontroljson", label="Live Control JSON")
+    if getattr(connector.par, "Livestatusjson", None) is None:
+        podcast_page.appendFile("Livestatusjson", label="Live Status JSON")
+    if getattr(connector.par, "Livecurrentjson", None) is None:
+        podcast_page.appendFile("Livecurrentjson", label="Current Live Bundle JSON")
+    if getattr(connector.par, "Currentnarrationid", None) is None:
+        podcast_page.appendStr("Currentnarrationid", label="Current Narration ID")
+    if getattr(connector.par, "Canonicalvisuals", None) is None:
+        podcast_page.appendFile("Canonicalvisuals", label="Canonical Narration Visuals")
+    if getattr(connector.par, "Canonicalhumanvisuals", None) is None:
+        podcast_page.appendFile(
+            "Canonicalhumanvisuals",
+            label="Canonical Human-Figure Visuals",
+        )
+    runtime_root = project_root / "work" / "storytelling-real-december" / "runtime"
+    connector.par.Livecontroljson = str(runtime_root / "control.json")
+    connector.par.Livestatusjson = str(runtime_root / "status.json")
+    connector.par.Livecurrentjson = str(runtime_root / "current.json")
+    if not str(connector.par.Canonicalvisuals.eval()).strip():
+        connector.par.Canonicalvisuals = str(connector.par.Scenejson.eval())
+    if not str(connector.par.Canonicalhumanvisuals.eval()).strip():
+        human = getattr(connector.par, "Humanfigurejson", None)
+        if human is not None:
+            connector.par.Canonicalhumanvisuals = str(human.eval())
+    if not str(profile.eval()).strip():
+        connector.par.Runtimeprofile = "3080_safe"
+    return profile
 
 
 def _normalize_audio_source(value):
@@ -309,7 +450,7 @@ def _normalize_visual_path(value):
     if hasattr(value, "eval"):
         value = value.eval()
     if isinstance(value, (int, float)):
-        return VISUAL_PATH_NAMES[1 if int(value) == 1 else 0]
+        return VISUAL_PATH_NAMES[int(value) if int(value) in (1, 2) else 0]
     normalized = str(value or "").strip().casefold().replace(" ", "_")
     if normalized in {
         "1",
@@ -319,11 +460,22 @@ def _normalize_visual_path(value):
         "humanfigures",
     }:
         return "human_figures"
+    if normalized in {"2", "balanced", "balanced_memories"}:
+        return "balanced"
     return "original"
 
 
+def _normalize_runtime_profile(value):
+    if hasattr(value, "eval"):
+        value = value.eval()
+    if isinstance(value, (int, float)):
+        return "5090_live" if int(value) == 1 else "3080_safe"
+    normalized = str(value or "").strip().casefold().replace(" ", "_")
+    return "5090_live" if normalized in {"1", "5090", "5090_live"} else "3080_safe"
+
+
 def _visual_path_index(value):
-    return 1 if _normalize_visual_path(value) == "human_figures" else 0
+    return VISUAL_PATH_NAMES.index(_normalize_visual_path(value))
 
 
 def _install_visual_path_parameters(
@@ -351,6 +503,9 @@ def _install_visual_path_parameters(
         )[0]
     visual_parameter.menuNames = list(VISUAL_PATH_NAMES)
     visual_parameter.menuLabels = list(VISUAL_PATH_LABELS)
+
+    if getattr(connector.par, "Balancedjson", None) is None:
+        podcast_page.appendFile("Balancedjson", label="Balanced Memories Scene JSON")
 
     human_json_parameter = getattr(connector.par, "Humanfigurejson", None)
     if human_json_parameter is None:

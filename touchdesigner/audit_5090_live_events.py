@@ -25,6 +25,7 @@ VALUE_CONTROLS = (
     "Play",
     "Audioenabled",
     "Audiosource",
+    "Visualpath",
     "Randomseeds",
     "Crossfadesec",
     "Colorenabled",
@@ -36,6 +37,14 @@ VALUE_CONTROLS = (
     "Hue",
     "Saturation",
     "Value",
+    "Runtimeprofile",
+    "Livevariations",
+    "Narrationvariation",
+    "Speechvariation",
+    "Visualvariation",
+    "Interpretivecasting",
+    "Randomvariationseeds",
+    "Variationseed",
 )
 
 
@@ -174,6 +183,25 @@ def audit_5090_live_events():
             ),
         )
 
+    for visual_path, parameter_name in (
+        ("human_figures", "Humanfigurejson"),
+        ("original", "Scenejson"),
+    ):
+        action_and_check(
+            f"op({CONTROL_PATH!r}).par.Visualpath={visual_path!r}",
+            f"menu:Visualpath:{visual_path}",
+            (
+                f"op({CONNECTOR_PATH!r}).par.Visualpath.eval()=={visual_path!r} and "
+                f"op({EXECUTE_PATH!r}).module.get_controller().loaded_path=="
+                f"op({EXECUTE_PATH!r}).module.get_controller()._resolve_path("
+                f"str(getattr(op({CONNECTOR_PATH!r}).par,{parameter_name!r}).eval()))"
+            ),
+            (
+                f"(op({CONNECTOR_PATH!r}).par.Visualpath.eval(),"
+                f"op({EXECUTE_PATH!r}).module.get_controller().loaded_path)"
+            ),
+        )
+
     for enabled, expected in ((False, False), (True, True)):
         action_and_check(
             f"op({CONTROL_PATH!r}).par.Randomseeds={enabled!r}",
@@ -186,6 +214,28 @@ def audit_5090_live_events():
                 f"op({EXECUTE_PATH!r}).module.get_controller()"
                 "._random_seeds_enabled()"
             ),
+        )
+
+    schedule(f"op({CONTROL_PATH!r}).par.Runtimeprofile='5090_live'", frames=2)
+    action_and_check(
+        f"op({CONTROL_PATH!r}).par.Livevariations=True",
+        "runtime:5090_live_can_enable",
+        f"op({CONTROL_PATH!r}).par.Livevariations.eval()",
+        f"op({CONTROL_PATH!r}).par.Livevariations.eval()",
+    )
+    for name, value in (
+        ("Narrationvariation", True),
+        ("Speechvariation", True),
+        ("Visualvariation", True),
+        ("Interpretivecasting", True),
+        ("Randomvariationseeds", True),
+        ("Variationseed", 12345),
+    ):
+        action_and_check(
+            f"op({CONTROL_PATH!r}).par.{name}={value!r}",
+            f"runtime:{name}",
+            f"op({CONTROL_PATH!r}).par.{name}.eval()=={value!r}",
+            f"op({CONTROL_PATH!r}).par.{name}.eval()",
         )
 
     for value in (0.0, 30.0):
@@ -287,6 +337,27 @@ def audit_5090_live_events():
                 ".seed_generation"
             ),
         ),
+    )
+    schedule(
+        (
+            f"op({CONTROL_PATH!r}).store('recovered_homes_live_nonce_before',"
+            f"op({CALLBACK_PATH!r}).module._write_live_control()"
+            "['regeneration_nonce']);"
+            f"op({CONTROL_PATH!r}).par.Regeneratenext.pulse()"
+        ),
+        frames=2,
+    )
+    schedule(
+        _append_check_code(
+            "button:Regeneratenext",
+            (
+                f"op({CALLBACK_PATH!r}).module._read_json_object("
+                f"__import__('pathlib').Path(str(op({CONNECTOR_PATH!r}).par."
+                "Livecontroljson.eval())))['regeneration_nonce']=="
+                f"op({CONTROL_PATH!r}).fetch('recovered_homes_live_nonce_before')+1"
+            ),
+            f"op({CONTROL_PATH!r}).fetch('recovered_homes_live_nonce_before')",
+        )
     )
 
     schedule(
@@ -405,7 +476,7 @@ def audit_5090_live_events():
             "if not _result['passed']];"
             "_report={"
             f"'project':{project_name!r},"
-            "'controls_exercised':18,"
+            f"'controls_exercised':{len(VALUE_CONTROLS) + 5},"
             "'event_checks_passed':len(_results)-len(_failures),"
             "'event_checks_failed':len(_failures),"
             "'failures':_failures,"
@@ -422,7 +493,7 @@ def audit_5090_live_events():
 
     scheduled = {
         "project": project_name,
-        "controls_scheduled": 18,
+        "controls_scheduled": len(VALUE_CONTROLS) + 5,
         "completion_frame_delay": next_frame,
         "saved": False,
         "model_servers_started": False,

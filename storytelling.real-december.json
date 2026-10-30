@@ -1,0 +1,16 @@
+{
+  "extends": "podcast.json",
+  "project_name": "Recovered Homes — Self-Narrated December 2013 Stories",
+  "production_mode": "self_narrated_storytelling",
+  "exports_dir": "data/full_exports/2013-12",
+  "catalog_path": "data/catalog-real-december.sqlite3",
+  "show_bible_path": "config/storytelling_bible.json",
+  "voice_roster_path": "config/storytelling_voice_policy.json",
+  "episodes_dir": "narrations/real-december",
+  "work_dir": "work/storytelling-real-december",
+  "audio_dir": "audio/storytelling-real-december",
+  "information_driven_planning": true,
+  "target_stories_per_installment": 1,
+  "target_minutes_min": 0,
+  "target_minutes_max": 5
+}

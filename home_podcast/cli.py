@@ -37,6 +37,35 @@ from .script_runner import generate_episode_script
 from .scene_soundscape import validate_scene_soundscape
 from .sfx_runner import generate_sound_effect_jobs
 from .sound_design import prepare_sfx_jobs, validate_sound_design
+from .live_storytelling import (
+    execute_live_variation,
+    live_storytelling_doctor,
+    prepare_live_variation,
+    read_live_control,
+    run_live_worker,
+    update_live_control,
+)
+from .local_audio import (
+    approve_local_voice,
+    assemble_local_speech,
+    assemble_local_speech_collection,
+    assemble_local_soundscape_collection,
+    generate_local_ambient,
+    generate_local_speech,
+    generate_local_voice_audition,
+    local_audio_doctor,
+    prepare_local_ambient,
+    prepare_local_ambient_collection,
+    prepare_local_speech_jobs,
+    prepare_local_voice_audition,
+)
+from .storytelling import (
+    create_storytelling_cast,
+    create_storytelling_plan,
+    export_storytelling_jobs,
+    import_storytelling_adaptations,
+    validate_storytelling_adaptation,
+)
 from .transcripts import render_transcripts
 from .tts_runner import generate_tts_jobs
 from .visual_prompt_runner import (
@@ -54,9 +83,16 @@ from .voice_audition import prepare_voice_candidate_audition_jobs
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="home-podcast",
-        description="Incremental production pipeline for the Recovered Homes podcast.",
+        description=(
+            "Incremental production pipeline for Recovered Homes storytelling "
+            "and its preserved podcast format."
+        ),
     )
-    parser.add_argument("--config", default="podcast.json", help="Path to podcast.json")
+    parser.add_argument(
+        "--config",
+        default="podcast.json",
+        help="Path to a Recovered Homes project config JSON",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     subparsers.add_parser("doctor", help="Check local project and pilot prerequisites")
@@ -140,6 +176,272 @@ def build_parser() -> argparse.ArgumentParser:
         help="Override the title when the proposal contains exactly one episode",
     )
     plan.add_argument("--output", help="Proposal JSON path")
+
+    storytelling_plan = subparsers.add_parser(
+        "plan-storytelling",
+        help="Create one evidence-grounded narration assignment per eligible story",
+    )
+    storytelling_plan.add_argument("--month", required=True)
+    storytelling_plan.add_argument("--output", help="Storytelling plan JSON path")
+
+    storytelling_export = subparsers.add_parser(
+        "export-storytelling",
+        help="Export uncached self-narrated adaptation jobs without network calls",
+    )
+    storytelling_export.add_argument("--plan", required=True)
+    storytelling_export.add_argument("--output", help="Adaptation jobs JSONL path")
+    storytelling_export.add_argument("--include-existing", action="store_true")
+    storytelling_export.add_argument("--limit", type=int)
+
+    storytelling_import = subparsers.add_parser(
+        "import-storytelling",
+        help="Validate and import locally authored story adaptations",
+    )
+    storytelling_import.add_argument("--input", required=True)
+    storytelling_import.add_argument("--jobs", required=True)
+    storytelling_import.add_argument("--report", help="Import report JSON path")
+
+    storytelling_validate = subparsers.add_parser(
+        "validate-storytelling",
+        help="Validate one adaptation against its exact source job",
+    )
+    storytelling_validate.add_argument("--adaptation", required=True)
+    storytelling_validate.add_argument("--job", required=True)
+
+    storytelling_cast = subparsers.add_parser(
+        "cast-storytelling",
+        help="Select and freeze one auditioned narrator for an adaptation",
+    )
+    storytelling_cast.add_argument("--narration", required=True)
+    storytelling_cast.add_argument("--adaptation")
+    storytelling_cast.add_argument("--output")
+
+    live_doctor = subparsers.add_parser(
+        "live-storytelling-doctor",
+        help="Check one local storytelling runtime profile without loading models",
+    )
+    live_doctor.add_argument(
+        "--profile",
+        choices=("3080_safe", "5090_live"),
+        default="3080_safe",
+    )
+    live_doctor.add_argument("--skip-ollama", action="store_true")
+
+    live_control = subparsers.add_parser(
+        "set-live-storytelling",
+        help="Update the file-based Show Control state used by the local worker",
+    )
+    live_control.add_argument(
+        "--profile", choices=("3080_safe", "5090_live")
+    )
+    live_enabled = live_control.add_mutually_exclusive_group()
+    live_enabled.add_argument("--enable", action="store_true")
+    live_enabled.add_argument("--disable", action="store_true")
+    for name in ("narration", "speech", "visual"):
+        group = live_control.add_mutually_exclusive_group()
+        group.add_argument(f"--{name}-variation", action="store_true")
+        group.add_argument(f"--canonical-{name}", action="store_true")
+    live_control.add_argument(
+        "--casting-mode",
+        choices=("evidence_conservative", "interpretive"),
+    )
+    live_control.add_argument("--seed-mode", choices=("fixed", "random"))
+    live_control.add_argument("--fixed-seed", type=int)
+    live_control.add_argument("--narration")
+    live_control.add_argument("--visuals")
+    live_control.add_argument("--human-visuals")
+    live_control.add_argument("--regenerate", action="store_true")
+
+    live_prepare = subparsers.add_parser(
+        "prepare-live-variation",
+        help="Prepare a no-network, exact-call-ceiling local variation request",
+    )
+    live_prepare.add_argument("--narration", required=True)
+    live_prepare.add_argument(
+        "--profile",
+        choices=("3080_safe", "5090_live"),
+        default="5090_live",
+    )
+    live_prepare.add_argument("--loop-index", type=int, required=True)
+    live_prepare.add_argument(
+        "--casting-mode",
+        choices=("evidence_conservative", "interpretive"),
+        default="interpretive",
+    )
+    live_prepare.add_argument("--seed", type=int)
+    live_prepare.add_argument("--visuals")
+    live_prepare.add_argument("--human-visuals")
+
+    live_execute = subparsers.add_parser(
+        "execute-live-variation",
+        help="Run a prepared variation through local Ollama and Qwen3-TTS",
+    )
+    live_execute.add_argument("--request", required=True)
+    live_execute.add_argument("--canonical-narration", action="store_true")
+    live_execute.add_argument("--canonical-speech", action="store_true")
+    live_execute.add_argument("--canonical-visuals", action="store_true")
+
+    live_worker = subparsers.add_parser(
+        "run-live-storytelling-worker",
+        help="Watch Show Control state and build validated next-loop buffers locally",
+    )
+    live_worker.add_argument("--once", action="store_true")
+    live_worker.add_argument("--poll-seconds", type=float, default=0.5)
+    live_worker.add_argument("--max-iterations", type=int)
+
+    story_audio = subparsers.add_parser(
+        "story-audio", help="Resumable whole-story VoiceDesign production on the offline 3080"
+    )
+    story_audio.add_argument("stage", choices=("queue", "prepare", "render", "audit", "quality", "package", "verify", "approve"))
+    story_audio.add_argument("--brief")
+    story_audio.add_argument("--production-index")
+    story_audio.add_argument("--limit", type=int, default=25)
+    story_audio.add_argument("--profile", default="3080_offline_production")
+    story_audio.add_argument("--execute", action="store_true")
+    story_audio.add_argument("--max-calls", type=int)
+    story_audio.add_argument("--reviewer")
+    story_audio.add_argument("--approval-note")
+
+    ambient_batch = subparsers.add_parser(
+        "ambient-batch", help="Evidence-bound offline CUDA soundscapes for approved narrations"
+    )
+    ambient_batch.add_argument("stage", choices=("prepare", "dry-run", "render", "quality", "audit", "package", "verify"))
+    ambient_batch.add_argument("--brief", required=True)
+    ambient_batch.add_argument("--execute", action="store_true")
+    ambient_batch.add_argument("--max-calls", type=int)
+
+    local_doctor = subparsers.add_parser(
+        "local-audio-doctor",
+        help="Check the sequential 3080 offline-audio runtime without loading models",
+    )
+    local_doctor.add_argument("--profile", default="3080_offline_production")
+    local_doctor.add_argument("--local-audio-config")
+    local_doctor.add_argument(
+        "--component", choices=("all", "qwen", "ambient"), default="all"
+    )
+
+    local_audition_prepare = subparsers.add_parser(
+        "prepare-local-voice-audition",
+        help="Build a diverse, no-network Qwen VoiceDesign audition plan",
+    )
+    local_audition_prepare.add_argument("--production-index")
+    local_audition_prepare.add_argument("--output")
+    local_audition_prepare.add_argument("--profile", default="3080_offline_production")
+    local_audition_prepare.add_argument("--local-audio-config")
+    local_audition_prepare.add_argument("--voice-limit", type=int)
+
+    local_audition_generate = subparsers.add_parser(
+        "generate-local-voice-audition",
+        help="Dry-run or resumably execute the local Qwen VoiceDesign audition",
+    )
+    local_audition_generate.add_argument("--plan", required=True)
+    local_audition_generate.add_argument("--execute", action="store_true")
+    local_audition_generate.add_argument("--max-calls", type=int)
+    local_audition_generate.add_argument("--limit", type=int)
+    local_audition_generate.add_argument("--allow-model-download", action="store_true")
+    local_audition_generate.add_argument("--local-audio-config")
+
+    local_voice_approve = subparsers.add_parser(
+        "approve-local-voice",
+        help="Record one reviewed synthetic audition voice in the local roster",
+    )
+    local_voice_approve.add_argument("--plan", required=True)
+    local_voice_approve.add_argument("--voice-id", required=True)
+    local_voice_approve.add_argument("--reviewer", required=True)
+    local_voice_approve.add_argument("--roster")
+
+    local_speech_prepare = subparsers.add_parser(
+        "prepare-local-speech",
+        help="Freeze approved local casts and export resumable section TTS jobs",
+    )
+    local_speech_prepare.add_argument("--production-index")
+    local_speech_prepare.add_argument("--roster")
+    local_speech_prepare.add_argument("--output")
+    local_speech_prepare.add_argument("--profile", default="3080_offline_production")
+    local_speech_prepare.add_argument("--local-audio-config")
+    local_speech_prepare.add_argument("--narration-limit", type=int)
+    local_speech_prepare.add_argument(
+        "--allow-conservative-editions",
+        action="store_true",
+        help="Include editions carrying the explicit conservative-spoken-edition warning",
+    )
+
+    local_speech_generate = subparsers.add_parser(
+        "generate-local-speech",
+        help="Dry-run or resumably execute cached Qwen voice-clone section jobs",
+    )
+    local_speech_generate.add_argument("--jobs", required=True)
+    local_speech_generate.add_argument("--execute", action="store_true")
+    local_speech_generate.add_argument("--max-calls", type=int)
+    local_speech_generate.add_argument("--limit", type=int)
+    local_speech_generate.add_argument("--allow-model-download", action="store_true")
+    local_speech_generate.add_argument("--profile", default="3080_offline_production")
+    local_speech_generate.add_argument("--local-audio-config")
+
+    local_speech_assemble = subparsers.add_parser(
+        "assemble-local-speech",
+        help="Assemble cached narration sections into voices-only audio and captions",
+    )
+    local_speech_assemble.add_argument("--jobs", required=True)
+    local_speech_assemble.add_argument("--narration", required=True)
+    local_speech_assemble.add_argument("--output-dir")
+
+    local_speech_assemble_all = subparsers.add_parser(
+        "assemble-local-speech-collection",
+        help="Assemble every complete narration while reporting incomplete ones",
+    )
+    local_speech_assemble_all.add_argument("--jobs", required=True)
+    local_speech_assemble_all.add_argument("--narration-limit", type=int)
+
+    speech_master = subparsers.add_parser(
+        "master-local-speech",
+        help="Make a level-consistent playback copy of an existing WAV; no TTS calls",
+    )
+    speech_master.add_argument("--audio", required=True)
+    speech_master.add_argument("--output-dir", required=True)
+    speech_master.add_argument("--asr-report")
+
+    local_ambient_prepare = subparsers.add_parser(
+        "prepare-local-ambient",
+        help="Create continuous evidence-conservative Stable Audio jobs for one narration",
+    )
+    local_ambient_prepare.add_argument("--timeline", required=True)
+    local_ambient_prepare.add_argument("--adaptation", required=True)
+    local_ambient_prepare.add_argument("--sound-design", required=True)
+    local_ambient_prepare.add_argument("--jobs", required=True)
+    local_ambient_prepare.add_argument("--profile", default="3080_offline_production")
+    local_ambient_prepare.add_argument("--local-audio-config")
+
+    local_ambient_generate = subparsers.add_parser(
+        "generate-local-ambient",
+        help="Dry-run or resumably execute Stable Audio 3 ambient jobs",
+    )
+    local_ambient_generate.add_argument("--jobs", required=True)
+    local_ambient_generate.add_argument("--execute", action="store_true")
+    local_ambient_generate.add_argument("--max-calls", type=int)
+    local_ambient_generate.add_argument("--limit", type=int)
+    local_ambient_generate.add_argument("--allow-model-download", action="store_true")
+    local_ambient_generate.add_argument("--profile", default="3080_offline_production")
+    local_ambient_generate.add_argument("--local-audio-config")
+
+    local_ambient_prepare_all = subparsers.add_parser(
+        "prepare-local-ambient-collection",
+        help="Prepare continuous Stable Audio plans for all assembled narrations",
+    )
+    local_ambient_prepare_all.add_argument("--production-index")
+    local_ambient_prepare_all.add_argument("--output")
+    local_ambient_prepare_all.add_argument(
+        "--profile", default="3080_offline_production"
+    )
+    local_ambient_prepare_all.add_argument("--local-audio-config")
+    local_ambient_prepare_all.add_argument("--narration-limit", type=int)
+
+    local_soundscape_assemble_all = subparsers.add_parser(
+        "assemble-local-soundscape-collection",
+        help="Render all complete voices-only and soundscape-only story tracks",
+    )
+    local_soundscape_assemble_all.add_argument("--production-index")
+    local_soundscape_assemble_all.add_argument("--narration-limit", type=int)
 
     lock = subparsers.add_parser(
         "lock-episode", help="Freeze one proposed installment as an episode manifest"
@@ -544,6 +846,8 @@ def main(argv: list[str] | None = None) -> int:
         _print_json(result)
         if args.command == "validate-script" and not result["valid"]:
             return 2
+        if args.command == "validate-storytelling" and not result["valid"]:
+            return 2
         if args.command == "generate-script" and not result["valid"]:
             return 2
         if args.command == "trim-script" and not result["valid"]:
@@ -568,6 +872,9 @@ def main(argv: list[str] | None = None) -> int:
                 "generate-sfx",
                 "generate-tts",
                 "generate-visual-prompts",
+                "generate-local-voice-audition",
+                "generate-local-speech",
+                "generate-local-ambient",
             }
             and result["execution_requested"]
             and result["failed"]
@@ -662,6 +969,369 @@ def _dispatch(config: ProjectConfig, args: argparse.Namespace) -> dict[str, Any]
             "installments": len(proposal["installments"]),
             **proposal["coverage"],
         }
+    if args.command == "plan-storytelling":
+        output = _path_or_default(
+            args.output,
+            config.work_dir / "planning" / f"{args.month}-storytelling-plan.json",
+        )
+        storytelling_plan = create_storytelling_plan(
+            config,
+            args.month,
+            output,
+        )
+        return {
+            "output": str(output),
+            **storytelling_plan["coverage"],
+            "network_calls": 0,
+        }
+    if args.command == "export-storytelling":
+        plan_path = Path(args.plan).resolve()
+        plan_value = json.loads(plan_path.read_text(encoding="utf-8"))
+        month = str(plan_value.get("archive_volume", "storytelling"))
+        output = _path_or_default(
+            args.output,
+            config.work_dir / "adaptations" / f"{month}-jobs.jsonl",
+        )
+        return export_storytelling_jobs(
+            config,
+            plan_path,
+            output,
+            include_existing=args.include_existing,
+            limit=args.limit,
+        )
+    if args.command == "import-storytelling":
+        report = _path_or_default(
+            args.report,
+            config.work_dir / "adaptations" / "import-report.json",
+        )
+        return import_storytelling_adaptations(
+            config,
+            Path(args.input).resolve(),
+            Path(args.jobs).resolve(),
+            report,
+        )
+    if args.command == "validate-storytelling":
+        return validate_storytelling_adaptation(
+            Path(args.adaptation).resolve(),
+            Path(args.job).resolve(),
+        )
+    if args.command == "cast-storytelling":
+        adaptation = _path_or_default(
+            args.adaptation,
+            config.episodes_dir / args.narration / "adaptation.json",
+        )
+        output = _path_or_default(
+            args.output,
+            config.episodes_dir / args.narration / "cast.json",
+        )
+        cast_value, created, pending_reason = create_storytelling_cast(
+            config,
+            args.narration,
+            adaptation,
+            output,
+        )
+        return {
+            "output": str(output),
+            "created": created,
+            "narration_id": args.narration,
+            "ready": cast_value is not None,
+            "pending_reason": pending_reason,
+            "narrator": cast_value.get("narrator") if cast_value else None,
+            "network_calls": 0,
+        }
+    if args.command == "live-storytelling-doctor":
+        return live_storytelling_doctor(
+            config,
+            profile_name=args.profile,
+            check_ollama=not args.skip_ollama,
+        )
+    if args.command == "set-live-storytelling":
+        changes: dict[str, Any] = {}
+        if args.profile:
+            changes["profile"] = args.profile
+        if args.enable:
+            changes["enabled"] = True
+        elif args.disable:
+            changes["enabled"] = False
+        for name in ("narration", "speech", "visual"):
+            if getattr(args, f"{name}_variation"):
+                changes[f"{name}_variation"] = True
+            elif getattr(args, f"canonical_{name}"):
+                changes[f"{name}_variation"] = False
+        if args.casting_mode:
+            changes["casting_mode"] = args.casting_mode
+        if args.seed_mode:
+            changes["seed_mode"] = args.seed_mode
+        if args.fixed_seed is not None:
+            changes["fixed_seed"] = args.fixed_seed
+        if args.narration is not None:
+            changes["current_narration_id"] = args.narration
+        if args.visuals is not None:
+            changes["canonical_visuals"] = str(Path(args.visuals).resolve())
+        if args.human_visuals is not None:
+            changes["canonical_human_visuals"] = str(
+                Path(args.human_visuals).resolve()
+            )
+        if args.regenerate:
+            changes["regeneration_nonce"] = (
+                int(read_live_control(config)["regeneration_nonce"]) + 1
+            )
+        control = update_live_control(config, changes)
+        return {
+            "control": control,
+            "control_path": str(config.work_dir / "runtime" / "control.json"),
+            "network_calls": 0,
+            "paid_calls": 0,
+        }
+    if args.command == "prepare-live-variation":
+        return prepare_live_variation(
+            config,
+            args.narration,
+            profile_name=args.profile,
+            loop_index=args.loop_index,
+            casting_mode=args.casting_mode,
+            seed=args.seed,
+            canonical_visuals_path=(
+                Path(args.visuals).resolve() if args.visuals else None
+            ),
+            canonical_human_visuals_path=(
+                Path(args.human_visuals).resolve() if args.human_visuals else None
+            ),
+        )
+    if args.command == "execute-live-variation":
+        return execute_live_variation(
+            config,
+            Path(args.request).resolve(),
+            narration_variation=not args.canonical_narration,
+            speech_variation=not args.canonical_speech,
+            visual_variation=not args.canonical_visuals,
+        )
+    if args.command == "run-live-storytelling-worker":
+        return run_live_worker(
+            config,
+            once=args.once,
+            poll_seconds=args.poll_seconds,
+            max_iterations=args.max_iterations,
+        )
+    if args.command == "ambient-batch":
+        from .ambient_batch import AmbientBatch
+        runner = AmbientBatch(config, Path(args.brief))
+        if args.stage == "render":
+            return runner.render(execute=args.execute, max_calls=args.max_calls)
+        result = getattr(runner, args.stage.replace("-", "_"))()
+        if args.stage == "quality" and result.get("held_assets"):
+            raise ValueError("Ambient assets held; see the saved quality report")
+        if args.stage == "audit" and result.get("recognized_segments"):
+            raise ValueError("Possible ambient speech; see the saved diagnostic")
+        return result
+    if args.command == "story-audio":
+        from .local_audio import load_local_audio_config
+        from .single_take_audio import MODEL, REVISION, SingleTakeProduction, read
+        _, profile, _ = load_local_audio_config(config, profile_name=args.profile)
+        narration = profile["narration"]
+        if (narration.get("production_mode") != "single_take_voice_design"
+                or narration.get("production_model") != MODEL
+                or narration.get("production_model_revision") != REVISION):
+            raise ValueError("story-audio requires the pinned single_take_voice_design offline profile")
+        runner = SingleTakeProduction(config, model_path=(
+            Path(narration["production_model_path"]) if narration.get("production_model_path") else None))
+        if args.stage == "queue":
+            if not args.production_index:
+                raise ValueError("queue requires --production-index pointing to a reviewed production index")
+            return runner.queue(Path(args.production_index).resolve(), limit=args.limit)
+        if not args.brief:
+            raise ValueError("This story-audio stage requires --brief with reviewed casting and delivery")
+        brief = read(Path(args.brief).resolve())
+        if args.stage == "prepare":
+            return runner.prepare(brief)
+        plan = read(runner.paths(brief)[0] / "plan.json")
+        if args.stage == "render":
+            return runner.render(brief, plan, execute=args.execute, max_calls=args.max_calls)
+        if args.stage == "approve":
+            return runner.approve(brief, plan, reviewer=args.reviewer or "", note=args.approval_note or "")
+        return getattr(runner, args.stage)(brief, plan)
+    if args.command == "local-audio-doctor":
+        return local_audio_doctor(
+            config,
+            profile_name=args.profile,
+            local_config_path=(
+                Path(args.local_audio_config).resolve()
+                if args.local_audio_config
+                else None
+            ),
+            component=args.component,
+        )
+    if args.command == "prepare-local-voice-audition":
+        return prepare_local_voice_audition(
+            config,
+            _path_or_default(
+                args.production_index,
+                config.project_root
+                / "series"
+                / "2013-12"
+                / "storytelling-production-index.json",
+            ),
+            _path_or_default(
+                args.output,
+                config.work_dir / "local-audio" / "voice-audition-plan.json",
+            ),
+            profile_name=args.profile,
+            local_config_path=(
+                Path(args.local_audio_config).resolve()
+                if args.local_audio_config
+                else None
+            ),
+            voice_limit=args.voice_limit,
+        )
+    if args.command == "generate-local-voice-audition":
+        return generate_local_voice_audition(
+            config,
+            Path(args.plan).resolve(),
+            execute=args.execute,
+            max_calls=args.max_calls,
+            limit=args.limit,
+            allow_model_download=args.allow_model_download,
+            local_config_path=(
+                Path(args.local_audio_config).resolve()
+                if args.local_audio_config
+                else None
+            ),
+        )
+    if args.command == "approve-local-voice":
+        return approve_local_voice(
+            config,
+            Path(args.plan).resolve(),
+            args.voice_id,
+            _path_or_default(
+                args.roster, config.project_root / "config" / "local_voice_roster.json"
+            ),
+            reviewer=args.reviewer,
+        )
+    if args.command == "prepare-local-speech":
+        return prepare_local_speech_jobs(
+            config,
+            _path_or_default(
+                args.production_index,
+                config.project_root
+                / "series"
+                / "2013-12"
+                / "storytelling-production-index.json",
+            ),
+            _path_or_default(
+                args.roster, config.project_root / "config" / "local_voice_roster.json"
+            ),
+            _path_or_default(
+                args.output,
+                config.work_dir / "local-audio" / "production-speech-jobs.jsonl",
+            ),
+            profile_name=args.profile,
+            local_config_path=(
+                Path(args.local_audio_config).resolve()
+                if args.local_audio_config
+                else None
+            ),
+            narration_limit=args.narration_limit,
+            allow_conservative_editions=args.allow_conservative_editions,
+        )
+    if args.command == "generate-local-speech":
+        return generate_local_speech(
+            config,
+            Path(args.jobs).resolve(),
+            execute=args.execute,
+            max_calls=args.max_calls,
+            limit=args.limit,
+            allow_model_download=args.allow_model_download,
+            profile_name=args.profile,
+            local_config_path=(
+                Path(args.local_audio_config).resolve()
+                if args.local_audio_config
+                else None
+            ),
+        )
+    if args.command == "assemble-local-speech":
+        return assemble_local_speech(
+            config,
+            Path(args.jobs).resolve(),
+            args.narration,
+            output_dir=(Path(args.output_dir).resolve() if args.output_dir else None),
+        )
+    if args.command == "assemble-local-speech-collection":
+        return assemble_local_speech_collection(
+            config,
+            Path(args.jobs).resolve(),
+            narration_limit=args.narration_limit,
+        )
+    if args.command == "master-local-speech":
+        from .speech_mastering import load_settings, master_speech
+
+        result = master_speech(
+            Path(args.audio), Path(args.output_dir), load_settings(config.project_root),
+            asr_path=Path(args.asr_report) if args.asr_report else None,
+        )
+        return {key: value for key, value in result.items() if key not in {"metrics", "identity"}}
+    if args.command == "prepare-local-ambient":
+        return prepare_local_ambient(
+            config,
+            Path(args.timeline).resolve(),
+            Path(args.adaptation).resolve(),
+            Path(args.sound_design).resolve(),
+            Path(args.jobs).resolve(),
+            profile_name=args.profile,
+            local_config_path=(
+                Path(args.local_audio_config).resolve()
+                if args.local_audio_config
+                else None
+            ),
+        )
+    if args.command == "generate-local-ambient":
+        return generate_local_ambient(
+            config,
+            Path(args.jobs).resolve(),
+            execute=args.execute,
+            max_calls=args.max_calls,
+            limit=args.limit,
+            allow_model_download=args.allow_model_download,
+            profile_name=args.profile,
+            local_config_path=(
+                Path(args.local_audio_config).resolve()
+                if args.local_audio_config
+                else None
+            ),
+        )
+    if args.command == "prepare-local-ambient-collection":
+        return prepare_local_ambient_collection(
+            config,
+            _path_or_default(
+                args.production_index,
+                config.project_root
+                / "series"
+                / "2013-12"
+                / "storytelling-production-index.json",
+            ),
+            _path_or_default(
+                args.output,
+                config.work_dir / "local-audio" / "ambient-jobs.jsonl",
+            ),
+            profile_name=args.profile,
+            local_config_path=(
+                Path(args.local_audio_config).resolve()
+                if args.local_audio_config
+                else None
+            ),
+            narration_limit=args.narration_limit,
+        )
+    if args.command == "assemble-local-soundscape-collection":
+        return assemble_local_soundscape_collection(
+            config,
+            _path_or_default(
+                args.production_index,
+                config.project_root
+                / "series"
+                / "2013-12"
+                / "storytelling-production-index.json",
+            ),
+            narration_limit=args.narration_limit,
+        )
     if args.command == "lock-episode":
         path, created = lock_episode_manifest(
             config, Path(args.proposal).resolve(), args.episode

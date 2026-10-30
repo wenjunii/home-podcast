@@ -117,3 +117,50 @@ Return raw JSON only. Preserve the supplied `scene_id`.
   "editorial_review_required": true
 }
 ```
+
+## Active self-narrated collection
+
+When the job belongs to a self-narrated story, use only its editorially approved
+personal experience and reviewed analysis, never an unreviewed page inventory.
+Every scene must map to reviewed section IDs and an exact `personal_story_excerpt`
+from that narration. A place in a sidebar, travel category, unrelated post,
+advertisement, or archive is not the scene location. Do not visualize generic
+advice, date lists, products for sale, or source-editor commentary as memories.
+First-person storytelling describes whose experience is told, not a mandatory
+first-person camera. Front-facing environmental portraits remain encouraged in
+the human-figure path. Keep supported place, time, identity, action, and both
+soundtrack contexts aligned; unspecified appearance is documented artistic
+casting. The original podcast prompt path is otherwise unchanged.
+
+For the optional `balanced` / **Balanced Memories** path, author a new sequence
+of durable memory beats rather than alternately copying the contextual and
+portrait prompts. Vary interactions, meaningful objects, actions, environmental
+detail and human presence. Independent scene boundaries are allowed on the same
+approved audio/caption clock. The active 136-story December revision uses a
+five-second minimum; all other scopes and preserved legacy editions keep their existing minimum.
+The five-second floor is not a required cutting rate. Use more distinct,
+supported memory beats where they add content rather than dividing a single
+image mechanically. Post-onset fades must fit the shorter scenes.
+Keep short beats on the previous image. Distinguish remembered events from
+future wishes and hypothetical places. Prefer physical crops or back views for
+unknown faces; avoid reflection, double-exposure and diffusion wording that can
+produce duplicated heads. Keep exclusion/attribution commentary in metadata or
+negative prompts, not positive CLIP descriptions. Each path remains separately
+reviewable; do not overwrite the retained two-path edition.
+
+In story-detail revisions, spend the token budget on supported objects,
+actions, relationships, spatial context and distinctive material details first.
+Prefer a person doing the story's specific activity over a generic person
+standing in an empty room. Replace abstract mood explanations with concrete
+visible content where the evidence supports it; keep attribution and authenticity
+disclaimers in metadata. Fit details into one coherent scene, not a collage.
+Never invent props to meet a detail quota when a personal fragment is sparse.
+Keep new events at or after their recorded speech anchor, and leave hopes,
+unrealized plans and uncertain memories explicitly unresolved.
+
+For the 2026-10-30 five-second revision, the user authorized one source-grounded
+opening-context image at each story's exact start, so a previous person's image
+does not carry into the new story. Restrict that opening to the supplied opening
+context; disclose the story-introduction timing exception in metadata. Do not
+use it to preview later events, places, relationships, or outcomes. Subsequent
+details keep their measured material and semantic boundaries.

@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "working_title": "Recovered Homes — Voices from the Archive",
+  "promise": "Conversational, emotionally truthful retellings of individual stories about home and belonging recovered from the archived web.",
+  "format": {
+    "production_mode": "self_narrated_storytelling",
+    "source_stories_per_narration": 1,
+    "speakers_per_narration": 1,
+    "fixed_runtime_minutes": null,
+    "maximum_runtime_minutes": 5,
+    "runtime_includes": "All spoken audio, breaths, natural pauses and added tail silence.",
+    "length_planning": "Aim for roughly 450-550 English words or fewer, allowing expressive pauses. The measured finished audio, not word count, must be at most 300 seconds.",
+    "long_story_policy": "One condensed version per story; never split into parts. Preserve the central personal experience, essential context, identity, location, causal sequence and unresolved ending. Condense secondary details and repetition, document duration omissions, and archive the full adaptation before revision. Never truncate audio or accelerate speech. Complete source texts and existing recordings remain intact.",
+    "primary_adaptation_language": "en",
+    "allow_original_language_passages": true,
+    "podcast_hosts": false,
+    "thematic_collections_are_navigation_not_combined_episodes": true
+  },
+  "perspective_modes": {
+    "first_person_preserved": "Use a conversational first-person voice only when the recovered source itself supports that narrator and viewpoint.",
+    "attributed_first_person": "Use first person for explicitly attributed testimony while preserving the attribution in publication metadata.",
+    "unsupported_first_person": "Hold the story outside the narrated collection when the recovered source does not safely establish who could say I. Never invent a first-person witness."
+  },
+  "adaptation_rules": [
+    "Adapt the source into natural spoken language; do not read the extraction word for word.",
+    "Retain the central personal arc, important relationships, locations, chronology and uncertainty. The user-authorized short edition may condense secondary details and repetition with explicit duration_condensation metadata, while the full source and earlier adaptation remain preserved.",
+    "Paraphrases must remain traceable to contiguous source evidence; direct quotations must be character-for-character exact.",
+    "Never invent dialogue, memories, thoughts, motives, identities, locations, historical context, beginnings, endings, or emotional resolution.",
+    "Treat the Common Crawl date only as capture time, never as writing or publication time.",
+    "Record missing beginnings, endings, access gates, OCR damage, attribution, and archive uncertainty only in metadata; never speak editorial source commentary.",
+    "Require an evidence-backed personal experience, not merely first-person pronouns; hold general information, advertisements, genealogy lists, lyrics, and fiction without an independently established personal witness.",
+    "Omit navigation, archive dates, subscription appeals, product or service pitches, and unrelated comments from speech; retain exact omission evidence in metadata.",
+    "Require a current personal-story editorial review before auditions, speech, or visual production; structural evidence checks alone are not approval.",
+    "Do not claim that the performed narrator is the original author, witness, or historical person.",
+    "Use the complete recovered source as the factual authority; the evidence card is a navigation aid rather than the limit of usable information.",
+    "Keep the language conversational, intimate, vivid, and accessible without flattening difficult or culturally specific material.",
+    "Allow quietness and ambiguity; do not force every story into a lesson, triumph, or tidy ending."
+  ],
+  "voice_casting_rules": [
+    "Select and freeze one auditioned canonical voice for each narration so the initial ElevenLabs render remains reproducible.",
+    "An optional local rendition may select a new evidence-compatible interpretive cast at a loop boundary; keep that cast stable for the complete rendition and record every seed.",
+    "Rotate voices across narrations to create genuine variety in gender presentation, accent, vocal age, texture, energy, and personality.",
+    "A source-supported narrator identity may constrain casting only when a contiguous excerpt explicitly supports that identity detail.",
+    "A name, URL, language, physical location, nationality reference, or cultural object never establishes race, ethnicity, gender, age, or accent by itself.",
+    "When gender or accent is unsupported, treat the voice as an artistic storyteller casting choice and record that it is not an identity claim.",
+    "Never request an accent through imitation, caricature, phonetic spelling, or stereotype; use only a provider voice with a verified natural accent that has been auditioned.",
+    "Do not use accent as shorthand for intelligence, class, morality, foreignness, comedy, or authenticity.",
+    "Choose personality and emotional range from the story's supported dramatic arc, not from demographic assumptions.",
+    "Avoid matching a voice to a story solely because the voice and story share a geographic label.",
+    "Public metadata must describe the result as a performed adaptation and must not present the synthetic voice as the source person."
+  ],
+  "performance_rules": [
+    "Write for breath, pacing, emphasis, pauses, hesitation, warmth, restraint, laughter, sighs, and silence where the situation supports them.",
+    "Keep performance directions in TTS-only delivery fields; transcripts and captions contain spoken words rather than bracketed acting instructions.",
+    "Use laughter only with genuine warmth, surprise, affection, or humor in the source; never place it beside trauma for tonal relief.",
+    "Use sighs, breaths, or hesitation sparingly at supported emotional turns rather than as decoration.",
+    "Vary pace and intensity within a narration so it sounds remembered and told, not uniformly read.",
+    "Do not name or discuss synthesis, models, prompts, providers, or generation technology within the performed story."
+  ],
+  "deliverables_per_story": [
+    "immutable source manifest",
+    "evidence-grounded spoken adaptation",
+    "frozen narrator cast and performance profile",
+    "voices-only master audio",
+    "timestamped timeline",
+    "Markdown transcript",
+    "WebVTT captions",
+    "SRT captions",
+    "source and adaptation provenance report"
+  ],
+  "optional_later_deliverables": [
+    "story-specific soundscape-only stem",
+    "combined review mix",
+    "SDXL visual scene prompts",
+    "TouchDesigner sequence",
+    "validated buffered Gemma 4 12B narration variation",
+    "local Qwen3-TTS rendition with fresh captions and timing",
+    "casting-aware SDXL prompt variation"
+  ]
+}

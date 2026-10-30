@@ -38,6 +38,14 @@ VALUE_CONTROLS = (
     "Hue",
     "Saturation",
     "Value",
+    "Runtimeprofile",
+    "Livevariations",
+    "Narrationvariation",
+    "Speechvariation",
+    "Visualvariation",
+    "Interpretivecasting",
+    "Randomvariationseeds",
+    "Variationseed",
 )
 
 
@@ -214,6 +222,28 @@ def audit_3080_live_events():
             ),
         )
 
+    schedule(f"op({CONTROL_PATH!r}).par.Runtimeprofile='3080_safe'", frames=2)
+    action_and_check(
+        f"op({CONTROL_PATH!r}).par.Livevariations=True",
+        "runtime:3080_safe_forces_live_off",
+        f"not op({CONTROL_PATH!r}).par.Livevariations.eval()",
+        f"op({CONTROL_PATH!r}).par.Livevariations.eval()",
+    )
+    for name, value in (
+        ("Narrationvariation", False),
+        ("Speechvariation", False),
+        ("Visualvariation", False),
+        ("Interpretivecasting", False),
+        ("Randomvariationseeds", False),
+        ("Variationseed", 12345),
+    ):
+        action_and_check(
+            f"op({CONTROL_PATH!r}).par.{name}={value!r}",
+            f"runtime:{name}",
+            f"op({CONTROL_PATH!r}).par.{name}.eval()=={value!r}",
+            f"op({CONTROL_PATH!r}).par.{name}.eval()",
+        )
+
     for value in (0.0, 30.0):
         action_and_check(
             f"op({CONTROL_PATH!r}).par.Crossfadesec={value!r}",
@@ -298,6 +328,28 @@ def audit_3080_live_events():
             f");op({CONTROL_PATH!r}).par.Newseeds.pulse()"
         ),
         frames=2,
+    )
+
+    schedule(
+        (
+            f"op({CONTROL_PATH!r}).store('recovered_homes_live_nonce_before',"
+            f"op({CALLBACK_PATH!r}).module._write_live_control()"
+            "['regeneration_nonce']);"
+            f"op({CONTROL_PATH!r}).par.Regeneratenext.pulse()"
+        ),
+        frames=2,
+    )
+    schedule(
+        _append_check_code(
+            "button:Regeneratenext",
+            (
+                f"op({CALLBACK_PATH!r}).module._read_json_object("
+                f"__import__('pathlib').Path(str(op({CONNECTOR_PATH!r}).par."
+                "Livecontroljson.eval())))['regeneration_nonce']=="
+                f"op({CONTROL_PATH!r}).fetch('recovered_homes_live_nonce_before')+1"
+            ),
+            f"op({CONTROL_PATH!r}).fetch('recovered_homes_live_nonce_before')",
+        )
     )
     schedule(
         _append_check_code(
@@ -432,7 +484,7 @@ def audit_3080_live_events():
             "_report={"
             f"'project':{project_name!r},"
             f"'project_variant':{PROJECT_VARIANT!r},"
-            f"'controls_exercised':{len(VALUE_CONTROLS) + 4},"
+            f"'controls_exercised':{len(VALUE_CONTROLS) + 5},"
             "'event_checks_passed':len(_results)-len(_failures),"
             "'event_checks_failed':len(_failures),"
             "'failures':_failures,"
@@ -450,7 +502,7 @@ def audit_3080_live_events():
     scheduled = {
         "project": project_name,
         "project_variant": PROJECT_VARIANT,
-        "controls_scheduled": len(VALUE_CONTROLS) + 4,
+        "controls_scheduled": len(VALUE_CONTROLS) + 5,
         "completion_frame_delay": next_frame,
         "saved": False,
         "model_servers_started": False,

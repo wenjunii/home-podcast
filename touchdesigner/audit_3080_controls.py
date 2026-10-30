@@ -33,6 +33,15 @@ CONTROL_STYLES = {
     "Saturation": "Float",
     "Value": "Float",
     "Resetcolor": "Pulse",
+    "Runtimeprofile": "Menu",
+    "Livevariations": "Toggle",
+    "Narrationvariation": "Toggle",
+    "Speechvariation": "Toggle",
+    "Visualvariation": "Toggle",
+    "Interpretivecasting": "Toggle",
+    "Randomvariationseeds": "Toggle",
+    "Variationseed": "Int",
+    "Regeneratenext": "Pulse",
 }
 FLOAT_SPECS = {
     "Crossfadesec": (0.0, 30.0, 0.0, 15.0),
@@ -217,6 +226,12 @@ def audit_3080_controls():
                 list(control.par.Visualpath.menuNames),
                 list(control.par.Visualpath.menuLabels),
             ),
+        )
+        check(
+            "control:Runtimeprofile:menu",
+            list(control.par.Runtimeprofile.menuNames)
+            == ["3080_safe", "5090_live"],
+            list(control.par.Runtimeprofile.menuNames),
         )
         callback_names = set(str(callbacks.par.pars.eval()).split())
         check(
@@ -410,6 +425,45 @@ def audit_3080_controls():
             "switch:Randomseeds:off",
             status.get("seed_mode") == "stable",
             status.get("seed_mode"),
+        )
+
+        set_control("Runtimeprofile", "3080_safe")
+        set_control("Livevariations", True)
+        check(
+            "runtime:3080_safe_forces_live_off",
+            str(connector.par.Runtimeprofile.eval()) == "3080_safe"
+            and not bool(control.par.Livevariations.eval()),
+            (
+                connector.par.Runtimeprofile.eval(),
+                control.par.Livevariations.eval(),
+            ),
+        )
+        for name, value in (
+            ("Narrationvariation", False),
+            ("Speechvariation", False),
+            ("Visualvariation", False),
+            ("Interpretivecasting", False),
+            ("Randomvariationseeds", False),
+            ("Variationseed", 12345),
+        ):
+            set_control(name, value)
+        live_control_path = Path(str(connector.par.Livecontroljson.eval()))
+        live_control = (
+            __import__("json").loads(live_control_path.read_text(encoding="utf-8"))
+            if live_control_path.is_file()
+            else {}
+        )
+        check(
+            "runtime:control_file",
+            live_control.get("profile") == "3080_safe"
+            and live_control.get("enabled") is False
+            and live_control.get("narration_variation") is False
+            and live_control.get("speech_variation") is False
+            and live_control.get("visual_variation") is False
+            and live_control.get("casting_mode") == "evidence_conservative"
+            and live_control.get("seed_mode") == "fixed"
+            and int(live_control.get("fixed_seed", -1)) == 12345,
+            live_control,
         )
         set_control("Randomseeds", True)
         status = _table_values(connector.op("status_out"))

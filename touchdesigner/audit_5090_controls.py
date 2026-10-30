@@ -17,6 +17,7 @@ CONTROL_STYLES = {
     "Play": "Toggle",
     "Audioenabled": "Toggle",
     "Audiosource": "Menu",
+    "Visualpath": "Menu",
     "Randomseeds": "Toggle",
     "Crossfadesec": "Float",
     "Newseeds": "Pulse",
@@ -32,6 +33,15 @@ CONTROL_STYLES = {
     "Saturation": "Float",
     "Value": "Float",
     "Resetcolor": "Pulse",
+    "Runtimeprofile": "Menu",
+    "Livevariations": "Toggle",
+    "Narrationvariation": "Toggle",
+    "Speechvariation": "Toggle",
+    "Visualvariation": "Toggle",
+    "Interpretivecasting": "Toggle",
+    "Randomvariationseeds": "Toggle",
+    "Variationseed": "Int",
+    "Regeneratenext": "Pulse",
 }
 FLOAT_SPECS = {
     "Crossfadesec": (0.0, 30.0, 0.0, 15.0),
@@ -202,6 +212,18 @@ def audit_5090_controls():
                 list(control.par.Audiosource.menuNames),
                 list(control.par.Audiosource.menuLabels),
             ),
+        )
+        check(
+            "control:Runtimeprofile:menu",
+            list(control.par.Runtimeprofile.menuNames)
+            == ["3080_safe", "5090_live"],
+            list(control.par.Runtimeprofile.menuNames),
+        )
+        check(
+            "control:Visualpath:menu",
+            list(control.par.Visualpath.menuNames)
+            == ["original", "human_figures"],
+            list(control.par.Visualpath.menuNames),
         )
         callback_names = set(str(callbacks.par.pars.eval()).split())
         check(

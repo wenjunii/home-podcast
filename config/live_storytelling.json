@@ -1,0 +1,98 @@
+{
+  "contract_version": 1,
+  "kind": "local_live_storytelling_runtime",
+  "default_profile": "3080_safe",
+  "profiles": {
+    "3080_safe": {
+      "label": "RTX 3080 Safe — Canonical Playback",
+      "local_generation_enabled": false,
+      "narration_source": "canonical_codex",
+      "speech_source": "cached_canonical_initial_render",
+      "visual_prompt_source": "canonical_codex",
+      "model_loading_policy": "Do not load Ollama or local TTS models. Play the reviewed canonical local-Qwen or ElevenLabs fallback assets and reserve the GPU for StreamDiffusionTD."
+    },
+    "5090_live": {
+      "label": "RTX 5090 Live — Buffered Local Variations",
+      "local_generation_enabled": true,
+      "narration_source": "ollama_constrained_variation",
+      "speech_source": "qwen3_tts_local",
+      "visual_prompt_source": "ollama_casting_aware_variation",
+      "buffer_policy": "Generate and validate a complete future rendition before atomically promoting it.",
+      "ollama": {
+        "base_url": "http://127.0.0.1:11434",
+        "model": "gemma4:12b",
+        "timeout_seconds": 300,
+        "temperature": 0.85,
+        "top_p": 0.95,
+        "top_k": 64,
+        "num_ctx": 32768,
+        "keep_alive": "10m"
+      },
+      "qwen_tts": {
+        "model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+        "mode": "voice_design",
+        "device_map": "cuda:0",
+        "dtype": "bfloat16",
+        "attention": "sdpa",
+        "production_note": "Voice Design is the preview default. Build an auditioned reference-voice bank and switch to the Base voice-clone model when cross-section voice continuity has been approved."
+      }
+    }
+  },
+  "interpretive_casting": {
+    "policy": "Only source-explicit traits are facts. Every unspecified selection below is artistic casting and never a claim about the archived writer or witness.",
+    "gender_presentations": [
+      "feminine",
+      "masculine",
+      "androgynous"
+    ],
+    "age_presentations": [
+      "young adult",
+      "middle-aged adult",
+      "older adult"
+    ],
+    "accent_profiles": [
+      "General American English",
+      "Canadian English",
+      "Northern English",
+      "Irish English",
+      "Scottish English",
+      "Caribbean English",
+      "West African English",
+      "East African English",
+      "Indian English",
+      "Singapore English",
+      "French-influenced international English",
+      "Spanish-influenced international English",
+      "Portuguese-influenced international English"
+    ],
+    "appearance_profiles": [
+      "a person with deep brown skin and close-cropped coiled hair",
+      "a person with warm brown skin and shoulder-length natural curls",
+      "a person with medium brown skin and short softly waved dark hair",
+      "a person with olive-toned skin and thick dark wavy hair",
+      "a person with light brown skin and straight black shoulder-length hair",
+      "a person with fair skin and short dark curly hair",
+      "a person with fair freckled skin and softly waved auburn hair",
+      "a person with pale skin and straight light-brown hair"
+    ],
+    "personality_variations": [
+      "curious",
+      "warm",
+      "restrained",
+      "gently humorous",
+      "intimate",
+      "observant",
+      "earnest",
+      "quietly expressive"
+    ],
+    "safeguards": {
+      "location_implies_identity": false,
+      "language_implies_identity": false,
+      "accent_implies_appearance": false,
+      "name_implies_gender": false,
+      "one_cast_per_complete_rendition": true,
+      "new_cast_allowed_at_next_loop": true,
+      "publication_requires_editorial_review": true
+    }
+  }
+}

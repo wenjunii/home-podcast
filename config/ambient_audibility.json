@@ -1,0 +1,13 @@
+{
+  "contract_version": 1,
+  "enabled": true,
+  "minimum_midrange_energy_fraction": 0.05,
+  "midrange_low_hz": 250.0,
+  "midrange_high_hz": 8000.0,
+  "maximum_mono_loss_db": 6.0,
+  "loop_edge_window_seconds": 0.5,
+  "maximum_loop_edge_trim_seconds": 12.0,
+  "maximum_loop_edge_trim_fraction": 0.15,
+  "loop_edge_drop_db": 6.0,
+  "maximum_loop_dip_db": 6.0
+}

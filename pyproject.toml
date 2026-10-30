@@ -10,7 +10,10 @@ readme = "README.md"
 requires-python = ">=3.10"
 authors = [{name = "Home Podcast"}]
 license = {file = "LICENSE"}
-dependencies = []
+dependencies = ["ftfy>=6.1,<7"]
+
+[project.optional-dependencies]
+audio-mastering = ["numpy>=1.24,<3", "scipy>=1.10,<2", "soundfile>=0.12,<1"]
 
 [project.scripts]
 home-podcast = "home_podcast.cli:main"

@@ -19,6 +19,17 @@
       "type": "array",
       "items": {"type": "string", "minLength": 1}
     },
+    "continuous_background": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "base_cue_id", "minimum_specific_span_ms", "short_span_policy"],
+      "properties": {
+        "enabled": {"const": true},
+        "base_cue_id": {"type": "string", "minLength": 1},
+        "minimum_specific_span_ms": {"type": "integer", "minimum": 1000, "maximum": 300000},
+        "short_span_policy": {"const": "inherit_previous"}
+      }
+    },
     "cues": {
       "type": "array",
       "items": {
@@ -44,6 +55,7 @@
           "kind": {
             "enum": ["ident", "ambience", "spot", "transition"]
           },
+          "coverage_role": {"enum": ["base", "section"]},
           "anchor": {
             "type": "object",
             "additionalProperties": false,
@@ -88,6 +100,7 @@
           "loop": {"type": "boolean"},
           "duck_under_dialogue": {"type": "boolean"},
           "transcript_label": {"type": "string", "minLength": 1},
+          "caption_duration_ms": {"type": "integer", "minimum": 500, "maximum": 30000},
           "editorial_note": {"type": "string"},
           "provenance": {
             "type": "object",
@@ -112,7 +125,8 @@
                   "generation_duration_ms": {
                     "type": "integer",
                     "minimum": 100,
-                    "maximum": 30000
+                    "maximum": 380000,
+                    "description": "Maximum source-asset duration. Provider runners may impose a lower provider-specific limit."
                   }
                 }
               },
