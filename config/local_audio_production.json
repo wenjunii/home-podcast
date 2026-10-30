@@ -1,0 +1,170 @@
+{
+  "contract_version": 1,
+  "kind": "local_offline_audio_production",
+  "default_profile": "3080_offline_production",
+  "profiles": {
+    "3080_offline_production": {
+      "label": "RTX 3080 Offline Initial Audio Production",
+      "hardware_target": "RTX 3080",
+      "execution_mode": "offline_sequential",
+      "concurrent_gpu_models": 1,
+      "streamdiffusion_must_be_stopped": true,
+      "narration": {
+        "provider": "qwen3_tts_local",
+        "audition_model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+        "audition_model_path": null,
+        "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+        "production_model_path": null,
+        "production_model_revision": "5ecdb67327fd37bb2e042aab12ff7391903235d3",
+        "production_mode": "single_take_voice_design",
+        "device_map": "cuda:0",
+        "dtype": "bfloat16",
+        "attention": "sdpa",
+        "audition_max_characters": 520,
+        "max_section_characters": 2200,
+        "cache_unit": "one complete reviewed story with frozen casting and performance direction",
+        "unload_after_phase": true
+      },
+      "ambient": {
+        "provider": "stable_audio_3_local",
+        "model": "medium",
+        "device": "cuda",
+        "model_half": true,
+        "steps": 8,
+        "cfg_scale": 1.0,
+        "chunked_decode": true,
+        "minimum_specific_span_ms": 15000,
+        "negative_prompt": "speech, voice, narration, dialogue, singing, lyrics, human vocalization, podcast, radio announcer, melody, beat, musical score, sudden loud impact",
+        "continuous_base_layer": true,
+        "unload_after_phase": true
+      },
+      "phase_order": [
+        "reviewed_story_casting",
+        "single_take_production_speech",
+        "cpu_speech_content_audit",
+        "speech_level_mastering",
+        "listening_review",
+        "ambient_sound",
+        "local_assembly"
+      ],
+      "safety_note": "Close TouchDesigner and stop StreamDiffusionTD before every executed local-audio phase. Never load Qwen3-TTS and Stable Audio 3 together."
+    },
+    "3080_legacy_voice_clone": {
+      "extends_profile": "3080_offline_production",
+      "label": "Legacy section-by-section Base voice cloning (explicit opt-in)",
+      "narration": {
+        "production_model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "production_model_revision": null,
+        "production_mode": "voice_clone",
+        "cache_unit": "one narration section"
+      },
+      "phase_order": ["voice_audition", "production_speech", "ambient_sound", "local_assembly"]
+    },
+    "3080_native_windows_fallback": {
+      "extends_profile": "3080_offline_production",
+      "label": "RTX 3080 Native Windows Audio Fallback",
+      "ambient": {
+        "model": "small-sfx",
+        "device": "cpu",
+        "model_half": false,
+        "chunked_decode": false
+      },
+      "safety_note": "Qwen still uses the 3080 in its own phase. Stable Audio Small-SFX runs on CPU as a native-Windows fallback and must be auditioned before collection production."
+    }
+  },
+  "audition_voice_designs": [
+    {
+      "voice_id": "local-warm-atlantic-feminine",
+      "display_name": "Warm Atlantic",
+      "gender_presentation": "feminine",
+      "age_presentation": "middle-aged adult",
+      "accent_profile": "soft Irish-influenced international English",
+      "personality_tags": ["warm", "curious", "quietly expressive"],
+      "tts_instruction": "A warm middle-aged feminine voice with a soft Irish-influenced international English accent. Natural conversational rhythm, intimate but not theatrical, emotionally responsive, with gentle breaths and small hesitations where the meaning calls for them.",
+      "seed": 12031
+    },
+    {
+      "voice_id": "local-observant-west-african-masculine",
+      "display_name": "Observant West African",
+      "gender_presentation": "masculine",
+      "age_presentation": "middle-aged adult",
+      "accent_profile": "West African English",
+      "personality_tags": ["observant", "grounded", "gently humorous"],
+      "tts_instruction": "A grounded middle-aged masculine voice speaking clear West African English. Observant, personable and lightly humorous, with lively human phrasing, natural changes of pace, and restrained emotional warmth rather than announcer polish.",
+      "seed": 23147
+    },
+    {
+      "voice_id": "local-intimate-indian-androgynous",
+      "display_name": "Intimate Indian English",
+      "gender_presentation": "androgynous",
+      "age_presentation": "young adult",
+      "accent_profile": "Indian English",
+      "personality_tags": ["intimate", "earnest", "curious"],
+      "tts_instruction": "A young adult androgynous voice speaking natural Indian English. Intimate, earnest and curious, with expressive timing, believable uncertainty, soft laughter only when appropriate, and a close conversational presence.",
+      "seed": 34159
+    },
+    {
+      "voice_id": "local-reflective-caribbean-feminine",
+      "display_name": "Reflective Caribbean",
+      "gender_presentation": "feminine",
+      "age_presentation": "older adult",
+      "accent_profile": "Caribbean English",
+      "personality_tags": ["reflective", "resilient", "warm"],
+      "tts_instruction": "An older adult feminine voice speaking clear Caribbean English. Reflective and resilient with unforced warmth, textured pauses, audible thoughtfulness, and a full emotional range that never becomes melodramatic.",
+      "seed": 45181
+    },
+    {
+      "voice_id": "local-playful-singapore-masculine",
+      "display_name": "Playful Singapore English",
+      "gender_presentation": "masculine",
+      "age_presentation": "young adult",
+      "accent_profile": "Singapore English",
+      "personality_tags": ["curious", "playful", "quick-witted"],
+      "tts_instruction": "A young adult masculine voice speaking conversational Singapore English. Curious and quick-witted, with playful timing, genuine small laughs when earned, energetic reactions, and natural speech rather than a performed caricature.",
+      "seed": 56209
+    },
+    {
+      "voice_id": "local-restrained-northern-english-androgynous",
+      "display_name": "Restrained Northern English",
+      "gender_presentation": "androgynous",
+      "age_presentation": "older adult",
+      "accent_profile": "Northern English",
+      "personality_tags": ["restrained", "dryly funny", "tender"],
+      "tts_instruction": "An older adult androgynous voice with a natural Northern English accent. Restrained, dryly funny and capable of tenderness, with lived-in pacing, subtle sighs and hesitations, and no broadcast-style smoothness.",
+      "seed": 67217
+    },
+    {
+      "voice_id": "local-open-latin-american-feminine",
+      "display_name": "Open Latin American English",
+      "gender_presentation": "feminine",
+      "age_presentation": "young adult",
+      "accent_profile": "Spanish-influenced international English",
+      "personality_tags": ["open", "animated", "empathetic"],
+      "tts_instruction": "A young adult feminine voice speaking fluent Spanish-influenced international English. Open, animated and empathetic, with spontaneous emotional shifts, natural breath, and friendly spoken-word intimacy without exaggerating the accent.",
+      "seed": 78301
+    },
+    {
+      "voice_id": "local-calm-east-african-masculine",
+      "display_name": "Calm East African",
+      "gender_presentation": "masculine",
+      "age_presentation": "older adult",
+      "accent_profile": "East African English",
+      "personality_tags": ["calm", "insightful", "quietly expressive"],
+      "tts_instruction": "An older adult masculine voice speaking clear East African English. Calm, insightful and quietly expressive, with grounded pauses, delicate emotional changes and conversational directness rather than formal narration.",
+      "seed": 89417
+    }
+  ],
+  "license_and_download_policy": {
+    "automatic_downloads": false,
+    "qwen_execution_requires_allow_model_download_if_no_local_path": true,
+    "stable_audio_uses_cache_only_without_allow_model_download": true,
+    "stable_audio_license_must_be_reviewed_by_operator": true,
+    "generated_audio_is_not_committed_by_default": true
+  },
+  "future_5090_handoff": {
+    "live_runtime_config": "config/live_storytelling.json",
+    "profile": "5090_live",
+    "buffer_policy": "Generate a complete future rendition before atomic promotion.",
+    "canonical_3080_outputs_remain_fallback": true
+  }
+}

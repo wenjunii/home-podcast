@@ -3,6 +3,21 @@
 You are preparing source evidence for a popular, entertaining, and emotionally
 responsible podcast about home, belonging, digital history, and digital archaeology.
 
+The active self-narrated collection has a stricter editorial gate than the
+preserved podcast. Identify the actual personal experience and who can safely
+say "I". Do not mistake navigation, archive dates, sales copy, general reference
+material, genealogy lists, lyrics, or fictional narration for autobiography.
+Contextual information may remain useful to the separate podcast; that does not
+make it a personal-history narration. A short personal fragment inside a noisy
+page can qualify on its own. Record uncertainty rather than invent a witness.
+
+Do not create "Recovered narrative passage N" inventories as if they were
+analysis. Summaries and beats must describe the person's supported experience.
+Exclude menus, categories, unrelated comments, promotional calls to action, and
+archive lists from narrative beats, locations, time markers, and sensory details.
+Substring matches are not evidence: "photography" does not mean heat, and
+"train" does not mean rain. Independently verify the meaning of every claim.
+
 Analyze only the supplied story. Treat its crawl timestamp as the capture time, not
 the publication date. Do not infer an author's identity, motive, location, or historical
 context unless the supplied evidence states it.

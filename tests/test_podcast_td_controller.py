@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -129,6 +130,30 @@ class FakeOwner:
 
 
 class PodcastTdControllerTests(unittest.TestCase):
+    def test_random_live_variations_request_the_next_loop_buffer(self) -> None:
+        owner = FakeOwner(None)
+        owner.targets["show_control"] = SimpleNamespace(
+            par=SimpleNamespace(
+                Livevariations=FakePar(True),
+                Runtimeprofile=FakePar("5090_live"),
+                Randomvariationseeds=FakePar(True),
+            )
+        )
+        requests = []
+        owner.targets["show_control/control_callbacks"] = SimpleNamespace(
+            module=SimpleNamespace(
+                _write_live_control=lambda **kwargs: requests.append(kwargs)
+            )
+        )
+        controller = PodcastVisualController.__new__(PodcastVisualController)
+        controller.owner_comp = owner
+        controller.live_runtime_message = "live_active"
+
+        controller._request_random_live_variation()
+
+        self.assertEqual(requests, [{"regenerate": True}])
+        self.assertEqual(controller.live_runtime_message, "requested_next_loop")
+
     def test_selects_original_or_human_figure_scene_path(self) -> None:
         owner = FakeOwner(None)
         controller = PodcastVisualController.__new__(PodcastVisualController)
@@ -143,6 +168,43 @@ class PodcastTdControllerTests(unittest.TestCase):
             controller._selected_scene_path(),
             str(MODULE_PATH.resolve()),
         )
+
+    def test_live_bundle_preserves_original_and_human_path_switch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            original = root / "original.json"
+            human = root / "human.json"
+            original.write_text("{}", encoding="utf-8")
+            human.write_text("{}", encoding="utf-8")
+            owner = FakeOwner(None)
+            controller = PodcastVisualController.__new__(PodcastVisualController)
+            controller.owner_comp = owner
+            controller.active_live_bundle = {
+                "assets": {
+                    "visuals": {
+                        "original": str(original),
+                        "human_figures": str(human),
+                    }
+                }
+            }
+
+            self.assertEqual(controller._selected_scene_path(), str(original))
+            owner.par.Visualpath.val = "human_figures"
+            self.assertEqual(controller._selected_scene_path(), str(human))
+
+    def test_balanced_path_is_optional_and_keeps_legacy_fallback(self) -> None:
+        owner = FakeOwner(None)
+        controller = PodcastVisualController.__new__(PodcastVisualController)
+        controller.owner_comp = owner
+        owner.par.Visualpath.val = "Balanced Memories"
+        self.assertEqual(controller._visual_path_name(), "balanced")
+        self.assertEqual(controller._selected_scene_path(), str(Path(__file__).resolve()))
+        owner.par.Balancedjson = FakePar(str(MODULE_PATH.resolve()))
+        self.assertEqual(controller._selected_scene_path(), str(MODULE_PATH.resolve()))
+        owner.par.Visualpath.val = 2
+        self.assertEqual(controller._visual_path_name(), "balanced")
+        owner.par.Balancedjson.val = ""
+        self.assertEqual(controller._selected_scene_path(), str(Path(__file__).resolve()))
 
     def test_reads_live_crossfade_from_show_control(self) -> None:
         controller = PodcastVisualController.__new__(PodcastVisualController)

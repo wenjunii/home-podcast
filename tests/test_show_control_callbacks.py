@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -46,6 +48,46 @@ class FakePars(SimpleNamespace):
 
 
 class ShowControlCallbackTests(unittest.TestCase):
+    def test_runtime_control_file_forces_live_off_in_3080_profile(self):
+        module = load_module(
+            "show_control_callbacks_runtime_test",
+            "touchdesigner/show_control_callbacks.py",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            control_path = Path(directory) / "control.json"
+            connector = SimpleNamespace(
+                par=FakePars(
+                    Livecontroljson=FakePar("Livecontroljson", str(control_path)),
+                    Runtimeprofile=FakePar("Runtimeprofile", "5090_live"),
+                    Currentnarrationid=FakePar("Currentnarrationid", "story-one"),
+                    Canonicalvisuals=FakePar("Canonicalvisuals", "visuals.json"),
+                )
+            )
+            control = SimpleNamespace(
+                par=FakePars(
+                    Runtimeprofile=FakePar("Runtimeprofile", "3080_safe"),
+                    Livevariations=FakePar("Livevariations", True),
+                    Narrationvariation=FakePar("Narrationvariation", True),
+                    Speechvariation=FakePar("Speechvariation", True),
+                    Visualvariation=FakePar("Visualvariation", True),
+                    Interpretivecasting=FakePar("Interpretivecasting", True),
+                    Randomvariationseeds=FakePar("Randomvariationseeds", False),
+                    Variationseed=FakePar("Variationseed", 77),
+                )
+            )
+            control.parent = lambda: connector
+            module.parent = lambda: control
+
+            result = module._write_live_control(regenerate=True)
+
+            stored = json.loads(control_path.read_text(encoding="utf-8"))
+            self.assertFalse(control.par.Livevariations.eval())
+            self.assertFalse(stored["enabled"])
+            self.assertEqual(stored["profile"], "3080_safe")
+            self.assertEqual(stored["regeneration_nonce"], 1)
+            self.assertEqual(stored["fixed_seed"], 77)
+            self.assertEqual(result, stored)
+
     def test_audio_toggle_updates_legacy_constant_audio_output(self):
         module = load_module(
             "show_control_callbacks_audio_test",
@@ -131,6 +173,13 @@ class ShowControlCallbackTests(unittest.TestCase):
         self.assertEqual(connector.par.Visualpath.eval(), "human_figures")
         self.assertEqual(connector.par.Audiosource.eval(), "soundscape")
         self.assertEqual(len(reloads), 1)
+
+        module.onValueChange(FakePar("Visualpath", "balanced"), "human_figures")
+        self.assertEqual(connector.par.Visualpath.eval(), "balanced")
+        self.assertEqual(connector.par.Audiosource.eval(), "soundscape")
+        self.assertEqual(len(reloads), 2)
+        self.assertEqual(module._visual_path_index(2), 2)
+        self.assertEqual(module._visual_path_index("Balanced Memories"), 2)
 
     def test_play_toggle_updates_touchdesigner_timeline(self):
         module = load_module(
@@ -240,7 +289,7 @@ class ExecuteCallbackTests(unittest.TestCase):
             timeline if path == "/local/time" else project_root
         )
 
-        module._synchronize_show_control()
+        module._synchronize_show_control(reset_paused_start=True)
 
         self.assertFalse(timeline.par.play.eval())
         self.assertEqual(project_root.time.frame, 1)
@@ -249,6 +298,65 @@ class ExecuteCallbackTests(unittest.TestCase):
         self.assertEqual(connector.par.Audiosource.eval(), "soundscape")
         self.assertEqual(source_switch.par.index.eval(), 1)
         self.assertEqual(connector.par.Visualpath.eval(), "human_figures")
+
+    def test_regular_sync_preserves_paused_seek_position(self):
+        module = load_module(
+            "execute_callbacks_paused_seek_test",
+            "touchdesigner/execute_callbacks.py",
+        )
+        show_control = SimpleNamespace(par=FakePars(Play=FakePar("Play", False)))
+        connector = SimpleNamespace(par=FakePars(), op=lambda name: show_control if name == "show_control" else None)
+        timeline = SimpleNamespace(par=FakePars(play=FakePar("play", False)))
+        project_root = SimpleNamespace(time=SimpleNamespace(frame=901))
+        module.parent = lambda: connector
+        module.op = lambda path: timeline if path == "/local/time" else project_root
+
+        module._synchronize_show_control()
+        module._synchronize_show_control()
+
+        self.assertEqual(project_root.time.frame, 901)
+        self.assertFalse(timeline.par.play.eval())
+
+    def test_load_events_request_startup_reset_but_frame_events_do_not(self):
+        module = load_module(
+            "execute_callbacks_reset_scope_test",
+            "touchdesigner/execute_callbacks.py",
+        )
+        calls = []
+        module._synchronize_show_control = lambda **kwargs: calls.append(kwargs)
+        module._synchronize_live_control_file = lambda: None
+        module.get_controller = lambda: SimpleNamespace(update=lambda seconds: None)
+        module.parent = lambda: SimpleNamespace(par=FakePars(Enabled=FakePar("Enabled", False)))
+
+        module.onStart()
+        module.onCreate()
+        module.onFrameStart(100)
+
+        self.assertEqual(calls, [{"reset_paused_start": True}, {"reset_paused_start": True}, {}])
+
+
+class ConnectorParameterCallbackTests(unittest.TestCase):
+    def test_narration_change_updates_live_control_file(self):
+        module = load_module(
+            "parameter_callbacks_runtime_test",
+            "touchdesigner/parameter_callbacks.py",
+        )
+        writes = []
+        callbacks = SimpleNamespace(
+            module=SimpleNamespace(
+                _write_live_control=lambda: writes.append(True)
+            )
+        )
+        connector = SimpleNamespace(
+            op=lambda name: (
+                callbacks if name == "show_control/control_callbacks" else None
+            )
+        )
+        module.parent = lambda: connector
+
+        module.onValueChange(FakePar("Currentnarrationid", "story-one"), "")
+
+        self.assertEqual(writes, [True])
 
 
 if __name__ == "__main__":

@@ -30,6 +30,7 @@ class ProjectConfig:
     dialogue_provider: dict[str, Any] | None
     sound_effects_provider: dict[str, Any] | None
     visual_provider: dict[str, Any] | None = None
+    production_mode: str = "podcast"
 
     @classmethod
     def load(cls, path: str | Path = "podcast.json") -> "ProjectConfig":
@@ -83,6 +84,7 @@ class ProjectConfig:
             dialogue_provider=data.get("dialogue_provider"),
             sound_effects_provider=data.get("sound_effects_provider"),
             visual_provider=data.get("visual_provider") or data.get("script_provider"),
+            production_mode=str(data.get("production_mode", "podcast")),
         )
 
     def load_themes(self) -> dict[str, Any]:

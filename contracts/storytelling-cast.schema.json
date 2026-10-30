@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "storytelling-cast.schema.json",
+  "title": "Recovered Homes Story Narrator Cast",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "narration_id",
+    "source_story_id",
+    "provider",
+    "selection_policy",
+    "selection_seed_sha256",
+    "identity_claim",
+    "evidence_constraints",
+    "artistic_choices",
+    "narrator",
+    "status"
+  ],
+  "properties": {
+    "contract_version": {"const": 1},
+    "narration_id": {"type": "string", "minLength": 1},
+    "source_story_id": {"type": "string", "pattern": "^story-[a-f0-9]{24}$"},
+    "provider": {"type": "string", "minLength": 1},
+    "selection_policy": {"type": "string", "minLength": 1},
+    "selection_seed_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "identity_claim": {"const": false},
+    "evidence_constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["trait", "value", "evidence_excerpt"],
+        "properties": {
+          "trait": {"type": "string", "minLength": 1},
+          "value": {"type": "string", "minLength": 1},
+          "evidence_excerpt": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "artistic_choices": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "narrator": {
+      "type": "object",
+      "required": [
+        "person_id",
+        "display_name",
+        "voice_name",
+        "voice_id",
+        "gender_presentation",
+        "verified_natural_accent",
+        "personality_tags",
+        "emotional_range_tags"
+      ],
+      "properties": {
+        "person_id": {"type": "string", "minLength": 1},
+        "display_name": {"type": "string", "minLength": 1},
+        "voice_name": {"type": "string", "minLength": 1},
+        "voice_id": {"type": "string", "minLength": 1},
+        "gender_presentation": {"type": "string", "minLength": 1},
+        "verified_natural_accent": {"type": "string", "minLength": 1},
+        "personality_tags": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "emotional_range_tags": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "status": {"enum": ["selected", "auditioned", "approved", "frozen"]}
+  }
+}

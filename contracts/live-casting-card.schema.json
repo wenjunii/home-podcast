@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "live-casting-card.schema.json",
+  "title": "Recovered Homes Interpretive Casting Card",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "kind",
+    "cast_id",
+    "narration_id",
+    "loop_index",
+    "casting_seed",
+    "mode",
+    "identity_claim",
+    "voice",
+    "visual",
+    "personality",
+    "trait_provenance"
+  ],
+  "properties": {
+    "contract_version": {"const": 1},
+    "kind": {"const": "interpretive_casting_card"},
+    "cast_id": {"type": "string", "pattern": "^cast-[a-f0-9]{20}$"},
+    "narration_id": {"type": "string", "minLength": 1},
+    "loop_index": {"type": "integer", "minimum": 0},
+    "casting_seed": {"type": "integer", "minimum": 0},
+    "mode": {"enum": ["evidence_conservative", "interpretive"]},
+    "identity_claim": {"const": false},
+    "voice": {
+      "type": "object",
+      "required": [
+        "gender_presentation",
+        "age_presentation",
+        "accent_profile",
+        "tts_instruction"
+      ]
+    },
+    "visual": {
+      "type": "object",
+      "required": [
+        "appearance",
+        "gender_presentation",
+        "age_presentation",
+        "continuity_instruction"
+      ]
+    },
+    "personality": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "trait_provenance": {
+      "type": "object",
+      "required": [
+        "gender_presentation",
+        "age_presentation",
+        "accent_profile",
+        "appearance"
+      ]
+    }
+  }
+}

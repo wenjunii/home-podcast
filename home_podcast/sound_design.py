@@ -181,10 +181,10 @@ def validate_sound_design(
             )
             if (
                 not isinstance(generation_duration, int)
-                or not 500 <= generation_duration <= 30000
+                or not 500 <= generation_duration <= 380000
             ):
                 errors.append(
-                    f"{label}.source.generation_duration_ms must be from 500 to 30000"
+                    f"{label}.source.generation_duration_ms must be from 500 to 380000"
                 )
         elif source_type == "licensed":
             for field in ("path", "license", "credit"):
@@ -221,7 +221,10 @@ def validate_sound_design(
             if isinstance(cue, dict) and cue.get("coverage_role") == "section"
         ]
         if not section_cues:
-            errors.append("continuous_background requires at least one section cue")
+            warnings.append(
+                "continuous background has no eligible section cue; the base layer "
+                "will cover the complete timeline"
+            )
         for cue in section_cues:
             if cue.get("loop") is not True:
                 errors.append(
@@ -266,6 +269,8 @@ def prepare_sfx_jobs(
         generation_duration_ms = source.get(
             "generation_duration_ms", min(cue["duration_ms"], 30000)
         )
+        if provider in {"elevenlabs", "elevenlabs_sound_effects"}:
+            generation_duration_ms = min(int(generation_duration_ms), 30000)
         fingerprint = json.dumps(
             {
                 "provider": provider,

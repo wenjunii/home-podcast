@@ -1,8 +1,9 @@
 # Recovered Homes
 
-Recovered Homes is an incremental production pipeline for a popular,
-rotating-cast podcast about home, belonging, digital history, and digital
-archaeology.
+Recovered Homes is an incremental production pipeline for stories about home,
+belonging, digital history, and digital archaeology. The active production path
+is now one conversational self-narrated adaptation per archived story. The
+existing rotating-cast podcast path remains preserved and can be resumed later.
 
 The canonical source snapshot is tracked in `data/exports`. It contains only
 `stories_*.md` files copied from the sibling extractor project and deliberately
@@ -18,11 +19,391 @@ incremental Codex analysis.
 The system is designed around three promises:
 
 1. New or changed stories are processed incrementally.
-2. Every podcast claim remains traceable to archived source evidence.
-3. Published episodes remain reproducible even when older crawl months receive
-   late-arriving stories.
+2. Every spoken claim remains traceable to archived source evidence.
+3. Published narrations and podcast episodes remain reproducible even when
+   older crawl months receive late-arriving stories.
 
-## Current pipeline
+## Active self-narrated storytelling path
+
+### Local-first operation; GitHub optional
+
+Use `python -m scripts.private_handoff` to plan, export, verify and import a
+private dependency-complete snapshot of the current 136-story `.40` edition.
+The default includes approved individual story audio, frozen sources,
+adaptations and approval receipts as well as the complete playback show.
+Content-addressed snapshots reuse unchanged files; imports never overwrite
+different existing files or an existing 5090 setup. No GitHub, paid API,
+media generation or Git commit is involved.
+
+Keep the package private: it contains the selected licensed TOE and personal
+story material, not model weights, environments, credentials or Git history.
+GitHub remains available for optional code-only publishing; nothing is pushed
+automatically. See [private cross-PC export/import and TouchDesigner rebinding](docs/PORTABLE_SETUP.md#current-local-first-handoff-136-stories--podcast40toe).
+Before an explicitly requested public sync, run
+`python -m scripts.check_public_sync` on staged files, then
+`python -m scripts.check_public_sync --base origin/main` on the new commits.
+The gate checks Git blobs for private assets and recognizable credentials;
+neither command pushes or publishes anything.
+
+### Current local 136-story continuous-image edition (.40)
+
+Open **`podcast.40.toe`** in TouchDesigner **2025.32820** on the RTX 3080.
+The outgoing approved scene now continues through uncovered visual intervals,
+the one-second story separators and the loop tail. It interpolates into the
+next scene only at that scene's unchanged approved cue. Mid-story colour
+interruptions are disabled; Show Control's legacy gap-colour control is greyed
+out at zero. A held scene is a presentation reference, not an extension of its
+source event.
+
+**Scene Interpolation Seconds** and **Story / Loop Interpolation Seconds**
+remain adjustable, both defaulting to **3**, capped at half the incoming scene.
+The 136 stories, 619 scenes per path, 2,862 captions, three audio modes and
+3:18:58.720 clock are unchanged. Interpolation blends prompt and seed weights
+(`slerp`), not buffered rendered frames. Live renderer motion still needs a
+visual check with only your selected StreamDiffusionTD server running.
+
+`.38`, every earlier project, all reviewed media and the 5090 setup are
+preserved. Isolated build and native reopen/output/control audit receipts:
+`work/storytelling-real-december/continuous-image-hold-136-3080-2026-10-30/`.
+
+### Preserved local 136-story interpolation edition (.38)
+
+Open **`podcast.38.toe`** in TouchDesigner **2025.32820** on the RTX 3080.
+All three visual paths now interpolate at every within-story join, story
+boundary and full-playlist loop. **Scene Interpolation Seconds** and
+**Story / Loop Interpolation Seconds** both default to **3**; the requested
+duration is capped at half the incoming scene. Zero explicitly disables it.
+Incoming prompt weight starts at zero at its approved cue, never before it.
+The outgoing image is a temporary transition reference, not an extension of
+its event or a claim that two narrators share an identity.
+
+**Gap Colour Fade Seconds** now handles actual uncovered visual gaps only;
+it is not a substitute for story or loop interpolation. Interpolation blends
+prompt and seed weights (`slerp`); generated-image motion remains dependent on
+the renderer, not a guaranteed linear dissolve between two rendered buffers.
+The 3080 adapter also deterministically folds unsigned32-bit canonical seeds
+into TD's supported positive integer range. This prevents a seed overflow
+from aborting a blend halfway through its parameter update. Saved canonical
+seeds are unchanged, and random/stable seed modes remain available.
+
+The same 136 stories, 619 scenes per path, 2,862 captions, approved audio and
+one-second separators are reused without regeneration. `.36`, every older
+project, all source media and the 5090 setup are preserved. Start only one
+StreamDiffusionTD server yourself. Build and audit receipts are in
+`work/storytelling-real-december/interpolated-136-3080-2026-10-30/`.
+
+### Preserved local 136-story five-second edition (.36)
+
+Open `podcast.36.toe` in TouchDesigner **2025.32820** on the RTX 3080.
+It contains the current **136 approved stories / 3:18:58.720**, including
+the 24 newly approved richer ambient revisions and 112 unchanged soundscapes.
+All three audio modes have exact one-second silent separators between stories
+and at the loop tail; narration, approved mix levels and caption wording are
+unchanged. The three visual paths each contain **619 approved scenes**, with a
+five-second minimum and a source-grounded opening prompt at every story start.
+All paths share the same 2,862 captions and audio clock.
+
+Show Control → Playlist provides **Story / Loop Transition Seconds** (0–30)
+and **Soft Colour Transition Seconds** (0–5). The within-story scene crossfade
+remains independent. Expired memory images fade into soft abstract colour,
+not black or another person's memory; incoming prompts never run before their
+story starts. Story transitions default to zero seconds for immediate incoming
+prompt changes; increase the control for a colour-mediated reveal. Generated
+images still have renderer response latency. Playback starts paused, with
+Balanced Memories and Narration + Ambient selected. Start only one
+StreamDiffusionTD server yourself; installation and tests do not start either.
+The 5090 setup, `.34`, `.28`, all older projects and source media are preserved.
+The seven excluded stories and 204 later recordings remain outside this build.
+
+The edition manifest, approval bindings, isolated installer and validation
+receipts are in
+`work/storytelling-real-december/approved-136-five-second-3080-2026-10-30/`.
+See [the .36 controls and verification notes](touchdesigner/README.md#current-offline-136-story-edition-36).
+
+### Preserved 45-story edition (.28)
+
+The preserved local RTX 3080 storytelling playlist is `podcast.28.toe`
+(TouchDesigner 2025.32820), with **45 approved stories / 55:35.680** on one
+shared audio, caption and visual clock. In Show Control, Audio Source now
+offers **Narration Only**, **Ambient Only**, and **Narration + Ambient**.
+The combined mix retains the approved voice level and existing background-bed
+level with a safety limiter; it does not generate new audio. Solo source
+recordings are preserved. Playlist controls add **Jump to Story**, **Previous
+Story**, **Next Story**, **Restart Playlist**, **Loop Full Playlist**, current
+story/time displays, and adjustable **Story Edge Fade Seconds**. Story joins
+and the full loop fade through black, never preloading the next person's
+memory into the outgoing image. The visual scene Crossfade Seconds control
+still works independently. Playback is initially paused with combined audio
+and Balanced Memories selected; live generation is locked off for this offline
+3080 collection. Start only the StreamDiffusionTD version you intend to use.
+See [`touchdesigner/README.md`](touchdesigner/README.md#full-offline-storytelling-playlist-28)
+for build, installation and audit commands. This is the preserved 45-story
+approved subset, not the entire December source collection. Visual renders
+still need editorial review; no model server is started by setup or audits.
+The previous `.26` retains its original 35-story / 40:56.240 collection.
+The new edition has 818 unchanged captions and **166 source-detail scenes per
+visual path** (498 prompt treatments). Contextual, Human Figures and Balanced
+Memories now share the same speech-anchored memory beats. The user-approved
+revision adds concrete story objects, actions and settings and corrects three
+early openings, with 15-second minimum holds and post-onset crossfades.
+Its ten appended stories occupy slots 36–45. `.27` preserves the previous
+132/132/161-scene edition; all source audio, earlier prompts and cached segments
+remain intact. No narration or ambient audio was regenerated for `.28`.
+
+The preserved smaller RTX 3080 storytelling test is `podcast.25.toe` (TouchDesigner
+2025.32820), saved separately from `.24`, `.23` and the preserved podcast projects.
+Show Control → Visual Path offers **Balanced Memories**, **Original Story
+Visuals**, and **Human Figures**. Balanced Memories has 124 newly authored
+scenes for the current 35 audio/caption-approved stories, compared with 95 in
+each retained path. It mixes people, interactions, places, actions and object
+details on the unchanged voice/ambient clock; scene changes follow recorded
+speech anchors and every image lasts at least 15 seconds. The `.25` test story
+selector still covers stories 1, 5 and 28, not the entire December collection.
+The `.25` revision rewrites all 124 balanced prompts to prioritize source
+objects, actions, relationships and settings over generic mood wording. Hand
+Library and the grandparents' riverside picnic have their own speech-anchored
+images; the audio and caption clocks remain unchanged. Review all 35 prompt
+sequences, including the previous balanced edition for comparison, in
+`audio/storytelling-real-december/rich-visual-review-2026-10-29/index.html`.
+Prompt validation is complete; actual generated images still need editorial
+review. No model server is started by the setup or routing audits.
+
+The December 2013 collection is configured separately in
+`storytelling.real-december.json`. It shares the recovered source catalog and
+analysis cards but writes to dedicated `narrations/`, `work/`, and `audio/`
+directories. Each eligible unique story becomes one conversational spoken-word
+adaptation with a frozen, evidence-aware narrator. New story narrations have a
+**five-minute maximum**, including breaths, pauses and tail silence; shorter
+stories are not padded. Each longer story receives one condensed version, not
+parts; the full source and previous adaptation stay intact. The podcast path's
+information-driven runtime policy is unchanged.
+
+Local narration playback now uses the shared settings in
+[`config/speech_mastering.json`](config/speech_mastering.json): a common speech
+level, gradual volume-drift correction, and peak headroom. Original takes and
+caption timing are preserved. This CPU-only finishing step does not make another
+TTS call; changing the settings creates a new cached listening master. See
+[speech-level setup](docs/LOCAL_AUDIO_3080.md#consistent-speech-volume).
+
+The next ten-story narration batch is listening-approved at
+`audio/storytelling-real-december/production-batch-03-2026-10-29/index.html`
+(14:39.440 total; each complete take is under five minutes). It includes
+level-controlled WAVs, exact narration transcripts, and 306 draft audio-timed
+caption cues in SRT/VTT. Two recognition errors were resolved only after the
+user checked short excerpts and independent unprompted recognition agreed;
+the original recordings and ASR reports are preserved. The user's full-batch
+listening approval is recorded separately from caption editorial approval.
+
+Its ten continuous soundscapes are also listening-approved at
+`audio/storytelling-real-december/ambient-production-batch-04-audible-v2-2026-10-29/index.html`.
+Each story has an unchanged approved voice player, a voice-plus-ambient preview,
+and a matched-level ambient-only preview. Two new effects were generated on
+local CUDA; an additional short background candidate was preserved but excluded
+because it faded too early. The corrected edition reuses a tested longer room-air
+texture, with no replacement generation or relaxed level limits. Approval is
+recorded in a separate hash-bound sidecar; historical manifests are unchanged.
+
+The new ten-story caption edition is also approved, and remains available at
+`audio/storytelling-real-december/caption-review-10-readable-v2-2026-10-29/index.html`:
+216 audio-timed cues, SRT/VTT and a spoken transcript for each story. All 24
+recognition/script discrepancies were reviewed individually with source spelling
+evidence and 15 offline unprompted clip checks. Three apparent spoken variations
+are retained; nine wording/repetition checks remain visible in the historical
+review page. The user's overall caption acceptance is recorded in a separate
+sidecar and does not authorize any voice repair. The readability revision keeps
+supported names together and improves phrase breaks without changing caption
+text or any audio. Original 306-cue drafts
+and the first 215-cue editorial edition are preserved.
+
+The next ten stories have three prompt-approved visual paths at
+`audio/storytelling-real-december/visual-review-next-10-2026-10-29/index.html`:
+37 memory scenes and 111 distinct contextual, human-figure and balanced prompt
+treatments. All prompts are 71–75 SDXL content tokens, all human-path scenes
+request safe front-facing portraits, and all paths use the approved 14:39.440
+audio/caption clock. Locations and source-specific details have exact evidence;
+future wishes remain distinct from completed memories. The page supports path
+switching, four unchanged audio choices and post-onset fade preview. No image
+model is started. Prompt approval is recorded in a hash-bound sidecar; these
+stories are now included in `.27`. Actual generated-image review remains
+separate. `.26` still retains the previous 35-story approved collection. See
+[batch 04 production notes](docs/LOCAL_AUDIO_3080.md#ambient-batch-04-for-the-next-ten-stories).
+See also [next-ten visual production](docs/LOCAL_AUDIO_3080.md#three-visual-paths-for-the-next-ten-stories).
+
+Voice gender presentation, reviewed accent presentation, personality, and emotional
+range rotate across stories. They are constrained by identity evidence only
+when the source explicitly supports that constraint; otherwise they remain
+documented artistic casting choices rather than claims about the source person.
+
+The format, safeguards, artifacts, and next engineering gates are documented in
+[`docs/SELF_NARRATED_STORIES.md`](docs/SELF_NARRATED_STORIES.md). The editorial
+rules are in `config/storytelling_bible.json`, and new adaptations must conform
+to `contracts/storytelling-script.schema.json`.
+
+Build or refresh the December narration plan and its pending Codex jobs without
+making a network or paid API call:
+
+```powershell
+py -3.10 -m home_podcast `
+  --config .\storytelling.real-december.json `
+  plan-storytelling --month 2013-12
+py -3.10 -m home_podcast `
+  --config .\storytelling.real-december.json `
+  export-storytelling `
+  --plan .\work\storytelling-real-december\planning\2013-12-storytelling-plan.json
+```
+
+The December collection contains 415 structurally valid narration drafts
+representing 412 source-story pages. Structural validity is not personal-story
+approval. Following the October 28 source-backed short-edition reviews, **367
+personal stories are approved and 48 remain held**. The earlier initial audit
+had approved only 9 and blocked 406; those historical counts are not the current
+production queue. The Warm Atlantic lyric source remains held rather than
+treated as autobiography.
+The old roughly 60-hour estimate includes unapproved source copies and must not
+be used as a production runtime. See
+[`docs/PERSONAL_STORY_CONTENT_AUDIT.md`](docs/PERSONAL_STORY_CONTENT_AUDIT.md).
+Three pages with two distinct
+source voices were split into six independently attributed narrations. Two
+otherwise eligible records remain outside the collection because their text
+does not safely establish who may say “I”, and 15 extraction false positives
+are explicitly excluded. The decisions are recorded in
+`series/2013-12/storytelling-editorial-decisions.json`. Export remains resumable;
+zero missing structural adaptations does **not** mean zero pending editorial
+work. The personal-story review queue is separate and remains visible.
+
+Re-export all current jobs and audit every canonical adaptation, locked source
+job, and manifest without a network call:
+
+```powershell
+py -3.10 -m home_podcast `
+  --config .\storytelling.real-december.json `
+  export-storytelling `
+  --plan .\work\storytelling-real-december\planning\2013-12-storytelling-plan.json `
+  --output .\work\storytelling-real-december\adaptations\2013-12-all-current-jobs.jsonl `
+  --include-existing
+py -3.10 -m scripts.audit_storytelling_collection `
+  --config .\storytelling.real-december.json `
+  --jobs .\work\storytelling-real-december\adaptations\2013-12-all-current-jobs.jsonl
+```
+
+Before any speech-provider work, run the no-network cleanup check and rebuild
+the provider-neutral production inventory:
+
+```powershell
+py -3.10 .\scripts\clean_storytelling_for_speech.py `
+  --config .\storytelling.real-december.json `
+  --jobs .\work\storytelling-real-december\adaptations\2013-12-all-current-jobs.jsonl `
+  --backup-root .\work\storytelling-real-december\pre-elevenlabs\original-adaptations `
+  --report .\work\storytelling-real-december\pre-elevenlabs\2013-12-speech-cleanup-report.json
+
+py -3.10 .\scripts\build_storytelling_preflight.py `
+  --config .\storytelling.real-december.json `
+  --jobs .\work\storytelling-real-december\adaptations\2013-12-all-current-jobs.jsonl `
+  --index .\series\2013-12\storytelling-production-index.json `
+  --audit .\work\storytelling-real-december\pre-elevenlabs\2013-12-editorial-audit.json `
+  --inventory .\work\storytelling-real-december\pre-elevenlabs\2013-12-section-inventory.jsonl
+```
+
+The inventory now includes only current, evidence-backed personal-story
+approvals. The 48 held records include 35 still flagged as conservative copies;
+an authored label is not approval either. A `personal-story-review.json` sidecar
+binds each approval to the exact adaptation and frozen source job. Old cached
+plans cannot bypass this gate. No candidate voice IDs or casts are invented
+before the storytelling-specific audition.
+
+```powershell
+py -3.10 -m scripts.audit_personal_story_content --config storytelling.real-december.json
+```
+The machine-readable stopping point is
+`series/2013-12/pre-elevenlabs-handoff.json`.
+
+The initial audio path now has two alternatives: the preserved ElevenLabs
+workflow and a resumable local 3080 workflow. The default local speech path now
+uses **one continuous Qwen VoiceDesign take per reviewed story**, with frozen
+casting, emotional direction and natural pauses. CPU speech checks, shared
+volume leveling and audio-timed draft captions follow; raw takes stay intact.
+The earlier Base section-cloning workflow remains an explicit legacy option.
+Stable Audio soundscapes are a separate, later production phase.
+It does not load models while TouchDesigner is running and does not modify the
+3080 or 5090 `.toe` projects. Setup, exact dry-run ceilings, bounded batches,
+hash-bound listening approvals and production commands are in
+[`docs/LOCAL_AUDIO_3080.md`](docs/LOCAL_AUDIO_3080.md).
+
+The first ten-story audio batch and second 25-story batch are listening-approved. The second batch has
+25 new complete takes (27:12 total), with transcripts and audio-timed draft
+SRT/VTT captions at the local
+`audio/storytelling-real-december/production-batch-02-2026-10-28/index.html`.
+All 25 pass technical checks and are under five minutes; caption-editorial
+approval is still pending. No earlier assets were replaced.
+
+A three-story ambient audition now tests local GPU sound generation on this
+3080 Ti. Listen at
+`audio/storytelling-real-december/ambient-audition-2026-10-28/audible-v3/index.html`
+for complete ambient stems and mixes with the approved narration. Six source
+assets rendered in 20.307 seconds after model loading, with CUDA execution
+verified. The new listening edition replaces the bass-heavy house room tone
+and applies the shared `config/ambient_mastering.json` standard: -24 LUFS source
+sounds, -30 LUFS production backgrounds, and -23 LUFS solo previews. Finished
+backgrounds measure within 0.1 LU of the same target; originals are preserved.
+Future local ambient jobs use the same loudness and audibility gates. Ambient
+listening approval remains pending. See the
+[GPU ambient audition](docs/LOCAL_AUDIO_3080.md#gpu-ambient-audition-on-the-3080-ti)
+for the pinned runtime, evidence, timing and resumable trial commands.
+
+The supported offline CUDA batch path is now `ambient-batch` (also available
+through the 3080 PowerShell runner). The first production ambient batch covers
+the ten listening-approved narrations from speech batch 01, totaling 13:44.72.
+It uses 17 source-grounded sound assets; two effects whose post-mention spans
+were under 15 seconds inherit the continuous background. The three-story
+`audible-v3` audition is recorded as user-approved separately; this new batch
+requires its own listening approval. Existing voices, podcast files, and 5090
+settings are preserved. See [ambient batch production](docs/LOCAL_AUDIO_3080.md#resumable-gpu-ambient-batches).
+
+For the current batch review, use
+`audio/storytelling-real-december/ambient-production-batch-01-2026-10-28/volume-v2/index.html`.
+Only story 10, **Allowed Home, but Unable to Stay**, has changed: its bass-heavy
+background and quiet loop join are replaced by a previously approved,
+non-locating air texture. Its solo preview measures -23 LUFS; the other nine
+stories and every narration remain byte-identical. The edition uses no new
+generation. The user approved story 10's repaired ambient-only track; this is
+not bulk approval of the other nine soundscapes, combined mixes or captions.
+New ambient batch plans also
+freeze `config/ambient_audibility.json`, adding 250–8000 Hz energy, mono
+compatibility and loop-dip checks alongside the existing loudness targets.
+
+The next ten-story ambient listening package is
+`audio/storytelling-real-december/ambient-production-batch-02-audible-v2-2026-10-28/index.html`
+(10:15.52). It keeps the approved speech from narration batch 02 unchanged and
+offers ambient-only, voice-only and combined previews. Thirteen source sounds
+were generated locally on the 3080; the new gate held one bass-heavy apartment
+take. The corrected edition uses the other twelve assets, sharing a passing
+generic house-air texture across two suitable stories, with no further model
+calls. Solo previews measure -23.07 to -23.00 LUFS; production backgrounds
+-30.05 to -29.94 LUFS. The user has approved these ten soundscapes; captions
+retain their separate pending editorial status. Approval is recorded under
+`work/storytelling-real-december/local-audio/approvals/ambient-production-batch-02-audible-v2-2026-10-28.json`.
+The final twelve stories in this approved speech queue are now prepared in
+`audio/storytelling-real-december/ambient-production-batch-03-audible-v4-2026-10-28/index.html`
+(14:28.72), with separate ambient stems and listening previews. Four weak
+candidate backgrounds are preserved but excluded; corrected cached textures
+need no replacement generation. The new edition also uses versioned peak-safe
+solo mastering and repairs an interior fade gap in the final story. All twelve
+need listening approval. This completes ambient preparation for the current
+35-narration queue, not the entire December collection; caption review remains
+separate. The three already-approved audition stories are not regenerated.
+
+The optional live path keeps every canonical Codex adaptation and initial
+render as an immutable fallback. `3080_safe` plays only those assets and leaves
+local language and speech models unloaded. `5090_live` can
+prepare a future loop with constrained Gemma 4 12B narration, a shared
+interpretive casting card, Qwen3-TTS speech, and casting-aware SDXL prompts.
+Nothing is promoted until the requested bundle validates and its audio exists.
+See [`docs/LIVE_LOCAL_VARIATIONS.md`](docs/LIVE_LOCAL_VARIATIONS.md).
+
+## Preserved podcast pipeline
+
+The podcast plan and all existing pilot, audio, soundscape, visual,
+TouchDesigner, episode, and configuration artifacts remain unchanged:
 
 ```text
 stories_*.md
@@ -50,6 +431,13 @@ Ask Codex to analyze new stories, build an episode script, or generate visual
 prompts. Repository-level instructions in [`AGENTS.md`](AGENTS.md) make the
 workflow incremental and require the existing importers and validators.
 
+The requested Codex model for story analysis, first-person writing (initial
+adaptations and revisions), and visual prompt writing is **GPT-6.1 Sol with
+Extra High reasoning** (`gpt-6.1-sol`, `xhigh`). Select it in this conversation's
+model controls; this repository preference does not change the running chat model. Existing
+artifacts retain their original provenance. The local Gemma variation model
+and speech, ambience, and image-generation models keep their separate roles.
+
 The short user-facing guide, supported tasks, and provider boundaries are in
 [`docs/CODEX_WORKFLOW.md`](docs/CODEX_WORKFLOW.md).
 
@@ -70,7 +458,9 @@ The configured source directory is:
 data/exports
 ```
 
-This makes a GitHub clone self-contained. To move the project to another
+This makes the preserved public-source/pilot snapshot self-contained, not the
+current private storytelling show. To move the current show without GitHub,
+use the private handoff above. To move the older public snapshot to another
 computer, including rebuilding the local catalog and restoring cached story
 analysis, follow [`docs/PORTABLE_SETUP.md`](docs/PORTABLE_SETUP.md).
 
@@ -768,7 +1158,7 @@ core. `/project1/podcast_visualizer` in the current local working revision,
 - `caption_out` for the current spoken caption;
 - `status_out` for playhead and scene diagnostics;
 - `show_control` for live play, audio-source, visual-path, seed, crossfade, and
-  color controls;
+  color controls plus the optional local-variation profile and child switches;
 - `color_out_1` and `color_out_2` for adjusted primary and backup images;
 - `voices_only_audio` and `soundscape_audio`, both locked to the same timeline;
 - `audiosource_switch`, which sends exactly one selected stem to `audio_out`.
@@ -787,6 +1177,11 @@ brightness, contrast, gamma, black level, opacity, hue, saturation, and value
 through post-generation Level and HSV TOPs. Reinstalling the show-control
 component preserves its current playback, seed, crossfade, and color values.
 Only one model server should run at a time.
+The Local Variations tab defaults to `3080_safe` and Off. The 5090 profile can
+independently vary narration text, local speech, visual prompts, interpretive
+casting, and variation seeds. A completed bundle becomes active only at a
+loop boundary; a missing, late, or invalid bundle leaves the canonical assets
+playing.
 `Audio Source` offers only `Human Voices Only` and `Soundscape Only`; the
 combined review mix is deliberately excluded. `Audio Enabled` gates the
 selected stem at the Audio Device Out. Saved paused projects reopen at frame
@@ -801,8 +1196,8 @@ Brightness `1.0` is neutral in the Level TOP; `0.0` is black and values above
 The local `.toe` and `.tox` files are ignored by Git and must not be published.
 Use `touchdesigner/update_3080_project.py` for guarded 3080 refreshes. Then run
 `touchdesigner/audit_3080_controls.py` and
-`touchdesigner/audit_3080_live_events.py`; together they exercise all 19
-controls through deterministic callback checks and the live frame-separated
+`touchdesigner/audit_3080_live_events.py`; together they exercise the controls
+through deterministic callback checks and the live frame-separated
 Parameter Execute path. `touchdesigner/audit_3080_visuals.py` rejects saved
 stale backend telemetry and requires a live RTX 3080 backend plus non-black
 generator and Spout output. It forces one non-destructive local output cook so

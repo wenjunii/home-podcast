@@ -28,7 +28,9 @@ and report rejected or pending items.
 | Script generation and polishing | Codex task + `validate-script` |
 | Captions and sequencer timing | Local deterministic code |
 | SDXL prompt writing | Codex task + `import-visual-prompts` |
-| Speech and sound generation | ElevenLabs, only when requested |
+| Initial storytelling speech | Local Qwen3-TTS VoiceDesign, explicitly requested offline production |
+| Storytelling sound effects | Cached local Stable Audio Small-SFX, explicitly requested production |
+| Legacy podcast media / optional fallback | ElevenLabs, only when requested |
 | Live image generation | StreamDiffusionTD |
 | Unattended text-generation fallback | Capriole, only when requested |
 
@@ -55,7 +57,20 @@ Codex-authored artifacts do not bypass the production contracts:
 
 No text-generation API credential is required for these Codex-native passes.
 They use the active Codex task’s plan allowance instead of Capriole billing.
-ElevenLabs and StreamDiffusionTD remain separate external systems.
+The 3080 playback profile uses reviewed cached speech and soundscapes; it does
+not load the text/TTS models during playback. The optional 5090 live path stays
+separate and requires explicit activation. ElevenLabs and StreamDiffusionTD
+remain separate external systems.
+
+## Local-first preservation and optional publishing
+
+GitHub is not needed for the current 136-story show handoff. Use
+`python -m scripts.private_handoff` and the private workflow in
+[`PORTABLE_SETUP.md`](PORTABLE_SETUP.md). Essential ignored runtime scripts,
+approved media and provenance travel in the verified private package, not in a
+public code-only clone. Keep credentials, local model weights, TOEs and
+production records off GitHub. Public syncs require an explicit user request
+and the `scripts.check_public_sync` staged/commit-blob gates.
 
 ## External API fallback
 

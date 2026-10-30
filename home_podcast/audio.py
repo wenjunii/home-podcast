@@ -4,7 +4,6 @@ import hashlib
 import json
 import re
 import shutil
-import subprocess
 import wave
 from pathlib import Path
 from typing import Any
@@ -262,6 +261,8 @@ def render_soundscape_audio(
     *,
     sfx_jobs_path: Path | None = None,
     voices_audio_path: Path | None = None,
+    ambient_mastering_settings: dict[str, Any] | None = None,
+    ambient_project_root: Path | None = None,
 ) -> dict[str, Any]:
     """Render sound design against an existing reviewed episode timeline.
 
@@ -327,6 +328,16 @@ def render_soundscape_audio(
         soundscape_master_path,
         duration_ms,
     )
+    ambient_master = None
+    if ambient_mastering_settings is not None:
+        if ambient_project_root is None:
+            raise ValueError("Ambient mastering requires its project root")
+        from .ambient_mastering import master_ambient
+        ambient_master = master_ambient(
+            soundscape_master_path, ambient_mastering_settings,
+            root=ambient_project_root, role="stem", ffmpeg=ffmpeg,
+        )
+        soundscape_master_path = Path(ambient_master["audio_path"])
     _encode_mp3(ffmpeg, soundscape_master_path, soundscape_mp3_path)
 
     tracks: dict[str, Any] = {
@@ -337,6 +348,8 @@ def render_soundscape_audio(
             "continuous": bool(soundscape_coverage.get("continuous")),
         }
     }
+    if ambient_master is not None:
+        tracks["soundscape_only"]["ambient_mastering"] = ambient_master
     if voices_audio_path is not None:
         voices_audio_path = voices_audio_path.expanduser().resolve()
         if not voices_audio_path.is_file():
@@ -353,14 +366,21 @@ def render_soundscape_audio(
             output_dir / f"{episode_id}-master.wav"
         ).resolve()
         combined_mp3_path = (output_dir / f"{episode_id}.mp3").resolve()
-        _mix_voice_and_sound_cues(
-            ffmpeg,
-            voices_audio_path,
-            sound_cues,
-            prepared_cues,
-            combined_master_path,
-            duration_ms,
-        )
+        mix_gain = None
+        if ambient_master is not None:
+            mix_gain = _mix_existing_voice_and_stem(
+                ffmpeg, voices_audio_path, soundscape_master_path,
+                combined_master_path,
+            )
+        else:
+            _mix_voice_and_sound_cues(
+                ffmpeg,
+                voices_audio_path,
+                sound_cues,
+                prepared_cues,
+                combined_master_path,
+                duration_ms,
+            )
         _encode_mp3(ffmpeg, combined_master_path, combined_mp3_path)
         tracks["combined_preview"] = {
             "master_audio": str(combined_master_path),
@@ -368,6 +388,9 @@ def render_soundscape_audio(
             "contains": "voices_and_soundscape",
             "voices_source": str(voices_audio_path),
         }
+        if mix_gain is not None:
+            tracks["combined_preview"]["global_peak_safety_gain_db"] = mix_gain
+            tracks["combined_preview"]["ambient_source"] = str(soundscape_master_path)
 
     return {
         "contract_version": 1,
@@ -382,6 +405,28 @@ def render_soundscape_audio(
         "soundscape_coverage": soundscape_coverage,
         "tracks": tracks,
     }
+
+
+def _mix_existing_voice_and_stem(
+    ffmpeg: str, voice: Path, stem: Path, output: Path,
+) -> float:
+    """Preserve the new stem/voice balance; only a global peak-safety cut.
+
+    Opt-in local storytelling path only. The historical podcast mixer and
+    its level policy remain unchanged.
+    """
+    from .ambient_mastering import measure_loudness
+    premix = output.with_name(output.stem + "-before-peak-safety.wav")
+    _run([ffmpeg, "-y", "-loglevel", "error", "-i", str(voice), "-i", str(stem),
+          "-filter_complex", "[0:a][1:a]amix=inputs=2:duration=first:normalize=0[mix]",
+          "-map", "[mix]", "-ar", "48000", "-ac", "2", "-c:a", "pcm_f32le", str(premix)])
+    peak = measure_loudness(premix, ffmpeg)["true_peak_dbfs"]
+    if peak is None:
+        raise ValueError("Unmeasurable voice/ambient preview")
+    gain = min(0.0, -1.0 - peak)
+    _run([ffmpeg, "-y", "-loglevel", "error", "-i", str(premix), "-af", f"volume={gain:g}dB",
+          "-c:a", "pcm_s16le", str(output)])
+    return gain
 
 
 def _render_assembled_episode(
@@ -822,11 +867,17 @@ def _read_jobs(path: Path) -> list[dict[str, Any]]:
 
 
 def _run(command: list[str]) -> None:
-    subprocess.run(command, check=True)
+    from .ambient_mastering import _spawn
+    # Same media operation and mix policy; only pre-execution Windows DLL
+    # startup failures are retried. Never retry an actual media-processing error.
+    result = _spawn(command)
+    if result.returncode:
+        raise RuntimeError(f"Audio tool failed ({result.returncode}): {result.stderr[-2000:]}")
 
 
 def _duration_ms(ffprobe: str, path: Path) -> int:
-    result = subprocess.run(
+    from .ambient_mastering import _spawn
+    result = _spawn(
         [
             ffprobe,
             "-v",
@@ -837,10 +888,8 @@ def _duration_ms(ffprobe: str, path: Path) -> int:
             "default=noprint_wrappers=1:nokey=1",
             str(path),
         ],
-        check=True,
-        capture_output=True,
-        text=True,
     )
+    result.check_returncode()
     return round(float(result.stdout.strip()) * 1000)
 
 

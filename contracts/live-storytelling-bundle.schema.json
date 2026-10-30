@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "live-storytelling-bundle.schema.json",
+  "title": "Recovered Homes Buffered Live Storytelling Bundle",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "kind",
+    "status",
+    "variant_id",
+    "narration_id",
+    "loop_index",
+    "profile",
+    "cast_id",
+    "assets",
+    "seeds",
+    "fallback"
+  ],
+  "properties": {
+    "contract_version": {"const": 1},
+    "kind": {"const": "live_storytelling_ready_bundle"},
+    "status": {"enum": ["ready", "prepared_without_audio"]},
+    "variant_id": {"type": "string", "minLength": 1},
+    "narration_id": {"type": "string", "minLength": 1},
+    "loop_index": {"type": "integer", "minimum": 0},
+    "profile": {"enum": ["3080_safe", "5090_live"]},
+    "cast_id": {"type": "string", "pattern": "^cast-[a-f0-9]{20}$"},
+    "assets": {
+      "type": "object",
+      "required": ["adaptation", "audio", "timeline", "visuals", "casting_card"]
+    },
+    "seeds": {
+      "type": "object",
+      "required": ["casting", "narration", "speech", "visual_prompt", "image"]
+    },
+    "fallback": {
+      "type": "object",
+      "required": ["adaptation", "audio", "visuals"]
+    }
+  }
+}

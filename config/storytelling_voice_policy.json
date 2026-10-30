@@ -1,0 +1,41 @@
+{
+  "contract_version": 1,
+  "kind": "storytelling_voice_policy",
+  "provider": "elevenlabs",
+  "status": "voice_pool_requires_storytelling_audition",
+  "selection_unit": "one frozen canonical ElevenLabs narrator per source story; optional local loop casts are recorded separately",
+  "rotation_dimensions": [
+    "gender_presentation",
+    "verified_natural_accent",
+    "vocal_age_presentation",
+    "vocal_texture",
+    "energy",
+    "personality",
+    "emotional_range"
+  ],
+  "required_candidate_metadata": [
+    "person_id",
+    "display_name",
+    "voice_name",
+    "voice_id",
+    "provider",
+    "gender_presentation",
+    "verified_natural_accent",
+    "supported_languages",
+    "personality_tags",
+    "emotional_range_tags",
+    "audition_status"
+  ],
+  "identity_policy": {
+    "location_implies_accent": false,
+    "language_implies_ethnicity": false,
+    "name_implies_gender": false,
+    "unsupported_voice_traits_are_artistic_casting": true,
+    "performed_voice_claims_to_be_source_person": false,
+    "local_cast_may_vary_when_trait_is_unspecified": true,
+    "local_cast_is_stable_within_one_complete_rendition": true,
+    "accent_implies_visual_appearance": false
+  },
+  "selection_policy": "Filter by explicit evidence constraints and language capability, score personality and emotional fit, rotate underused voice traits, break ties deterministically from the narration ID, then freeze the result.",
+  "candidates": []
+}

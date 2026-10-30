@@ -221,10 +221,10 @@ class ShowControlComponentTests(unittest.TestCase):
             "voices",
         )
 
-    def test_visual_path_normalization_has_two_exclusive_paths(self) -> None:
+    def test_visual_path_normalization_has_three_exclusive_paths(self) -> None:
         self.assertEqual(
             MODULE.VISUAL_PATH_NAMES,
-            ("original", "human_figures"),
+            ("original", "human_figures", "balanced"),
         )
         self.assertEqual(
             MODULE._normalize_visual_path("Original Story Visuals"),
@@ -235,6 +235,17 @@ class ShowControlComponentTests(unittest.TestCase):
             "human_figures",
         )
         self.assertEqual(MODULE._visual_path_index("human"), 1)
+        self.assertEqual(MODULE._normalize_visual_path("Balanced Memories"), "balanced")
+        self.assertEqual(MODULE._normalize_visual_path(2), "balanced")
+        self.assertEqual(MODULE._visual_path_index("balanced"), 2)
+
+    def test_runtime_profiles_keep_3080_safe_and_5090_live_separate(self) -> None:
+        self.assertEqual(
+            MODULE.RUNTIME_PROFILE_NAMES,
+            ("3080_safe", "5090_live"),
+        )
+        self.assertEqual(MODULE._normalize_runtime_profile(0), "3080_safe")
+        self.assertEqual(MODULE._normalize_runtime_profile("5090"), "5090_live")
 
     def test_installs_5090_spout_outputs_from_existing_nulls(self) -> None:
         null1 = self.container.add("null1")

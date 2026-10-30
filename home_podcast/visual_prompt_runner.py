@@ -14,6 +14,7 @@ from typing import Any, Callable
 
 from .config import ProjectConfig
 from .providers import CaprioleChatClient, ProviderTrafficBlockedError
+from .storytelling_quality import require_personal_story, validate_personal_visual_plan
 
 LOCATION_ROLES = {
     "home",
@@ -125,6 +126,7 @@ def import_visual_prompt_results(
     prompt_text = prompt_path.read_text(encoding="utf-8")
     prompt_hash = hashlib.sha256(prompt_text.encode("utf-8")).hexdigest()[:12]
     plan = _load_object(visuals_path)
+    _check_personal_story_plan(config, plan)
     jobs = _read_jsonl(jobs_path)
     _validate_jobs(jobs, plan)
     job_by_scene = {str(job["scene_id"]): job for job in jobs}
@@ -225,6 +227,7 @@ def generate_visual_prompt_jobs(
     prompt_text = prompt_path.read_text(encoding="utf-8")
     prompt_hash = hashlib.sha256(prompt_text.encode("utf-8")).hexdigest()[:12]
     plan = _load_object(visuals_path)
+    _check_personal_story_plan(config, plan)
     jobs = _read_jsonl(jobs_path)
     if limit is not None:
         jobs = jobs[: max(0, limit)]
@@ -432,6 +435,15 @@ def generate_visual_prompt_jobs(
     _write_failure_log(cache_dir, failures)
     report["failure_log"] = str(cache_dir / "failures.jsonl")
     return report
+
+
+def _check_personal_story_plan(config: ProjectConfig, plan: dict[str, Any]) -> None:
+    if getattr(config, "production_mode", "podcast") != "self_narrated_storytelling":
+        return
+    narration_id = str(plan.get("narration_id", ""))
+    directory = config.episodes_dir / narration_id
+    require_personal_story(directory)
+    validate_personal_visual_plan(plan, _load_object(directory / "adaptation.json"))
 
 
 def _validate_jobs(jobs: list[dict[str, Any]], plan: dict[str, Any]) -> None:

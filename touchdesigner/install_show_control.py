@@ -32,6 +32,9 @@ def install():
     connector.op("parameter_callbacks").text = (
         touchdesigner_root / "parameter_callbacks.py"
     ).read_text(encoding="utf-8")
+    connector.op("parameter_callbacks").par.pars = (
+        "Playheadsec Currentnarrationid Canonicalvisuals Canonicalhumanvisuals"
+    )
 
     component_module = _load_module(
         "recovered_homes_show_control_component",
@@ -66,6 +69,9 @@ def install():
     callbacks.module._CONTROLLER = None
     controller = callbacks.module.get_controller()
     callbacks.module._synchronize_show_control()
+    live_callbacks = control.op("control_callbacks")
+    if live_callbacks is not None:
+        live_callbacks.module._write_live_control()
     controller.update(float(connector.par.Playheadsec.eval()))
     control.current = True
     return control

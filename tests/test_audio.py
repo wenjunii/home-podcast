@@ -312,6 +312,19 @@ class AudioRenderTests(unittest.TestCase):
                 ).is_file()
             )
             self.assertFalse((root / "output" / "test-episode-timeline.json").exists())
+            # Opt-in local storytelling uses the shared finished-stem target,
+            # and the preview actually uses that stem (not the raw cue bus).
+            from home_podcast.ambient_mastering import DEFAULTS
+            original_voice = voice.read_bytes()
+            leveled = render_soundscape_audio(
+                timeline_path, sound_design_path, root / "work", root / "leveled-output",
+                voices_audio_path=voice, ambient_mastering_settings=DEFAULTS,
+                ambient_project_root=root,
+            )
+            stem = leveled["tracks"]["soundscape_only"]
+            self.assertAlmostEqual(stem["ambient_mastering"]["metrics"]["integrated_lufs"], -30, delta=.7)
+            self.assertEqual(leveled["tracks"]["combined_preview"]["ambient_source"], stem["master_audio"])
+            self.assertEqual(voice.read_bytes(), original_voice)
 
 
 def _licensed_cue(cue_id: str, path: Path, duck: bool, offset_ms: int) -> dict:

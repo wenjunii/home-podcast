@@ -11,6 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import importlib.util
+import json
 from pathlib import Path
 import re
 import secrets
@@ -40,6 +41,10 @@ class PodcastVisualController:
         self.last_playhead_ms = None
         self.seed_salt = secrets.randbits(64)
         self.seed_generation = 0
+        self.active_live_bundle = None
+        self.pending_live_bundle = None
+        self.live_runtime_message = "canonical"
+        self._refresh_live_bundle(allow_activate=True)
         self.reload()
 
     def reload(self):
@@ -71,6 +76,19 @@ class PodcastVisualController:
         return True
 
     def update(self, playhead_seconds):
+        requested_playhead_ms = max(0, round(float(playhead_seconds) * 1000.0))
+        loop_boundary = self.last_playhead_ms is None
+        detected_wrap = False
+        if self.sequencer is not None and self.last_playhead_ms is not None:
+            edge = max(1_000, min(10_000, self.sequencer.duration_ms // 10))
+            detected_wrap = (
+                self.last_playhead_ms >= self.sequencer.duration_ms - edge
+                and requested_playhead_ms <= edge
+            )
+            loop_boundary = detected_wrap
+        self._refresh_live_bundle(allow_activate=loop_boundary)
+        if detected_wrap:
+            self._request_random_live_variation()
         selected_path = self._selected_scene_path()
         if selected_path != self.loaded_path:
             if not self._load_scene(selected_path):
@@ -440,6 +458,17 @@ class PodcastVisualController:
         table.appendRow(["seed_generation", self.seed_generation])
         table.appendRow(["streamdiffusion", adapter_state])
         table.appendRow(["color", color_state])
+        table.appendRow(["live_runtime", self.live_runtime_message])
+        table.appendRow(
+            [
+                "live_variant_id",
+                (
+                    self.active_live_bundle.get("variant_id", "")
+                    if self.active_live_bundle
+                    else ""
+                ),
+            ]
+        )
 
     def _status(self, state, message):
         table = self.owner_comp.op("status_out")
@@ -461,7 +490,7 @@ class PodcastVisualController:
         parameter = getattr(self.owner_comp.par, "Visualpath", None)
         value = parameter.eval() if parameter is not None else "original"
         if isinstance(value, (int, float)):
-            return "human_figures" if int(value) == 1 else "original"
+            return {1: "human_figures", 2: "balanced"}.get(int(value), "original")
         normalized = str(value or "").strip().casefold().replace(" ", "_")
         if normalized in {
             "1",
@@ -471,15 +500,133 @@ class PodcastVisualController:
             "humanfigures",
         }:
             return "human_figures"
+        if normalized in {"2", "balanced", "balanced_memories"}:
+            return "balanced"
         return "original"
 
     def _selected_scene_path(self):
-        parameter_name = (
-            "Humanfigurejson"
-            if self._visual_path_name() == "human_figures"
-            else "Scenejson"
-        )
+        active_live_bundle = getattr(self, "active_live_bundle", None)
+        if active_live_bundle:
+            live_visuals = active_live_bundle.get("assets", {}).get("visuals")
+            live_path = (
+                live_visuals.get(self._visual_path_name())
+                if isinstance(live_visuals, dict)
+                else live_visuals
+            )
+            if live_path and Path(str(live_path)).is_file():
+                return self._resolve_path(str(live_path))
+        parameter_name = {"human_figures": "Humanfigurejson",
+                          "balanced": "Balancedjson"}.get(
+                              self._visual_path_name(), "Scenejson")
         parameter = getattr(self.owner_comp.par, parameter_name, None)
-        if parameter is None:
+        if parameter is None or not str(parameter.eval()).strip():
             parameter = self.owner_comp.par.Scenejson
         return self._resolve_path(str(parameter.eval()))
+
+    def _live_variations_enabled(self):
+        control = self.owner_comp.op("show_control")
+        if control is None:
+            return False
+        enabled = getattr(control.par, "Livevariations", None)
+        profile = getattr(control.par, "Runtimeprofile", None)
+        if enabled is None or profile is None or not bool(enabled.eval()):
+            return False
+        value = profile.eval()
+        if isinstance(value, (int, float)):
+            return int(value) == 1
+        return str(value).strip().casefold().replace(" ", "_") in {
+            "5090",
+            "5090_live",
+            "1",
+        }
+
+    def _refresh_live_bundle(self, *, allow_activate):
+        if not self._live_variations_enabled():
+            if self.active_live_bundle is not None:
+                self.active_live_bundle = None
+                self.pending_live_bundle = None
+                self.last_scene_id = ""
+                self._set_voices_audio(self._canonical_audio_path())
+            self.live_runtime_message = "canonical"
+            return
+        current_parameter = getattr(self.owner_comp.par, "Livecurrentjson", None)
+        narration_parameter = getattr(self.owner_comp.par, "Currentnarrationid", None)
+        if current_parameter is None or narration_parameter is None:
+            self.live_runtime_message = "runtime_parameters_missing"
+            return
+        narration_id = str(narration_parameter.eval()).strip()
+        if not narration_id:
+            self.live_runtime_message = "waiting_for_narration"
+            return
+        current_path = Path(self._resolve_path(str(current_parameter.eval())))
+        try:
+            pointer = json.loads(current_path.read_text(encoding="utf-8-sig"))
+            if pointer.get("status") != "ready":
+                raise ValueError("current pointer is not ready")
+            bundle_path = Path(str(pointer["bundle"]))
+            bundle = json.loads(bundle_path.read_text(encoding="utf-8-sig"))
+            if bundle.get("status") != "ready":
+                raise ValueError("bundle is not ready")
+            if bundle.get("narration_id") != narration_id:
+                self.live_runtime_message = "ready_for_other_narration"
+                return
+            audio = bundle.get("assets", {}).get("audio")
+            if not audio or not Path(str(audio)).is_file():
+                raise ValueError("bundle audio is missing")
+        except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+            self.live_runtime_message = "fallback_canonical"
+            return
+        if (
+            self.active_live_bundle is None
+            or self.active_live_bundle.get("variant_id") != bundle.get("variant_id")
+        ):
+            self.pending_live_bundle = bundle
+        if allow_activate and self.pending_live_bundle is not None:
+            self.active_live_bundle = self.pending_live_bundle
+            self.pending_live_bundle = None
+            self.last_scene_id = ""
+            self.last_streamdiffusion_signature = None
+            self._set_voices_audio(self.active_live_bundle["assets"]["audio"])
+            self.live_runtime_message = "live_ready"
+        elif self.pending_live_bundle is not None:
+            self.live_runtime_message = "ready_next_loop"
+        else:
+            self.live_runtime_message = "live_active"
+
+    def _canonical_audio_path(self):
+        parameter = getattr(self.owner_comp.par, "Audiofile", None)
+        return str(parameter.eval()) if parameter is not None else ""
+
+    def _set_voices_audio(self, path):
+        if not path:
+            return
+        audio = self.owner_comp.op("voices_only_audio")
+        if audio is None:
+            return
+        try:
+            current = str(audio.par.file.eval())
+            if current != str(path):
+                audio.par.file.val = str(path)
+                cue = getattr(audio.par, "cuepulse", None)
+                if cue is not None:
+                    cue.pulse()
+        except Exception:
+            self.live_runtime_message = "audio_switch_failed"
+
+    def _request_random_live_variation(self):
+        if not self._live_variations_enabled():
+            return
+        control = self.owner_comp.op("show_control")
+        random_parameter = (
+            getattr(control.par, "Randomvariationseeds", None)
+            if control is not None
+            else None
+        )
+        if random_parameter is None or not bool(random_parameter.eval()):
+            return
+        callbacks = self.owner_comp.op("show_control/control_callbacks")
+        try:
+            callbacks.module._write_live_control(regenerate=True)
+            self.live_runtime_message = "requested_next_loop"
+        except Exception:
+            self.live_runtime_message = "variation_request_failed"

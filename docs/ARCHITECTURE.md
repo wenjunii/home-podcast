@@ -73,6 +73,54 @@ the source.
 AI checks are useful for tone and unsupported-claim detection, but deterministic
 validation remains the final gate wherever a machine-checkable rule exists.
 
+## First-person storytelling and live buffers
+
+The active storytelling path produces one independently playable adaptation
+per supported first-person source voice. A source without evidence for who may
+say “I” is held; it is never converted to a fictional narrator. Explicit
+editorial decisions remove non-story extraction false positives and partition
+multi-author pages by exact source-text boundaries, while retaining the shared
+story ID and content hash. Canonical Codex adaptations, initial ElevenLabs
+speech, and reviewed visual plans are immutable fallback assets.
+
+The optional local runtime is double-buffered:
+
+```text
+canonical source-validated rendition
+  -> seeded interpretive casting card
+  -> constrained local narration and prompt variation
+  -> deterministic gates
+  -> local speech + new timing/captions
+  -> complete ready bundle
+  -> atomic current pointer
+  -> TouchDesigner activation at the next loop boundary
+```
+
+The runtime never sends unfinished model text directly to speech or image
+generation. Casting, narration, speech, prompt, and image randomness use
+separate recorded seeds. A cast is stable within one rendition. Explicit
+identity evidence is locked; unspecified traits remain artistic casting and
+location, language, name, or accent never fills an identity field.
+
+`3080_safe` disables local generation and does not import its model stack.
+`5090_live` uses a loopback-only Ollama adapter and optional Qwen3-TTS runtime.
+
+The separate `3080_offline_production` profile is not a show-control mode. It
+runs only while TouchDesigner is closed, keeps one GPU model resident at a
+time, caches speech per section and ambience per cue, and unloads each model
+before the next phase. Its canonical outputs become the immutable fallback for
+the later `5090_live` double buffer. See `docs/LOCAL_AUDIO_3080.md`.
+Failure, timeout, invalid output, missing audio, or worker absence keeps the
+canonical or last-known-good bundle active.
+
+Before provider speech, a separate deterministic gate validates every active
+adaptation against its locked source job and manifest, removes machine-detectable
+speech hazards, and emits a hash-addressed section inventory. Excluded draft
+directories are preserved under `narrations/editorial-exclusions/` and cannot
+enter that inventory. Structural readiness permits voice audition only;
+editorial approval and a frozen cast are separate requirements for production
+TTS.
+
 ## Sound-design trust boundary
 
 Non-voice audio is not evidence. Every cue must be marked either as

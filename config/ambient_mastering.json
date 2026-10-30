@@ -1,0 +1,15 @@
+{
+  "contract_version": 1,
+  "enabled": true,
+  "asset_target_lufs": -24.0,
+  "stem_target_lufs": -30.0,
+  "solo_target_lufs": -23.0,
+  "asset_true_peak_dbfs": -3.0,
+  "stem_true_peak_dbfs": -7.0,
+  "solo_true_peak_dbfs": -3.0,
+  "highpass_hz": 60.0,
+  "lowpass_hz": 14000.0,
+  "loudness_range_lu": 11.0,
+  "level_tolerance_lu": 0.7,
+  "maximum_audible_band_loss_lu": 8.0
+}

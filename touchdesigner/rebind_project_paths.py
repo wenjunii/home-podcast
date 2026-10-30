@@ -73,6 +73,14 @@ def rebind_project_paths():
             "before rebinding project paths."
         )
     human_scene_parameter.val = str(paths["human_scene"])
+    canonical_visuals = getattr(connector.par, "Canonicalvisuals", None)
+    if canonical_visuals is not None:
+        canonical_visuals.val = str(paths["scene"])
+    canonical_human_visuals = getattr(
+        connector.par, "Canonicalhumanvisuals", None
+    )
+    if canonical_human_visuals is not None:
+        canonical_human_visuals.val = str(paths["human_scene"])
     connector.par.Audiofile = str(paths["voices_audio"])
     soundscape_parameter = getattr(
         connector.par,
@@ -83,6 +91,17 @@ def rebind_project_paths():
         soundscape_parameter.val = str(paths["soundscape_audio"])
     connector.par.Sequencermodule = str(paths["sequencer"])
     connector.par.Controllermodule = str(paths["controller"])
+    runtime_root = (
+        project_root / "work" / "storytelling-real-december" / "runtime"
+    )
+    for parameter_name, filename in (
+        ("Livecontroljson", "control.json"),
+        ("Livestatusjson", "status.json"),
+        ("Livecurrentjson", "current.json"),
+    ):
+        parameter = getattr(connector.par, parameter_name, None)
+        if parameter is not None:
+            parameter.val = str(runtime_root / filename)
 
     audio = connector.op("voices_only_audio")
     soundscape_audio = connector.op("soundscape_audio")
@@ -123,6 +142,7 @@ def rebind_project_paths():
         "visual_path": str(connector.par.Visualpath.eval()),
         "voices_audio_file": str(paths["voices_audio"]),
         "soundscape_audio_file": str(paths["soundscape_audio"]),
+        "live_runtime_root": str(runtime_root),
         "streamdiffusion_paths_unchanged": str(
             connector.par.Streamdiffusionpath.eval()
         ),
