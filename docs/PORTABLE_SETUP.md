@@ -125,6 +125,12 @@ payloads, symlinks and oversized source files. A successful gate is an added
 safeguard, not a comprehensive secret detector or permission to publish private
 data. Commit/push/PR actions still require an explicit user request.
 
+Public tests use synthetic stories to exercise source preservation and the
+editorial-review gate, including rejection after an approved fixture changes.
+Two historical production-snapshot integration tests run only when their
+private files are present; those records do not need to be published to run
+the code tests. Synthetic test reviews never count as production approval.
+
 The following describes the older public-source/pilot handoff, not a complete
 restore of the current private `.40` storytelling show.
 

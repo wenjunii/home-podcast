@@ -1,14 +1,79 @@
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
 from home_podcast.config import ProjectConfig
+from home_podcast.storytelling import (
+    create_storytelling_plan, export_storytelling_jobs, import_storytelling_adaptations,
+)
+from scripts.build_storytelling_preflight import build_preflight
+from tests.test_storytelling import SOURCE, _setup, _adaptation
+from tests.storytelling_test_support import write_review
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class StorytellingPlanTests(unittest.TestCase):
+    def synthetic_collection(self, root):
+        """One invented fixture story; never read or approve production records."""
+        config, story, _ = _setup(root)
+        plan_path, jobs_path = root / "plan.json", root / "jobs.jsonl"
+        plan = create_storytelling_plan(config, "2013-05", plan_path)
+        export_storytelling_jobs(config, plan_path, jobs_path)
+        job = json.loads(jobs_path.read_text(encoding="utf-8"))
+        adaptation = _adaptation(job)
+        results = root / "results.jsonl"
+        results.write_text(json.dumps(adaptation)+"\n", encoding="utf-8")
+        imported = import_storytelling_adaptations(config, results, jobs_path, root / "report.json")
+        self.assertEqual((imported["imported"], imported["rejected"]), (1, 0))
+        return config, story, plan, job, jobs_path, adaptation
+
+    def test_fixture_plan_freezes_full_source_and_preserves_other_projects(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            pilot = root / "episodes/pilot/script.json"
+            pilot.parent.mkdir(parents=True)
+            pilot.write_bytes(b'{"preserved_podcast": true}\n')
+            other_project = root / "podcast.5090.toe"
+            other_project.write_bytes(b"synthetic existing project sentinel")
+            before = (pilot.read_bytes(), other_project.read_bytes())
+            config, story, plan, job, _, _ = self.synthetic_collection(root)
+            directory = config.episodes_dir / job["narration_id"]
+            frozen = json.loads((directory / "source-job.json").read_text(encoding="utf-8"))
+            self.assertEqual(plan["coverage"]["planned_eligible_narrations"], 1)
+            self.assertEqual(frozen["story_text"], SOURCE)
+            self.assertEqual(frozen["source_content_hash"], story["content_hash"])
+            self.assertEqual(job["perspective"]["preferred_perspective"], "first_person_preserved")
+            self.assertEqual((pilot.read_bytes(), other_project.read_bytes()), before)
+
+    def test_fixture_preflight_summary_requires_current_editorial_review(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config, _, _, job, jobs, adaptation = self.synthetic_collection(root)
+            index, audit, inventory = build_preflight(config, jobs)
+            self.assertEqual(index["summary"], audit["summary"])
+            self.assertEqual(index["summary"]["planned_narrations"], 1)
+            self.assertEqual(index["summary"]["readiness"]["blocked_before_voice_audition"], 1)
+            self.assertFalse(audit["valid"])
+            self.assertEqual(inventory, [])
+            self.assertFalse(audit["model_servers_started"])
+            # Explicit synthetic review, labelled test-fixture by the helper.
+            directory = config.episodes_dir / job["narration_id"]
+            write_review(directory)
+            index, audit, inventory = build_preflight(config, jobs)
+            self.assertTrue(audit["valid"], audit["blocked_narrations"])
+            self.assertEqual(index["summary"], audit["summary"])
+            self.assertEqual(index["summary"]["sections_ready_for_voice_audition"], len(inventory))
+            self.assertEqual(len(inventory), len(adaptation["sections"]))
+            self.assertTrue(all(row["cast_status"] == "pending_storytelling_voice_audition" for row in inventory))
+            adaptation["sections"][0]["text"] += " A changed memory."
+            (directory / "adaptation.json").write_text(json.dumps(adaptation), encoding="utf-8")
+            _, stale_audit, stale_inventory = build_preflight(config, jobs)
+            self.assertFalse(stale_audit["valid"])
+            self.assertEqual(stale_inventory, [])
+
     def test_storytelling_uses_shared_evidence_and_separate_outputs(self):
         storytelling = ProjectConfig.load(ROOT / "storytelling.real-december.json")
         podcast = ProjectConfig.load(ROOT / "podcast.real-december.json")
@@ -36,6 +101,10 @@ class StorytellingPlanTests(unittest.TestCase):
         self.assertFalse(identity["performed_voice_claims_to_be_source_person"])
         self.assertTrue(identity["unsupported_voice_traits_are_artistic_casting"])
 
+    @unittest.skipUnless(
+        (ROOT / "series/2013-12/storytelling-collection.json").is_file(),
+        "Private production snapshot is not included in a public code-only checkout",
+    )
     def test_storytelling_collection_preserves_podcast_and_has_complete_sources(self):
         collection = json.loads(
             (ROOT / "series" / "2013-12" / "storytelling-collection.json").read_text(
@@ -105,6 +174,11 @@ class StorytellingPlanTests(unittest.TestCase):
         self.assertFalse(safeguards["accent_implies_appearance"])
         self.assertTrue(safeguards["one_cast_per_complete_rendition"])
 
+    @unittest.skipUnless(
+        all((ROOT / "series/2013-12" / name).is_file() for name in
+            ("pre-elevenlabs-handoff.json", "storytelling-production-index.json")),
+        "Private production snapshots are not included in a public code-only checkout",
+    )
     def test_pre_elevenlabs_handoff_matches_production_index(self):
         handoff = json.loads(
             (ROOT / "series" / "2013-12" / "pre-elevenlabs-handoff.json").read_text(
