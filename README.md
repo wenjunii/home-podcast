@@ -45,6 +45,29 @@ Before an explicitly requested public sync, run
 The gate checks Git blobs for private assets and recognizable credentials;
 neither command pushes or publishes anything.
 
+### Task-completion cleanup
+
+After verification, Codex may clean known disposable task artifacts without
+asking again: one-off validation scripts, scratch files, redundant test/restore
+copies, reproducible caches, completed installation archives and abandoned
+partial downloads. Exact ownership and dependencies must be checked first;
+an old or ignored file is not automatically disposable.
+
+This is a task-completion preference, **not a background service or a broad
+cleanup script**. Prefer the Recycle Bin and report material removals and their
+recoverability; disk space is not reclaimed until recycled files are removed.
+Keep sources, references, user outputs, audio, prompts, captions, approvals,
+project versions, backups, private handoff packages, active/shared models,
+required tools/environments and the 5090 setup. Files under `work/` can be live
+TouchDesigner dependencies or durable verification receipts, not just scratch.
+Only when the user retires a workflow may models downloaded exclusively for
+that workflow be removed, after checking that nothing else shares them.
+
+The handoff commands never prune package objects or old snapshots. The public
+sync gate remains read-only; neither script deletes files or starts cleanup.
+See [the working preferences](AGENTS.md#automatic-cleanup-after-tasks) and
+[private-package preservation](docs/PORTABLE_SETUP.md#preserving-private-packages-during-cleanup).
+
 ### Current local 136-story continuous-image edition (.40)
 
 Open **`podcast.40.toe`** in TouchDesigner **2025.32820** on the RTX 3080.

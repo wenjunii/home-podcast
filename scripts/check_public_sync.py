@@ -3,6 +3,8 @@
 Default: audit staged additions/modifications. With --base REF, audit every
 new commit's changed blobs, including content deleted again in a later commit.
 No push, commit, credentials, model loading or network calls.
+No cleanup or deletion: the separate task-completion policy in AGENTS.md
+requires dependency checks; it is not a side effect of this audit.
 """
 from __future__ import annotations
 
