@@ -102,6 +102,29 @@ older pilot-only `rebind_project_paths.py` for this edition.
   review pages, generation caches and older TOE editions are not a complete
   part of this scoped package; preserve their originals separately if needed.
 
+### Preserving private packages during cleanup
+
+Routine task-completion cleanup is limited to known disposable artifacts after
+verification and dependency checks. It may remove one-off validation scripts,
+scratch/test copies, completed installation archives and abandoned partial
+downloads. Do not delete a helper just because it lives in `work/`: the current
+TOE imports earlier controller helpers from there. Keep approval/validation
+receipts and all source/reference inputs and user outputs.
+
+The private package is not a disposable test copy. Keep its objects, immutable
+snapshots and standalone tool together; objects may be shared across snapshots.
+Neither `scripts.private_handoff` nor `scripts.check_public_sync` performs
+cleanup, pruning, background scheduling or Recycle Bin emptying. Keep models
+and environments needed for future production; user retirement of a workflow
+permits removal only of models downloaded exclusively for it after a shared
+dependency check. No workflow is retired merely because playback is cached.
+
+Prefer recoverable Recycle Bin moves for disposable artifacts and briefly
+report material removals. Moving files there does not itself reclaim space.
+The [working preferences](../AGENTS.md#automatic-cleanup-after-tasks) govern
+cleanup; they do not authorize deleting private packages, production versions,
+the 5090 setup, or making an unrequested public GitHub sync.
+
 ## Preserved GitHub/pilot restore workflow
 
 ### Optional current code-only GitHub sync

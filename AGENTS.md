@@ -1,3 +1,26 @@
+# Working preferences
+
+## Automatic cleanup after tasks
+
+- The user authorizes routine cleanup of disposable files created or downloaded
+  for a task once verification is finished, without asking again. Include one-off
+  validation scripts, scratch files, completed installation archives, abandoned
+  partial downloads, and redundant task copies when they are no longer needed.
+- Verify exact targets and dependencies before removal. Limit cleanup to known
+  task artifacts; age or absence from the current workflow alone does not
+  establish that a file is unused.
+- When the user retires a workflow, also remove models downloaded exclusively
+  for that workflow after checking for shared dependencies. Preserve active or
+  shared models, required tools and environments, source files, reference inputs,
+  and user outputs unless their removal is authorized.
+- Prefer the Recycle Bin when practical. Do not empty the Recycle Bin or
+  permanently remove unrelated files as part of routine cleanup.
+- Briefly report material cleanup, approximate size when useful, and whether the
+  files are recoverable. Perform cleanup as part of task completion; this
+  preference does not create a background schedule.
+
+--- project-doc ---
+
 # Recovered Homes — Codex production instructions
 
 These instructions apply to the complete repository.
@@ -296,3 +319,12 @@ that path invokes the configured external LLM.
 - TouchDesigner reads the external scene JSON. After visual changes, instruct
   the user to reopen the latest local `.toe` or reload the controller; do not
   start both StreamDiffusionTD model servers.
+- Apply the working-preference cleanup policy only to verified disposable task
+  artifacts. Resolve exact targets, reject symlinks/junctions and unsafe recursive
+  targets, and check tracked files, active workers, registered Git worktrees and
+  runtime dependencies before removal. Preserve production helpers under `work/`,
+  approval/validation receipts, source/reference inputs, raw/failed/approved
+  media, all project versions, backups, private handoff packages and the 5090
+  setup. Do not infer that a workflow is retired because it is currently idle.
+  Distinguish recoverable Recycle Bin moves from reclaimed disk space; cleanup
+  grants no GitHub-write or global/system-wide cleanup authority.
