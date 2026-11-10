@@ -121,6 +121,45 @@ class PrivateHandoffTests(unittest.TestCase):
         self.write("config/unsafe.json", json.dumps({"api_key": "not-a-standard-shaped-key"}).encode())
         with self.assertRaisesRegex(h.HandoffError, "credential field"):self.body()
 
+    def scan_memory(self, name, payload):
+        # Authorization fixtures stay in RAM, never files or Git objects.
+        with patch.object(Path, "read_bytes", return_value=b"{}"), patch.object(h, "read", return_value=payload):
+            h.scan(Path("unused-fixture.json"), name)
+
+    def test_reviewed_editorial_permission_value_is_not_an_api_header(self):
+        name = "work/storytelling-real-december/visuals-35-2026-10-29/storytelling-23-handoff.json"
+        self.scan_memory(name, {"authorization": "Yes, save .23"})
+
+    def test_changed_or_relocated_editorial_permission_is_held(self):
+        name = "work/storytelling-real-december/visuals-35-2026-10-29/storytelling-23-handoff.json"
+        for logical_name, value in ((name, "Unreviewed value"), ("config/other.json", "Yes, save .23")):
+            with self.subTest(name=logical_name), self.assertRaisesRegex(h.HandoffError, "credential field"):
+                self.scan_memory(logical_name, {"authorization": value})
+
+    def test_editorial_permission_never_exempts_other_credential_fields(self):
+        name = "work/storytelling-real-december/visuals-35-2026-10-29/storytelling-23-handoff.json"
+        with self.assertRaisesRegex(h.HandoffError, "credential field"):
+            self.scan_memory(name, {"authorization": "Yes, save .23", "password": "Unreviewed value"})
+
+    def test_nested_credentials_are_scanned_even_with_a_pinned_parent(self):
+        name = "work/storytelling-real-december/fixture.json"
+        payload = {"authorization": {"password": "Unreviewed value"}}
+        # Even an erroneously pinned parent must not exempt nested fields.
+        pins = {name: h.digest_bytes(h.canonical(payload["authorization"]))}
+        with patch.object(h, "EDITORIAL_AUTHORIZATION_DIGESTS", pins), self.assertRaisesRegex(h.HandoffError, "credential field"):
+            self.scan_memory(name, payload)
+
+    def test_additional_credential_fields_are_rejected_without_storage(self):
+        for key in ("secret_key", "api_secret", "aws_secret_access_key"):
+            with self.subTest(key=key), self.assertRaisesRegex(h.HandoffError, "credential field"):
+                self.scan_memory("config/fixture.json", {key: "Unreviewed value"})
+
+    def test_credential_shaped_filename_is_refused_without_echo(self):
+        value = "sk-" + "aB1" * 12
+        with self.assertRaises(h.HandoffError) as result:
+            h.safe_name("work/" + value + ".json")
+        self.assertNotIn(value, str(result.exception))
+
     def test_filename_and_traversal_guards(self):
         for name in ("../outside", "/absolute", "C:/escape", "a\\b", "a//b", "a/./b", "con.txt", "a/NUL", "a/b.", ".git/config", ".env", "auth.json", "key.pem", "a:stream"):
             with self.subTest(name=name), self.assertRaises(h.HandoffError):h.safe_name(name)
