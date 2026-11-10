@@ -13,8 +13,10 @@ The current tracked snapshot contains 1,652 unique stories in ten languages:
 677 captured in May 2013, 444 in December 2013, 281 in March 2014, 180 in
 April 2014, and 70 in July 2014. Capture time is provenance from the WARC
 filename, not a claim about writing or publication time. Ninety-one stories
-currently have portable analysis cards; the remaining 1,561 stay available for
-incremental Codex analysis.
+are covered by the public portable analysis-card snapshot; the remaining 1,561
+are not part of that public card export. Private working catalogues can contain
+additional analysis/editorial state, preserved by the private handoff rather
+than requiring unchanged stories to be reanalyzed.
 
 The system is designed around three promises:
 
@@ -27,10 +29,19 @@ The system is designed around three promises:
 
 ### Local-first operation; GitHub optional
 
-Use `python -m scripts.private_handoff` to plan, export, verify and import a
-private dependency-complete snapshot of the current 136-story `.40` edition.
-The default includes approved individual story audio, frozen sources,
-adaptations and approval receipts as well as the complete playback show.
+For the latest 3080 working data PLUS the approved show, use
+`python -m scripts.prepare_working_handoff --bundle PATH --label LABEL`.
+It plans read-only; add `--apply` to freeze a versioned transfer. This includes
+all current adaptation records (415 at the November 10 preparation), working
+source/planning/review state and two portable catalogue SQL snapshots, while
+keeping the approved 136-story `.40` playback scope unchanged. Pending/held
+records remain pending/held. See [the repeatable three-PC handoff](docs/PC_HANDOFF.md).
+
+`python -m scripts.private_handoff` remains the narrower approved-136-only
+exporter and the common verify/import tool. Its editable scope includes
+approved individual audio, frozen sources, adaptations and approval receipts.
+Use a separate package folder for that narrower scope; it cannot replace the
+latest pointer of a broader working-state package.
 Content-addressed snapshots reuse unchanged files; imports never overwrite
 different existing files or an existing 5090 setup. No GitHub, paid API,
 media generation or Git commit is involved.
@@ -38,7 +49,9 @@ media generation or Git commit is involved.
 Keep the package private: it contains the selected licensed TOE and personal
 story material, not model weights, environments, credentials or Git history.
 GitHub remains available for optional code-only publishing; nothing is pushed
-automatically. See [private cross-PC export/import and TouchDesigner rebinding](docs/PORTABLE_SETUP.md#current-local-first-handoff-136-stories--podcast40toe).
+automatically. On 4090/5090, stage the incoming package separately and compare;
+never overwrite machine-specific settings or run the 3080 rebinder against an
+existing receiver project. See [portable setup](docs/PORTABLE_SETUP.md).
 Before an explicitly requested public sync, run
 `python -m scripts.check_public_sync` on staged files, then
 `python -m scripts.check_public_sync --base origin/main` on the new commits.

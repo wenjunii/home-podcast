@@ -22,10 +22,31 @@ EDITION = "work/storytelling-real-december/continuous-image-hold-136-3080-2026-1
 APPROVED = "work/storytelling-real-december/approved-136-five-second-3080-2026-10-30"
 TOE = "podcast.40.toe"
 FORMAT = "recovered-homes-private-handoff-v1"
-TEXT = {".py", ".ps1", ".json", ".jsonl", ".md", ".txt", ".toml", ".html", ".srt", ".vtt", ".yml", ".yaml", ".ini", ".cfg"}
+TEXT = {".py", ".ps1", ".json", ".jsonl", ".md", ".txt", ".toml", ".html", ".srt", ".vtt", ".yml", ".yaml", ".ini", ".cfg", ".log"}
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 SECRET = re.compile(rb"(?:sk-[A-Za-z0-9_-]{20,}|sk_[a-fA-F0-9]{32,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)")
 RESERVED = re.compile(r"(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?\Z", re.I)
+CREDENTIAL_FIELDS = {"api_key", "apikey", "access_token", "refresh_token", "client_secret", "password", "authorization", "secret_key", "api_secret", "aws_secret_access_key"}
+
+# These legacy fields mean HUMAN permission, not an HTTP/API authorization.
+# Each exception pins an exact logical artifact path AND canonical value digest
+# reviewed on 2026-11-10. Unknown/changed values still fail closed. Pattern scans
+# run first, and every nested field is still scanned; this is not a file bypass.
+EDITORIAL_AUTHORIZATION_DIGESTS = {
+    "work/storytelling-real-december/ambient-detail-143-v1-2026-10-30/brief.json": "5da58ad791edfceb357d055ee0697102e804e36da05115b98f9ec3c789b3f44b",
+    "work/storytelling-real-december/ambient-held-28-repair-v1-2026-10-30/brief.json": "cdf6536f3fa5925e3babc9fb066ee2ea6b2c50a822544bd2c3a61f62e19bce0c",
+    "work/storytelling-real-december/ambient-recheck-136-2026-10-30/findings.json": "5b037479f7f4c279c30d00f21076909fe2a9f776426db6be57f6d9e8b71f66e5",
+    "work/storytelling-real-december/ambient-recheck-136-2026-10-30/parent-adjudication.json": "5b037479f7f4c279c30d00f21076909fe2a9f776426db6be57f6d9e8b71f66e5",
+    "work/storytelling-real-december/ambient-targeted-136-v1-2026-10-30/brief.json": "b1fe4c891fe3e46b63c22c8ae7d5cc3a14aebddfc5cac25856ad419d2f31e279",
+    "work/storytelling-real-december/ambient-targeted-repair-5-v1-2026-10-30/brief.json": "f77cff8ab09e4b7b576a7229aa2c0ab11199aeb2d853ad596ad62d3b1b1b04b6",
+    "work/storytelling-real-december/collection-detail-revision-v1-2026-10-30/assignments.json": "d66cfcc3f5e57c135bded97d53ebb6eea1bd09f3fff8848ad47c2ac26ae62734",
+    "work/storytelling-real-december/condensation/short-editorial-2026-10-28/group_a/independent-spot-check.json": "95849e72b7b6a9c8fb57e31b1aeb6a27bf7114ba2143cde36cbbaf207b23884d",
+    "work/storytelling-real-december/five-second-visuals-136-3080-2026-10-30/writer-contract.json": "bed5e562ce0d1c0fc8ba8435c091b0bef7f21db057b53d6f811413e11947613d",
+    "work/storytelling-real-december/local-audio/first100-held-repair-2026-10-30/replacement-provenance.json": "7fb629237bcdca0b2c4be50df55ced99ae0d8815b1237e126aca6e81db5dea05",
+    "work/storytelling-real-december/remaining-322-2026-10-29/continuation.json": "07749dc304f5b61d4a742287d8c14e5306e5288adc65fcca61597d07ec022a61",
+    "work/storytelling-real-december/remaining-322-2026-10-29/held-five-repair/scope.json": "7fb629237bcdca0b2c4be50df55ced99ae0d8815b1237e126aca6e81db5dea05",
+    "work/storytelling-real-december/visuals-35-2026-10-29/storytelling-23-handoff.json": "b117ca270debe571d1069cd5a7305c3173947f5a7b01565dc063446ff88d2e77",
+}
 
 
 class HandoffError(ValueError):
@@ -59,6 +80,7 @@ def read(path):
 
 def safe_name(name):
     require(isinstance(name, str) and bool(name), "Empty/non-string package path")
+    require(not SECRET.search(name.encode("utf-8")), "Credential-shaped path (contents suppressed)")
     require("\\" not in name and ":" not in name and not any(c in name for c in '\x00<>"|?*'), "Unsafe package path")
     parts = name.split("/")
     require(not PurePosixPath(name).is_absolute() and not PureWindowsPath(name).drive, "Absolute package path")
@@ -99,8 +121,11 @@ def scan(path, name):
         def walk(value):
             if isinstance(value, dict):
                 for key, item in value.items():
-                    if str(key).casefold() in {"api_key", "apikey", "access_token", "refresh_token", "client_secret", "password", "authorization"}:
-                        require(item in (None, "", False), "Nonempty credential field: " + name + " (contents suppressed)")
+                    if str(key).casefold() in CREDENTIAL_FIELDS:
+                        editorial_note = (str(key) == "authorization"
+                            and name in EDITORIAL_AUTHORIZATION_DIGESTS
+                            and digest_bytes(canonical(item)) == EDITORIAL_AUTHORIZATION_DIGESTS[name])
+                        require(item in (None, "", False) or editorial_note, "Nonempty credential field: " + name + " (contents suppressed)")
                     walk(item)
             elif isinstance(value, list):
                 for item in value:
@@ -352,6 +377,11 @@ def export_bundle(root, bundle, body, apply=False):
         require(marker_path.is_file(), "Use an empty folder or an existing private handoff package")
         marker = read(marker_path)
         require(marker.get("format") == FORMAT and isinstance(marker.get("allowed_bootstrap_sha256"), list), "Invalid package marker")
+        if checked_path(bundle, "latest.json").exists():
+            previous_body, _ = load_bundle(bundle)
+            if previous_body["metadata"].get("selection_mode") == "latest-working-state-plus-approved-show":
+                require(body["metadata"].get("selection_mode") == "latest-working-state-plus-approved-show",
+                    "Cannot narrow a working-state package; use prepare_working_handoff or a separate 136-only package")
         launcher = checked_path(bundle, "handoff.py")
         if launcher.exists():
             require(sha(launcher) in marker["allowed_bootstrap_sha256"], "Standalone tool was locally edited; preserve it and use a new package folder")

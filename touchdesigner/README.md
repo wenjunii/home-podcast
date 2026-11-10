@@ -28,6 +28,11 @@ rewriting an unchanged prompt.
 
 For a private cross-PC restore without GitHub, use the export/import tool in
 [`docs/PORTABLE_SETUP.md`](../docs/PORTABLE_SETUP.md#current-local-first-handoff-136-stories--podcast40toe).
+For wider working data, use the repeatable
+[`prepare_working_handoff` workflow](../docs/PC_HANDOFF.md). On a 4090/5090,
+stage and compare first; the following rebinder is NOT a migration/update
+command for an existing receiver project. Do not open or overwrite that
+project until a separately reviewed native merge is planned.
 Run **`touchdesigner/rebind_private_handoff.py`** in the imported `.40` after
 hash verification, with both servers stopped. It rebases our file parameters
 and embedded callback paths without saving, starting models or touching paid

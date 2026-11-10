@@ -1,5 +1,26 @@
 # Continue Recovered Homes on another PC
 
+## Latest working-state handoff from the 3080
+
+The repeatable command is now `python -m scripts.prepare_working_handoff`.
+Use [the three-PC guide](PC_HANDOFF.md) for its read-only plan, explicit
+`--apply`, checkpoint labels, catalogue snapshots and receiver instructions.
+The latest working scope includes all local adaptation records (415 at the
+November 10 preparation) plus working source/review/planning state and the
+approved **136-story** show. Transport does not approve pending records.
+
+The 3080 is the stated authoritative DATA source. The other PCs still need
+fresh-folder staging, comparison and a controlled merge; their native TOE,
+GPU/operator/environment/model settings and credentials must not be replaced.
+Never propagate sender cache deletions or execute catalogue SQL on an existing
+receiver database automatically. The frozen package includes START-HERE.md and
+checksummed sender/verification notes. Credentials, model installations and
+historical audio are excluded. Private media/packages never belong on GitHub.
+
+The narrower workflow below is preserved for the approved 136-story edition.
+Choose a separate bundle for it: a narrow export cannot replace a broader
+working-state package's latest pointer. All immutable snapshots remain intact.
+
 ## Current local-first handoff: 136 stories / podcast.40.toe
 
 GitHub is optional. The private handoff tool snapshots the **current working
