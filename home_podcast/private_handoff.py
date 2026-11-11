@@ -429,7 +429,11 @@ def import_bundle(bundle, target, snapshot=None, apply=False):
     verification = verify_bundle(bundle, snapshot)
     body, snapshot = load_bundle(bundle, verification["snapshot"])
     target, bundle = Path(target).absolute(), Path(bundle).resolve()
-    require(target != bundle and not target.is_relative_to(bundle) and not bundle.is_relative_to(target), "Import target and package must not overlap")
+    # Windows can name the same ancestor with an 8.3 alias and a long path.
+    # Compare canonical paths, retaining the original path for the subsequent
+    # checked_path reparse/junction checks rather than following links for I/O.
+    resolved_target = target.resolve()
+    require(resolved_target != bundle and not resolved_target.is_relative_to(bundle) and not bundle.is_relative_to(resolved_target), "Import target and package must not overlap")
     require(target != Path(target.anchor) and target.resolve() != Path.home().resolve(), "Use a dedicated project directory")
     new = [];same = [];conflicts = []
     # A missing file whose ancestor is an existing file is also a conflict;

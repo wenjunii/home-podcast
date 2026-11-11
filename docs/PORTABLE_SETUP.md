@@ -21,6 +21,22 @@ The narrower workflow below is preserved for the approved 136-story edition.
 Choose a separate bundle for it: a narrow export cannot replace a broader
 working-state package's latest pointer. All immutable snapshots remain intact.
 
+## RTX 5090 receiver after the November 11 controlled merge
+
+The active numbered receiver file is `podcast.5090.25.toe`, derived from this
+PC's `.24` rig plus the verified 3080 snapshot
+`b0c09459c29021c6d6681b1202cb53635cd4ea95b29af1c37651be8bd0b5ec4e`.
+Existing TOEs, receiver environments/paths and frozen podcast artifacts are
+preserved. Live generation and both model servers remain off; the cached
+profile is named `3080_safe` on every GPU. The 415 transported adaptation
+records retain their existing reviews; only the approved 136-story selection
+is the active show. Catalogue SQL remains inert private data.
+
+Keep `work/storytelling-real-december/` edition helpers: they are production
+dependencies. This receiver uses `touchdesigner/rebind_5090_136.py` and writes
+its own runtime/audit state under `work/5090-136/`. Do not invoke the following
+3080 `.40` rebinder against a 5090 native project.
+
 ## Current local-first handoff: 136 stories / podcast.40.toe
 
 GitHub is optional. The private handoff tool snapshots the **current working

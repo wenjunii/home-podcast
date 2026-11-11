@@ -24,6 +24,57 @@ rewriting an unchanged prompt.
 
 ## Visual paths
 
+### RTX 5090 receiver edition (.25)
+
+Use `podcast.5090.25.toe` on this PC with TD2025.32820. It preserves the
+receiver `.24` primary StreamDiffusionTD 0.3.1, backup 0.3.0, local model/server
+paths, environments, OSC ports, audio device and Spout senders. Its new show
+connector uses the approved `.40` 136-story continuous-image-hold data.
+The master live-generation switch stays off in the `3080_safe` cached profile;
+that profile name describes behavior, not this PC's GPU. No worker is started.
+
+`scripts/build_5090_136_native.py` makes this one-time `.24` -> NEW `.25`
+migration with Derivative's offline tools. It refuses an existing output,
+checks both reviewed input hashes, preserves all renderer subtrees and
+callbacks, preserves receiver audio/Spout configuration, and verifies a second
+native expansion. It copies only the show connector from the reference.
+The receiver-specific playlist callback never imports a 3080 installer.
+
+For routine path/callback refreshes, the generic 5090 updater dispatches this
+edition to `rebind_5090_136.py`; neither helper saves or starts a server.
+Do not use `rebind_private_handoff.py` or the pilot rebinder on this edition.
+To audit with both servers stopped, run in Textport:
+
+```python
+exec(open(r"C:\Users\ONX-HERA-01\Documents\home-podcast\touchdesigner\audit_5090_136.py", encoding="utf-8").read())
+audit()
+pixel_audit()
+exec(open(r"C:\Users\ONX-HERA-01\Documents\home-podcast\touchdesigner\control_audit_5090_136.py", encoding="utf-8").read())
+start()
+```
+
+Wait for `full-control-audit.json` under `work/5090-136/`. The narrower
+`event_audit()` remains available separately and produces
+`native-event-audit.json`; do not run asynchronous audits together. Each uses an
+independent wall clock. The full audit explicitly classifies all 40 parameters:
+25 playback controls, six dormant variation settings, three controls held off
+by canonical generation policy, four read-only displays and two retired controls.
+Its 73 cases include slider minimum/default/maximum values, real Parameter
+Execute callbacks, menu changes without clock jumps and the dormant file
+protocol with generation disabled. Isolated tests prove the canonical writer
+cannot enable generation or advance the regeneration nonce.
+
+Signed Hue is normalized into the HSV TOP's 0–360-degree interval: `-180` and
+`180` are equivalent. The synthetic pixel audit checks that equivalence and
+also requires a visible pixel change from zero rotation on both output chains.
+Completeness checks reject missing/duplicate event results; controls and clock
+are restored. Inspect `passed`, `complete`, `state_restored` and `failures`,
+not only the initial scheduled message. Native tests never save the TOE.
+Synthetic output tests are not a model-image quality test.
+Preserve the system's save preferences: ordinary Save can advance
+the number and refresh the unnumbered link. Use `.25` explicitly; the original
+unnumbered file is intentionally retained alongside `.24`.
+
 ### Current continuous-image edition (.40)
 
 For a private cross-PC restore without GitHub, use the export/import tool in
