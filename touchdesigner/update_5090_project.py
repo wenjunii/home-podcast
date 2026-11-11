@@ -30,6 +30,16 @@ def update_5090_project():
         raise RuntimeError(
             "Missing /project1/podcast_visualizer in the 5090 project."
         )
+    playlist = getattr(connector.par, "Playlistmanifest", None)
+    if playlist is not None and "continuous-image-hold-136-3080-2026-10-30" in str(playlist.eval()):
+        # This newer canonical edition must never be rebound to the old pilot
+        # or have its offline generation policy changed by routine maintenance.
+        # TD exposes these context objects implicitly; they need not appear
+        # in globals(). Pass them explicitly into the isolated helper scope.
+        namespace = dict(globals(), project=project, app=app, op=op)
+        exec((project_root / "touchdesigner/rebind_5090_136.py").read_text(encoding="utf-8"), namespace)
+        return {"project": project_name, "edition": "canonical-136", "saved": False,
+                "model_servers_started": False, "live_generation": False}
     streamdiffusion_paths = str(connector.par.Streamdiffusionpath.eval())
 
     exec(
