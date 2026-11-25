@@ -75,7 +75,21 @@ Preserve the system's save preferences: ordinary Save can advance
 the number and refresh the unnumbered link. Use `.25` explicitly; the original
 unnumbered file is intentionally retained alongside `.24`.
 
-### Current continuous-image edition (.40)
+### Current approved 3080 show (.41)
+
+Use **`podcast.41.toe`** in **2025.32820** for the 136-story show with the
+new ambient stems. **Ambient Only** and **Narration + Ambient** change;
+**Narration Only**, the one-second gaps, caption clock, all three visual paths
+and the .40 image-hold/interpolation behaviour are preserved. The numbered
+`.40` remains the rollback. The existing 5090 receiver is not changed.
+
+For a moved .41 use its private mirror guide or the
+[opt-in .41 playback export](../docs/PORTABLE_SETUP.md#private-playback-handoff-podcast41toe).
+The new export's `rebind_show_41.py` requires a verified import, refuses other
+projects, and never saves, starts a server, or touches the paid renderer
+configuration. Start only the renderer you intend to use.
+
+### Preserved continuous-image edition (.40)
 
 For a private cross-PC restore without GitHub, use the export/import tool in
 [`docs/PORTABLE_SETUP.md`](../docs/PORTABLE_SETUP.md#current-local-first-handoff-136-stories--podcast40toe).

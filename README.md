@@ -46,6 +46,12 @@ Content-addressed snapshots reuse unchanged files; imports never overwrite
 different existing files or an existing 5090 setup. No GitHub, paid API,
 media generation or Git commit is involved.
 
+For the newer **.41 playback-only show**, opt in with
+`python -m scripts.private_handoff plan --edition 3080-41`. Use a separate
+private package folder. The existing working-state handoff still pairs its
+data with the .40 reference; it does not upgrade receiver projects.
+See [the .41 backup and restore steps](docs/PORTABLE_SETUP.md#private-playback-handoff-podcast41toe).
+
 Keep the package private: it contains the selected licensed TOE and personal
 story material, not model weights, environments, credentials or Git history.
 GitHub remains available for optional code-only publishing; nothing is pushed
@@ -109,7 +115,23 @@ not reported as a live-generation test. Unknown controls, missed callbacks,
 duplicate results and failed restoration cannot silently pass.
 The 3080 reference `.40` and its installers are not receiver update entrypoints.
 
-### Current 3080 136-story continuous-image edition (.40)
+### Current 3080 136-story show (.41)
+
+Open **`podcast.41.toe`** in TouchDesigner **2025.32820** on the RTX 3080 Ti.
+Select **Show Control → Audio Source → Narration + Ambient** and turn on
+**Play**. **Ambient Only** uses the new story-specific soundscapes, while
+**Narration Only** is unchanged. The approved update adds an individual
+background for each story, with 78 timed settings and 178 timed effects across
+the show. The 136-story order, 3:18:58.720 clock, one-second gaps, 619 scenes per
+path, 2,862 captions and scene/story/loop interpolation are unchanged.
+
+The saved project passed all 70 native reopen checks with both servers
+stopped. The new ambience and live images were then reviewed by listening and
+playback. Start only one selected StreamDiffusionTD server for live images.
+Use `.40` as the untouched rollback; this update is not a 4090/5090 migration.
+The native deliveries, exact playback files and private backups are local.
+
+### Preserved 3080 136-story continuous-image edition (.40)
 
 Open **`podcast.40.toe`** in TouchDesigner **2025.32820** on the RTX 3080.
 The outgoing approved scene now continues through uncovered visual intervals,
