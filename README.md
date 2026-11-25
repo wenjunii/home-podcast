@@ -145,6 +145,16 @@ playback. Start only one selected StreamDiffusionTD server for live images.
 Use `.40` as the untouched rollback; this update is not a 4090/5090 migration.
 The native deliveries, exact playback files and private backups are local.
 
+#### Optional 3080 TouchDesigner MCP check
+
+Run `touchdesigner.verify_3080_mcp` with the existing sibling TD Knowledge
+bridge's Python to check the dedicated `home-podcast` profile and local
+documentation index. The [isolated 3080 MCP guide](touchdesigner/README.md#isolated-3080-mcp-check)
+covers the optional read-only live check on port `19871`. That check was
+demonstrated on a disposable `.41` copy with **2025.33230**, not the
+**2025.32820** production build. Keep the approved `.40`/`.41` files and
+the separate 5090 and shared MCP settings as they are.
+
 ### Preserved 3080 136-story continuous-image edition (.40)
 
 Open **`podcast.40.toe`** in TouchDesigner **2025.32820** on the RTX 3080.

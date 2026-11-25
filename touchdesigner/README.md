@@ -170,6 +170,51 @@ The new export's `rebind_show_41.py` requires a verified import, refuses other
 projects, and never saves, starts a server, or touches the paid renderer
 configuration. Start only the renderer you intend to use.
 
+#### Isolated 3080 MCP check
+
+The Windows verifier uses the sibling `td-knowledge-mcp` environment (MCP
+SDK 2.2), the `td-ai-assistant/faiss_db` index, and this project's
+[`home_podcast_mcp.json`](home_podcast_mcp.json). From the production checkout,
+with port `19871` idle:
+
+```powershell
+& '..\td-knowledge-mcp\.venv\Scripts\python.exe' -B -m touchdesigner.verify_3080_mcp
+```
+
+This starts a temporary bridge, checks the profile and loaded local index,
+and requires Envoy to stay offline. It does not need TouchDesigner open,
+does not fetch embeddings, and does not register an MCP client. The verified
+index had 2,900 chunks; the check accepts an updated, nonempty local index.
+
+For optional live inspection, keep both renderers stopped and use an isolated
+copy, not a show file you will save:
+
+1. Create a fresh sibling folder named `home-podcast-envoy-test` and copy the
+   approved `podcast.41.toe` to it. Use an ordinary copy, not a link or Git
+   worktree. The verifier requires the approved file hash and the exact copy
+   path in the running window title. Leave `.40` and the production `.41` alone.
+2. Open only the copy in **2025.33230** with the already-installed Embody
+   **6.3.3** component and a compatible, test-only Python environment. If the
+   matching build or environment is unavailable, stick to the index check.
+   Do not migrate the `.41` production project or accept an older-build load
+   warning just to run this test.
+3. Load Embody in the copy only. Skip its automatic setup wizard. Set its AI
+   project root to **Project Folder**, both client selectors to **None**, and
+   turn off Convoy and automatic updates. Keep Show Control **Play** and
+   **Live Variations** off and Audio Source on **Narration + Ambient**. Disable
+   `audio_out` and cooking on `podcast_visualizer` in the copy before advancing
+   TouchDesigner's clock for Envoy. Enable only Envoy, on loopback port **19871**.
+4. Run the same verifier with `--live`. Once done, turn off Envoy and close the
+   copy without saving. Don't change the shared profiles or use the 5090 test
+   registry. For a separate source worktree, `--workspace-parent` points to
+   the local directory containing the two sibling repos and the test folder.
+
+The live check verifies the listener's process, the project identity, Show
+Control, and the three audio operators. It does not play the show or render
+images. The bridge may advertise editing tools; the verifier only calls its
+explicit read allowlist. The native test folder, credentials, and local
+environments are not part of the public handoff.
+
 ### Preserved continuous-image edition (.40)
 
 For a private cross-PC restore without GitHub, use the export/import tool in
