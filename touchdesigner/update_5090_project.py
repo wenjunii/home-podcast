@@ -14,6 +14,8 @@ PROJECT_NAME_PATTERN = re.compile(
     re.IGNORECASE,
 )
 LEGACY_PLAYLIST = "work/storytelling-real-december/continuous-image-hold-136-3080-2026-10-30/playlist.json"
+MCP_TEST_FOLDER = "home-podcast-5090-mcp-test"
+MCP_TEST_MARKER = "/rh_podcast_5090_27_mcp_guard"
 
 
 def update_5090_project():
@@ -28,6 +30,11 @@ def update_5090_project():
 
     revision = int(match[1]) if match[1] else 0
     project_root = Path(project.folder).resolve()
+    if project_root.name.casefold() == MCP_TEST_FOLDER or op(MCP_TEST_MARKER) is not None:
+        raise RuntimeError(
+            "Refusing to update the isolated MCP test copy. Use "
+            "touchdesigner.verify_5090_mcp from the production checkout instead."
+        )
     connector = op("/project1/podcast_visualizer")
     if connector is None:
         raise RuntimeError(

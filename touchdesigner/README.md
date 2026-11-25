@@ -47,12 +47,62 @@ helper = Path(project.folder) / "touchdesigner" / "update_5090_project.py"
 exec(compile(helper.read_text(encoding="utf-8"), str(helper), "exec"))
 ```
 
-For `.26` and later numbered copies, that entrypoint is verification only.
+For production `.26` and later numbered copies, that entrypoint is verification only.
 It checks the bound playlist, all audio routes, plans and aliases, controller
 paths and isolated runtime paths. A missing or stale binding fails instead of
 rerouting the show to the .40 or pilot data. The new check does not change
 playback, reload callbacks, write a TOE or start a model server. Do not use
 pilot installers or sender rebinders on the receiver.
+
+### Isolated 5090 MCP test copy (.27)
+
+Use `../home-podcast-5090-mcp-test/podcast.5090.27.toe` only for live
+inspection. It is a sibling of the checkout, not the 5090 show file or the
+3080's separate `.27` edition. The verified pairing is TouchDesigner
+**2025.32820** with a private Embody **6.0.134** component and environment.
+This workflow does not install, upgrade, graft, save, or change the shared
+Envoy settings. Keep production on `.26`. The production updater refuses
+the test folder or a TOE with the test identity marker.
+
+From the production checkout:
+
+```powershell
+python -B -m touchdesigner.verify_5090_mcp
+```
+
+The offline check only reads the two TOE hashes, the test-only build receipts,
+and the project identity profile. It does not require TouchDesigner to be
+open. These artifacts are local; a GitHub clone does not recreate the test.
+Use the launch instructions in the sibling test folder to open only `.27`
+in 2025.32820. Don't open another test window if port `10987` is already in use.
+If a restart picks another port, close only the test window and inspect its
+private `.embody/envoy.json`. If every entry is for the test TOE, every listed
+PID has exited, and its ports are free, rename that file to an unused backup
+name in the test folder. Reopen to let Envoy generate a fresh registry on
+`10987`. Leave other registries untouched; don't change the verifier's port.
+With Envoy running and the test copy still in its saved paused state, run:
+
+```powershell
+& '..\td-knowledge-mcp\.venv\Scripts\python.exe' -B -m touchdesigner.verify_5090_mcp --live
+```
+
+The live check requires its own single-instance registry and process bound
+only to `127.0.0.1:10987`. Both probes are pinned to that port with no fallback.
+The bridge must see both `/rh_podcast_5090_27_mcp_guard` and
+`/project1/podcast_visualizer` before it exposes live tools. The check reads
+the live graph, confirms the approved audio and visual bindings and the
+muted/off states, loads local library stats without embedding calls, and
+requires a wrong identity to hide the live tools and reject a call. It does
+not change playback, test audio output, or write any TouchDesigner parameters.
+
+For a dedicated client, use the existing TD Knowledge bridge and its local
+`td-ai-assistant` library with **both** `--envoy-config` pointing to the test
+folder's `.embody/envoy.json` and `--project-context` pointing to its
+`podcast-project-context.json`. Don't use the auto-generated raw `.mcp.json`
+or change global settings or the `2d-3d` workspace. Confirm
+`get_td_server_health` reports port `10987` and `identity_verified: true`
+before inspecting the live network. The identity check guards the target,
+not permissions on individual editing tools.
 
 ### Preserved RTX 5090 receiver edition (.25)
 

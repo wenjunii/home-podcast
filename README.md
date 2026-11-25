@@ -115,6 +115,20 @@ GitHub carries the scripts and documentation, not the WAVs, native projects,
 or local verification receipts. See the [TouchDesigner guide](touchdesigner/README.md)
 for the receiver controls and the preserved `.25` audits.
 
+### Optional 5090 MCP test copy (.27)
+
+`podcast.5090.27.toe` in the sibling `home-podcast-5090-mcp-test` folder
+is a private MCP test copy, **not a production upgrade**. Keep `.26` for
+show playback. The test copy starts paused and muted, with Spout outputs,
+renderer listeners, both model servers and live variations off.
+
+From the production checkout, run `python -B -m touchdesigner.verify_5090_mcp`
+to check the local TOE receipts without contacting MCP. See the
+[isolated MCP guide](touchdesigner/README.md#isolated-5090-mcp-test-copy-27)
+for the optional live check. It only uses its own loopback listener and
+rejects a wrong project identity; do not reuse or change the `2d-3d` connection.
+GitHub does not carry the test TOE, its runtime, or the local MCP configuration.
+
 ### Current 3080 136-story show (.41)
 
 Open **`podcast.41.toe`** in TouchDesigner **2025.32820** on the RTX 3080 Ti.
