@@ -1,45 +1,69 @@
-"""Refresh the tracked connector only in a local 5090 TouchDesigner project.
+"""Maintain the connector in a local 5090 TouchDesigner project.
 
-Run this script from the TouchDesigner Textport with ``podcast.5090.toe`` or
-one of its numbered revisions open.  It refuses to run against a 3080 project,
-does not save the .toe automatically, and does not start model servers.
+The .26 audio-overlay edition is verified in place, never rebound. Legacy
+5090 editions retain their own update paths. No saves or model-server starts.
 """
 
 from pathlib import Path
 import re
+from runpy import run_path
 
 
 PROJECT_NAME_PATTERN = re.compile(
-    r"podcast\.5090(?:\.\d+)?\.toe",
+    r"podcast\.5090(?:\.([1-9]\d*))?\.toe",
     re.IGNORECASE,
 )
+LEGACY_PLAYLIST = "work/storytelling-real-december/continuous-image-hold-136-3080-2026-10-30/playlist.json"
 
 
 def update_5090_project():
     project_name = Path(str(project.name)).name
-    if PROJECT_NAME_PATTERN.fullmatch(project_name) is None:
+    match = PROJECT_NAME_PATTERN.fullmatch(project_name)
+    if match is None:
         raise RuntimeError(
             "Refusing to update a non-5090 project. Open podcast.5090.toe "
             "or a numbered podcast.5090 revision first. The 3080 projects "
             "are reference files and must remain untouched."
         )
 
+    revision = int(match[1]) if match[1] else 0
     project_root = Path(project.folder).resolve()
     connector = op("/project1/podcast_visualizer")
     if connector is None:
         raise RuntimeError(
             "Missing /project1/podcast_visualizer in the 5090 project."
         )
+    if revision >= 26:
+        # Never run legacy writers on .26 or later, even when the manifest
+        # parameter is missing, stale or already points back at .40.
+        helper = project_root / "touchdesigner/verify_5090_audio_overlay.py"
+        if not helper.is_file():
+            raise RuntimeError("Missing 5090 audio-overlay verifier; sync the scripts before continuing")
+        report = run_path(str(helper))["verify_native_overlay"](
+            project_root, project_name, str(app.build), connector,
+        )
+        print("VERIFIED_5090_AUDIO_OVERLAY", report)
+        return report
+
     playlist = getattr(connector.par, "Playlistmanifest", None)
-    if playlist is not None and "continuous-image-hold-136-3080-2026-10-30" in str(playlist.eval()):
-        # This newer canonical edition must never be rebound to the old pilot
-        # or have its offline generation policy changed by routine maintenance.
+    saved_playlist = (
+        str(playlist.eval()).strip().replace("\\", "/").casefold()
+        if playlist is not None else ""
+    )
+    if revision == 25:
+        if not (saved_playlist == LEGACY_PLAYLIST or saved_playlist.endswith("/" + LEGACY_PLAYLIST)):
+            raise RuntimeError(
+                "The .25 receiver must be bound to its original canonical playlist; "
+                "no fallback updater will run"
+            )
         # TD exposes these context objects implicitly; they need not appear
         # in globals(). Pass them explicitly into the isolated helper scope.
         namespace = dict(globals(), project=project, app=app, op=op)
         exec((project_root / "touchdesigner/rebind_5090_136.py").read_text(encoding="utf-8"), namespace)
         return {"project": project_name, "edition": "canonical-136", "saved": False,
                 "model_servers_started": False, "live_generation": False}
+    if saved_playlist:
+        raise RuntimeError("This legacy 5090 project has an edition playlist; refusing to run the pilot updater")
     streamdiffusion_paths = str(connector.par.Streamdiffusionpath.eval())
 
     exec(

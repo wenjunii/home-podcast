@@ -24,9 +24,39 @@ rewriting an unchanged prompt.
 
 ## Visual paths
 
-### RTX 5090 receiver edition (.25)
+### Current RTX 5090 receiver edition (.26)
 
-Use `podcast.5090.25.toe` on this PC with TD2025.32820. It preserves the
+Use **`podcast.5090.26.toe`** in **2025.32820**, not the unchanged unnumbered
+master. The private `.41` audio-only transfer supplies **Ambient Only** and
+**Narration + Ambient**. **Narration Only** still points to the exact `.25`
+WAV. The clock, captions, three visual paths, renderer versions and paths,
+audio device and Spout routing stay as they were on `.25`. Both servers and
+streams stay stopped for verification; the playback profile is `3080_safe`.
+
+Use the **Show Control → Audio Source** menu to listen. The installation
+passed reopen, all three audio modes, story navigation and the timeline's
+last-to-first wrap. See
+[portable setup](../docs/PORTABLE_SETUP.md#rtx-5090-receiver-with-the-41-audio-overlay)
+for the required private files and the standalone verifier.
+
+To check native bindings, pause the show and run in the Textport:
+
+```python
+from pathlib import Path
+helper = Path(project.folder) / "touchdesigner" / "update_5090_project.py"
+exec(compile(helper.read_text(encoding="utf-8"), str(helper), "exec"))
+```
+
+For `.26` and later numbered copies, that entrypoint is verification only.
+It checks the bound playlist, all audio routes, plans and aliases, controller
+paths and isolated runtime paths. A missing or stale binding fails instead of
+rerouting the show to the .40 or pilot data. The new check does not change
+playback, reload callbacks, write a TOE or start a model server. Do not use
+pilot installers or sender rebinders on the receiver.
+
+### Preserved RTX 5090 receiver edition (.25)
+
+`podcast.5090.25.toe` remains the rollback with TD2025.32820. It preserves the
 receiver `.24` primary StreamDiffusionTD 0.3.1, backup 0.3.0, local model/server
 paths, environments, OSC ports, audio device and Spout senders. Its new show
 connector uses the approved `.40` 136-story continuous-image-hold data.
@@ -40,8 +70,9 @@ callbacks, preserves receiver audio/Spout configuration, and verifies a second
 native expansion. It copies only the show connector from the reference.
 The receiver-specific playlist callback never imports a 3080 installer.
 
-For routine path/callback refreshes, the generic 5090 updater dispatches this
-edition to `rebind_5090_136.py`; neither helper saves or starts a server.
+For path/callback refreshes on `.25` with its original playlist, the generic
+5090 updater dispatches to `rebind_5090_136.py`. That rebinder refuses `.26`
+and above. Neither helper saves or starts a server.
 Do not use `rebind_private_handoff.py` or the pilot rebinder on this edition.
 To audit with both servers stopped, run in Textport:
 
@@ -72,8 +103,8 @@ are restored. Inspect `passed`, `complete`, `state_restored` and `failures`,
 not only the initial scheduled message. Native tests never save the TOE.
 Synthetic output tests are not a model-image quality test.
 Preserve the system's save preferences: ordinary Save can advance
-the number and refresh the unnumbered link. Use `.25` explicitly; the original
-unnumbered file is intentionally retained alongside `.24`.
+the number and refresh the unnumbered link. Use numbered editions explicitly;
+the original unnumbered file is intentionally retained alongside `.24`.
 
 ### Current approved 3080 show (.41)
 
@@ -81,7 +112,7 @@ Use **`podcast.41.toe`** in **2025.32820** for the 136-story show with the
 new ambient stems. **Ambient Only** and **Narration + Ambient** change;
 **Narration Only**, the one-second gaps, caption clock, all three visual paths
 and the .40 image-hold/interpolation behaviour are preserved. The numbered
-`.40` remains the rollback. The existing 5090 receiver is not changed.
+`.40` remains the rollback. Restoring the 3080 backup does not update the 5090.
 
 For a moved .41 use its private mirror guide or the
 [opt-in .41 playback export](../docs/PORTABLE_SETUP.md#private-playback-handoff-podcast41toe).
@@ -543,8 +574,8 @@ the connector's `Currentnarrationid` and optional `Canonicalvisuals` values.
 The active bundle can replace the voices-only Audio File In path and visual
 scene JSON; selecting `Soundscape Only` remains independent.
 
-The guarded 3080 updater sets `3080_safe` and Off. The guarded 5090 updater
-sets the capable profile but also leaves generation Off, so updating a project
-never loads models. See
+The guarded 3080 updater sets `3080_safe` and Off. The guarded 5090 **pilot**
+updater sets the capable profile but leaves generation Off. The canonical
+5090 `.25` and `.26` editions use `3080_safe` cached playback instead. See
 [`../docs/LIVE_LOCAL_VARIATIONS.md`](../docs/LIVE_LOCAL_VARIATIONS.md) for the
 worker and command-line workflow.

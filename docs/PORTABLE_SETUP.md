@@ -21,10 +21,15 @@ The narrower workflow below is preserved for the approved 136-story edition.
 Choose a separate bundle for it: a narrow export cannot replace a broader
 working-state package's latest pointer. All immutable snapshots remain intact.
 
-## RTX 5090 receiver after the November 11 controlled merge
+## RTX 5090 receiver with the .41 audio overlay
 
-The active numbered receiver file is `podcast.5090.25.toe`, derived from this
-PC's `.24` rig plus the verified 3080 snapshot
+The active numbered receiver is `podcast.5090.26.toe` in TouchDesigner
+2025.32820. It retains the .25 show and adds only two approved WAVs from the
+separate private `.41` **audio-only** transfer. That transfer contains no
+3080 TOE and is not the full 3080 .41 playback backup described below.
+
+The previous `podcast.5090.25.toe` remains the rollback, derived from the
+5090's `.24` rig plus the verified 3080 snapshot
 `b0c09459c29021c6d6681b1202cb53635cd4ea95b29af1c37651be8bd0b5ec4e`.
 Existing TOEs, receiver environments/paths and frozen podcast artifacts are
 preserved. Live generation and both model servers remain off; the cached
@@ -32,10 +37,29 @@ profile is named `3080_safe` on every GPU. The 415 transported adaptation
 records retain their existing reviews; only the approved 136-story selection
 is the active show. Catalogue SQL remains inert private data.
 
-Keep `work/storytelling-real-december/` edition helpers: they are production
-dependencies. This receiver uses `touchdesigner/rebind_5090_136.py` and writes
-its own runtime/audit state under `work/5090-136/`. Do not invoke the following
-3080 `.40` rebinder against a 5090 native project.
+Keep both numbered TOEs, the original .25 playlist and visual plans, its
+edition helpers under `work/storytelling-real-december/`, and its narration
+WAV. Keep `work/5090-136/ambient-update-41-2026-11-24/` intact: it contains
+the two new WAVs, the overlay playlist, the three audio-metadata-only plan
+copies, and `staging-verification.json`. The .26 runtime and local reopen
+reports are separate under `work/5090-136/audio41-install-20261124/`.
+
+From the project root, verify the overlay against its existing private
+staging receipt and .25 base:
+
+```powershell
+python -B -m touchdesigner.verify_5090_audio_overlay
+```
+
+It checks the playlist and visual/caption data, all three WAV hashes and
+48 kHz stereo PCM format, and every exact one-second gap. It does not create
+or install files. For the native check, open `.26` explicitly and run
+[`update_5090_project.py` in Textport](../touchdesigner/README.md#current-rtx-5090-receiver-edition-26)
+with playback paused and both servers and streams stopped. It verifies
+bindings instead of rebinding. If a file is missing or differs, restore it
+from the verified private transfer or use the untouched .25 rollback;
+GitHub cannot restore the audio. `rebind_5090_136.py` is .25-only. Do not run
+the .40 or .41 3080 restore helpers against either 5090 project.
 
 ## Private playback handoff: podcast.41.toe
 
