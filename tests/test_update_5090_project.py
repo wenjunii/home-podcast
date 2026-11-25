@@ -31,7 +31,8 @@ class Update5090ProjectTests(unittest.TestCase):
             result = runpy.run_path(str(SCRIPT_PATH), init_globals={
                 "project": SimpleNamespace(name="podcast.5090.25.toe", folder=directory),
                 "app": SimpleNamespace(build="2025.32820"),
-                "op": lambda path: connector, "marker": marker,
+                "op": lambda path: connector if path == "/project1/podcast_visualizer" else None,
+                "marker": marker,
             })
             self.assertEqual(marker, ["canonical-rebind"])
             self.assertEqual(result["updated_5090_project"]["edition"], "canonical-136")
@@ -53,8 +54,27 @@ class Update5090ProjectTests(unittest.TestCase):
             return runpy.run_path(str(SCRIPT_PATH), init_globals={
                 "project": SimpleNamespace(name=f"podcast.5090.{revision}.toe", folder=str(root)),
                 "app": SimpleNamespace(build="2025.32820"),
-                "op": lambda path: connector,
+                "op": lambda path: connector if path == "/project1/podcast_visualizer" else None,
             })["updated_5090_project"]
+
+    def test_mcp_test_folder_is_refused_before_operator_access(self):
+        with tempfile.TemporaryDirectory() as directory:
+            test_root = Path(directory) / "home-podcast-5090-mcp-test"
+            with self.assertRaisesRegex(RuntimeError, "isolated MCP test copy"):
+                runpy.run_path(str(SCRIPT_PATH), init_globals={
+                    "project": SimpleNamespace(name="podcast.5090.27.toe", folder=test_root),
+                })
+
+    def test_mcp_identity_marker_is_refused_even_if_the_copy_is_renamed(self):
+        def op(path):
+            self.assertEqual(path, "/rh_podcast_5090_27_mcp_guard")
+            return object()
+
+        with self.assertRaisesRegex(RuntimeError, "isolated MCP test copy"):
+            runpy.run_path(str(SCRIPT_PATH), init_globals={
+                "project": SimpleNamespace(name="podcast.5090.25.toe", folder="."),
+                "op": op,
+            })
 
     def test_26_dispatches_to_read_only_verifier(self):
         result = self.run_update(26, overlay.OVERLAY_PLAYLIST, {
