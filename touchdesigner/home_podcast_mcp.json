@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "project_id": "home-podcast",
+  "overview": {
+    "title": "Recovered Homes .41 — isolated 3080 inspection",
+    "production_build": "2025.32820",
+    "tested_envoy_build": "2025.33230",
+    "project_file": "podcast.41.toe"
+  },
+  "network": {
+    "identity_operators": [
+      "/project1/podcast_visualizer",
+      "/project1/podcast_visualizer/show_control",
+      "/project1/podcast_visualizer/combined_audio"
+    ],
+    "connector": "/project1/podcast_visualizer",
+    "show_control": "/project1/podcast_visualizer/show_control"
+  },
+  "safety": {
+    "scope": "Read-only inspection of a disposable 3080 test copy via loopback port 19871",
+    "production_changes": false,
+    "shared_client_changes": false,
+    "start_media_servers": false
+  }
+}
