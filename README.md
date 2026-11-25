@@ -87,33 +87,33 @@ sync gate remains read-only; neither script deletes files or starts cleanup.
 See [the working preferences](AGENTS.md#automatic-cleanup-after-tasks) and
 [private-package preservation](docs/PORTABLE_SETUP.md#preserving-private-packages-during-cleanup).
 
-### Current 5090 receiver edition (.25)
+### Current 5090 receiver edition (.26)
 
-On ONX-HERA-01 (RTX 5090), open **`podcast.5090.25.toe`** with
-TouchDesigner **2025.32820**. It combines this PC's preserved `.24` renderer
-rig with the approved 3080 `.40` data: 136 stories, three audio modes, three
-619-scene visual paths, 2,862 captions and continuous image holds. The
-three-second scene/story interpolation controls follow the approved edition.
-`3080_safe` is the canonical cached-playback profile name, even on this GPU;
-live variations and both model servers stay off. This migration generates no
-new narration, audio or prompts and grants no new editorial approvals.
+On ONX-HERA-01 (RTX 5090), open **`podcast.5090.26.toe`** with
+TouchDesigner **2025.32820**. In **Show Control → Audio Source**, choose
+**Narration + Ambient** or **Ambient Only** to hear the two approved tracks
+from the private `.41` audio-only transfer. **Narration Only** is unchanged.
+The 136 stories, 3:18:58.720 clock, 136 one-second gaps per track, three
+619-scene paths, 2,862 captions and image-hold/interpolation behavior match
+`.25`. The 5090's renderer, device and Spout settings are preserved.
 
-All older native versions and the unnumbered `podcast.5090.toe` are preserved;
-the unnumbered file still points to the older saved edition. Use the numbered
-`.25` explicitly. Routine updates detect this edition and use
-`touchdesigner/rebind_5090_136.py` rather than the older pilot rebinder.
-Run `touchdesigner/audit_5090_136.py` in the Textport, then call `audit()` and
-`pixel_audit()` for scene conditioning, audio and synthetic final outputs.
-The full control check is `touchdesigner/control_audit_5090_136.py`: call
-`start()` and wait for `full-control-audit.json` under `work/5090-136/`.
-It accounts for all 40 custom parameters and tests 73 native callback cases,
-including slider limits, every active button, all playback modes and dormant
-variation settings while generation stays off. Four read-only displays and
-the disabled legacy/gap-colour controls are checked as such. The three
-generation controls are verified under their canonical off policy; they are
-not reported as a live-generation test. Unknown controls, missed callbacks,
-duplicate results and failed restoration cannot silently pass.
-The 3080 reference `.40` and its installers are not receiver update entrypoints.
+The saved project starts paused in `3080_safe` cached playback with live
+variations off. On reopen, all three audio modes, a story change and the
+natural end-to-start loop passed with both servers stopped. Use `.25` for
+rollback; the unnumbered master is unchanged and is not the current edition.
+
+From the checkout, run `python -B -m touchdesigner.verify_5090_audio_overlay` to
+check the installed files without opening TouchDesigner. With `.26` open and
+paused, `touchdesigner/update_5090_project.py` also checks the native bindings,
+without changing or saving the show. If the receipt, assets or bindings are
+missing or mismatched, it stops; it never reinstalls the old `.40` tracks.
+The legacy `rebind_5090_136.py` is for `.25` only. Neither 3080 rebinder is
+an update tool for the 5090.
+
+Keep the [private receiver overlay and its base dependencies](docs/PORTABLE_SETUP.md#rtx-5090-receiver-with-the-41-audio-overlay).
+GitHub carries the scripts and documentation, not the WAVs, native projects,
+or local verification receipts. See the [TouchDesigner guide](touchdesigner/README.md)
+for the receiver controls and the preserved `.25` audits.
 
 ### Current 3080 136-story show (.41)
 

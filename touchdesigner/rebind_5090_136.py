@@ -1,21 +1,27 @@
-"""Refresh paths/callbacks for the approved canonical 136-story 5090 edition.
+"""Refresh paths/callbacks only for the original .25 canonical 5090 edition.
 
-Run in TD2025.32820 with podcast.5090.25.toe (or a later numbered copy).
+Run in TD2025.32820 with podcast.5090.25.toe. Do not use on the .26 overlay.
 Never saves, starts servers, installs components or invokes a sender installer.
 """
 from pathlib import Path
 import json
-import re
 
 EDITION = "work/storytelling-real-december/continuous-image-hold-136-3080-2026-10-30"
 
 
 def rebind_5090_136():
-    match = re.fullmatch(r"podcast\.5090\.(\d+)\.toe", str(project.name), re.I)
-    if not match or int(match[1]) < 25 or str(app.build) != "2025.32820":
-        raise RuntimeError("Only new 5090 canonical revisions in TD2025.32820 may be rebound")
+    if str(project.name).casefold() != "podcast.5090.25.toe" or str(app.build) != "2025.32820":
+        raise RuntimeError("The .40-derived rebinder is only for podcast.5090.25.toe in TD2025.32820")
     root = Path(project.folder).resolve()
     owner = op("/project1/podcast_visualizer")
+    playlist = getattr(owner.par, "Playlistmanifest", None) if owner is not None else None
+    saved_playlist = (
+        str(playlist.eval()).strip().replace("\\", "/").casefold()
+        if playlist is not None else ""
+    )
+    relative = EDITION + "/playlist.json"
+    if not (saved_playlist == relative or saved_playlist.endswith("/" + relative)):
+        raise RuntimeError("Refusing to replace an unknown or newer 5090 playlist with the .40-derived edition")
     control = owner.op("show_control")
     renderers = [owner.op(n) for n in ("StreamDiffusionTD", "StreamDiffusionTD2")]
     if any(n is None or n.par.Serveractive.eval() or n.par.Streamactive.eval() for n in renderers):
