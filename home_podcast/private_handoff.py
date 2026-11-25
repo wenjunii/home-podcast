@@ -21,6 +21,16 @@ import uuid
 EDITION = "work/storytelling-real-december/continuous-image-hold-136-3080-2026-10-30"
 APPROVED = "work/storytelling-real-december/approved-136-five-second-3080-2026-10-30"
 TOE = "podcast.40.toe"
+TOE_41 = "podcast.41.toe"
+EDITION_41 = "work/storytelling-real-december/approved-ambient-136-3080-2026-11-24"
+PLAYLIST_41 = EDITION_41 + "/playlist.json"
+MODE_41 = "approved-3080-41-playback"
+RUNTIME_41 = (
+    EDITION_41 + "/playlist_controls.py",
+    "work/storytelling-real-december/expanded-playlist-136-3080-2026-10-30/offline_show_control_callbacks.py",
+    "touchdesigner/execute_callbacks.py", "touchdesigner/parameter_callbacks.py",
+    "touchdesigner/podcast_sequencer.py",
+)
 FORMAT = "recovered-homes-private-handoff-v1"
 TEXT = {".py", ".ps1", ".json", ".jsonl", ".md", ".txt", ".toml", ".html", ".srt", ".vtt", ".yml", ".yaml", ".ini", ".cfg", ".log"}
 HEX = re.compile(r"[0-9a-f]{64}\Z")
@@ -249,6 +259,106 @@ def build_selection(root, editable=True):
         excluded="Credentials, Git history, model weights/environments, old TOEs, render caches and nonselected story media. Historical review pages/caches are not a full archive.")
 
 
+def build_approved_41_selection(root):
+    """Select only the checked .41 playback assets; never promote a draft take."""
+    root = Path(root).absolute()
+    selected = {}
+    expected = {}
+
+    def receipt(name):
+        path = checked_path(root, name)
+        scan(path, name)
+        return read(path)
+
+    def add(name, role, sha256=None):
+        name = safe_name(name)
+        require(checked_path(root, name).is_file(), "Missing approved .41 dependency: " + name)
+        selected.setdefault(name, set()).add(role)
+        if sha256 is not None:
+            require(isinstance(sha256, str) and HEX.fullmatch(sha256), "Missing approved input digest")
+            require(expected.get(name, sha256) == sha256, "Conflicting .41 input digests")
+            expected[name] = sha256
+
+    manifest = receipt(PLAYLIST_41)
+    assembly = receipt(EDITION_41 + "/assembly-verification.json")
+    delivery = receipt(EDITION_41 + "/delivery.json")
+    reopen = receipt(EDITION_41 + "/native-reopen.json")
+    require(delivery["passed"] is True and delivery["project"] == TOE_41
+            and delivery["manifest"] == PLAYLIST_41 and delivery["touchdesigner_build"] == "2025.32820"
+            and delivery["changes_5090"] == 0 and delivery["model_servers_started"] is False,
+            "The approved .41 native delivery receipt is required")
+    require(reopen["project"] == TOE_41 and not reopen["failures"]
+            and 0 < reopen["passed"] == reopen["checks"] == delivery["native_checks"],
+            "The saved .41 must pass its native reopen checks")
+    require(assembly["passed"] is True and assembly["original_narration_unchanged"] is True
+            and assembly["scene_captions_and_timing_unchanged"] is True
+            and assembly["audio"] == manifest["audio_sha256"], "Audio assembly does not match the approved show")
+    approval_path = EDITION_41 + "/approval.json"
+    approval = receipt(approval_path)
+    require(manifest["human_ambient_approval"] == approval["human_ambient_approval"] == "approved_by_user"
+            and manifest["ambient_approval"] == approval_path and approval["target"] == TOE_41
+            and approval["story_count"] == 136 and not approval["held_stories"],
+            "No complete listening approval bound to .41")
+    stories = manifest["stories"]
+    require(manifest["profile"] == "3080_safe" and manifest["target_toe"] == TOE_41
+            and manifest["story_count"] == len(stories) == 136 and manifest["gap_colour_enabled"] is False,
+            "Wrong .41 playback scope")
+    end = 0
+    for index, story in enumerate(stories, 1):
+        require(story["number"] == index and story["start_ms"] == end
+                and story["start_ms"] < story["content_end_ms"] == story["end_ms"] - 1000,
+                "Story clock or one-second gaps changed")
+        end = story["end_ms"]
+    require(len({s["narration_id"] for s in stories}) == 136 and end == manifest["duration_ms"]
+            == delivery["duration_ms"] == assembly["duration_ms"] == 11938720, "Changed .41 timeline")
+    add(TOE_41, "licensed_private_3080_project", delivery["sha256"])
+    add(PLAYLIST_41, "active_playlist", assembly["manifest_sha256"])
+    audio = manifest["audio"]
+    require(set(audio) == set(manifest["audio_sha256"]) == {"voices_only", "soundscape_only", "combined"},
+            "Exactly three .41 audio modes are required")
+    for kind, name in audio.items():
+        require(safe_name(name).startswith("audio/storytelling-real-december/") and name.endswith(".wav"),
+                "Only approved local playback WAVs are allowed")
+        add(name, "playlist_" + kind, manifest["audio_sha256"][kind])
+    for extension in ("srt", "vtt"):
+        add("audio/storytelling-real-december/approved-136-five-second-3080-2026-10-30/playlist-captions."
+            + extension, "reviewed_playlist_captions")
+    seeds = set(RUNTIME_41)
+    require(set(manifest["plans"]) == {"original", "human_figures", "balanced"}, "Missing approved visual path")
+    for mode, entry in manifest["plans"].items():
+        require(entry["path"] == f"{EDITION_41}/{mode}-visual-scenes.json", "Unexpected .41 visual plan path")
+        add(entry["path"], "reviewed_visuals_and_captions", entry["sha256"])
+        plan = receipt(entry["path"])
+        require(plan["visual_path"]["id"] == mode and plan["playlist_stories"] == stories
+                and len(plan["scenes"]) == 619 and len(plan["captions"]) == 2862
+                and plan["duration_ms"] == end and plan["hold_visual_gaps_edition"] is True,
+                "Visual cues, captions or clock changed")
+        require([plan["audio_file"], plan["soundscape_audio_file"], plan["combined_audio_file"]]
+                == [audio[k] for k in ("voices_only", "soundscape_only", "combined")]
+                and plan["audio_sha256"] == manifest["audio_sha256"], "Stale audio bindings in a .41 visual plan")
+        seeds.update((plan["sequencer_module"], plan["controller_module"]))
+    for name in runtime_closure(root, seeds):
+        add(name, "runtime_dependency")
+    for name in ("approval.json", "assembly-verification.json", "native-reopen.json", "delivery.json"):
+        add(EDITION_41 + "/" + name, "edition_receipt")
+    add(APPROVED + "/approval.json", "preserved_visual_approval")
+    # A sender root can be specified separately. Do not package a legacy
+    # launcher or the mirror-specific rebinder with this new snapshot format.
+    checkout = Path(__file__).resolve().parents[1]
+    for name, role in (("home_podcast/private_handoff.py", "standalone_handoff_tool"),
+                       ("touchdesigner/rebind_show_41.py", "restore_only_3080_connector_rebinder")):
+        publisher = checked_path(checkout, name)
+        sender = checked_path(root, name)
+        require(publisher.is_file() and sender.is_file(), "Use a sender checkout with the updated .41 scripts")
+        checksum = sha(publisher)
+        require(sha(sender) == checksum, "Sender playback tools must match the current .41 exporter")
+        add(name, role, checksum)
+    add("LICENSE", "project_code_license")
+    return selected, expected, dict(edition="136-story-.41", selection_mode=MODE_41, toe=TOE_41,
+        profile="3080_safe", playlist=PLAYLIST_41, stories=136, scenes_per_path=619, captions=2862,
+        duration_ms=end, editable=False, excluded="Other TOEs, editorial history, render caches, credentials and renderer environments.")
+
+
 def inventory(root, selected, expected=None, metadata=None):
     entries = []
     for name in sorted(selected):
@@ -266,6 +376,14 @@ def inventory(root, selected, expected=None, metadata=None):
 def validate_manifest(body):
     require(isinstance(body, dict) and body.get("format") == FORMAT, "Unsupported package format")
     require(isinstance(body.get("metadata"), dict) and isinstance(body.get("files"), list) and body["files"], "Malformed manifest")
+    meta = body["metadata"]
+    toe_41 = meta.get("toe") == TOE_41 or meta.get("selection_mode") == MODE_41
+    if toe_41:
+        require(meta.get("toe") == TOE_41 and meta.get("selection_mode") == MODE_41
+                and meta.get("playlist") == PLAYLIST_41 and meta.get("stories") == 136
+                and meta.get("profile") == "3080_safe" and meta.get("editable") is False,
+                "The .41 native file is allowed only in a dedicated 3080 playback snapshot")
+    selected_toe = TOE_41 if toe_41 else TOE
     seen = set()
     for entry in body["files"]:
         require(isinstance(entry, dict), "Malformed file entry")
@@ -277,10 +395,12 @@ def validate_manifest(body):
         require(type(entry.get("size")) is int and entry["size"] >= 0, "Invalid file size")
         require(isinstance(entry.get("roles"), list) and all(isinstance(x, str) for x in entry["roles"]), "Invalid roles")
         require(Path(name).suffix.lower() not in {".tox", ".sqlite3", ".gz", ".pem", ".key"}, "Excluded file type")
-        require(Path(name).suffix.lower() != ".toe" or name == TOE, "Only the selected private 3080 TOE may transfer")
+        require(Path(name).suffix.lower() != ".toe" or name == selected_toe, "Only the selected private 3080 TOE may transfer")
     for name in seen:
         parts = name.split("/")
         require(not any("/".join(parts[:i]) in seen for i in range(1, len(parts))), "File/directory path collision")
+    if toe_41:
+        require(TOE_41 in seen and PLAYLIST_41 in seen, "The dedicated .41 snapshot is incomplete")
     return body
 
 
@@ -379,7 +499,11 @@ def export_bundle(root, bundle, body, apply=False):
         require(marker.get("format") == FORMAT and isinstance(marker.get("allowed_bootstrap_sha256"), list), "Invalid package marker")
         if checked_path(bundle, "latest.json").exists():
             previous_body, _ = load_bundle(bundle)
-            if previous_body["metadata"].get("selection_mode") == "latest-working-state-plus-approved-show":
+            old_mode = previous_body["metadata"].get("selection_mode")
+            new_mode = body["metadata"].get("selection_mode")
+            if old_mode == MODE_41 or new_mode == MODE_41:
+                require(old_mode == new_mode, "Use a separate package folder for the .41 playback edition")
+            if old_mode == "latest-working-state-plus-approved-show":
                 require(body["metadata"].get("selection_mode") == "latest-working-state-plus-approved-show",
                     "Cannot narrow a working-state package; use prepare_working_handoff or a separate 136-only package")
         launcher = checked_path(bundle, "handoff.py")
@@ -435,6 +559,13 @@ def import_bundle(bundle, target, snapshot=None, apply=False):
     resolved_target = target.resolve()
     require(resolved_target != bundle and not resolved_target.is_relative_to(bundle) and not bundle.is_relative_to(resolved_target), "Import target and package must not overlap")
     require(target != Path(target.anchor) and target.resolve() != Path.home().resolve(), "Use a dedicated project directory")
+    if body["metadata"].get("selection_mode") == MODE_41:
+        # Check even unrelated native files, before an import creates anything.
+        anchor = checked_path(target, TOE_41).parent
+        require(not anchor.exists() or anchor.is_dir(), "Use a dedicated .41 project directory")
+        if anchor.is_dir():
+            require(not any(p.suffix.casefold() == ".toe" and p.name != TOE_41 for p in anchor.iterdir()),
+                    "Do not import the .41 playback snapshot into an existing native project directory")
     new = [];same = [];conflicts = []
     # A missing file whose ancestor is an existing file is also a conflict;
     # detect it before creating any directories or copying any payload.
@@ -487,6 +618,8 @@ def main(argv=None):
         command = commands.add_parser(name)
         command.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
         command.add_argument("--playback-only", action="store_true", help="Omit individual story media and editorial history")
+        command.add_argument("--edition", choices=("3080-40", "3080-41"), default="3080-40",
+                             help="Select an approved 3080 show; 3080-41 is always playback-only")
         if name == "export":
             command.add_argument("--bundle", type=Path, required=True)
             command.add_argument("--apply", action="store_true", help="Otherwise report the dry run only")
@@ -503,7 +636,10 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         if args.command in ("plan", "export"):
-            selection, expected, metadata = build_selection(args.root, editable=not args.playback_only)
+            if args.edition == "3080-41":
+                selection, expected, metadata = build_approved_41_selection(args.root)
+            else:
+                selection, expected, metadata = build_selection(args.root, editable=not args.playback_only)
             body = inventory(args.root, selection, expected, metadata)
             if args.command == "plan":
                 result = dict(files=len(body["files"]), bytes=sum(e["size"] for e in body["files"]), metadata=metadata, credential_scan="passed", writes=0)

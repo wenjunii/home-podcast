@@ -37,6 +37,62 @@ dependencies. This receiver uses `touchdesigner/rebind_5090_136.py` and writes
 its own runtime/audit state under `work/5090-136/`. Do not invoke the following
 3080 `.40` rebinder against a 5090 native project.
 
+## Private playback handoff: podcast.41.toe
+
+On the 3080 Ti, `.41` is the approved 136-story show with the new
+story-specific soundscapes. It keeps .40's narration, gaps, captions and
+visual timing. This is a **playback-only** backup: exact .41, three full WAV
+tracks, three visual plans, caption exports, runtime scripts and the approval
+and verification receipts. It neither needs nor includes the full story
+catalogue, audition media, credentials, renderer weights/environments, or a
+5090 TOE. Keep .40 and the existing 4090/5090 setups intact.
+
+### Verify the existing local mirror
+
+If you already have the `show-41-2026-11-24` playback mirror, use its
+`START-HERE.md` and bundled `verify_show_41.py`. It has its own in-memory
+rebinder. Copy the **whole** folder to a separate private drive for protection
+against disk failure. It is not a content-addressed package and should not be
+passed to `scripts.private_handoff import`.
+
+### Export and restore an incremental .41 package
+
+On a sender with the reviewed .41 files and their local receipts, use a new
+package directory. The opt-in export is separate from the .40 and
+working-state packages; it will refuse to replace their latest pointers.
+
+```powershell
+py -3.10 -m scripts.private_handoff plan --edition 3080-41
+py -3.10 -m scripts.private_handoff export --edition 3080-41 --bundle .\work\private-handoffs\approved-41-playback
+py -3.10 -m scripts.private_handoff export --edition 3080-41 --bundle .\work\private-handoffs\approved-41-playback --apply
+py -3.10 -m scripts.private_handoff verify --bundle .\work\private-handoffs\approved-41-playback
+```
+
+Only `--apply` copies files. Copy the entire private package to trusted
+storage and compare the snapshot ID with the sender. To restore it, use the
+bundled `handoff.py verify`, `import` and `verify-target` commands below, with
+a **fresh** project directory. Import refuses directories with another
+native project. If the export reports missing files, retrieve the approved
+media and receipts from a private backup; GitHub contains code, not assets.
+
+With TouchDesigner **2025.32820** and the licensed renderer environment set
+up separately, open the imported `podcast.41.toe` with both servers and
+streams stopped. Use the Python Textport to rebind the verified local files:
+
+```python
+from pathlib import Path
+helper = Path(project.folder) / "touchdesigner" / "rebind_show_41.py"
+exec(compile(helper.read_text(encoding="utf-8"), str(helper), "exec"))
+rebind_show_41()
+```
+
+This rebases only the owned connector and playback scripts. It leaves the
+project paused, does not save a TOE, and does not start or reconfigure the
+renderer. Repeat the rebind after opening a moved copy. If rebind fails, close
+the partial state without saving and verify the restored files. Play
+**Narration + Ambient** and check a story change and the last-to-first loop.
+The .40 and 5090 rebinding scripts retain their existing scope.
+
 ## Current local-first handoff: 136 stories / podcast.40.toe
 
 GitHub is optional. The private handoff tool snapshots the **current working
