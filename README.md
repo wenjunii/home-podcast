@@ -145,6 +145,28 @@ playback. Start only one selected StreamDiffusionTD server for live images.
 Use `.40` as the untouched rollback; this update is not a 4090/5090 migration.
 The native deliveries, exact playback files and private backups are local.
 
+#### Read-only `.41` playback preflight
+
+From the checkout, with the approved local playback files in place:
+
+```powershell
+py -3.10 -B -m scripts.verify_3080_show_41
+```
+
+The preflight is specific to `podcast.41.toe`. It checks the approved project,
+playlist, and receipts; the hashes, 48 kHz stereo PCM clocks, and all 136
+one-second gaps in each WAV; and the three visual paths against the **five-second**
+minimum and recorded speech cues. It also checks story openings, the loop
+clock, and both caption exports against the playlist cues. It reads all
+three WAVs to verify their hashes, so allow time for local disk I/O.
+
+It prints a report without writing files, opening TouchDesigner, or starting
+models. It verifies the existing native reopen receipt; it does not replay
+the show, retokenize prompts, or assess rendered images. Pass `--root PATH`
+to check a separate local `.41` playback tree with the same layout and receipts.
+It never falls back to `.40` or a 5090 edition. The older 15-second validator
+stays with its legacy editions.
+
 #### Optional 3080 TouchDesigner MCP check
 
 Run `touchdesigner.verify_3080_mcp` with the existing sibling TD Knowledge
