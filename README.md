@@ -64,6 +64,24 @@ Before an explicitly requested public sync, run
 The gate checks Git blobs for private assets and recognizable credentials;
 neither command pushes or publishes anything.
 
+#### Prepare the .41 preflight code for the 5090, without syncing it
+
+On the sender, preview the reviewed three-file update from PR #26:
+
+```powershell
+py -3.10 -B -m scripts.prepare_5090_preflight_handoff --label 5090-41-preflight-v2
+```
+
+Add `--apply` to prepare a patch and `START-HERE.md` in a new ignored
+`work/cross-pc-prep-LABEL/` folder. The command recreates the exact reviewed
+patch from the local PR commit, checks its hash, ignores uncommitted changes,
+and refuses to overwrite a prior handoff. It doesn't fetch missing commits,
+contact the 5090, or transfer any media, credentials, or `.toe` files.
+
+Use the instructions only when authorizing the receiver sync later. The `.41`
+verifier stays specific to the 3080; the 5090 `.26` show keeps its own
+`touchdesigner.verify_5090_audio_overlay` check and native setup.
+
 ### Task-completion cleanup
 
 After verification, Codex may clean known disposable task artifacts without
